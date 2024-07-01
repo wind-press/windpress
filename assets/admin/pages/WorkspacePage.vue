@@ -1,13 +1,66 @@
-<script setup></script>
+<script setup>
+import Logo from '../../../windpress.svg';
+import { useColorMode } from '@vueuse/core';
+
+const theme = useColorMode({
+    storageKey: 'theme',
+    initialValue: 'light',
+    onChanged: (value, defaultHandler) => {
+        defaultHandler(value);
+        document.documentElement.style.colorScheme = value;
+    },
+});
+
+</script>
 
 <template>
     <div class="r:12 bg:white h:full box-shadow:0|2px|5px|rgba(0,0,0,.051)">
         <div class="workspace-container flex flex:column h:full">
-            <div class="window-header flex px:12 py:10 bb:1|solid|gray-20/.5">
-                <div class="window-header__macos flex flex:row {ml:6}>*+*">
+            <div class="window-header flex flex:row px:12 bb:1|solid|gray-20/.5">
+                <div class="window-header__macos py:10 flex flex:row align-items:center gap:6">
                     <div class="window-header__macos__button b:1|solid|gray-20 bg:gray-10 r:full size:10"></div>
                     <div class="window-header__macos__button b:1|solid|gray-20 bg:gray-10 r:full size:10"></div>
                     <div class="window-header__macos__button b:1|solid|gray-20 bg:gray-10 r:full size:10"></div>
+                </div>
+                <div class="window-header__title py:10 flex flex:row align-items:center flex-grow:1 ml:20 gap:6 justify-content:center">
+                    <inline-svg :src="Logo" class="inline-svg fill:current font:18" />
+                    <span class="font:16 font:semibold fg:black/.4">WindPress</span>
+                    <span class="fg:black/.4">{{ windpress._version }}</span>
+                </div>
+                <div class="flex align-items:center flex:row gap:6">
+                    <button @click="theme = theme === 'dark' ? 'light' : 'dark'" class="flex button button-secondary b:0 bg:transparent bg:gray-10:hover fg:gray-90 min-w:36 my:auto width:auto font:16 align-items:center">
+                        <font-awesome-icon v-if="theme === 'light'" :icon="['fas', 'sun-bright']" class="fill:current" />
+                        <font-awesome-icon v-else-if="theme === 'dark'" :icon="['fas', 'moon-stars']" class="fill:current" />
+                    </button>
+
+                    <VDropdown :distance="12">
+                        <button class="button button-secondary b:0 bg:transparent bg:gray-10:hover fg:gray-90 min-w:36 my:auto width:auto font:16 align-items:center">
+                            <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
+                        </button>
+
+                        <template #popper>
+                            <div>
+                                <div role="group" class="flex flex:column font:14 min-w:120 p:4 w:auto">
+                                    <a href="https://wind.press/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=pro-version" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
+                                        <font-awesome-icon :icon="['fas', 'book']" class="min-w:14" />
+                                        Documentation
+                                    </a>
+                                    <a href="https://rosua.org/support-portal" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
+                                        <font-awesome-icon :icon="['fas', 'user-headset']" class="min-w:14" />
+                                        Support
+                                    </a>
+                                    <a href="https://www.facebook.com/groups/1142662969627943" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
+                                        <font-awesome-icon :icon="['fab', 'facebook']" class="min-w:14" />
+                                        Community
+                                    </a>
+                                </div>
+                            </div>
+                        </template>
+                    </VDropdown>
+
+                    <button class="button button-secondary b:transparent b:#2271b1:hover">
+                        Save
+                    </button>
                 </div>
             </div>
 
