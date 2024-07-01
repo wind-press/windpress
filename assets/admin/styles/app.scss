@@ -1,0 +1,39 @@
+#wpcontent {
+    padding-left: 0;
+
+    #wpbody-content {
+        padding-bottom: 0;
+    }
+}
+
+#wpcontent,
+#wp-body,
+#wpbody-content,
+#windpress-app,
+.windpress-main {
+    height: calc(100vh - var(--wp-admin--admin-bar--height));
+}
+
+#wpfooter {
+    display: none;
+}
+
+/* Hide the update nag */
+.update-nag {
+    display: none;
+}
+
+#windpress-app {
+    svg.inline-svg {
+        display: inline-block;
+        height: 1em;
+        vertical-align: -.125em;
+    }
+}
+
+
+.workspace-container {
+    * {
+        border-collapse: collapse;
+    }
+}

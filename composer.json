@@ -1,0 +1,33 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "windpress/windpress",
+    "description": "Tailwind CSS for WordPress",
+    "version": "1.0.0",    
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "WindPress\\WindPress\\": "src/"
+        },
+        "files": [
+            "constant.php"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.4",
+        "hidehalo/nanoid-php": "^1.1",
+        "masterminds/html5": "^2.9",
+        "rosua/leak": "dev-master",
+        "symfony/finder": "^5.4",
+        "symfony/property-access": "^5.4"
+    }
+}
