@@ -2,11 +2,14 @@
 import { useUIStore } from '../../stores/ui.js';
 
 const ui = useUIStore();
+
+// const panelComponents = {};
+
 </script>
 
 <template>
     <div class="main-panel w:full flex flex:column flex-grow:1">
-        <div class="tab-head flex flex:row {cursor:pointer;user-select:none;px:18;py:10;bt:1|solid|transparent;br:1|solid|gray-20/.5;bb:1|solid|gray-20/.5}>.tab-head__item {bg:white;bb:gray-20/.2;bt:1|solid|sky-80}>.tab-head__item.active">
+        <div class="tab-head flex flex:row {cursor:pointer;user-select:none;px:18;py:10;bt:1|solid|transparent;br:1|solid|gray-20/.5;bb:1|solid|gray-20/.5;fg:gray-60}>.tab-head__item {bg:white}>.tab-head__item:hover {bg:white;bb:gray-20/.2;bt:1|solid|sky-80;fg:gray-95}>.tab-head__item.active">
             <div :class="{ active: ui.virtualState('main-panel.tab.active', 'main.css').value === 'main.css' }" @click="ui.virtualState('main-panel.tab.active', 'main.css').value = 'main.css'" class="tab-head__item">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 54 33" class="h:1em mr:2 vertical-align:-0.125em">
                     <g clip-path="url(#prefix__clip0)">
