@@ -2,7 +2,6 @@
 import WindowHeader from '../components/Workspace/WindowHeader.vue';
 import Sidebar from '../components/Workspace/Sidebar.vue';
 import MainPanel from '../components/Workspace/MainPanel.vue';
-
 </script>
 
 <template>

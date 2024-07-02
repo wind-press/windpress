@@ -9,11 +9,11 @@ const sidebarComponents = {
 };
 
 function doSwitch(name) {
-    if (ui.virtualState('sidebar.active', true).value === name) {
-        ui.virtualState('sidebar.show', true).value = !ui.virtualState('sidebar.show', true).value;
+    if (ui.virtualState('sidebar.active', 'explorer').value === name) {
+        ui.virtualState('sidebar.isShow', true).value = !ui.virtualState('sidebar.isShow', true).value;
     } else {
-        ui.virtualState('sidebar.active', true).value = name;
-        ui.virtualState('sidebar.show', true).value = !ui.virtualState('sidebar.show', true).value;
+        ui.virtualState('sidebar.active').value = name;
+        ui.virtualState('sidebar.isShow', true).value = true;
     }
 }
 </script>
@@ -23,7 +23,7 @@ function doSwitch(name) {
         <!-- nav -->
         <div class="sidebar-nav-content flex flex:column h:full">
             <div class="composite-bar flex-grow:1 {fg:gray-60;font:24;py:14;mx:auto;text-align:center;w:full;bx:2|solid|transparent;cursor:pointer}>.sidebar-nav-item {fg:gray-95}>.sidebar-nav-item:hover {bl:sky-80;fg:gray-95}>.sidebar-nav-item.active">
-                <div :class="{ active: ui.virtualState('sidebar.show', true).value && ui.virtualState('sidebar.active', 'explorer').value === 'explorer' }" @click="doSwitch('explorer')" v-tooltip="{ placement: 'right', content: 'Explorer' }" class="sidebar-nav-item explorer">
+                <div :class="{ active: ui.virtualState('sidebar.isShow', true).value && ui.virtualState('sidebar.active', 'explorer').value === 'explorer' }" @click="doSwitch('explorer')" v-tooltip="{ placement: 'right', content: 'Explorer' }" class="sidebar-nav-item explorer">
                     <svg class="inline-svg fill:current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.5 0H8.5L7 1.5V6H2.5L1 7.5V22.5699L2.5 24H14.5699L16 22.5699V18H20.7L22 16.5699V4.5L17.5 0ZM17.5 2.12L19.88 4.5H17.5V2.12ZM14.5 22.5H2.5V7.5H7V16.5699L8.5 18H14.5V22.5ZM20.5 16.5H8.5V1.5H16V6H20.5V16.5Z" fill="current" />
                     </svg>
@@ -59,7 +59,7 @@ function doSwitch(name) {
             </div>
         </div>
     </div>
-    <div v-if="ui.virtualState('sidebar.show', true).value" class="sidebar w:268 flex-grow:0 flex-shrink:0">
+    <div v-if="ui.virtualState('sidebar.isShow', true).value" class="sidebar w:268 flex-grow:0 flex-shrink:0">
         <!-- sidebar -->
         <div class="sidebar__inner">
             <component :is="sidebarComponents[ui.virtualState('sidebar.active', 'explorer').value]" />

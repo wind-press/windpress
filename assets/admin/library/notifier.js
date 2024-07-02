@@ -1,5 +1,5 @@
 import 'awesome-notifications/dist/style.css';
-import AWN from 'https://esm.sh/awesome-notifications';
+import AWN from 'awesome-notifications';
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import {
     faGear,

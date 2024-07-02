@@ -6,7 +6,7 @@
 .p-ink {
     display: block;
     position: absolute;
-    background: #38bdf8;
+    background: var(--p-ripple-color, #38bdf8);
     border-radius: 100%;
     transform: scale(0);
     pointer-events: none;

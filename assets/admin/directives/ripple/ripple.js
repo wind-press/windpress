@@ -1,3 +1,6 @@
+/**
+ * PrimeVue Ripple
+ */
 import './ripple.css';
 
 const DomHandler = {

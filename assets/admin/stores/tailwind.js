@@ -18,10 +18,6 @@ export const useTailwindStore = defineStore('tailwind', () => {
         css: {
             prepend: '',
             append: ''
-        },
-        config: {
-            prepend: '',
-            append: ''
         }
     });
 
@@ -32,22 +28,6 @@ export const useTailwindStore = defineStore('tailwind', () => {
     const css = ref(null);
     const _cssInit = ref(null);
     const _cssDefault = ref(null);
-
-    /**
-     * The Tailwind preset that will be used to generate the Tailwind config.
-     * @param {string} preset
-     */
-    const preset = ref(null);
-    const _presetInit = ref(null);
-    const _presetDefault = ref(null);
-
-    /**
-     * The Tailwind config that gets generated from the preset.
-     * @param {string} config
-     */
-    const config = ref(null);
-    const _configInit = ref(null);
-    const _configDefault = ref(null);
 
     /**
      * The Tailwind wizard.
@@ -85,14 +65,11 @@ export const useTailwindStore = defineStore('tailwind', () => {
             .then(response => response.data)
             .then((data) => {
                 css.value = data.tailwind.css;
-                preset.value = data.tailwind.preset;
-                config.value = data.tailwind.config;
+                
                 wizard.value = data.tailwind.wizard;
                 selectedWizardId.value = data.tailwind.wizard[0].id;
 
                 _cssDefault.value = data._default.css;
-                _presetDefault.value = data._default.preset;
-                _configDefault.value = data._default.config;
                 _wizardDefault.value = data._default.wizard;
 
                 _custom.value = data._custom;
@@ -122,8 +99,6 @@ export const useTailwindStore = defineStore('tailwind', () => {
                 data: {
                     tailwind: {
                         css: css.value,
-                        preset: preset.value,
-                        config: config.value,
                         wizard: wizard.value,
                     }
                 },
@@ -149,8 +124,6 @@ export const useTailwindStore = defineStore('tailwind', () => {
      */
     function updateInitValues() {
         _cssInit.value = css.value;
-        _presetInit.value = preset.value;
-        _configInit.value = config.value;
         _wizardInit.value = toRaw(wizard.value);
     }
 
@@ -159,8 +132,6 @@ export const useTailwindStore = defineStore('tailwind', () => {
      */
     function hasChanged() {
         if (isEqual(_cssInit.value, css.value) === false) return true;
-        if (isEqual(_presetInit.value, preset.value) === false) return true;
-        if (isEqual(_configInit.value, config.value) === false) return true;
         if (isEqual(toRaw(_wizardInit.value), toRaw(wizard.value)) === false) return true;
         return false;
     }
@@ -168,20 +139,14 @@ export const useTailwindStore = defineStore('tailwind', () => {
     return {
         initValues: {
             css: _cssInit,
-            preset: _presetInit,
-            config: _configInit,
             wizard: _wizardInit,
         },
         defaultValues: {
             css: _cssDefault,
-            preset: _presetDefault,
-            config: _configDefault,
             wizard: _wizardDefault,
         },
         customValue: _custom,
         css,
-        preset,
-        config,
         wizard,
         selectedWizardId,
         selectedWizard,
