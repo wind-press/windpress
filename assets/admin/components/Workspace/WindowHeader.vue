@@ -17,10 +17,10 @@ const theme = useColorMode({
 
 <template>
     <div class="window-header flex flex:row px:12 bb:1|solid|gray-20/.5">
-        <div class="window-header__macos py:10 flex flex:row align-items:center gap:6">
-            <div class="window-header__macos__button b:1|solid|gray-20 bg:gray-10 r:full size:10"></div>
-            <div class="window-header__macos__button b:1|solid|gray-20 bg:gray-10 r:full size:10"></div>
-            <div class="window-header__macos__button b:1|solid|gray-20 bg:gray-10 r:full size:10"></div>
+        <div class="window-header__macos py:10 flex flex:row align-items:center gap:6 {b:1;b:solid}>.window-header__macos__button .window-header:not(:hover)_{b:1|solid|gray-20;bg:gray-10}_.window-header__macos__button">
+            <div class="window-header__macos__button macos__button-close bg:#ff5f57 b:#de3f37 r:full size:10"></div>
+            <div class="window-header__macos__button macos__button-minimize bg:#febc2e b:#de9c0e r:full size:10"></div>
+            <div class="window-header__macos__button macos__button-expand bg:#28c840 b:#05a61d r:full size:10"></div>
         </div>
         <div class="window-header__title py:10 flex flex:row align-items:center flex-grow:1 ml:20 gap:6 justify-content:center">
             <inline-svg :src="Logo" class="inline-svg fill:current font:18" />
