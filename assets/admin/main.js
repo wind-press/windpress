@@ -20,10 +20,6 @@ const app = createApp(App);
 
 app.config.globalProperties.windpress = window.windpress;
 
-// https://github.com/lightvue/lightvue/blob/d3219dd658e960c85a27ad151bd0ba65c68993a7/docs-v3/src/main.js#L12
-// app.config.globalProperties.$listeners = '';
-// app.config.globalProperties.$lightvue = { ripple: true, version: 3 };
-
 app
     .use(pinia)
     .use(FloatingVue, {

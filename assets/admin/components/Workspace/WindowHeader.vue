@@ -1,9 +1,12 @@
 <script setup>
 import Logo from '../../../../windpress.svg';
 import { useColorMode } from '@vueuse/core';
+import { useUIStore } from '../../stores/ui';
+
+const ui = useUIStore();
 
 const theme = useColorMode({
-    storageKey: 'theme',
+    storageRef: ui.virtualState('window.color-mode', 'light'),
     initialValue: 'light',
     onChanged: (value, defaultHandler) => {
         defaultHandler(value);
