@@ -23,4 +23,21 @@
         height: 1em;
         vertical-align: -.125em;
     }
+
+    .v-popper--theme-tooltip {
+        .v-popper__wrapper {
+            box-shadow: 0 2px 3px rgba(0, 0, 0, .12);
+        }
+    
+        .v-popper__inner {
+            color: rgb(34 33 35);
+            background: white;
+        }
+    
+        .v-popper__arrow-inner,
+        .v-popper__arrow-outer {
+            border-color: white;
+        }
+    
+    }
 }
