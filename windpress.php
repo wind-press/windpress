@@ -49,7 +49,4 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
         // This is to ensure the activation process is executed at least once when the requirements are met.
         add_action('admin_init', fn () => deactivate_plugins(plugin_basename(__FILE__)), 0, 0);
     }
-
-
-    // add_action('admin_notices', fn () => $requirement->printNotice(), 0, 0);
 }
