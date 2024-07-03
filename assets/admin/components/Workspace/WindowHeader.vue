@@ -17,7 +17,7 @@ const theme = useColorMode({
 
 <template>
     <div class="window-header flex flex:row px:12 bb:1|solid|titleBar-border bg:#f8f8f8 bg:#1f1f1f@dark">
-        <div class="window-header__macos py:10 flex flex:row align-items:center gap:6 {b:1;b:solid}>.window-header__macos__button .workspace-container:not(:hover)_{b:1|solid|gray-20;bg:gray-10}_.window-header__macos__button">
+        <div class="window-header__macos py:10 flex flex:row align-items:center gap:6 {b:1;b:solid}>.window-header__macos__button .workspace-container:not(:hover)_{b:1|solid|gray-20;bg:gray-10;b:gray-60@dark;bg:gray-70@dark}_.window-header__macos__button">
             <div class="window-header__macos__button macos__button-close r:full size:10"></div>
             <div class="window-header__macos__button macos__button-minimize r:full size:10"></div>
             <div class="window-header__macos__button macos__button-expand r:full size:10"></div>
