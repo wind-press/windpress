@@ -29,11 +29,8 @@ import {
     faTrashUndo,
     faReply,
     faShare,
-
-
-
-
     faBolt,
+    faBroom,
 } from '@fortawesome/pro-solid-svg-icons';
 
 import {
@@ -79,8 +76,8 @@ library.add(
     faTrashUndo,
     faReply,
     faShare,
-
     faBolt,
+    faBroom,
 
     /** far */
     faHeartRegular,

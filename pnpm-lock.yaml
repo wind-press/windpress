@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  lightvue@1.5.1:
-    hash: qwfo34nvaplemc22lygfut3tpe
-    path: assets/patches/lightvue@1.5.1.patch
-
 importers:
 
   .:
@@ -85,9 +80,6 @@ importers:
       floating-vue:
         specifier: ^5.2.2
         version: 5.2.2(vue@3.4.31)
-      lightvue:
-        specifier: ^1.5.1
-        version: 1.5.1(patch_hash=qwfo34nvaplemc22lygfut3tpe)
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1054,10 +1046,6 @@ packages:
   lightningcss@1.25.1:
     resolution: {integrity: sha512-V0RMVZzK1+rCHpymRv4URK2lNhIRyO8g7U7zOFwVAhJuat74HtkjIQpQRKNCwFEYkRGpafOpmXXLoaoBcyVtBg==}
     engines: {node: '>= 12.0.0'}
-
-  lightvue@1.5.1:
-    resolution: {integrity: sha512-Au6oL6cS9mT7AjU/DT9F1ee0Ecb8aXQcjC5Bxs5BxsznKXzr5cIpxJDY44JjIhEhEzTM2KzjUdxPrEPhPIfgsg==}
-    engines: {node: '>=6 <15.0.0'}
 
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
@@ -2293,8 +2281,6 @@ snapshots:
       lightningcss-linux-x64-gnu: 1.25.1
       lightningcss-linux-x64-musl: 1.25.1
       lightningcss-win32-x64-msvc: 1.25.1
-
-  lightvue@1.5.1(patch_hash=qwfo34nvaplemc22lygfut3tpe): {}
 
   lilconfig@2.1.0: {}
 

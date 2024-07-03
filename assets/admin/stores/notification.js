@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { nanoid } from 'nanoid';
 
-export const useWordpressNoticeStore = defineStore('wordpressNotice', () => {
+export const useNotificationStore = defineStore('notification', () => {
     const notices = ref([]);
 
     /**
