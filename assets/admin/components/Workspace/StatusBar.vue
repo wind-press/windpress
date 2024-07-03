@@ -12,15 +12,15 @@ const latestLogMessage = computed(() => {
 </script>
 
 <template>
-    <div class="status-bar flex">
+    <div class="status-bar flex fg:statusBar-foreground bg:statusBar-background bt:1|solid|statusBar-border">
         <div class="flex flex:row gap:2 w:full">
             <div class="flex flex-grow:1">
-                <div v-tooltip="{ placement: 'top', content: 'Rebuild Cache' }" class="flex flex:row bg:blue-50 fg:white px:12 py:6 align-items:center cursor:pointer" v-ripple>
+                <div v-tooltip="{ placement: 'top', content: 'Rebuild Cache' }" class="flex flex:row bg:statusBarItem-remoteBackground fg:statusBarItem-remoteForeground px:12 py:6 align-items:center cursor:pointer" v-ripple>
                     <font-awesome-icon :icon="['fas', 'broom']" />
                 </div>
             </div>
             <div class="flex flex:row px:12 py:6 gap:12 rel">
-                <div class="status-bar__log rel flex align-items:center leading:normal fg:gray-50 overflow:hidden">
+                <div class="status-bar__log rel flex align-items:center leading:normal fg:statusBar-foreground/.7 overflow:hidden">
                     <Transition  mode="out-in" name="slide-up">
                         <span :key="latestLogMessage" class="leading:normal">
                             {{ latestLogMessage }}

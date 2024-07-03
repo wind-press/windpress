@@ -5,6 +5,13 @@
         #wpbody-content {
             padding-bottom: 0;
         }
+
+        // on html.dark
+        
+    }
+
+    html.dark>& {
+        background: #14161c;
     }
 
     #wpfooter {

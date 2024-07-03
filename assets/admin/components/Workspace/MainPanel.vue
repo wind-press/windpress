@@ -13,8 +13,8 @@ const panelComponents = {
 </script>
 
 <template>
-    <div class="main-panel w:full flex flex:column flex-grow:1">
-        <div class="tab-head flex flex:row {cursor:pointer;user-select:none;px:18;py:10;bt:1|solid|transparent;br:1|solid|gray-20/.5;bb:1|solid|gray-20/.5;fg:gray-60}>.tab-head__item,>.tab-head__space {bg:white}>.tab-head__item:hover {bg:white;bb:gray-20/.2;bt:1|solid|sky-80;fg:gray-95}>.tab-head__item.active">
+    <div class="main-panel w:full flex flex:column flex-grow:1 bl:1|solid|sideBar-border">
+        <div class="tab-head flex flex:row {cursor:pointer;user-select:none;px:18;py:10;bt:1|solid|transparent;br:1|solid|tab-border;bb:1|solid|tab-border;fg:tab-inactiveForeground;bg:tab-inactiveBackground}>.tab-head__item,>.tab-head__space {bg:tab-activeBackground}>.tab-head__item:hover {bg:tab-activeBackground;bb:tab-border/.2;bt:1|solid|tab-activeBorderTop;fg:tab-activeForeground}>.tab-head__item.active">
             <div :class="{ active: ui.virtualState('main-panel.tab.active', 'main.css').value === 'main.css' }" @click="ui.virtualState('main-panel.tab.active', 'main.css').value = 'main.css'" class="tab-head__item">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 54 33" class="h:1em mr:2 vertical-align:-0.125em">
                     <g clip-path="url(#prefix__clip0)">
@@ -38,7 +38,7 @@ const panelComponents = {
             </div>
             <div class="tab-head__space flex-grow:1 br:hidden!"></div>
         </div>
-        <div class="tab-body h:full bg:white">
+        <div class="tab-body h:full bg:editor-background">
             <div class="content-panel h:full">
                 <!-- content -->
                 <div class="h:full">
