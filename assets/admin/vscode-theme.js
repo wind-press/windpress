@@ -272,32 +272,10 @@ export const light = {
 
 export const vscodeTheme = {};
 
-// combine the dark and light themes
-
-// 1. tranform the path with the following rules:
-// - replace all . with dash -
-
-// 2. Each key will use both the dark and light theme values with the following rules:
-// '@light': 'light value',
-// '@dark': 'dark value',
-
-// 3. The final output will be an object with the following structure:
-// {
-//     'path': {
-//         '@light': 'light value',
-//         '@dark': 'dark value',
-//     }
-// }
-
-
-
-// dark
 Object.keys(dark).forEach(key => {
     vscodeTheme[key.replace(/\./g, '-')] = {
         '@light': light[key],
         '@dark': dark[key],
     };
 });
-
-console.log(vscodeTheme);
 
