@@ -39,9 +39,7 @@ const latestLogMessage = computed(() => {
     </div>
 </template>
 
-
 <style scoped>
-
 .slide-up-enter-active,
 .slide-up-leave-active {
   transition: all 0.25s ease-out;
