@@ -8,7 +8,7 @@ export const useUIStore = defineStore('ui', () => {
     
     // Persistent state in local storage.
     // for non-persistent usage, use `const _virtualState = {}` instead
-    const _virtualState = useStorage('ui.state', state);
+    const _virtualState = useStorage('windpress.ui.state', state);
 
     // Provide a virtual path access even if it doesn't exist.
     // Example:

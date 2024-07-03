@@ -9,7 +9,6 @@ const notification = useNotificationStore();
 const latestLogMessage = computed(() => {
     return log.logs.length > 0 ? log.logs[log.logs.length - 1].message :  `Thank you for using WindPress! Join us on the Facebook Group.`;
 });
-
 </script>
 
 <template>

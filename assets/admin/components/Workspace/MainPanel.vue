@@ -1,10 +1,15 @@
 <script setup>
 import { useUIStore } from '../../stores/ui.js';
 
+import MainCSS from './MainPanel/MainCSS.vue';
+
 const ui = useUIStore();
 
-// const panelComponents = {};
-
+const panelComponents = {
+    'main.css': MainCSS,
+    // 'wizard': () => import('./MainPanel/Wizard.vue'),
+    // 'settings': () => import('./MainPanel/Settings.vue'),
+};
 </script>
 
 <template>
@@ -37,7 +42,9 @@ const ui = useUIStore();
             <div class="content-panel h:full">
                 <!-- content -->
                 <div class="h:full">
-                    <!-- <vue-monaco-editor v-model:value="twCss" language="scss" path="file:///main.css" :theme="monacoTheme" :options="MONACO_EDITOR_OPTIONS" @mount="handleCssEditorMount" /> -->
+                    <KeepAlive>
+                        <component :is="panelComponents[ui.virtualState('main-panel.tab.active', 'main.css').value]" />
+                    </KeepAlive>
                 </div>
             </div>
             <div class="dock-panel">
