@@ -47,8 +47,6 @@ class AdminPage
 
     private function render()
     {
-        add_filter('admin_footer_text', static fn ($text) => 'Thank you for using <b>WindPress</b>! Join us on the <a href="https://www.facebook.com/groups/1142662969627943" target="_blank">Facebook Group</a>.', 1_000_001);
-        add_filter('update_footer', static fn ($text) => $text . ' | WindPress ' . WIND_PRESS::VERSION, 1_000_001);
         echo '<div id="windpress-app" class=""></div>';
     }
 
