@@ -5,7 +5,11 @@
 
 import { loader } from '@guolao/vue-monaco-editor';
 
-import * as monaco from 'monaco-editor';
+
+import 'monaco-editor/esm/vs/basic-languages/css/css.contribution';
+import 'monaco-editor/esm/vs/language/css/monaco.contribution.js';
+import * as monaco from 'monaco-editor/esm/vs/editor/edcore.main.js';
+
 import editorWorkerUrl from 'monaco-editor/esm/vs/editor/editor.worker?worker&url';
 import cssWorkerUrl from 'monaco-editor/esm/vs/language/css/css.worker?worker&url';
 
@@ -30,3 +34,4 @@ self.MonacoEnvironment = {
 }
 
 loader.config({ monaco });
+

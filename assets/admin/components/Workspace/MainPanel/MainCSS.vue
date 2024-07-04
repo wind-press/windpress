@@ -1,24 +1,109 @@
 <script setup>
 import { ref, computed, shallowRef } from 'vue';
-import { useStorage } from '@vueuse/core';
 import { useUIStore } from '../../../stores/ui.js';
+
+import { __unstable__loadDesignSystem } from 'tailwindcss';
+import twTheme from 'tailwindcss/theme.css?inline';
 
 const ui = useUIStore();
 
 const MONACO_EDITOR_OPTIONS = {
-  automaticLayout: true,
-  formatOnType: false,
-  formatOnPaste: false,
+    automaticLayout: true,
+    formatOnType: false,
+    formatOnPaste: false,
 };
 
-const twCss = ref('// some code...');
+const twCss = ref(/* css */`@import "tailwindcss";
+
+@theme {
+    --color-primary: rgb(103, 58, 183);
+    --color-secondary: rgb(149, 141, 165);
+
+    --color-title: var(--color-gray-950);
+    --color-content: var(--color-gray-900);
+}
+`);
 
 /** @type {?import('monaco-editor').editor.IStandaloneCodeEditor} */
 const editorCssRef = shallowRef();
-const handleCssEditorMount = editor => (editorCssRef.value = editor);
 
+function naturalExpand(value, total = null) {
+    const length = typeof total === 'number' ? total.toString().length : 8
+    return ('0'.repeat(length) + value).slice(-length)
+}
+
+function handleCssEditorMount(editor, monaco) {
+    monaco.languages.css.cssDefaults.setOptions({
+        data: {
+            dataProviders: {
+                tailwindcss: {
+                    version: 1.1,
+                    atDirectives: [
+                        {
+                            name: '@theme',
+                            status: 'standard',
+                            description: 'The special `@theme` directive tells Tailwind to make new utilities and variants available based on those variables',
+                            references: [
+                                {
+                                    name: 'Blog: Open-sourcing our progress on Tailwind CSS v4.0',
+                                    url: 'https://tailwindcss.com/blog/tailwindcss-v4-alpha#:~:text=the%20special%20%40theme%20directive%20tells%20tailwind%20to%20make%20new%20utilities%20and%20variants%20available%20based%20on%20those%20variables'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    });
+
+    editorCssRef.value = editor;
+
+    // TODO: Register custom completion provider
+    monaco.languages.registerCompletionItemProvider('css', {
+        provideCompletionItems(model, position) {
+            const wordInfo = model.getWordUntilPosition(position)
+
+            const theme = twTheme + twCss.value
+            const design = __unstable__loadDesignSystem(theme)
+
+            const variables = Array.from(design.theme.entries()).map(
+                (entry, index) => {
+                    const variable = entry[0]
+
+                    const defaultValue = entry[1].value
+                    const calculatedValue = `${parseFloat(defaultValue) * 16}px`
+
+                    const isCalculated = defaultValue.includes('rem')
+                    const isColor = variable.includes('--color')
+
+                    return {
+                        kind: isColor
+                            ? monaco.languages.CompletionItemKind.Color
+                            : monaco.languages.CompletionItemKind.Variable,
+                        label: variable,
+                        insertText: variable,
+                        detail: isCalculated
+                            ? calculatedValue
+                            : defaultValue,
+                        range: {
+                            startLineNumber: position.lineNumber,
+                            startColumn: wordInfo.startColumn,
+                            endLineNumber: position.lineNumber,
+                            endColumn: wordInfo.endColumn
+                        },
+                        sortText: naturalExpand(index)
+                    }
+                }
+            )
+
+            return {
+                suggestions: variables
+            }
+        }
+    });
+}
 </script>
 
 <template>
-    <vue-monaco-editor v-model:value="twCss" language="scss" path="file:///main.css" :options="MONACO_EDITOR_OPTIONS" @mount="handleCssEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
+    <vue-monaco-editor v-model:value="twCss" language="css" path="file:///main.css" :options="MONACO_EDITOR_OPTIONS" @mount="handleCssEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
 </template>

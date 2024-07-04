@@ -89,6 +89,9 @@ importers:
       pretty-bytes:
         specifier: ^6.1.1
         version: 6.1.1
+      tailwindcss:
+        specifier: 4.0.0-alpha.17
+        version: 4.0.0-alpha.17
       vue:
         specifier: ^3.4.31
         version: 3.4.31
@@ -873,6 +876,9 @@ packages:
   state-local@1.0.7:
     resolution: {integrity: sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==}
 
+  tailwindcss@4.0.0-alpha.17:
+    resolution: {integrity: sha512-wWr6kvH40Hp1LQVcD738ojwU6+muJnpIUZw3J2EqjOdqHpg3iUIkrrQszP5HP4nwi4qBsoCoHPWVJ3Qw4f1IZw==}
+
   to-fast-properties@2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
@@ -1582,6 +1588,8 @@ snapshots:
   source-map-js@1.2.0: {}
 
   state-local@1.0.7: {}
+
+  tailwindcss@4.0.0-alpha.17: {}
 
   to-fast-properties@2.0.0: {}
 
