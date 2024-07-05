@@ -13,13 +13,19 @@ const theme = useColorMode({
         document.documentElement.style.colorScheme = value;
     },
 });
+
+function toggleMinimize() {
+    // if (document.getElementById('windpress-app').classList.contains('universal')) {
+    ui.virtualState('window.minimized', false).value = !ui.virtualState('window.minimized', false).value;
+    // }
+}
 </script>
 
 <template>
     <div class="window-header flex flex:row px:12 bb:1|solid|titleBar-border bg:#f8f8f8 bg:#1f1f1f@dark">
-        <div class="window-header__macos py:10 flex flex:row align-items:center gap:6 {b:1;b:solid}>.macos__button .window-header:not(:hover)_{b:1|solid|gray-20;bg:gray-10}_.macos__button .window-header:not(:hover)_{b:gray-60;bg:gray-70}_.macos__button@dark">
+        <div class="window-header__macos py:10 flex flex:row align-items:center gap:6 {b:1|solid|gray-20;bg:gray-10}>.macos__button .window-header:not(:hover)_{b:1|solid|gray-20;bg:gray-10}_.macos__button .window-header:not(:hover)_{b:gray-60;bg:gray-70}_.macos__button@dark">
             <div class="macos__button close r:full size:10"></div>
-            <div class="macos__button minimize r:full size:10"></div>
+            <div @click="toggleMinimize" class="macos__button minimize r:full size:10"></div>
             <div class="macos__button expand r:full size:10"></div>
         </div>
         <div class="window-header__title py:10 flex flex:row align-items:center flex-grow:1 ml:20 gap:6 justify-content:center fg:foreground">
@@ -42,20 +48,22 @@ const theme = useColorMode({
 </template>
 
 <style lang="scss" scoped>
-.macos__button {
-    &.close {
-        background: #ff5f57;
-        border-color: #de3f37;
-    }
+html:has(#windpress-app.universal) {
+    .macos__button {
+        &.close {
+            background: #ff5f57;
+            border-color: #de3f37;
+        }
 
-    &.minimize {
-        background: #febc2e;
-        border-color: #de9c0e;
-    }
+        &.minimize {
+            background: #febc2e;
+            border-color: #de9c0e;
+        }
 
-    &.expand {
-        background: #28c840;
-        border-color: #05a61d;
+        &.expand {
+            background: #28c840;
+            border-color: #05a61d;
+        }
     }
 }
 </style>

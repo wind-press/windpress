@@ -7,3 +7,15 @@
     --color-title: var(--color-gray-950);
     --color-content: var(--color-gray-900);
 }
+
+@layer base {
+    /* ... */
+}
+
+@layer components {
+    /* ... */
+}
+
+@layer utilities {
+    /* ... */
+}

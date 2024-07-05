@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, shallowRef } from 'vue';
+import { ref, shallowRef } from 'vue';
 import { useUIStore } from '../../../stores/ui.js';
 
 import { __unstable__loadDesignSystem } from 'tailwindcss';
@@ -11,6 +11,7 @@ const MONACO_EDITOR_OPTIONS = {
     automaticLayout: true,
     formatOnType: false,
     formatOnPaste: false,
+    // fontSize: 'initial',
 };
 
 const twCss = ref(/* css */`@import "tailwindcss";
@@ -33,28 +34,34 @@ function naturalExpand(value, total = null) {
 }
 
 function handleCssEditorMount(editor, monaco) {
-    monaco.languages.css.cssDefaults.setOptions({
-        data: {
-            dataProviders: {
-                tailwindcss: {
-                    version: 1.1,
-                    atDirectives: [
-                        {
-                            name: '@theme',
-                            status: 'standard',
-                            description: 'The special `@theme` directive tells Tailwind to make new utilities and variants available based on those variables',
-                            references: [
+    monaco.languages.css.cssDefaults.setOptions(
+        Object.assign(
+            monaco.languages.css.cssDefaults.options,
+            {
+                data: {
+                    useDefaultDataProvider: true,
+                    dataProviders: {
+                        tailwindcss: {
+                            version: 1.1,
+                            atDirectives: [
                                 {
-                                    name: 'Blog: Open-sourcing our progress on Tailwind CSS v4.0',
-                                    url: 'https://tailwindcss.com/blog/tailwindcss-v4-alpha#:~:text=the%20special%20%40theme%20directive%20tells%20tailwind%20to%20make%20new%20utilities%20and%20variants%20available%20based%20on%20those%20variables'
+                                    name: '@theme',
+                                    status: 'standard',
+                                    description: 'The special `@theme` directive tells Tailwind to make new utilities and variants available based on those variables',
+                                    references: [
+                                        {
+                                            name: 'Blog: Open-sourcing our progress on Tailwind CSS v4.0',
+                                            url: 'https://tailwindcss.com/blog/tailwindcss-v4-alpha#:~:text=the%20special%20%40theme%20directive%20tells%20tailwind%20to%20make%20new%20utilities%20and%20variants%20available%20based%20on%20those%20variables'
+                                        }
+                                    ],
                                 }
-                            ]
+                            ],
                         }
-                    ]
+                    }
                 }
             }
-        }
-    });
+        )
+    );
 
     editorCssRef.value = editor;
 
@@ -107,3 +114,15 @@ function handleCssEditorMount(editor, monaco) {
 <template>
     <vue-monaco-editor v-model:value="twCss" language="css" path="file:///main.css" :options="MONACO_EDITOR_OPTIONS" @mount="handleCssEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
 </template>
+
+<style lang="scss">
+.monaco-editor .suggest-widget .monaco-list .monaco-list-row {
+    &>.contents>.main {
+        width: 100%;
+    }
+
+    .monaco-highlighted-label>.highlight {
+        background-color: initial;
+    }
+}
+</style>

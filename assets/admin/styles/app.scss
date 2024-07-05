@@ -27,10 +27,30 @@
 }
 
 #windpress-app {
+
+    &.universal {
+        >.windpress-container {
+            z-index: calc(infinity);
+            position: fixed;
+            top: var(--wp-admin--admin-bar--height);
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            &.hide-universal {
+                display: none;
+            }
+        }
+    }
+
     svg.inline-svg {
         display: inline-block;
         height: 1em;
         vertical-align: -.125em;
+    }
+
+    .monaco-editor * {
+        font-size: 13px !important;
     }
 
     .v-popper--theme-tooltip {
@@ -48,5 +68,11 @@
             border-color: white;
         }
 
+    }
+}
+
+html:not(:has(#windpress-app.universal)) {
+    .windpress-badge {
+        display: none;
     }
 }

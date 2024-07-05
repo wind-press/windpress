@@ -69,7 +69,6 @@ class AdminPage
         wp_localize_script($handle, 'windpress', [
             '_version' => WIND_PRESS::VERSION,
             '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
-            'web_history' => self::get_page_url(),
             'rest_api' => [
                 'nonce' => wp_create_nonce('wp_rest'),
                 'root' => esc_url_raw(rest_url()),

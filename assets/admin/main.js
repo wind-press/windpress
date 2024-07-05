@@ -34,4 +34,12 @@ app
 
 app.directive('ripple', vRipple);
 
+// find a container element to mount the app, if not found, create one
+if (!document.getElementById('windpress-app')) {
+    const el = document.createElement('div');
+    el.id = 'windpress-app';
+    el.classList.add('universal');
+    document.body.appendChild(el);
+}
+
 app.mount('#windpress-app');

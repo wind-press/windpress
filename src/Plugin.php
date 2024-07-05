@@ -147,7 +147,7 @@ final class Plugin
 
         // new ApiRouter();
 
-        // Runtime::get_instance()->init();
+        Runtime::get_instance()->init();
         // Instantiate the AdminPage class.
         new AdminPage();
 
