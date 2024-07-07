@@ -1,4 +1,5 @@
 <script setup>
+import Logo from '../../windpress.svg';
 import { useUIStore } from './stores/ui';
 
 import WorkspacePage from './pages/WorkspacePage.vue';
@@ -11,6 +12,8 @@ const ui = useUIStore();
         <WorkspacePage />
     </div>
     <div :class="{hidden: ui.virtualState('window.minimized', false).value === false}" class="windpress-badge fixed bottom:0 right:0">
-        <button @click="ui.virtualState('window.minimized', false).value = !ui.virtualState('window.minimized', false).value">Toggle Minimize</button>
+        <div @click="ui.virtualState('window.minimized', false).value = !ui.virtualState('window.minimized', false).value" v-tooltip="{ placement: 'left', distance: 20, content: 'WindPress' }" class="fixed z:calc(infinity) bottom:15 right:15 cursor:pointer:hover fg:black fg:white@dark">
+            <inline-svg :src="Logo" class="inline-svg fill:current font:28" />
+        </div>
     </div>
 </template>

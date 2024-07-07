@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Yabe package.
+ * This file is part of the WindPress package.
  *
  * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Yabe\Siul\Api\Admin\Settings;
+namespace WindPress\WindPress\Api\Admin\Settings;
 
-use SIUL;
+use WIND_PRESS;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use Yabe\Siul\Api\AbstractApi;
-use Yabe\Siul\Api\ApiInterface;
-use Yabe\Siul\Core\Cache as CoreCache;
-use Yabe\Siul\Utils\Common;
-use Yabe\Siul\Utils\Debug;
+use WindPress\WindPress\Api\AbstractApi;
+use WindPress\WindPress\Api\ApiInterface;
+use WindPress\WindPress\Core\Cache as CoreCache;
+use WindPress\WindPress\Utils\Common;
+use WindPress\WindPress\Utils\Debug;
 
 class Cache extends AbstractApi implements ApiInterface
 {
@@ -106,7 +106,7 @@ class Cache extends AbstractApi implements ApiInterface
             $content = sprintf(
                 "/* ! %s v%s | %s */\n%s",
                 strtolower(Common::plugin_data('Name')),
-                SIUL::VERSION,
+                WIND_PRESS::VERSION,
                 date('Y-m-d H:i:s', time()),
                 base64_decode($payload['content'])
             );

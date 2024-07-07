@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Yabe package.
+ * This file is part of the WindPress package.
  *
  * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
@@ -19,6 +19,7 @@ use WP_REST_Response;
 use WP_REST_Server;
 use WindPress\WindPress\Api\AbstractApi;
 use WindPress\WindPress\Api\ApiInterface;
+use WindPress\WindPress\Utils\Common;
 
 class Tailwind extends AbstractApi implements ApiInterface
 {
@@ -56,21 +57,29 @@ class Tailwind extends AbstractApi implements ApiInterface
 
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        $tailwind = get_option(WIND_PRESS::WP_OPTION . '_tailwind', base64_encode(json_encode(WIND_PRESS::default_tailwind())));
+        $stub_main_css = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/main.css');
 
-        $tailwind = apply_filters('f!windpress/api/admin/tailwind:index', json_decode(base64_decode($tailwind)));
+        $main_css = $stub_main_css;
+
+        $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
+        if (file_exists($main_css_path)) {
+            $main_css = file_get_contents($main_css_path);
+        }
+
+        $tailwind_data = [
+            'main_css' => $main_css,
+            '_main_css' => $stub_main_css,
+            'wizard' => null,
+        ];
+
+        $tailwind_data = apply_filters('f!windpress/api/admin/tailwind:index', json_decode(json_encode($tailwind_data)));
 
         return new WP_REST_Response([
-            'tailwind' => $tailwind,
-            // '_default' => WIND_PRESS::default_tailwind(),
+            'tailwind' => $tailwind_data,
             '_custom' => [
-                'css' => [
-                    'prepend' => apply_filters('f!windpress/core/runtime:enqueue_play_cdn.css.prepend', ''),
-                    'append' => apply_filters('f!windpress/core/runtime:enqueue_play_cdn.css.append', ''),
-                ],
-                'config' => [
-                    'prepend' => apply_filters('f!windpress/core/runtime:enqueue_play_cdn.config.prepend', ''),
-                    'append' => apply_filters('f!windpress/core/runtime:enqueue_play_cdn.config.append', ''),
+                'main_css' => [
+                    'prepend' => apply_filters('f!windpress/core/runtime:main_css.prepend', ''),
+                    'append' => apply_filters('f!windpress/core/runtime:main_css.append', ''),
                 ],
             ]
         ]);
@@ -80,14 +89,14 @@ class Tailwind extends AbstractApi implements ApiInterface
     {
         $payload = $wprestRequest->get_json_params();
 
-        $tailwind = $payload['tailwind'];
+        $main_css = $payload['tailwind']['main_css'];
 
-        $tailwind = apply_filters('f!windpress/api/admin/tailwind:store', $tailwind);
+        $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
 
-        update_option(WIND_PRESS::WP_OPTION . '_tailwind', base64_encode(json_encode($tailwind)));
+        Common::save_file($main_css, $main_css_path);
 
         return new WP_REST_Response([
-            'message' => 'TailwindCSS config updated',
+            'message' => 'data stored successfully',
         ]);
     }
 }

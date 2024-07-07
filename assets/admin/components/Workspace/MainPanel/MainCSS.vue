@@ -1,29 +1,21 @@
 <script setup>
-import { ref, shallowRef } from 'vue';
-import { useUIStore } from '../../../stores/ui.js';
-
 import { __unstable__loadDesignSystem } from 'tailwindcss';
+import { ref, shallowRef, onBeforeMount, toRef, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useUIStore } from '../../../stores/ui.js';
+import { useTailwindStore } from '../../../stores/tailwind.js';
+
 import twTheme from 'tailwindcss/theme.css?inline';
 
 const ui = useUIStore();
+const twStore = useTailwindStore();
 
 const MONACO_EDITOR_OPTIONS = {
     automaticLayout: true,
     formatOnType: false,
     formatOnPaste: false,
-    // fontSize: 'initial',
+    fontSize: 14,
 };
-
-const twCss = ref(/* css */`@import "tailwindcss";
-
-@theme {
-    --color-primary: rgb(103, 58, 183);
-    --color-secondary: rgb(149, 141, 165);
-
-    --color-title: var(--color-gray-950);
-    --color-content: var(--color-gray-900);
-}
-`);
 
 /** @type {?import('monaco-editor').editor.IStandaloneCodeEditor} */
 const editorCssRef = shallowRef();
@@ -32,6 +24,27 @@ function naturalExpand(value, total = null) {
     const length = typeof total === 'number' ? total.toString().length : 8
     return ('0'.repeat(length) + value).slice(-length)
 }
+
+function doSave() {
+    // if (editorCssRef.value) {
+    //     twStore.doPush(editorCssRef.value.getValue());
+    // }
+
+    twStore.doPush();
+}
+
+onBeforeMount(() => {
+    // set the monaco editor content
+    (async () => {
+        if (twStore.data.main_css.init === null) {
+            await twStore.doPull();
+        }
+
+        // if (Object.keys(settingsStore.options).length === 0) {
+        //     await settingsStore.doPull();
+        // }
+    })();
+});
 
 function handleCssEditorMount(editor, monaco) {
     monaco.languages.css.cssDefaults.setOptions(
@@ -70,7 +83,7 @@ function handleCssEditorMount(editor, monaco) {
         provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position)
 
-            const theme = twTheme + twCss.value
+            const theme = twTheme + twStore.data.main_css.current
             const design = __unstable__loadDesignSystem(theme)
 
             const variables = Array.from(design.theme.entries()).map(
@@ -108,21 +121,39 @@ function handleCssEditorMount(editor, monaco) {
             }
         }
     });
+
+    // add key binding command to monaco.editor to save all changes
+    monaco.editor.addEditorAction({
+        id: 'save',
+        label: 'Save',
+        keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
+        run: () => {
+            doSave();
+        }
+    });
 }
 </script>
 
 <template>
-    <vue-monaco-editor v-model:value="twCss" language="css" path="file:///main.css" :options="MONACO_EDITOR_OPTIONS" @mount="handleCssEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
+    <vue-monaco-editor v-model:value="twStore.data.main_css.current" language="css" path="file:///main.css" :options="MONACO_EDITOR_OPTIONS" @mount="handleCssEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
 </template>
 
 <style lang="scss">
-.monaco-editor .suggest-widget .monaco-list .monaco-list-row {
-    &>.contents>.main {
-        width: 100%;
-    }
+#windpress-app {
+    .monaco-editor {
+        .suggest-widget .monaco-list .monaco-list-row {
+            &>.contents>.main {
+                width: 100%;
+            }
 
-    .monaco-highlighted-label>.highlight {
-        background-color: initial;
+            .monaco-highlighted-label>.highlight {
+                background-color: initial;
+            }
+
+            a:where(:not(.wp-element-button)) {
+                text-decoration: none;
+            }
+        }
     }
 }
 </style>

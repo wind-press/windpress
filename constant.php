@@ -50,4 +50,8 @@ class WIND_PRESS
      * @var string
      */
     public const REST_NAMESPACE = 'windpress/v1';
+
+    public const DATA_DIR = '/windpress/data/';
+
+    public const CACHE_DIR = '/windpress/cache/';
 }

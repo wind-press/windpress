@@ -29,7 +29,7 @@
 #windpress-app {
     &.universal {
         >.windpress-container {
-            z-index: calc(infinity);
+            z-index: calc(infinity-1000);
             position: fixed;
             top: var(--wp-admin--admin-bar--height, 0);
             left: 0;
@@ -39,6 +39,10 @@
             &.hide-universal {
                 display: none;
             }
+
+            .v-popper__popper {
+                z-index: calc(infinity);
+            }
         }
     }
 
@@ -46,10 +50,6 @@
         display: inline-block;
         height: 1em;
         vertical-align: -.125em;
-    }
-
-    .monaco-editor * {
-        font-size: 13px !important;
     }
 
     .v-popper--theme-tooltip {

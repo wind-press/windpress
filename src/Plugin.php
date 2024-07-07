@@ -145,7 +145,7 @@ final class Plugin
         // Load translations.
         load_plugin_textdomain(WIND_PRESS::TEXT_DOMAIN, false, dirname(plugin_basename(WIND_PRESS::FILE)) . '/languages/');
 
-        // new ApiRouter();
+        new ApiRouter();
 
         Runtime::get_instance()->init();
         // Instantiate the AdminPage class.

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Yabe package.
+ * This file is part of the WindPress package.
  *
  * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Yabe\Siul\Core;
+namespace WindPress\WindPress\Core;
 
-use Yabe\Siul\Utils\Cache as UtilsCache;
-use Yabe\Siul\Utils\Common;
+use WIND_PRESS;
+use WindPress\WindPress\Utils\Cache as UtilsCache;
+use WindPress\WindPress\Utils\Common;
 
 /**
  * @since 1.0.0
@@ -25,11 +26,6 @@ class Cache
      * @var string
      */
     public const CSS_CACHE_FILE = 'tailwind.css';
-
-    /**
-     * @var string
-     */
-    public const CACHE_DIR = '/yabe-siul/cache/';
 
     public static function get_providers(): array
     {
@@ -42,12 +38,12 @@ class Cache
 
     public static function get_cache_path(string $file_path = ''): string
     {
-        return wp_upload_dir()['basedir'] . self::CACHE_DIR . $file_path;
+        return wp_upload_dir()['basedir'] . WIND_PRESS::CACHE_DIR . $file_path;
     }
 
     public static function get_cache_url(string $file_path = ''): string
     {
-        return wp_upload_dir()['baseurl'] . self::CACHE_DIR . $file_path;
+        return wp_upload_dir()['baseurl'] . WIND_PRESS::CACHE_DIR . $file_path;
     }
 
     public static function save_cache(string $payload)

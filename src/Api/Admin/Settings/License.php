@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Yabe package.
+ * This file is part of the WindPress package.
  *
  * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Yabe\Siul\Api\Admin\Settings;
+namespace WindPress\WindPress\Api\Admin\Settings;
 
-use SIUL;
+use WIND_PRESS;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use Yabe\Siul\Api\AbstractApi;
-use Yabe\Siul\Api\ApiInterface;
-use Yabe\Siul\Plugin;
+use WindPress\WindPress\Api\AbstractApi;
+use WindPress\WindPress\Api\ApiInterface;
+use WindPress\WindPress\Plugin;
 
 class License extends AbstractApi implements ApiInterface
 {
@@ -102,7 +102,7 @@ class License extends AbstractApi implements ApiInterface
             ], 400);
         }
 
-        update_option(SIUL::WP_OPTION . '_license', [
+        update_option(WIND_PRESS::WP_OPTION . '_license', [
             'key' => $new_license_key,
             'opt_in_pre_release' => false,
         ]);
@@ -122,7 +122,7 @@ class License extends AbstractApi implements ApiInterface
         $plugin_updater->deactivate();
         $plugin_updater->drop_update_cache();
 
-        update_option(SIUL::WP_OPTION . '_license', [
+        update_option(WIND_PRESS::WP_OPTION . '_license', [
             'key' => '',
             'opt_in_pre_release' => false,
         ]);
@@ -135,7 +135,7 @@ class License extends AbstractApi implements ApiInterface
 
     private function get_license(): array
     {
-        $license = get_option(SIUL::WP_OPTION . '_license', [
+        $license = get_option(WIND_PRESS::WP_OPTION . '_license', [
             'key' => '',
             'opt_in_pre_release' => false,
         ]);
