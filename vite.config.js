@@ -1,9 +1,26 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { v4wp } from '@kucrut/vite-for-wp';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from "vite-plugin-top-level-await";
 
 export default defineConfig({
     plugins: [
+        wasm(),
+        topLevelAwait(),
+        nodePolyfills({
+            // include: [
+            //     'fs',
+            //     'path',
+            //     'process'
+            // ],
+            // Override the default polyfills for specific modules.
+            overrides: {
+                // Since `fs` is not supported in browsers, we can use the `memfs` package to polyfill it.
+                fs: 'memfs',
+            },
+        }),
         v4wp({
             input: {
                 admin: 'assets/admin/main.js',

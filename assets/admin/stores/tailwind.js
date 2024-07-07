@@ -32,7 +32,13 @@ export const useTailwindStore = defineStore('tailwind', () => {
         },
     });
 
-    watch(data.wizard.current, (value) => {
+    // watch(data.wizard.current, (value) => {
+    //     if (data.wizard.selected_id !== null && !value.find((item) => item.id === data.wizard.selected_id)) {
+    //         data.wizard.selected_id = null;
+    //     }
+    // });
+
+    watch(() => data.wizard.current, (value) => {
         if (data.wizard.selected_id !== null && !value.find((item) => item.id === data.wizard.selected_id)) {
             data.wizard.selected_id = null;
         }

@@ -31,6 +31,7 @@ import {
     faShare,
     faBolt,
     faBroom,
+    faCircle,
 } from '@fortawesome/pro-solid-svg-icons';
 
 import {
@@ -78,6 +79,7 @@ library.add(
     faShare,
     faBolt,
     faBroom,
+    faCircle,
 
     /** far */
     faHeartRegular,
