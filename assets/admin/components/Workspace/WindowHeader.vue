@@ -10,7 +10,10 @@ const theme = useColorMode({
     initialValue: 'light',
     onChanged: (value, defaultHandler) => {
         defaultHandler(value);
-        document.documentElement.style.colorScheme = value;
+
+        if (document.querySelector('#windpress-app.universal') === null) {
+            document.documentElement.style.colorScheme = value;
+        }
     },
 });
 

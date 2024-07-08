@@ -140,10 +140,6 @@ export async function buildCache(opts) {
                 logStore.add({ message: 'Cache stored', type: 'success' });
             });
     }
-
-
-    console.log('optimize', normal.css);
-    console.log('optimize', minified.css);
 }
 
 

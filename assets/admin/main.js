@@ -54,13 +54,21 @@ if (!document.getElementById('windpress-app')) {
         // const link = document.createElement('link');
         // link.rel = 'stylesheet';
         // link.href = stylesheet.href;
-        doc.head.appendChild(stylesheet);
+        // doc.head.appendChild(stylesheet);
+
+        // clone the stylesheet element and append it to the iframe
+        const clone = stylesheet.cloneNode(true);
+        doc.head.appendChild(clone);
     });
 
     // find all scripts in the parent document with id starting with 'windpress', and append them to the iframe
     const scripts = document.querySelectorAll('script[id^="windpress"]');
     scripts.forEach((script) => {
-        doc.body.appendChild(script);
+        // doc.body.appendChild(script);
+
+        // clone the script element and append it to the iframe
+        const clone = script.cloneNode(true);
+        doc.body.appendChild(clone);
     });
 
     // add the windpress-app div to the iframe
