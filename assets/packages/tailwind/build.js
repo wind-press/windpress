@@ -1,18 +1,8 @@
-import { compile } from 'tailwindcss'
-import { bundle } from './bundle.js'
-// import { Features, transform, browserslistToTargets } from 'lightningcss-wasm';
-// import init, { Features, transform, browserslistToTargets } from 'https://esm.sh/lightningcss-wasm';
-
-// import * as wasmBuild from 'lightningcss-wasm';
-import init, { Features, transform, browserslistToTargets } from 'lightningcss-wasm';
-// import * as wasmBuild from 'lightningcss-wasm/lightningcss_node.wasm?inline';
-
-// import directly from file system
+import { compile } from 'tailwindcss';
+import { bundle } from './bundle.js';
 import lightningcssWasmFile from '../../../node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
+import init, { Features, transform, browserslistToTargets } from 'lightningcss-wasm';
 
-
-
-// console.log('wasmBuild', wasmBuild);
 await init(lightningcssWasmFile);
 
 /**

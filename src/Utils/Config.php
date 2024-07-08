@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Yabe package.
+ * This file is part of the WindPress package.
  *
  * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Yabe\Siul\Utils;
+namespace WindPress\WindPress\Utils;
 
 use ArrayAccess;
 use Exception;
-use SIUL;
+use WIND_PRESS;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
@@ -54,9 +54,9 @@ class Config
      */
     public static function get($path, $defaultValue = null)
     {
-        $options = json_decode(get_option(SIUL::WP_OPTION . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
+        $options = json_decode(get_option(WIND_PRESS::WP_OPTION . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
 
-        $options = apply_filters('f!yabe/siul/utlis/config:options', $options);
+        $options = apply_filters('f!windpress/utlis/config:options', $options);
 
         try {
             return self::propertyAccessor()->getValue($options, $path);
@@ -77,9 +77,9 @@ class Config
      */
     public static function set($path, $value)
     {
-        $options = json_decode(get_option(SIUL::WP_OPTION . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
+        $options = json_decode(get_option(WIND_PRESS::WP_OPTION . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
 
-        $options = apply_filters('f!yabe/siul/utlis/config:options', $options);
+        $options = apply_filters('f!windpress/utlis/config:options', $options);
 
         if (self::propertyAccessor()->isWritable($options, $path)) {
             self::propertyAccessor()->setValue($options, $path, $value);
@@ -87,7 +87,7 @@ class Config
             self::data_set($options, $path, $value);
         }
 
-        update_option(SIUL::WP_OPTION . '_options', json_encode($options, JSON_THROW_ON_ERROR));
+        update_option(WIND_PRESS::WP_OPTION . '_options', json_encode($options, JSON_THROW_ON_ERROR));
     }
 
     /**
@@ -163,10 +163,6 @@ class Config
      */
     public static function array_exists($array, $key)
     {
-        // if ($array instanceof Enumerable) {
-        //     return $array->has($key);
-        // }
-
         if ($array instanceof ArrayAccess) {
             return $array->offsetExists($key);
         }

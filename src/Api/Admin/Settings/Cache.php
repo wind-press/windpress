@@ -104,10 +104,11 @@ class Cache extends AbstractApi implements ApiInterface
 
         try {
             $content = sprintf(
-                "/* ! %s v%s | %s */\n%s",
+                "/*! %s v%s | %s | %s */\n%s",
                 strtolower(Common::plugin_data('Name')),
                 WIND_PRESS::VERSION,
                 date('Y-m-d H:i:s', time()),
+                strtolower(Common::plugin_data('PluginURI')),
                 base64_decode($payload['content'])
             );
 

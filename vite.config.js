@@ -10,11 +10,6 @@ export default defineConfig({
         wasm(),
         topLevelAwait(),
         nodePolyfills({
-            // include: [
-            //     'fs',
-            //     'path',
-            //     'process'
-            // ],
             // Override the default polyfills for specific modules.
             overrides: {
                 // Since `fs` is not supported in browsers, we can use the `memfs` package to polyfill it.

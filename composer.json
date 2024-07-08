@@ -28,6 +28,7 @@
         "masterminds/html5": "^2.9",
         "rosua/leak": "dev-master",
         "symfony/finder": "^5.4",
-        "symfony/property-access": "^5.4"
+        "symfony/property-access": "^5.4",
+        "symfony/stopwatch": "^5.4"
     }
 }

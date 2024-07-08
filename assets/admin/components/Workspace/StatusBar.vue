@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useLogStore } from '../../stores/log';
 import { useNotificationStore } from '../../stores/notification';
+import { buildCache } from '../compiler';
 
 const log = useLogStore();
 const notification = useNotificationStore();
@@ -9,13 +10,18 @@ const notification = useNotificationStore();
 const latestLogMessage = computed(() => {
     return log.logs.length > 0 ? log.logs[log.logs.length - 1].message :  `Thank you for using WindPress! Join us on the Facebook Group.`;
 });
+
+function rebuildCache() {
+    console.log('Rebuilding Cache');
+    buildCache({  });
+}
 </script>
 
 <template>
     <div class="status-bar flex fg:statusBar-foreground bg:statusBar-background bt:1|solid|statusBar-border">
         <div class="flex flex:row gap:2 w:full">
             <div class="flex flex-grow:1">
-                <div v-tooltip="{ placement: 'top', content: 'Rebuild Cache' }" class="flex flex:row bg:statusBarItem-remoteBackground fg:statusBarItem-remoteForeground px:12 py:6 align-items:center cursor:pointer" v-ripple>
+                <div @click="rebuildCache" v-tooltip="{ placement: 'top', content: 'Rebuild Cache' }" class="flex flex:row bg:statusBarItem-remoteBackground fg:statusBarItem-remoteForeground px:12 py:6 align-items:center cursor:pointer" v-ripple>
                     <font-awesome-icon :icon="['fas', 'broom']" />
                 </div>
             </div>

@@ -161,7 +161,7 @@ final class Plugin
     {
         do_action('a!windpress/plugin:plugins_loaded.start');
 
-        // IntegrationLoader::get_instance()->register_integrations();
+        IntegrationLoader::get_instance()->register_integrations();
 
         if (is_admin()) {
             add_action('admin_notices', static fn () => Notice::admin_notices());

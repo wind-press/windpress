@@ -40,6 +40,8 @@ if (!document.getElementById('windpress-app')) {
     el.id = 'windpress-app';
     el.classList.add('universal');
     document.body.appendChild(el);
+
+    // app.config.globalProperties.isUniversal = true;
 }
 
 app.mount('#windpress-app');

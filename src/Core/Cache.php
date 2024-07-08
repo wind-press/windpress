@@ -33,7 +33,12 @@ class Cache
          * Register cache providers.
          * @param array $providers The list of cache providers. Each provider should have `id`, `name`, `description`, and `callback` keys.
          */
-        return apply_filters('f!yabe/siul/core/cache:compile.providers', []);
+        // return apply_filters('f!windpress/core/cache:compile.providers', []);
+
+        // temporary backporting from yabe/siul
+        return apply_filters('f!windpress/core/cache:compile.providers', 
+            apply_filters('f!yabe/siul/core/cache:compile.providers', [])
+        );
     }
 
     public static function get_cache_path(string $file_path = ''): string
