@@ -28,6 +28,33 @@
 
 #windpress-app {
     &.universal {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        font-size: 13px;
+        line-height: 1.4em;
+
+         .button,  .button-secondary {
+            color: #2271b1;
+            border-color: #2271b1;
+            background: #f6f7f7;
+            vertical-align: top;
+        }
+         .button,  .button-primary,  .button-secondary {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
+            margin: 0;
+            padding: 0 10px;
+            cursor: pointer;
+            border-width: 1px;
+            border-style: solid;
+            -webkit-appearance: none;
+            border-radius: 3px;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
         >.windpress-container {
             z-index: calc(infinity-1000);
             position: fixed;
@@ -70,8 +97,20 @@
     }
 }
 
-html:not(:has(#windpress-app.universal)) {
-    .windpress-badge {
-        display: none;
+#windpress-iframe {
+    position: fixed;
+    z-index: calc(infinity);
+    bottom: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    border: 0;
+
+    &.expanded {
+        bottom: 0;
+        right: 0;
+        width: 100vw;
+        height: calc(100vh - var(--wp-admin--admin-bar--height, 0%));
+        top: var(--wp-admin--admin-bar--height, 0);
     }
 }

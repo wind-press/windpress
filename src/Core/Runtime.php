@@ -119,6 +119,7 @@ class Runtime
                 'name' => get_bloginfo('name'),
                 'site_url' => get_site_url(),
             ],
+            'is_universal' => true,
         ]);
 
         // do enqueue scripts manually as it already runned before

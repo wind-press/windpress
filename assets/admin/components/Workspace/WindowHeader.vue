@@ -23,7 +23,7 @@ function toggleMinimize() {
     <div class="window-header flex flex:row px:12 bb:1|solid|titleBar-border bg:#f8f8f8 bg:#1f1f1f@dark">
         <div class="window-header__macos py:10 flex flex:row align-items:center gap:6 {b:1|solid|gray-20;bg:gray-10}>.macos__button {b:1|solid|gray-20;bg:gray-10}_.macos__button {b:gray-60;bg:gray-70}_.macos__button@dark">
             <div class="macos__button close r:full size:10"></div>
-            <div @click="toggleMinimize" class="macos__button minimize r:full size:10"></div>
+            <div @click="toggleMinimize" class="macos__button minimize r:full size:10 cursor:pointer"></div>
             <div class="macos__button expand r:full size:10"></div>
         </div>
         <div class="window-header__title py:10 flex flex:row align-items:center flex-grow:1 ml:20 gap:6 justify-content:center fg:foreground">
@@ -33,12 +33,12 @@ function toggleMinimize() {
         </div>
         <div class="flex align-items:center flex:row gap:6">
             <div class="flex align-items:center flex:row gap:2">
-                <button @click="theme = theme === 'dark' ? 'light' : 'dark'" class="flex button button-secondary b:0 bg:transparent bg:button-secondaryHoverBackground:hover fg:foreground min-w:36 my:auto width:auto font:16 align-items:center" v-ripple>
-                    <font-awesome-icon v-if="theme === 'light'" :icon="['fas', 'sun-bright']" class="fill:current" />
-                    <font-awesome-icon v-else-if="theme === 'dark'" :icon="['fas', 'moon-stars']" class="fill:current" />
+                <button @click="theme = theme === 'dark' ? 'light' : 'dark'" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! min-w:36 my:auto width:auto font:16 align-items:center" v-ripple>
+                    <font-awesome-icon v-if="theme === 'light'" :icon="['fas', 'sun-bright']" class="fill:current!" />
+                    <font-awesome-icon v-else-if="theme === 'dark'" :icon="['fas', 'moon-stars']" class="fill:current!" />
                 </button>
             </div>
-            <button class="button button-secondary b:transparent fg:sky-80 fg:sky-40@dark b:sky-80:hover bg:transparent" v-ripple>
+            <button class="button button-secondary b:transparent! fg:sky-80! fg:sky-40!@dark b:sky-80!:hover bg:transparent!" v-ripple>
                 Save
             </button>
         </div>
