@@ -3,7 +3,7 @@ import { useTailwindStore } from '@/dashboard/stores/tailwind';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
-import { build, find_tw_candidates, optimize } from '@/packages/tailwind';
+import { build, find_tw_candidates, optimize } from '@/packages/core/tailwind';
 import broadcastChannel from '@/packages/core/utils/broadcast';
 
 const api = useApi();
@@ -111,7 +111,6 @@ export async function buildCache(opts) {
 
     logStore.add({ message: 'Cache built', type: 'success' });
 
-
     let css_cache = {
         last_generated: null,
         file_url: null,
@@ -120,17 +119,6 @@ export async function buildCache(opts) {
 
     // store to server?
     if (options.store === true) {
-        // await api
-        //     .post('admin/settings/cache', {
-        //         contents: {
-        //             // normal: normal.css,
-        //             // minified: minified.css,
-        //         },
-        //     })
-        //     .then(() => {
-        //         logStore.add({ message: 'Cache stored', type: 'success' });
-        //     });
-
         await api
             .post('admin/settings/cache/store', {
                 // @see https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
@@ -142,10 +130,6 @@ export async function buildCache(opts) {
             });
     }
 }
-
-
-
-
 
 broadcastChannel.addEventListener('message', (event) => {
     if (event.data.key === 'build-cache') {

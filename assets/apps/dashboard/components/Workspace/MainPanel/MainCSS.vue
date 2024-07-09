@@ -6,7 +6,7 @@ import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 
 import twTheme from 'tailwindcss/theme.css?inline';
-import { build, optimize, find_tw_candidates } from '@/packages/tailwind/index.js';
+import { build, optimize, find_tw_candidates } from '@/packages/core/tailwind/index.js';
 
 const ui = useUIStore();
 const twStore = useTailwindStore();

@@ -21,6 +21,9 @@ export default defineConfig({
             input: {
                 dashboard: 'assets/apps/dashboard/main.js',
 
+                // Tailwind
+                'packages/core/tailwind/observer': 'assets/packages/core/tailwind/observer.js',
+
                 // Integrations
                 // 'integration/bricks': 'assets/integration/bricks/main.js',
                 // 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',

@@ -1,7 +1,7 @@
 import { compile } from 'tailwindcss';
 import { bundle } from './bundle.js';
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
-import init, { Features, transform, browserslistToTargets } from 'lightningcss-wasm';
+import init, { Features, transform } from 'lightningcss-wasm';
 
 await init(lightningcssWasmFile);
 
