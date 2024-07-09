@@ -1,9 +1,10 @@
 import { ref } from 'vue';
-import { useTailwindStore } from '../stores/tailwind';
-import { useLogStore } from '../stores/log';
-import { useApi } from '../library/api';
+import { useTailwindStore } from '@/dashboard/stores/tailwind';
+import { useLogStore } from '@/dashboard/stores/log';
+import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
-import { build, find_tw_candidates, optimize } from '../../packages/tailwind';
+import { build, find_tw_candidates, optimize } from '@/packages/tailwind';
+import broadcastChannel from '@/packages/core/utils/broadcast';
 
 const api = useApi();
 
@@ -145,9 +146,8 @@ export async function buildCache(opts) {
 
 
 
-const bc = new BroadcastChannel('windpress_channel');
 
-bc.addEventListener('message', (event) => {
+broadcastChannel.addEventListener('message', (event) => {
     if (event.data.key === 'build-cache') {
         // if it's enabled, generate the cache
         // if (settingsStore.virtualOptions('performance.cache.enabled', false).value) {

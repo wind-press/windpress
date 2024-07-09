@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch, toRaw, reactive } from 'vue';
-import { useApi } from '../library/api.js';
+import { useApi } from '@/dashboard/library/api.js';
 import { useBusyStore } from './busy.js';
-import { useNotifier } from '../library/notifier.js';
+import { useNotifier } from '@/dashboard/library/notifier.js';
 import { isEqual } from 'lodash-es';
 
 export const useTailwindStore = defineStore('tailwind', () => {

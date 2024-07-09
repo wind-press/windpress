@@ -1,5 +1,5 @@
 <script setup>
-import Logo from '../../../../windpress.svg';
+import Logo from '~/windpress.svg';
 import { useColorMode } from '@vueuse/core';
 import { useUIStore } from '../../stores/ui';
 

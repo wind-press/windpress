@@ -1,5 +1,5 @@
 <script setup>
-import Logo from '../../windpress.svg';
+import Logo from '~/windpress.svg';
 import { useUIStore } from './stores/ui';
 
 import WorkspacePage from './pages/WorkspacePage.vue';

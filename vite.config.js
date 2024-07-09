@@ -4,6 +4,7 @@ import { v4wp } from '@kucrut/vite-for-wp';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from "vite-plugin-top-level-await";
+import path from 'path';
 
 export default defineConfig({
     plugins: [
@@ -18,7 +19,7 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                admin: 'assets/admin/main.js',
+                dashboard: 'assets/apps/dashboard/main.js',
 
                 // Integrations
                 // 'integration/bricks': 'assets/integration/bricks/main.js',
@@ -52,4 +53,13 @@ export default defineConfig({
         target: 'modules',
     },
     publicDir: 'assets/static',
+    resolve: {
+        alias: {
+            '~': path.resolve(__dirname), // root directory
+            '@/dashboard': path.resolve(__dirname, './assets/apps/dashboard'),
+            '@/integration': path.resolve(__dirname, './assets/integration'),
+            '@/common': path.resolve(__dirname, './assets/common'),
+            '@/packages': path.resolve(__dirname, './assets/packages'),
+        },
+    },
 });

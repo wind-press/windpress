@@ -1,6 +1,6 @@
 <script setup>
 import Explorer from './Sidebar/Explorer.vue';
-import { useUIStore } from '../../stores/ui.js';
+import { useUIStore } from '@/dashboard/stores/ui.js';
 
 const ui = useUIStore();
 

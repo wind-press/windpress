@@ -1,6 +1,6 @@
 <script setup>
-import { useTailwindStore } from '../../stores/tailwind.js';
-import { useUIStore } from '../../stores/ui.js';
+import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
+import { useUIStore } from '@/dashboard/stores/ui.js';
 
 import MainCSS from './MainPanel/MainCSS.vue';
 

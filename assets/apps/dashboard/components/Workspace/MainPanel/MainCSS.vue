@@ -2,11 +2,11 @@
 import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { ref, shallowRef, onBeforeMount, toRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useUIStore } from '../../../stores/ui.js';
-import { useTailwindStore } from '../../../stores/tailwind.js';
+import { useUIStore } from '@/dashboard/stores/ui.js';
+import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 
 import twTheme from 'tailwindcss/theme.css?inline';
-import { build, optimize, find_tw_candidates } from '../../../../packages/tailwind/index.js';
+import { build, optimize, find_tw_candidates } from '@/packages/tailwind/index.js';
 
 const ui = useUIStore();
 const twStore = useTailwindStore();

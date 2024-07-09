@@ -1,8 +1,8 @@
 <script setup>
-import WindowHeader from '../components/Workspace/WindowHeader.vue';
-import Sidebar from '../components/Workspace/Sidebar.vue';
-import MainPanel from '../components/Workspace/MainPanel.vue';
-import StatusBar from '../components/Workspace/StatusBar.vue';
+import WindowHeader from '@/dashboard/components/Workspace/WindowHeader.vue';
+import Sidebar from '@/dashboard/components/Workspace/Sidebar.vue';
+import MainPanel from '@/dashboard/components/Workspace/MainPanel.vue';
+import StatusBar from '@/dashboard/components/Workspace/StatusBar.vue';
 </script>
 
 <template>

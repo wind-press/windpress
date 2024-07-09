@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue';
-import { useLogStore } from '../../stores/log';
-import { useNotificationStore } from '../../stores/notification';
-import { buildCache } from '../compiler';
+import { useLogStore } from '@/dashboard/stores/log';
+import { useNotificationStore } from '@/dashboard/stores/notification';
+import { buildCache } from '@/dashboard/components/compiler.js';
 
 const log = useLogStore();
 const notification = useNotificationStore();
