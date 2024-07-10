@@ -70,7 +70,7 @@ async function applyStyles() {
     })
 
     const mainCssElement = document.querySelector('script[type="text/tailwindcss"]');
-    const mainCssContent = mainCssElement?.textContent ?? `@import "tailwindcss"`;
+    const mainCssContent = mainCssElement?.textContent ? atob(mainCssElement.textContent) : `@import "tailwindcss"`;
 
     if (document.body && candidates.size > 0) {
         if (!styleContainer || !styleContainer.isConnected) {

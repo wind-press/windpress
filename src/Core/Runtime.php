@@ -93,11 +93,8 @@ class Runtime
     {
         // Ensure that the Universal Mission Control is only loaded by Admin role and in the front-end
 
-        
+
         error_log('enqueue_universal_mission_control');
-
-        $handle = WIND_PRESS::WP_OPTION . ':admin';
-
 
         // add styles
         $stub_main_css = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/main.css');
@@ -106,12 +103,14 @@ class Runtime
         if (file_exists($main_css_path)) {
             $main_css = file_get_contents($main_css_path);
         }
-        echo sprintf("<script type=\"text/tailwindcss\">\n%s\n</script>", $main_css);
+        echo sprintf("<script type=\"text/tailwindcss\">%s</script>", base64_encode($main_css));
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/observer.js', [
-            'handle' => $handle,
-            'in_footer' => true,
+            'handle' => WIND_PRESS::WP_OPTION . ':observer',
+            'in_footer' => false,
         ]);
+
+        $handle = WIND_PRESS::WP_OPTION . ':admin';
 
         AssetVite::get_instance()->enqueue_asset('assets/apps/dashboard/main.js', [
             'handle' => $handle,
