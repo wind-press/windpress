@@ -12,13 +12,17 @@ import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compar
  */
 
 /**
- * Your function description here.
- *
- * @param {string} theme - The main.css content.
+ * @param {string|DesignSystem} theme - The main.css content.
  * @returns {ClassEntity} The data with ClassEntity type.
  */
 export function getClassList(theme) {
-    const design = __unstable__loadDesignSystem(theme)
+    let design;
+
+    if (typeof theme === 'string') {
+        design = __unstable__loadDesignSystem(theme);
+    } else {
+        design = theme;
+    }
 
     /** @type {ClassEntity[]} */
     const classList = getUtilityList(design).concat(
@@ -36,7 +40,6 @@ export function getClassList(theme) {
 
 
     /**
-     * 
      * @param {ClassEntity} classEntity 
      * @returns {ClassEntity}
      */
@@ -116,7 +119,13 @@ function unsupportedUtilityList() {
 }
 
 export function getVariableList(theme) {
-    const design = __unstable__loadDesignSystem(theme);
+    let design;
+
+    if (typeof theme === 'string') {
+        design = __unstable__loadDesignSystem(theme);
+    } else {
+        design = theme;
+    }
 
     return Array.from(design.theme.entries()).map(
         (entry, index) => {

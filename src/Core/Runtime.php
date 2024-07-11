@@ -150,11 +150,17 @@ class Runtime
         // Script content are base64 encoded to prevent it from being executed by the browser.
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo sprintf("<script type=\"text/tailwindcss\">%s</script>", base64_encode($main_css));
+        
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/autocomplete.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
+            'in-footer' => true,
+        ]);
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
         ]);
+
     }
 
     public function enqueue_front_panel()

@@ -32,22 +32,15 @@ class Editor
             return;
         }
 
-        $handle = WIND_PRESS::WP_OPTION . ':siulbricks-editor';
+        $handle = WIND_PRESS::WP_OPTION . ':windpressbricks-editor';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/bricks/main.js', [
             'handle' => $handle,
             'in_footer' => true,
         ]);
 
-        wp_localize_script($handle, 'siulbricks', [
+        wp_localize_script($handle, 'windpressbricks', [
             '_version' => WIND_PRESS::VERSION,
-            '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
-            'rest_api' => [
-                'nonce' => wp_create_nonce('wp_rest'),
-                'root' => esc_url_raw(rest_url()),
-                'namespace' => WIND_PRESS::REST_NAMESPACE,
-                'url' => esc_url_raw(rest_url(WIND_PRESS::REST_NAMESPACE)),
-            ],
             'assets' => [
                 'url' => AssetVite::asset_base_url(),
             ],
@@ -61,48 +54,15 @@ class Editor
             document.addEventListener('DOMContentLoaded', function () {
                 const iframeWindow = document.getElementById('bricks-builder-iframe');
 
-                // Cached query for autocomplete items.
-                const cached_query = new Map();
-                async function searchQuery(query) {
-                    // split query by `:` and search for each subquery
-                    let prefix = query.split(':');
-                    let q = prefix.pop();
-                    for (let i = query.length; i > query.length - q.length; i--) {
-                        const subquery = query.slice(0, i);
-                        if (cached_query.has(subquery)) {
-                            return cached_query.get(subquery);
-                        }
-                    }
-
-                    const suggestions = await iframeWindow.contentWindow.wp.hooks.applyFilters('siul.module.autocomplete', query)
-                        .then((suggestions) => {
-                            return suggestions.map((s) => {
-                                return {
-                                    value: [...s.variants, s.name].join(':'),
-                                    color: s.color,
-                                };
-                            });
-                        });
-
-                    cached_query.set(query, suggestions);
-
-                    return suggestions;
-                }
-
-                wp.hooks.addFilter('siulbricks-autocomplete-items-query', 'siulbricks', async (autocompleteItems, text) => {
-                    if (!iframeWindow.contentWindow.siul?.loaded?.module?.autocomplete) {
+                wp.hooks.addFilter('windpressbricks-autocomplete-items-query', 'windpressbricks', async (autocompleteItems, text) => {
+                    if (!iframeWindow.contentWindow.windpress?.loaded?.module?.autocomplete) {
                         return autocompleteItems;
                     }
+                    
+                    const windpress_suggestions = iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', text);
 
-                    const siul_suggestions = await searchQuery(text);
-
-                    return [...siul_suggestions, ...autocompleteItems];
+                    return [...windpress_suggestions, ...autocompleteItems];
                 });
-
-                // clear cache each 1 minute to avoid memory leak
-                setInterval(() => {
-                    cached_query.clear();
-                }, 60000);
             });
         JS, 'after');
     }

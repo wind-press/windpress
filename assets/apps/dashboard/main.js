@@ -65,7 +65,7 @@ if (!document.getElementById('windpress-app')) {
     const scripts = document.querySelectorAll('script[id^="windpress"]');
     scripts.forEach((script) => {
         // if id contain 'observer', skip
-        if (script.id.includes('observer')) {
+        if (script.id.includes('observer') || script.id.includes('autocomplete')) {
             return;
         }
 

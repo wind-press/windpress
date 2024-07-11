@@ -23,9 +23,10 @@ export default defineConfig({
 
                 // Tailwind
                 'packages/core/tailwind/observer': 'assets/packages/core/tailwind/observer.js',
+                'packages/core/tailwind/autocomplete': 'assets/packages/core/tailwind/autocomplete.js',
 
                 // Integrations
-                // 'integration/bricks': 'assets/integration/bricks/main.js',
+                'integration/bricks': 'assets/integration/bricks/main.js',
                 // 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
                 // 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
 

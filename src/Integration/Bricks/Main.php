@@ -29,7 +29,7 @@ class Main implements IntegrationInterface
             add_filter('f!windpress/core/runtime:is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
             add_filter('f!windpress/core/runtime:append_header.mission_control.is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
             add_filter('f!windpress/core/runtime:append_header.exclude_admin', fn (bool $is_exclude_admin): bool => $this->is_exclude_admin($is_exclude_admin));
-            // new Editor();
+            new Editor();
         }
     }
 

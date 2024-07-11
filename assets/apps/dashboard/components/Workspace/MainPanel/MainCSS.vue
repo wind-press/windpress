@@ -1,5 +1,4 @@
 <script setup>
-import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { shallowRef, onBeforeMount } from 'vue';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useTailwindStore } from '@/dashboard/stores/tailwind.js';

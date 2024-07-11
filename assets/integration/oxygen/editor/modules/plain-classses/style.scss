@@ -1,0 +1,246 @@
+#oxygen-sidebar {
+    textarea.siuloxygen-plc-input {
+        /* margin-top: 4px; */
+        min-height: auto;
+        form-sizing: content;
+        background-color: var(--oxy-dark);
+        color: var(--oxy-active-text);
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        overflow: hidden !important;
+        opacity: .75;
+
+        padding-left: 5.5px;
+        padding-right: 5.5px;
+
+        &::placeholder {
+            word-spacing: normal !important;
+            opacity: 1 !important;
+        }
+
+        // &::selection {
+        //     background-color: var(--builder-bg-accent);
+        //     color: var(--oxy-active);
+        // }
+    }
+}
+
+
+.hit-container {
+    border: 1px solid color-mix(in srgb, #26a0f5 50%, white 1%);
+    margin-top: 6px;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    // line-height: 26px !important;
+    // font-size: 10px;
+    // background-color: color-mix(in srgb, var(--oxy-dark) 10%, white 0%) !important;
+    background-color: var(--oxy-dark);
+    overflow: hidden !important;
+
+    .hit-backdrop,
+    textarea.siuloxygen-plc-input {
+        word-spacing: 8px !important;
+    }
+
+    .hit-backdrop {
+        position: absolute !important;
+        overflow: hidden !important;
+
+        width: 100%;
+        overflow-wrap: break-word;
+    }
+
+    .hit-highlights {
+        width: auto !important;
+        height: auto !important;
+        border-color: transparent !important;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        color: transparent !important;
+        overflow: hidden !important;
+        border-width: 0 !important;
+    }
+
+    .hit-input {
+        display: block !important;
+        position: relative !important;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+
+        &:focus {
+            outline-color: #495057;
+        }
+    }
+
+    .hit-content {
+        border: 0;
+        background: none transparent !important;
+        padding-left: 5.5px;
+        padding-right: 5.5px;
+        position: relative;
+
+        mark {
+            padding: 0;
+            border-radius: 0.1px;
+
+            &.word {
+                // background-color: var(--oxy-dark);
+                // outline-color: var(--oxy-dark);
+                background-color: var(--oxy-mid);
+                outline-color: var(--oxy-mid);
+                outline-width: 5.5px;
+                outline-style: solid;
+            }
+
+            &.multispace,
+            &.placeholder {
+                background-color: transparent;
+            }
+
+            &.placeholder {
+                color: var(--oxy-active-text);
+                opacity: .75;
+            }
+        }
+    }
+}
+
+.siuloxygen-tribute-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: auto;
+    overflow: auto;
+    display: block;
+    z-index: 999999;
+    max-height: 50vh;
+    max-width: 100% !important;
+
+    background-color: var(--oxy-dark);
+    border-radius: var(--builder-border-radius);
+
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, .5);
+
+    min-width: 200px;
+
+    ul {
+        margin: 0;
+        margin-top: 2px;
+        padding: 0;
+        list-style: none;
+
+        li {
+            padding: 5px 5px;
+            cursor: pointer;
+            font-size: 11px;
+            color: var(--oxy-active-text);
+            position: relative;
+
+            &.highlight {
+                background: var(--oxy-mid);
+            }
+
+            &.no-match {
+                cursor: default;
+            }
+
+            &.menu-highlighted {
+                font-weight: bold;
+            }
+        }
+    }
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, .4);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, .2);
+    }
+
+    li {
+        span.class-name {
+            span {
+                font-weight: bold;
+            }
+        }
+
+        span.class-hint {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            padding-right: 8px;
+            color: transparent;
+        }
+    }
+}
+
+.siuloxygen-plc-action-container {
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+    margin-bottom: 2px;
+    margin-top: 6px;
+
+    .actions {
+        display: flex;
+        gap: 4px;
+
+        .oxygen-svg-wrapper {
+            align-items: center;
+            background-color: var(--oxy-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            padding: 2px 6px;
+
+            
+            border-radius: var(--oxy-border-radius);
+
+            .oxygen-svg.icon-tabler {
+                fill: none;
+                height: 18px;
+                width: 18px;
+            }
+        }
+    }
+}
+
+
+#oxygen-sidebar textarea.siuloxygen-plc-input, .hit-container {
+    font-size: var(--oxy-small-text-size);
+    font-family: Consolas, monaco, Courier New, monospace;
+    
+    line-height: 26px !important;
+
+}
+
+#oxygen-sidebar textarea.siuloxygen-plc-input, .hit-container .hit-content {
+    padding: 2px 8px;
+}
+
+.tippy-box {
+    background-color: #1e1e1e;
+
+    max-width: calc(100vw - 10px) !important;
+}
