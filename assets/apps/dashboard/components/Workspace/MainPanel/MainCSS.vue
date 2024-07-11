@@ -35,6 +35,20 @@ function doSave() {
         err => notifier.alert(err.message),
         'Storing main.css...'
     );
+
+    promise.finally(() => {
+        channel.postMessage({
+            source: 'windpress/dashboard',
+            target: 'windpress/observer',
+            task: 'windpress.main_css.saved',
+            payload: {
+                main_css: {
+                    current: twStore.data.main_css.current,
+                    init: twStore.data.main_css.init,
+                }
+            }
+        });
+    });
 }
 
 onBeforeMount(() => {

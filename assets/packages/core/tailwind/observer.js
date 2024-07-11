@@ -98,38 +98,17 @@ await applyStyles();
 export function initListener(mainCssContainer, applyStyles) {
     const channel = new BroadcastChannel('windpress');
 
-    // /**
-    //  * Event listener inside iframe
-    //  */
-    // window.addEventListener(
-    //     'message',
-    //     async (e: MessageEvent<LumenMessage>) => {
-    //         const data = e.data
+    channel.addEventListener('message', async (e) => {
+        const data = e.data;
+        const source = 'windpress/dashboard';
+        const target = 'windpress/observer';
+        const task = 'windpress.main_css.saved';
 
-    //         if (
-    //             data.source === 'lumen/parentWindow' &&
-    //             data.target === 'lumen/iframeWindow'
-    //         ) {
-    //             mainCssContainer.textContent = data.mainCss
+        if (data.source === source && data.target === target && data.task === task) {
+            mainCssContainer.textContent = btoa(data.payload.main_css.current);
 
-    //             await applyStyles()
-    //         }
-    //     }
-    // )
-
-    // /**
-    //  * Event listener between tabs
-    //  */
-    // channel.addEventListener('message', async (e) => {
-    //     const data = e.data
-    //     const source = 'lumen/dashboard'
-    //     const target = 'lumen/observer'
-
-    //     if (data.source === source && data.target === target) {
-    //         mainCssContainer.textContent = data.mainCss
-
-    //         await applyStyles()
-    //     }
-    // })
+            await applyStyles();
+        }
+    })
 }
 

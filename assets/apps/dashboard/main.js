@@ -64,13 +64,10 @@ if (!document.getElementById('windpress-app')) {
     // find all scripts in the parent document with id starting with 'windpress', and append them to the iframe
     const scripts = document.querySelectorAll('script[id^="windpress"]');
     scripts.forEach((script) => {
-
         // if id contain 'observer', skip
         if (script.id.includes('observer')) {
             return;
         }
-
-        // doc.body.appendChild(script);
 
         // clone the script element and append it to the iframe
         const clone = script.cloneNode(true);
