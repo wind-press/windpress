@@ -47,6 +47,15 @@ class WIND_PRESS
     public const TEXT_DOMAIN = 'windpress';
 
     /**
+     * @var array
+     */
+    public const EDD_STORE = [
+        'store_url' => 'https://rosua.org',
+        'item_id' => 2250,
+        'author' => 'idrosua',
+    ];
+
+    /**
      * @var string
      */
     public const REST_NAMESPACE = 'windpress/v1';

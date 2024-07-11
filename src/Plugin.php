@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress;
 
+use EDD_SL\PluginUpdater;
 use Exception;
 use WIND_PRESS;
 use WP_Upgrader;
@@ -29,6 +30,14 @@ use WindPress\WindPress\Utils\Notice;
  */
 final class Plugin
 {
+    /**
+     * Easy Digital Downloads Software Licensing integration wrapper.
+     * Pro version only.
+     *
+     * @var PluginUpdater|null
+     */
+    public $plugin_updater = null;
+
     /**
      * Stores the instance, implementing a Singleton pattern.
      */
@@ -98,6 +107,8 @@ final class Plugin
             }
         }, 10, 2);
 
+        $this->maybe_update_plugin();
+
         add_action('plugins_loaded', fn () => $this->plugins_loaded(), 9);
         add_action('init', fn () => $this->init_plugin());
 
@@ -113,6 +124,8 @@ final class Plugin
         do_action('a!windpress/plugin:activate_plugin.start');
 
         update_option(WIND_PRESS::WP_OPTION . '_version', WIND_PRESS::VERSION);
+
+        $this->maybe_embedded_license();
 
         do_action('a!windpress/plugin:activate_plugin.end');
     }
@@ -190,5 +203,79 @@ final class Plugin
         ));
 
         return $links;
+    }
+
+    /**
+     * Initialize the plugin updater.
+     * Pro version only.
+     *
+     * @return PluginUpdater
+     */
+    public function maybe_update_plugin()
+    {
+        if (! class_exists(PluginUpdater::class)) {
+            return null;
+        }
+
+        if ($this->plugin_updater instanceof \EDD_SL\PluginUpdater) {
+            return $this->plugin_updater;
+        }
+
+        $license = get_option(WIND_PRESS::WP_OPTION . '_license', [
+            'key' => '',
+            'opt_in_pre_release' => false,
+        ]);
+
+        $this->plugin_updater = new PluginUpdater(
+            WIND_PRESS::WP_OPTION,
+            [
+                'version' => WIND_PRESS::VERSION,
+                'license' => $license['key'] ? trim($license['key']) : false,
+                'beta' => $license['opt_in_pre_release'],
+                'plugin_file' => WIND_PRESS::FILE,
+                'item_id' => WIND_PRESS::EDD_STORE['item_id'],
+                'store_url' => WIND_PRESS::EDD_STORE['store_url'],
+                'author' => WIND_PRESS::EDD_STORE['author'],
+            ]
+        );
+
+        return $this->plugin_updater;
+    }
+
+    /**
+     * Check if the plugin distributed with an embedded license and activate the license.
+     * Pro version only.
+     */
+    private function maybe_embedded_license(): void
+    {
+        if (! class_exists(PluginUpdater::class)) {
+            return;
+        }
+
+        $license_file = dirname(WIND_PRESS::FILE) . '/license-data.php';
+
+        if (! file_exists($license_file)) {
+            return;
+        }
+
+        require_once $license_file;
+
+        $const_name = 'ROSUA_EMBEDDED_LICENSE_KEY_' . WIND_PRESS::EDD_STORE['item_id'];
+
+        if (! defined($const_name)) {
+            return;
+        }
+
+        $license_key = constant($const_name);
+
+        update_option(WIND_PRESS::WP_OPTION . '_license', [
+            'key' => $license_key,
+            'opt_in_pre_release' => false,
+        ]);
+
+        unlink($license_file);
+
+        // activate the license.
+        $this->maybe_update_plugin()->activate($license_key);
     }
 }
