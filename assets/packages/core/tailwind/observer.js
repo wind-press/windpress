@@ -1,5 +1,4 @@
 import { build } from './build';
-import { broadcastChannel } from '@/packages/core/utils/broadcast';
 
 /**
  * @type {HTMLStyleElement}
@@ -97,6 +96,8 @@ await applyStyles();
  * @param {Function} applyStyles
  */
 export function initListener(mainCssContainer, applyStyles) {
+    const channel = new BroadcastChannel('windpress');
+
     // /**
     //  * Event listener inside iframe
     //  */
@@ -119,7 +120,7 @@ export function initListener(mainCssContainer, applyStyles) {
     // /**
     //  * Event listener between tabs
     //  */
-    // broadcastChannel.addEventListener('message', async (e) => {
+    // channel.addEventListener('message', async (e) => {
     //     const data = e.data
     //     const source = 'lumen/dashboard'
     //     const target = 'lumen/observer'

@@ -4,10 +4,12 @@ import { ref, shallowRef, onBeforeMount, toRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
+import { useNotifier } from '@/dashboard/library/notifier';
 
 import twTheme from 'tailwindcss/theme.css?inline';
 import { build, optimize, find_tw_candidates } from '@/packages/core/tailwind/index.js';
 
+const notifier = useNotifier();
 const ui = useUIStore();
 const twStore = useTailwindStore();
 
@@ -27,7 +29,14 @@ function naturalExpand(value, total = null) {
 }
 
 function doSave() {
-    twStore.doPush();
+    const promise = twStore.doPush();
+
+    notifier.async(
+        promise,
+        resp => notifier.success(resp.message),
+        err => notifier.alert(err.message),
+        'Storing main.css...'
+    );
 }
 
 onBeforeMount(() => {
@@ -202,6 +211,18 @@ function handleCssEditorMount(editor, monaco) {
         }
     });
 }
+
+const channel = new BroadcastChannel('windpress');
+channel.addEventListener('message', (e) => {
+    const data = e.data;
+    const source = 'windpress/dashboard';
+    const target = 'windpress/dashboard';
+    const task = 'windpress.save';
+
+    if (data.source === source && data.target === target && data.task === task) {
+        doSave();
+    }
+});
 
 async function tryBuild() {
     console.log('tryBuild', twStore.data.main_css.current);

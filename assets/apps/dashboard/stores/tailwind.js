@@ -8,7 +8,7 @@ import { isEqual } from 'lodash-es';
 export const useTailwindStore = defineStore('tailwind', () => {
     const busyStore = useBusyStore();
     const api = useApi();
-    // const notifier = useNotifier();
+    const notifier = useNotifier();
 
     /**
      * The custom Tailwind CSS and config added with the filter hooks.
@@ -65,7 +65,7 @@ export const useTailwindStore = defineStore('tailwind', () => {
                 updateInitValues();
             })
             .catch((error) => {
-                // notifier.alert(error.message);
+                notifier.alert(error.message);
             })
             .finally(() => {
                 busyStore.remove('tailwind.doPull');

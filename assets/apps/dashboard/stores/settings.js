@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
 import { useApi } from '../library/api.js';
 import { useBusyStore } from './busy.js';
 import { useNotifier } from '../library/notifier.js';
-import { cloneDeep, get, set } from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 import { createVirtualRef } from '@/dashboard/composables/virtual.js';
 
 export const useSettingsStore = defineStore('settings', () => {

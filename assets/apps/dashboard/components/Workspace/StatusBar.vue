@@ -2,18 +2,25 @@
 import { computed } from 'vue';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useNotificationStore } from '@/dashboard/stores/notification';
-import { buildCache } from '@/dashboard/components/compiler.js';
 
 const log = useLogStore();
 const notification = useNotificationStore();
+const channel = new BroadcastChannel('windpress');
 
 const latestLogMessage = computed(() => {
-    return log.logs.length > 0 ? log.logs[log.logs.length - 1].message :  `Thank you for using WindPress! Join us on the Facebook Group.`;
+    return log.logs.length > 0 ? log.logs[log.logs.length - 1].message : `Thank you for using WindPress! Join us on the Facebook Group.`;
 });
 
+
 function rebuildCache() {
-    console.log('Rebuilding Cache');
-    buildCache({  });
+    channel.postMessage({
+        source: 'any',
+        target: 'windpress/dashboard',
+        task: 'windpress.generate-cache',
+        payload: {
+            force_pull: true
+        }
+    });
 }
 </script>
 
@@ -27,7 +34,7 @@ function rebuildCache() {
             </div>
             <div class="flex flex:row px:12 py:6 gap:12 rel">
                 <div class="status-bar__log rel flex align-items:center leading:normal fg:statusBar-foreground/.7 overflow:hidden">
-                    <Transition  mode="out-in" name="slide-up">
+                    <Transition mode="out-in" name="slide-up">
                         <span :key="latestLogMessage" class="leading:normal">
                             {{ latestLogMessage }}
                         </span>
@@ -47,16 +54,16 @@ function rebuildCache() {
 <style scoped>
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
 }
 
 .slide-up-enter-from {
-  opacity: 0;
-  transform: translateY(15px);
+    opacity: 0;
+    transform: translateY(15px);
 }
 
 .slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(-15px);
+    opacity: 0;
+    transform: translateY(-15px);
 }
 </style>

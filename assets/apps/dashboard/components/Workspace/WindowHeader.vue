@@ -20,6 +20,16 @@ const theme = useColorMode({
 function toggleMinimize() {
     ui.virtualState('window.minimized', false).value = !ui.virtualState('window.minimized', false).value;
 }
+
+const channel = new BroadcastChannel('windpress');
+
+function doSave() {
+    channel.postMessage({
+        source: 'windpress/dashboard',
+        target: 'windpress/dashboard',
+        task: 'windpress.save',
+    });
+}
 </script>
 
 <template>
@@ -41,7 +51,7 @@ function toggleMinimize() {
                     <font-awesome-icon v-else-if="theme === 'dark'" :icon="['fas', 'moon-stars']" class="fill:current!" />
                 </button>
             </div>
-            <button class="button button-secondary b:transparent! fg:sky-80! fg:sky-40!@dark b:sky-80!:hover bg:transparent!" v-ripple>
+            <button @click="doSave" class="button button-secondary b:transparent! fg:sky-80! fg:sky-40!@dark b:sky-80!:hover bg:transparent!" v-ripple>
                 Save
             </button>
         </div>
