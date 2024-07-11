@@ -57,8 +57,8 @@ if (!document.getElementById('windpress-app')) {
         // doc.head.appendChild(stylesheet);
 
         // clone the stylesheet element and append it to the iframe
-        // const clone = stylesheet.cloneNode(true);
-        // doc.head.appendChild(clone);
+        const clone = stylesheet.cloneNode(true);
+        doc.head.appendChild(clone);
     });
 
     // find all scripts in the parent document with id starting with 'windpress', and append them to the iframe

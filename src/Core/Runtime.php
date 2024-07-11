@@ -73,11 +73,11 @@ class Runtime
     public function init()
     {
         if (!is_admin()) {
-            // $is_prevent_load = apply_filters('f!windpress/core/runtime:is_prevent_load', false);
+            $is_prevent_load = apply_filters('f!windpress/core/runtime:is_prevent_load', false);
 
-            // if ($is_prevent_load) {
-            //     return;
-            // }
+            if ($is_prevent_load) {
+                return;
+            }
 
             $this->append_header();
         }
@@ -85,31 +85,80 @@ class Runtime
 
     public function append_header()
     {
-        // add_action('wp_head', fn () => $this->enqueue_universal_mission_control(), 1_000_001);
-        add_action('wp_head', fn () => $this->enqueue_universal_mission_control(), 1_000_001);
+        $is_cache_enabled = Config::get('performance.cache.enabled', false);
+        $is_cache_enabled = apply_filters('f!windpress/core/runtime:append_header.cache_enabled', $is_cache_enabled);
+
+        $is_exclude_admin = Config::get('performance.cache.exclude_admin', false) && current_user_can('manage_options');
+        $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
+
+        if ($is_cache_enabled && $this->is_cache_exists() && !$is_exclude_admin) {
+            add_action('wp_head', fn () => $this->enqueue_css_cache(), 1_000_001);
+        } else {
+            add_action('wp_head', fn () => $this->enqueue_play_cdn(), 1_000_001);
+
+            if (
+                Config::get('general.mission-control.front.enabled', false)
+                && current_user_can('manage_options')
+                && !apply_filters('f!windpress/core/runtime:append_header.mission_control.is_prevent_load', false)
+            ) {
+                add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
+            }
+        }
     }
 
-    public function enqueue_universal_mission_control()
+    public function is_cache_exists()
     {
-        // Ensure that the Universal Mission Control is only loaded by Admin role and in the front-end
+        return file_exists(Cache::get_cache_path(Cache::CSS_CACHE_FILE)) && is_readable(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
+    }
+
+    public function enqueue_css_cache()
+    {
+        if (!$this->is_cache_exists()) {
+            return;
+        }
+
+        $handle = WIND_PRESS::WP_OPTION . '-cached';
+
+        if (Config::get('performance.cache.inline_load', false)) {
+            $css = file_get_contents(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
+
+            if ($css === false) {
+                return;
+            }
+
+            // CSS content are processed by lightningcss library and it's safe to be printed directly.
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo sprintf("<style id=\"%s-css\">\n%s\n</style>", $handle, strip_tags($css));
+        } else {
+            $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
+            wp_register_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
+            wp_print_styles($handle);
+        }
+    }
 
 
-        error_log('enqueue_universal_mission_control');
-
-        // add styles
+    public function enqueue_play_cdn($display = true)
+    {
+        // add main.css
         $stub_main_css = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/main.css');
         $main_css = $stub_main_css;
         $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
         if (file_exists($main_css_path)) {
             $main_css = file_get_contents($main_css_path);
         }
+
+        // Script content are base64 encoded to prevent it from being executed by the browser.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo sprintf("<script type=\"text/tailwindcss\">%s</script>", base64_encode($main_css));
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
-            'in_footer' => false,
+            'in-footer' => true,
         ]);
+    }
 
+    public function enqueue_front_panel()
+    {
         $handle = WIND_PRESS::WP_OPTION . ':admin';
 
         AssetVite::get_instance()->enqueue_asset('assets/apps/dashboard/main.js', [

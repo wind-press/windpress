@@ -51,7 +51,7 @@ class WIND_PRESS
      */
     public const EDD_STORE = [
         'store_url' => 'https://rosua.org',
-        'item_id' => 2250,
+        'item_id' => 3520, // WindPress
         'author' => 'idrosua',
     ];
 
