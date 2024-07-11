@@ -6,7 +6,7 @@ import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 import { useNotifier } from '@/dashboard/library/notifier';
 
 import twTheme from 'tailwindcss/theme.css?inline';
-import { getVariableList, getClassList } from '@/packages/core/tailwind';
+import { getVariableList } from '@/packages/core/tailwind';
 
 const notifier = useNotifier();
 const ui = useUIStore();
@@ -147,10 +147,6 @@ channel.addEventListener('message', (e) => {
         doSave();
     }
 });
-
-// filter with the property selector value 'px-2'
-console.log('getClassList', getClassList(twTheme + twStore.data.main_css.current));
-
 </script>
 
 <template>
