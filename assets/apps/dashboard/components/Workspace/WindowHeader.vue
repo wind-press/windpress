@@ -1,7 +1,7 @@
 <script setup>
 import Logo from '~/windpress.svg';
 import { useColorMode } from '@vueuse/core';
-import { useUIStore } from '../../stores/ui';
+import { useUIStore } from '@/dashboard/stores/ui';
 
 const ui = useUIStore();
 

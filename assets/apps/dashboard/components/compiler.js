@@ -3,7 +3,6 @@ import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
 import { build, find_tw_candidates, optimize } from '@/packages/core/tailwind';
-import { useNotifier } from '@/dashboard/library/notifier';
 
 const api = useApi();
 
@@ -13,7 +12,6 @@ export async function buildCache(opts) {
 
     const options = Object.assign({
         force_pull: false,
-        // notify: true,
         store: true,
     }, opts);
 
@@ -30,7 +28,6 @@ export async function buildCache(opts) {
         });
 
     if (providers.length === 0 || providers.filter(provider => provider.enabled).length === 0) {
-        // notifier.alert('No cache provider found');
         logStore.add({ message: 'No cache provider found', type: 'error' });
 
         throw new Error('No cache provider found');
@@ -126,25 +123,12 @@ export async function buildCache(opts) {
             .then((resp) => {
                 css_cache = resp.data.cache;
                 logStore.add({ message: 'Cache stored', type: 'success' });
-                // notifier.success('Cache generated and stored successfully');
             });
     }
+
+    return {
+        normal: normal,
+        minified: minified,
+        css_cache: css_cache,
+    };
 }
-
-
-const channel = new BroadcastChannel('windpress');
-channel.addEventListener('message', (event) => {
-    if (event.data.key === 'build-cache') {
-        // if it's enabled, generate the cache
-        // if (settingsStore.virtualOptions('performance.cache.enabled', false).value) {
-        //     debounceGenerateCache(
-        //         event.data.force_pull === true
-        //     );
-        // }
-
-        buildCache(event.data.opts);
-
-        // bc.postMessage({ key: 'build-cache' });
-
-    }
-});
