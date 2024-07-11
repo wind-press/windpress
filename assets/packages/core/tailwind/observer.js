@@ -90,7 +90,6 @@ async function applyStyles() {
 // Ensure the styles are applied once (on load)
 await applyStyles();
 
-
 /**
  * @param {Element} mainCssContainer
  * @param {Function} applyStyles
@@ -111,4 +110,3 @@ export function initListener(mainCssContainer, applyStyles) {
         }
     })
 }
-

@@ -6,6 +6,7 @@ import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 import { useNotifier } from '@/dashboard/library/notifier';
 
 import twTheme from 'tailwindcss/theme.css?inline';
+import { getVariableList, getClassList } from '@/packages/core/tailwind';
 
 const notifier = useNotifier();
 const ui = useUIStore();
@@ -96,47 +97,31 @@ function handleCssEditorMount(editor, monaco) {
 
     editorCssRef.value = editor;
 
-    // TODO: Register custom completion provider
     monaco.languages.registerCompletionItemProvider('css', {
         provideCompletionItems(model, position) {
-            const wordInfo = model.getWordUntilPosition(position)
+            const wordInfo = model.getWordUntilPosition(position);
 
-            const theme = twTheme + twStore.data.main_css.current
-            const design = __unstable__loadDesignSystem(theme)
+            const theme = twTheme + twStore.data.main_css.current;
 
-            const variables = Array.from(design.theme.entries()).map(
-                (entry, index) => {
-                    const variable = entry[0]
-
-                    const defaultValue = entry[1].value
-                    const calculatedValue = `${parseFloat(defaultValue) * 16}px`
-
-                    const isCalculated = defaultValue.includes('rem')
-                    const isColor = variable.includes('--color')
-
-                    return {
-                        kind: isColor
-                            ? monaco.languages.CompletionItemKind.Color
-                            : monaco.languages.CompletionItemKind.Variable,
-                        label: variable,
-                        insertText: variable,
-                        detail: isCalculated
-                            ? calculatedValue
-                            : defaultValue,
-                        range: {
-                            startLineNumber: position.lineNumber,
-                            startColumn: wordInfo.startColumn,
-                            endLineNumber: position.lineNumber,
-                            endColumn: wordInfo.endColumn
-                        },
-                        sortText: naturalExpand(index)
-                    }
+            const variables = getVariableList(theme).map(entry => {
+                return {
+                    kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
+                    label: entry.key,
+                    insertText: entry.key,
+                    detail: entry.value,
+                    range: {
+                        startLineNumber: position.lineNumber,
+                        startColumn: wordInfo.startColumn,
+                        endLineNumber: position.lineNumber,
+                        endColumn: wordInfo.endColumn
+                    },
+                    sortText: naturalExpand(entry.index)
                 }
-            )
+            });
 
             return {
                 suggestions: variables
-            }
+            };
         }
     });
 
@@ -162,6 +147,10 @@ channel.addEventListener('message', (e) => {
         doSave();
     }
 });
+
+// filter with the property selector value 'px-2'
+console.log('getClassList', getClassList(twTheme + twStore.data.main_css.current));
+
 </script>
 
 <template>

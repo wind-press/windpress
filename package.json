@@ -37,6 +37,7 @@
     "@headlessui/vue": "^1.7.22",
     "@master/css": "2.0.0-rc.43",
     "@master/css-runtime": "2.0.0-rc.43",
+    "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
     "@types/node": "^20.14.10",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vueuse/core": "^10.11.0",
