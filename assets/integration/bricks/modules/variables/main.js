@@ -9,6 +9,7 @@
 
 import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
 import { getVariableList } from '@/packages/core/tailwind';
+import { logger } from '@/integration/common/logger';
 import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { customAlphabet } from 'nanoid';
 
@@ -67,3 +68,5 @@ channel.addEventListener('message', async (e) => {
 });
 
 registerVariables();
+
+logger('Module loaded!', { module: 'variables' });

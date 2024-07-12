@@ -246,7 +246,7 @@ observer.observe(document.getElementById('bricks-panel-element'), {
 watch([activeElementId, visibleElementPanel], (newVal, oldVal) => {
     if (newVal[0] !== oldVal[0]) {
         nextTick(() => {
-            textInput.value = brxGlobalProp.$_activeElement.value.settings._cssClasses || '';
+            textInput.value = brxGlobalProp.$_activeElement.value?.settings?._cssClasses || '';
             onTextInputChanges();
         });
     }

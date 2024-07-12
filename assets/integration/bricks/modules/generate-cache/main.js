@@ -1,11 +1,13 @@
 /**
  * @module generate-cache 
- * @package Yabe Siul
+ * @package WindPress
  * @since 2.0.0
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 
  * Generate cache when post saved
  */
+
+import { logger } from '@/integration/common/logger';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -57,3 +59,5 @@ const channel = new BroadcastChannel('windpress');
 
     window.XMLHttpRequest = XMLHttpRequest;
 }());
+
+logger('Module loaded!', { module: 'generate-cache' });
