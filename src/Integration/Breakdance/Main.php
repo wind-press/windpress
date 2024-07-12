@@ -68,6 +68,7 @@ class Main implements IntegrationInterface
             return $is_prevent_load;
         }
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is not a form submission
         return isset($_GET['breakdance']) && $_GET['breakdance'] === 'builder';
     }
 
@@ -77,6 +78,7 @@ class Main implements IntegrationInterface
             return $is_exclude_admin;
         }
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is not a form submission
         return isset($_GET['breakdance_iframe']) && $_GET['breakdance_iframe'] === 'true';
     }
 

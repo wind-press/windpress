@@ -273,7 +273,7 @@ final class Plugin
             'opt_in_pre_release' => false,
         ]);
 
-        unlink($license_file);
+        wp_delete_file($license_file);
 
         // activate the license.
         $this->maybe_update_plugin()->activate($license_key);

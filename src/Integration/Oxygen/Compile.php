@@ -57,6 +57,7 @@ class Compile
             'posts_per_page' => -1,
             'fields' => 'ids',
             'post_type' => $post_types,
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- This only run by trigger on specific event
             'meta_query' => [
                 'relation' => 'OR',
                 ...array_map(

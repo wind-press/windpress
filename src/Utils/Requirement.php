@@ -146,8 +146,8 @@ class Requirement
 
         printf(
             '<div class="notice notice-error"><p>%1$s</p>%2$s</div>',
-            $notice,
-            $requirements
+            wp_kses_post($notice),
+            wp_kses_post($requirements)
         );
     }
 }

@@ -110,17 +110,28 @@ class Common
      */
     public static function save_file($content, string $file_path, int $flags = 0): void
     {
+        /**
+         * @var \WP_Filesystem_Base $wp_filesystem
+         */
+        global $wp_filesystem;
+
         if (! file_exists($file_path)) {
             wp_mkdir_p(dirname($file_path));
         }
 
-        $result = file_put_contents($file_path, $content, $flags);
+        if (! $wp_filesystem) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
+
+        $result = $wp_filesystem->put_contents($file_path, $content, $flags);
 
         if ($result === false) {
             throw new Exception('Failed to save to file.', 500);
         }
 
         // if write is successful continue
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
         $saved_content = file_get_contents($file_path);
 
         // if read is successful continue

@@ -72,9 +72,9 @@ class Notice
             foreach ($messages as $message) {
                 echo sprintf(
                     '<div class="notice notice-%s is-dismissible %s">%s</div>',
-                    $message['status'],
-                    self::OPTION_NAME,
-                    $message['message']
+                    esc_attr($message['status']),
+                    esc_attr(self::OPTION_NAME),
+                    wp_kses_post($message['message'])
                 );
             }
         }

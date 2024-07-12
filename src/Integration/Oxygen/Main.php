@@ -82,16 +82,19 @@ class Main implements IntegrationInterface
 
     public function is_inside_builder(): bool
     {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is not a form submission
         return isset($_GET['ct_builder']) && $_GET['ct_builder'];
     }
 
     public function is_preview(): bool
     {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is not a form submission
         return $this->is_inside_builder() && isset($_GET['oxygen_iframe']) && $_GET['oxygen_iframe'];
     }
 
     public function is_editor(): bool
     {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is not a form submission
         return $this->is_inside_builder() && ! isset($_GET['oxygen_iframe']);
     }
 }

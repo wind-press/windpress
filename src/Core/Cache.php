@@ -76,7 +76,7 @@ class Cache
             $_contents = array_key_exists('contents', $result) ? $result['contents'] : $result;
             $_contents = array_map(static function ($content) {
                 if (is_array($content['content']) || is_object($content['content'])) {
-                    $content['content'] = json_encode($content['content']);
+                    $content['content'] = wp_json_encode($content['content']);
                     $content['type'] = 'json';
                 }
 

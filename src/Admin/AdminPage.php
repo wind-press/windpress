@@ -38,6 +38,7 @@ class AdminPage
             'manage_options',
             WIND_PRESS::WP_OPTION,
             fn () => $this->render(),
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
             'data:image/svg+xml;base64,' . base64_encode(file_get_contents(dirname(WIND_PRESS::FILE) . '/windpress.svg')),
             1_000_001
         );
