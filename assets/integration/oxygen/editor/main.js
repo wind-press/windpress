@@ -1,4 +1,4 @@
-import { logger } from '../../common/logger.js';
+import { logger } from '@/integration/common/logger.js';
 
 logger('Loading...');
 

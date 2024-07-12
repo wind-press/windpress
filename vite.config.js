@@ -27,8 +27,8 @@ export default defineConfig({
 
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',
-                // 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
-                // 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
+                'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
+                'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
 
                 // // Tailwind
                 // 'integration/lib/compiler': 'assets/integration/common/compiler-bootstrap.js',

@@ -48,9 +48,9 @@ observer.observe(document.body, {
     attributeOldValue: true
 });
 
-// listen for messages from the parent window for the `siuloxygen-preview-class` action
+// listen for messages from the parent window for the `windpressoxygen-preview-class` action
 window.addEventListener('message', function (event) {
-    if (event.data?.action === 'siuloxygen-preview-class') {
+    if (event.data?.action === 'windpressoxygen-preview-class') {
 
         if (event.data.do === 'remove') {
             removePreviewClassFromElements();

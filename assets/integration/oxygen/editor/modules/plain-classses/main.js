@@ -9,52 +9,52 @@
 
 import './style.scss';
 
-import { logger } from '../../../../common/logger.js';
+import { logger } from '@/integration/common/logger.js';
 
-import tippy, { followCursor } from 'https://esm.sh/tippy.js';
+import tippy, { followCursor } from 'tippy.js';
 
 import { nextTick, ref, watch } from 'vue';
-import autosize from 'https://esm.sh/autosize';
-import Tribute from 'https://esm.sh/gh/zurb/tribute';
+import autosize from 'autosize';
+import Tribute from 'tributejs';
 
-import { getHighlighterCore, loadWasm } from 'https://esm.sh/shiki/core';
+import { createHighlighterCore, loadWasm } from 'shiki/core';
 
-import HighlightInTextarea from '../../../../library/highlight-in-textarea.js';
-import { oxygenScope, iframeScope, oxyIframe } from '../../constant.js';
+import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
+import { oxygenScope, iframeScope, oxyIframe } from '@/integration/oxygen/editor/constant.js';
 
 let shikiHighlighter = null;
 
 (async () => {
-    await loadWasm(import('https://esm.sh/shiki/wasm'));
-    shikiHighlighter = await getHighlighterCore({
+    await loadWasm(import('shiki/wasm'));
+    shikiHighlighter = await createHighlighterCore({
         themes: [
-            import('https://esm.sh/shiki/themes/dark-plus.mjs'),
-            import('https://esm.sh/shiki/themes/light-plus.mjs'),
+            import('shiki/themes/dark-plus.mjs'),
+            import('shiki/themes/light-plus.mjs'),
         ],
         langs: [
-            import('https://esm.sh/shiki/langs/css.mjs'),
+            import('shiki/langs/css.mjs'),
         ],
     });
 })();
 
 const textInput = document.createRange().createContextualFragment(/*html*/ `
-    <textarea id="siuloxygen-plc-input" class="siuloxygen-plc-input" rows="2" spellcheck="false"></textarea>
-`).querySelector('#siuloxygen-plc-input');
+    <textarea id="windpressoxygen-plc-input" class="windpressoxygen-plc-input" rows="2" spellcheck="false"></textarea>
+`).querySelector('#windpressoxygen-plc-input');
 
 const containerAction = document.createRange().createContextualFragment(/*html*/ `
-    <div class="siuloxygen-plc-action-container">
+    <div class="windpressoxygen-plc-action-container">
         <div class="actions">
         </div>
     </div>
-`).querySelector('.siuloxygen-plc-action-container');
+`).querySelector('.windpressoxygen-plc-action-container');
 const containerActionButtons = containerAction.querySelector('.actions');
 
 const classSortButton = document.createRange().createContextualFragment(/*html*/ `
-        <span id="siuloxygen-plc-class-sort" class="oxygen-svg-wrapper siuloxygen-plc-class-sort">
+        <span id="windpressoxygen-plc-class-sort" class="oxygen-svg-wrapper windpressoxygen-plc-class-sort">
             <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" class="oxygen-svg icon icon-tabler icons-tabler-outline icon-tabler-reorder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" /><path d="M16.5 8.5l2.5 2.5l2.5 -2.5" /></svg>    
         </span>
-`).querySelector('#siuloxygen-plc-class-sort');
-containerActionButtons.appendChild(classSortButton);
+`).querySelector('#windpressoxygen-plc-class-sort');
+// containerActionButtons.appendChild(classSortButton);
 
 const visibleElementPanel = ref(false);
 const activeElementId = ref(null);
@@ -63,44 +63,7 @@ let twConfig = null;
 let screenBadgeColors = [];
 
 (async () => {
-    if (oxyIframe.contentWindow.tailwind) {
-        const tw = oxyIframe.contentWindow.tailwind;
-        twConfig = await tw.resolveConfig(tw.config);
-
-        // find all colors that value a object and the object has 500 key
-        let baseColors = Object.keys(tw.colors).filter((color) => {
-            return typeof tw.colors[color] === 'object' && tw.colors[color][500] !== undefined && ![
-                "slate",
-                "gray",
-                "zinc",
-                "neutral",
-                "stone",
-                "warmGray",
-                "trueGray",
-                "coolGray",
-                "blueGray"
-            ].includes(color);
-        });
-
-        baseColors = baseColors.map((color) => {
-            return {
-                name: color,
-                value: tw.colors[color][500],
-            };
-        });
-
-        // randomize the base colors
-        baseColors.sort(() => Math.random() - 0.5);
-
-        let screenKeys = Object.keys(twConfig.theme.screens);
-
-        for (let i = 0; i < screenKeys.length; i++) {
-            screenBadgeColors.push({
-                screen: screenKeys[i],
-                color: baseColors[i].value,
-            });
-        }
-    }
+    
 })();
 
 let hit = null; // highlight any text except spaces and new lines
@@ -109,15 +72,15 @@ autosize(textInput);
 
 let autocompleteItems = [];
 
-wp.hooks.addAction('siuloxygen-autocomplete-items-refresh', 'siuloxygen', () => {
+wp.hooks.addAction('windpressoxygen-autocomplete-items-refresh', 'windpressoxygen', () => {
     // wp hook filters. {value, color?, fontWeight?, namespace?}[]
-    autocompleteItems = wp.hooks.applyFilters('siuloxygen-autocomplete-items', [], textInput.value);
+    autocompleteItems = wp.hooks.applyFilters('windpressoxygen-autocomplete-items', [], textInput.value);
 });
 
-wp.hooks.doAction('siuloxygen-autocomplete-items-refresh');
+wp.hooks.doAction('windpressoxygen-autocomplete-items-refresh');
 
 const tribute = new Tribute({
-    containerClass: 'siuloxygen-tribute-container',
+    containerClass: 'windpressoxygen-tribute-container',
 
     autocompleteMode: true,
 
@@ -127,7 +90,7 @@ const tribute = new Tribute({
     noMatchTemplate: '',
 
     values: async function (text, cb) {
-        const filters = await wp.hooks.applyFilters('siuloxygen-autocomplete-items-query', autocompleteItems, text);
+        const filters = await wp.hooks.applyFilters('windpressoxygen-autocomplete-items-query', autocompleteItems, text);
         cb(filters);
     },
 
@@ -290,10 +253,10 @@ watch([activeElementId, visibleElementPanel], (newVal, oldVal) => {
     if (newVal[0] && newVal[1]) {
         nextTick(() => {
             const panelElementClassesEl = document.querySelector('.oxygen-sidebar-currently-editing');
-            if (panelElementClassesEl.querySelector('.siuloxygen-plc-input') === null) {
+            if (panelElementClassesEl.querySelector('.windpressoxygen-plc-input') === null) {
                 panelElementClassesEl.appendChild(containerAction);
 
-                window.tippy('.siuloxygen-plc-class-sort', {
+                window.tippy('.windpressoxygen-plc-class-sort', {
                     content: 'Automatic Class Sorting',
                     animation: 'shift-toward',
                     placement: 'right',
@@ -341,7 +304,7 @@ textInput.addEventListener('highlights-updated', function (e) {
 });
 
 function hoverPreviewProvider() {
-    if (oxyIframe.contentWindow.siul?.loaded?.module?.classNameToCss !== true) {
+    if (oxyIframe.contentWindow.windpress?.loaded?.module?.classNameToCss !== true) {
         return;
     }
 
@@ -403,7 +366,7 @@ function hoverPreviewProvider() {
             registeredTippyElements = [];
         }
 
-        const generatedCssCode = oxyIframe.contentWindow.siul.module.classNameToCss.generate(detectedMarkWordElement.textContent);
+        const generatedCssCode = oxyIframe.contentWindow.windpress.module.classNameToCss.generate(detectedMarkWordElement.textContent);
         if (generatedCssCode === null) {
             return null;
         };
@@ -494,7 +457,7 @@ let menuAutocompleteItemeEl = null;
 
 textInput.addEventListener('tribute-active-true', function (e) {
     if (menuAutocompleteItemeEl === null) {
-        menuAutocompleteItemeEl = document.querySelector('.siuloxygen-tribute-container>ul');
+        menuAutocompleteItemeEl = document.querySelector('.windpressoxygen-tribute-container>ul');
     }
     nextTick(() => {
         if (menuAutocompleteItemeEl) {
@@ -509,11 +472,11 @@ textInput.addEventListener('tribute-active-true', function (e) {
 });
 
 classSortButton.addEventListener('click', function (e) {
-    if (oxyIframe.contentWindow.siul?.loaded?.module?.classSorter !== true) {
+    if (oxyIframe.contentWindow.windpress?.loaded?.module?.classSorter !== true) {
         return;
     }
 
-    textInput.value = oxyIframe.contentWindow.siul.module.classSorter.sort(textInput.value);
+    textInput.value = oxyIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
     setPlainClassAttribute(textInput.value);
 
     onTextInputChanges();
@@ -521,7 +484,7 @@ classSortButton.addEventListener('click', function (e) {
 
 function previewAddClass(className) {
     postMessageToIframe({
-        action: 'siuloxygen-preview-class',
+        action: 'windpressoxygen-preview-class',
         do: 'add',
         elementId: activeElementId.value,
         className: className,
@@ -530,7 +493,7 @@ function previewAddClass(className) {
 
 function previewResetClass() {
     postMessageToIframe({
-        action: 'siuloxygen-preview-class',
+        action: 'windpressoxygen-preview-class',
         do: 'remove'
     });
 }

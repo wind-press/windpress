@@ -63,44 +63,7 @@ let twConfig = null;
 let screenBadgeColors = [];
 
 (async () => {
-    if (brxIframe.contentWindow.tailwind) {
-        const tw = brxIframe.contentWindow.tailwind;
-        twConfig = await tw.resolveConfig(tw.config);
-
-        // find all colors that value a object and the object has 500 key
-        let baseColors = Object.keys(tw.colors).filter((color) => {
-            return typeof tw.colors[color] === 'object' && tw.colors[color][500] !== undefined && ![
-                "slate",
-                "gray",
-                "zinc",
-                "neutral",
-                "stone",
-                "warmGray",
-                "trueGray",
-                "coolGray",
-                "blueGray"
-            ].includes(color);
-        });
-
-        baseColors = baseColors.map((color) => {
-            return {
-                name: color,
-                value: tw.colors[color][500],
-            };
-        });
-
-        // randomize the base colors
-        baseColors.sort(() => Math.random() - 0.5);
-
-        let screenKeys = Object.keys(twConfig.theme.screens);
-
-        for (let i = 0; i < screenKeys.length; i++) {
-            screenBadgeColors.push({
-                screen: screenKeys[i],
-                color: baseColors[i].value,
-            });
-        }
-    }
+    
 })();
 
 let hit = null; // highlight any text except spaces and new lines

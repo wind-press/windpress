@@ -1,5 +1,5 @@
 #oxygen-sidebar {
-    textarea.siuloxygen-plc-input {
+    textarea.windpressoxygen-plc-input {
         /* margin-top: 4px; */
         min-height: auto;
         form-sizing: content;
@@ -41,7 +41,7 @@
     overflow: hidden !important;
 
     .hit-backdrop,
-    textarea.siuloxygen-plc-input {
+    textarea.windpressoxygen-plc-input {
         word-spacing: 8px !important;
     }
 
@@ -111,7 +111,7 @@
     }
 }
 
-.siuloxygen-tribute-container {
+.windpressoxygen-tribute-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -194,7 +194,7 @@
     }
 }
 
-.siuloxygen-plc-action-container {
+.windpressoxygen-plc-action-container {
     align-items: center;
     display: flex;
     gap: 4px;
@@ -227,7 +227,7 @@
 }
 
 
-#oxygen-sidebar textarea.siuloxygen-plc-input, .hit-container {
+#oxygen-sidebar textarea.windpressoxygen-plc-input, .hit-container {
     font-size: var(--oxy-small-text-size);
     font-family: Consolas, monaco, Courier New, monospace;
     
@@ -235,7 +235,7 @@
 
 }
 
-#oxygen-sidebar textarea.siuloxygen-plc-input, .hit-container .hit-content {
+#oxygen-sidebar textarea.windpressoxygen-plc-input, .hit-container .hit-content {
     padding: 2px 8px;
 }
 

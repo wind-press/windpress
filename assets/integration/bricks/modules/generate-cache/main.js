@@ -28,11 +28,6 @@ const channel = new BroadcastChannel('windpress');
                         const response = JSON.parse(xhr.responseText);
                         if (response.data && response.data.action) {
                             if (response.data.action === 'bricks_save_post') {
-                                // channel.postMessage({ key: 'generate-cache' });
-
-                                // const target = 'windpress/dashboard';
-                                // const task = 'windpress.generate-cache';
-
                                 channel.postMessage({
                                     source: 'windpress/integration',
                                     target: 'windpress/dashboard',

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Integration\Oxygen;
 
-use SIUL;
+use WIND_PRESS;
 use WindPress\WindPress\Utils\AssetVite;
 
 /**
@@ -29,7 +29,7 @@ class Editor
 
     public function iframe_assets()
     {
-        $handle = SIUL::WP_OPTION . ':siuloxygen-iframe';
+        $handle = WIND_PRESS::WP_OPTION . ':windpressoxygen-iframe';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen/iframe/main.js', [
             'handle' => $handle,
@@ -39,21 +39,21 @@ class Editor
 
     public function editor_assets()
     {
-        $handle = SIUL::WP_OPTION . ':siuloxygen-editor';
+        $handle = WIND_PRESS::WP_OPTION . ':windpressoxygen-editor';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen/editor/main.js', [
             'handle' => $handle,
             'in_footer' => true,
         ]);
 
-        wp_localize_script($handle, 'siuloxygen', [
-            '_version' => SIUL::VERSION,
-            '_wpnonce' => wp_create_nonce(SIUL::WP_OPTION),
+        wp_localize_script($handle, 'windpressoxygen', [
+            '_version' => WIND_PRESS::VERSION,
+            '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
             'rest_api' => [
                 'nonce' => wp_create_nonce('wp_rest'),
                 'root' => esc_url_raw(rest_url()),
-                'namespace' => SIUL::REST_NAMESPACE,
-                'url' => esc_url_raw(rest_url(SIUL::REST_NAMESPACE)),
+                'namespace' => WIND_PRESS::REST_NAMESPACE,
+                'url' => esc_url_raw(rest_url(WIND_PRESS::REST_NAMESPACE)),
             ],
             'assets' => [
                 'url' => AssetVite::asset_base_url(),
@@ -68,48 +68,20 @@ class Editor
             document.addEventListener('DOMContentLoaded', function () {
                 const iframeWindow = document.getElementById('ct-artificial-viewport');
 
-                // Cached query for autocomplete items.
-                const cached_query = new Map();
-                async function searchQuery(query) {
-                    // split query by `:` and search for each subquery
-                    let prefix = query.split(':');
-                    let q = prefix.pop();
-                    for (let i = query.length; i > query.length - q.length; i--) {
-                        const subquery = query.slice(0, i);
-                        if (cached_query.has(subquery)) {
-                            return cached_query.get(subquery);
-                        }
-                    }
-
-                    const suggestions = await iframeWindow.contentWindow.wp.hooks.applyFilters('siul.module.autocomplete', query)
-                        .then((suggestions) => {
-                            return suggestions.map((s) => {
-                                return {
-                                    value: [...s.variants, s.name].join(':'),
-                                    color: s.color,
-                                };
-                            });
-                        });
-
-                    cached_query.set(query, suggestions);
-
-                    return suggestions;
-                }
-
-                wp.hooks.addFilter('siuloxygen-autocomplete-items-query', 'siuloxygen', async (autocompleteItems, text) => {
-                    if (!iframeWindow.contentWindow.siul?.loaded?.module?.autocomplete) {
+                wp.hooks.addFilter('windpressoxygen-autocomplete-items-query', 'windpressoxygen', async (autocompleteItems, text) => {
+                    if (!iframeWindow.contentWindow.windpress?.loaded?.module?.autocomplete) {
                         return autocompleteItems;
                     }
 
-                    const siul_suggestions = await searchQuery(text);
+                    const windpress_suggestions = iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', text).map((s) => {
+                        return {
+                            value: s.value,
+                            color: s.color,
+                        };
+                    });
 
-                    return [...siul_suggestions, ...autocompleteItems];
+                    return [...windpress_suggestions, ...autocompleteItems];
                 });
-
-                // clear cache each 1 minute to avoid memory leak
-                setInterval(() => {
-                    cached_query.clear();
-                }, 60000);
             });
         JS, 'after');
     }

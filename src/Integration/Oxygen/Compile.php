@@ -49,7 +49,7 @@ class Compile
 
         $post_types = array_filter(
             get_post_types(),
-            fn ($post_type) => ! in_array($post_type, apply_filters('f!yabe/siul/integration/oxygen/compile:get_contents.ignored_post_types', $this->ignored_post_types))
+            fn ($post_type) => ! in_array($post_type, apply_filters('f!windpress/integration/oxygen/compile:get_contents.ignored_post_types', $this->ignored_post_types))
                 && get_option('oxygen_vsb_ignore_post_type_' . $post_type) !== 'true'
         );
 
@@ -65,7 +65,7 @@ class Compile
                         'compare' => '!=',
                         'value' => '',
                     ],
-                    apply_filters('f!yabe/siul/integration/oxygen/compile:get_contents.post_meta_keys', $this->post_meta_keys)
+                    apply_filters('f!windpress/integration/oxygen/compile:get_contents.post_meta_keys', $this->post_meta_keys)
                 ),
             ],
         ]);

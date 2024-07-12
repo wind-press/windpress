@@ -7,14 +7,24 @@
  * Generate cache when post saved
  */
 
-import { iframeScope } from "../../constant"; 
+import { logger } from '@/integration/common/logger';
+import { iframeScope } from "@/integration/oxygen/editor/constant.js"; 
 
-const bc = new BroadcastChannel('siul_channel');
+const channel = new BroadcastChannel('windpress');
 
 const originalAllSaved = iframeScope.allSaved;
 
 iframeScope.allSaved = function () {
     originalAllSaved.apply(this, arguments);
 
-    bc.postMessage({ key: 'generate-cache' });
+    channel.postMessage({
+        source: 'windpress/integration',
+        target: 'windpress/dashboard',
+        task: 'windpress.generate-cache',
+        payload: {
+            force_pull: true
+        }
+    });
 };
+
+logger('Module loaded!', { module: 'generate-cache' });
