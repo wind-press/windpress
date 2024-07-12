@@ -26,7 +26,7 @@ class Main implements IntegrationInterface
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
 
         if ($this->is_enabled()) {
-            // add_action('lc_editor_before_body_closing', fn () => $this->register_livecanvas_autocomplete());
+            add_action('lc_editor_before_body_closing', fn () => $this->register_livecanvas_autocomplete());
         }
     }
 
@@ -77,33 +77,16 @@ class Main implements IntegrationInterface
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }
 
-                    // Cached query for autocomplete items.
-                    const cached_query = new Map();
                     async function searchQuery(query) {
-                        // split query by `:` and search for each subquery
-                        let prefix = query.split(':');
-                        let q = prefix.pop();
-                        for (let i = query.length; i > query.length - q.length; i--) {
-                            const subquery = query.slice(0, i);
-                            if (cached_query.has(subquery)) {
-                                return cached_query.get(subquery);
-                            }
-                        }
-
-                        const suggestions = await iframeWindow.contentWindow.wp.hooks.applyFilters('siul.module.autocomplete', query)
-                            .then((suggestions) => {
-                                return suggestions.map((s) => {
-                                    return {
-                                        // color: s.color,
-                                        value: [...s.variants, s.name].join(':'),
-                                        meta: 'tailwind',
-                                        caption: s.name,
-                                        score: 1000, // Custom score for sorting (optional)
-                                    };
-                                });
-                            });
-
-                        cached_query.set(query, suggestions);
+                        const suggestions = iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', query).map((s) => {
+                            return {
+                                // color: s.color,
+                                value: s.value,
+                                meta: 'tailwind',
+                                caption: s.value,
+                                score: 1000, // Custom score for sorting (optional)
+                            };
+                        });
 
                         return suggestions;
                     }

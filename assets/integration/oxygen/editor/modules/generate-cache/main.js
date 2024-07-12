@@ -1,6 +1,6 @@
 /**
  * @module generate-cache 
- * @package Yabe Siul
+ * @package WindPress
  * @since 2.0.0
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 

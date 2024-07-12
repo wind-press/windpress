@@ -3,7 +3,7 @@
  * npm: highlight-in-textarea
  * 
  * This library is a fork of the original highlight-in-textarea library. 
- * Some undocumented modifications were made for the purpose of the use case in the YABE plugin.
+ * Some undocumented modifications were made for the purpose of the use case in the WindPress plugin.
  */
 
 function HighlightInTextarea(el, config) {

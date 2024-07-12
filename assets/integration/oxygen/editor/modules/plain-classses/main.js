@@ -1,6 +1,6 @@
 /**
  * @module plain-classes 
- * @package Yabe Siul
+ * @package WindPress
  * @since 1.0.0
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 
