@@ -43,7 +43,7 @@ unzip "php-scoper-wordpress-excludes-master.zip" -d "$DEPLOY_DIRECTORY/deploy"
 
 # 2. scope it
 note "Download php-scoper"
-wget https://github.com/humbug/php-scoper/releases/download/0.18.14/php-scoper.phar -N --no-verbose
+wget https://github.com/humbug/php-scoper/releases/download/0.18.11/php-scoper.phar -N --no-verbose
 
 # Work around possible PHP memory limits
 note "Running scoper to $RESULT_DIRECTORY"
