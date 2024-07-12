@@ -1,13 +1,13 @@
 <?php
 
 /**
- * WindPress - The simple Tailwind CSS integration for WordPress
+ * WindPress - The most effortless Tailwind CSS v4 integration for WordPress
  *
  * @wordpress-plugin
  * Plugin Name:         WindPress
  * Plugin URI:          https://wind.press
- * Description:         The simple Tailwind CSS integration for WordPress
- * Version:             1.0.0-DEV
+ * Description:         The most effortless Tailwind CSS v4 integration for WordPress
+ * Version:             0.0.1
  * Requires at least:   6.0
  * Requires PHP:        7.4
  * Author:              WindPress

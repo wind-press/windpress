@@ -1,0 +1,156 @@
+# builds the content of http://github.com/orgrosua/windpress
+# inspiration from https://github.com/rectorphp/rector-src/blob/main/.github/workflows/build_scoped_rector.yaml
+# TODO: trigger the FREE build only when the PRO build is successful. reference: https://github.blog/changelog/2022-09-08-github-actions-use-github_token-with-workflow_dispatch-and-repository_dispatch/
+name: Build PRO
+
+on:
+  push:
+    # branches:
+    #   - main
+    tags:
+      - '*'
+
+env:
+  # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+  COMPOSER_ROOT_VERSION: "dev-main"
+
+jobs:
+  build_scoped_orgrosua:
+    # Don't run on forks.
+    if: github.repository == 'orgrosua/windpress'
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+        # sometime, when 2 or more consecutive PRs merged, the checkout orgrosua/windpress is overlapped
+        # and reverting other commit change
+        # this should not happen on create a tag, so wait first
+        # - name: "Wait before checkout orgrosua/windpress on create a tag"
+        #   if: "startsWith(github.ref, 'refs/tags/')"
+        #   run: sleep 120
+
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        # clean up the dev files
+        - run: rm -rf ecs.php rector.php
+
+        # clean up the .wordpress-org directory as it is not needed in the PRO build
+        - run: rm -rf .wordpress-org
+
+        # Use pnpm to install dependencies and build the assets.
+        - uses: actions/setup-node@v4
+          with:
+            node-version: 20
+
+        - uses: pnpm/action-setup@v3
+          with:
+            version: 8
+
+        - name: Get pnpm store directory
+          shell: bash
+          run: |
+            echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+        - uses: actions/cache@v4
+          name: Setup pnpm cache
+          with:
+            path: ${{ env.STORE_PATH }}
+            key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+            restore-keys: |
+              ${{ runner.os }}-pnpm-store-
+
+        # Font Awesome Pro. https://fontawesome.com/docs/web/setup/packages
+        - run: npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+        - run: npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
+
+        - run: pnpm install
+        - run: pnpm build
+
+        # clean up the assets dev files
+        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js
+
+        # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
+        - uses: shivammathur/setup-php@v2
+          with:
+            php-version: 7.4
+            coverage: none
+          # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+          env:
+            COMPOSER_TOKEN: ${{ secrets.ORGROSUA_DEV_PAT }}
+
+        # install only prod dependencies
+        - run: composer install --no-dev --classmap-authoritative --ansi
+
+        # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
+        - run: rsync --exclude orgrosua-deploy -av * orgrosua-deploy --quiet
+
+        # humbug/php-scoper requires php ^8.2
+        - uses: shivammathur/setup-php@v2
+          with:
+            php-version: 8.2
+            coverage: none
+          
+        # prefix the namespaces
+        - run: sh deploy/deploy-scoped.sh orgrosua-deploy orgrosua-prefixed
+
+        # copy repository meta files
+        # - run: |
+        #     cp CHANGELOG.md orgrosua-prefixed/
+
+        # clone remote repository, so we can push it
+        - uses: "actions/checkout@v4"
+          with:
+            repository: orgrosua/windpress-pro
+            ref: main
+            path: remote-repository
+            token: ${{ secrets.ORGROSUA_DEV_PAT }}
+
+        # remove remote files, to avoid piling up dead code in remote repository
+        - working-directory: remote-repository
+          run: |
+            git rm -rf .
+            git clean -fxd
+
+        # copy files to remote repository
+        - run: cp -a orgrosua-prefixed/. remote-repository
+
+        # setup git
+        - working-directory: remote-repository
+          run: |
+            git config user.name "Joshua Gugun Siagian"
+            git config user.email suabahasa@gmail.com
+
+        # commit metadata
+        - name: "Get Git log"
+          id: git-log
+          run: |
+              echo "log<<EOF" >> $GITHUB_OUTPUT
+              echo "$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='https://github.com/orgrosua/windpress/commit/%H %s')" >> $GITHUB_OUTPUT
+              echo 'EOF' >> $GITHUB_OUTPUT
+
+        # publish it to remote repository without tag
+        # - name: "Commit Prefixed - main"
+        #   working-directory: remote-repository
+        #   if: "!startsWith(github.ref, 'refs/tags/')"
+        #   env:
+        #       INPUT_LOG: ${{ steps.git-log.outputs.log }}
+        #   run: |
+        #     git add --all
+        #     git commit -m "Updated Yabe Siul to commit ${{ github.event.after }}" -m "$INPUT_LOG"
+        #     git push --quiet origin main
+
+        # publish it to remote repository with tag
+        - name: "Commit Prefixed - tag"
+          working-directory: remote-repository
+          if: "startsWith(github.ref, 'refs/tags/')"
+          env:
+              INPUT_LOG: ${{ steps.git-log.outputs.log }}
+          run: |
+            git add --all
+            git commit -m "Yabe Siul ${GITHUB_REF#refs/tags/}" -m "$INPUT_LOG"
+            git push --quiet origin main
+            git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
+            git push --quiet origin ${GITHUB_REF#refs/tags/}
