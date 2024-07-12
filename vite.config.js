@@ -24,6 +24,7 @@ export default defineConfig({
                 // Tailwind
                 'packages/core/tailwind/observer': 'assets/packages/core/tailwind/observer.js',
                 'packages/core/tailwind/autocomplete': 'assets/packages/core/tailwind/autocomplete.js',
+                'packages/core/tailwind/sort': 'assets/packages/core/tailwind/sort.js',
 
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',

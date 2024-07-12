@@ -54,7 +54,7 @@ const classSortButton = document.createRange().createContextualFragment(/*html*/
         <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" class="bricks-svg icon icon-tabler icons-tabler-outline icon-tabler-reorder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" /><path d="M16.5 8.5l2.5 2.5l2.5 -2.5" /></svg>    
     </span>
 `).querySelector('#windpressbricks-plc-class-sort');
-// containerActionButtons.appendChild(classSortButton);
+containerActionButtons.appendChild(classSortButton);
 
 const visibleElementPanel = ref(false);
 const activeElementId = ref(null);
@@ -264,7 +264,7 @@ textInput.addEventListener('highlights-updated', function (e) {
 });
 
 function hoverPreviewProvider() {
-    if (brxIframe.contentWindow.siul?.loaded?.module?.classNameToCss !== true) {
+    if (brxIframe.contentWindow.windpress?.loaded?.module?.classNameToCss !== true) {
         return;
     }
 
@@ -326,7 +326,7 @@ function hoverPreviewProvider() {
             registeredTippyElements = [];
         }
 
-        const generatedCssCode = brxIframe.contentWindow.siul.module.classNameToCss.generate(detectedMarkWordElement.textContent);
+        const generatedCssCode = brxIframe.contentWindow.windpress.module.classNameToCss.generate(detectedMarkWordElement.textContent);
         if (generatedCssCode === null) {
             return null;
         };
@@ -432,12 +432,12 @@ textInput.addEventListener('tribute-active-true', function (e) {
     });
 });
 
-classSortButton.addEventListener('click', function (e) {
-    if (brxIframe.contentWindow.siul?.loaded?.module?.classSorter !== true) {
+classSortButton.addEventListener('click', async function (e) {
+    if (brxIframe.contentWindow.windpress?.loaded?.module?.classSorter !== true) {
         return;
     }
 
-    textInput.value = brxIframe.contentWindow.siul.module.classSorter.sort(textInput.value);
+    textInput.value = await brxIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
     brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
     onTextInputChanges();
 });

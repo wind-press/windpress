@@ -77,7 +77,14 @@ export function getClassList(theme) {
      * @param {ClassEntity} z - The second class entity.
      */
     const sortselectors = (a, z) => {
-        return compare(a.selector, z.selector);
+        // if prefix with '-' then sort it to the end, otherwise sort it normally
+        if (a.selector.startsWith('-') && !z.selector.startsWith('-')) {
+            return 1;
+        } else if (!a.selector.startsWith('-') && z.selector.startsWith('-')) {
+            return -1;
+        } else {
+            return compare(a.selector, z.selector);
+        }
     }
 
     return classList
@@ -145,4 +152,42 @@ export function getVariableList(theme) {
             }
         }
     );
+}
+
+/**
+ * @param {string|DesignSystem} theme 
+ * @param {Array<string>} classList 
+ * @returns 
+ */
+export function sortClasses(theme, classList) {
+    let design;
+
+    if (typeof theme === 'string') {
+        design = __unstable__loadDesignSystem(theme);
+    } else {
+        design = theme;
+    }
+
+    return defaultSort(design.getClassOrder(classList));
+}
+
+function defaultSort(arrayOfTuples) {
+    return arrayOfTuples
+        .sort(([, a], [, z]) => {
+            if (a === z) return 0;
+            if (a === null) return -1;
+            if (z === null) return 1;
+            return bigSign(a - z);
+        })
+        .map(([className]) => className);
+}
+
+function bigSign(value) {
+    if (value > 0n) {
+        return 1;
+    } else if (value === 0n) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
