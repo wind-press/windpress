@@ -1,12 +1,12 @@
 import { __unstable__loadDesignSystem } from 'tailwindcss';
-import { getClassList } from './intellisense';
+import { getClassList, getVariableList } from './intellisense';
 import { set } from 'lodash-es';
-import twTheme from 'tailwindcss/theme.css?inline';
+import { bundle } from './bundle';
 
 let classLists = [];
 let variableLists = [];
 
-let designSystem;
+const channel = new BroadcastChannel('windpress');
 
 const mainCssContainer = document.querySelector('script[type="text/tailwindcss"]');
 
@@ -23,13 +23,28 @@ if (mainCssContainer) {
     });
 }
 
-async function preloadItems() {
+async function getCssContent() {
     const mainCssElement = document.querySelector('script[type="text/tailwindcss"]');
-    const mainCssContent = mainCssElement?.textContent ? twTheme + atob(mainCssElement.textContent) : `@import "tailwindcss"`;
+    const mainCssContent = mainCssElement?.textContent ? atob(mainCssElement.textContent) : `@import "tailwindcss"`;
 
-    designSystem = __unstable__loadDesignSystem(mainCssContent);
+    const bundleResult = await bundle({
+        entrypoint: '/main.css',
+        volume: {
+            '/main.css': mainCssContent,
+        }
+    });
 
-    classLists = getClassList(designSystem);
+    return bundleResult.css;
+}
+
+async function preloadItems() {
+    classLists = getClassList(__unstable__loadDesignSystem(await getCssContent()));
+
+    channel.postMessage({
+        source: 'windpress/autocomplete',
+        target: 'any',
+        task: `windpress.main_css.saved.done`
+    });
 }
 
 // Ensure the items generated once (on load)
@@ -40,8 +55,6 @@ await preloadItems();
  * @param {Function} preloadItems
  */
 export function initListener(mainCssContainer, preloadItems) {
-    const channel = new BroadcastChannel('windpress');
-
     channel.addEventListener('message', async (e) => {
         const data = e.data;
         const source = 'windpress/dashboard';
@@ -51,7 +64,7 @@ export function initListener(mainCssContainer, preloadItems) {
         if (data.source === source && data.target === target && data.task === task) {
             await preloadItems();
         }
-    })
+    });
 }
 
 function getColor(declarations) {
@@ -81,7 +94,15 @@ function searchClassList(query) {
 // check if the wp-hooks is available
 if (window.wp?.hooks) {
     window.wp.hooks.addFilter('windpress.module.autocomplete', 'windpress', searchClassList);
+    window.wp.hooks.addFilter('windpress.module.design_system.main_css', 'windpress', async () => {
+        return await getCssContent();
+    });
 }
 
 set(window, 'windpress.loaded.module.autocomplete', true);
 set(window, 'windpress.module.autocomplete.query', (q) => searchClassList(q));
+
+set(window, 'windpress.loaded.module.design_system', true);
+set(window, 'windpress.module.design_system.main_css', async () => {
+    return await getCssContent();
+});

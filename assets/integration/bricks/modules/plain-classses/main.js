@@ -1,6 +1,6 @@
 /**
  * @module plain-classes 
- * @package Yabe Siul
+ * @package WindPress
  * @since 1.0.0
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 
@@ -21,31 +21,6 @@ import { createHighlighterCore, loadWasm } from 'shiki/core';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
 import { brxGlobalProp, brxIframeGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
-
-// import twTheme from 'tailwindcss/theme.css?inline';
-// import { getClassList } from '@/packages/core/tailwind';
-// import { segment } from '@tailwindcss/root/packages/tailwindcss/src/utils/segment';
-// import { parseCandidate, parseVariant } from '@tailwindcss/root/packages/tailwindcss/src/candidate';
-// import { __unstable__loadDesignSystem } from 'tailwindcss';
-
-
-// filter only item that has property selector with value contains `:`
-// console.log('classList', getClassList(twTheme).filter((item) => item.selector.includes('md')));
-
-// let cl = getClassList(twTheme);
-
-// cl.forEach((item) => {
-//     const sg = segment(item.selector, ':');
-//     if (sg.length > 1) {
-//         console.log(item.selector);
-//     }
-// });
-
-// const design = __unstable__loadDesignSystem(twTheme);
-// console.log('design', design);
-// console.log('parseCandidate', parseCandidate('md:grid-cols-1', design));
-// console.log('parseVariant', parseVariant('[@media(width>=123px)]:hover:', design));
-
 
 let shikiHighlighter = null;
 
@@ -79,7 +54,7 @@ const classSortButton = document.createRange().createContextualFragment(/*html*/
         <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" class="bricks-svg icon icon-tabler icons-tabler-outline icon-tabler-reorder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" /><path d="M16.5 8.5l2.5 2.5l2.5 -2.5" /></svg>    
     </span>
 `).querySelector('#windpressbricks-plc-class-sort');
-containerActionButtons.appendChild(classSortButton);
+// containerActionButtons.appendChild(classSortButton);
 
 const visibleElementPanel = ref(false);
 const activeElementId = ref(null);

@@ -12,15 +12,15 @@ const twVolume = {
     '/tailwindcss/theme.css': twTheme,
     '/tailwindcss/preflight.css': twPreflight,
     '/tailwindcss/utilities.css': twUtilities
-}
+};
 
 export function isValidUrl(url) {
     try {
-        const resource = new URL(url)
+        const resource = new URL(url);
 
-        return resource.protocol === 'http:' || resource.protocol === 'https:'
+        return resource.protocol === 'http:' || resource.protocol === 'https:';
     } catch (e) {
-        return false
+        return false;
     }
 }
 
@@ -28,7 +28,7 @@ export async function bundle(opts) {
     const volume = {
         ...opts.volume,
         ...twVolume
-    }
+    };
 
     const processor = postcss()
         .use(

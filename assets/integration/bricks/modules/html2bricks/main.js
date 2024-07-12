@@ -1,14 +1,14 @@
 /**
  * @module html2bricks 
- * @package Yabe Siul
+ * @package WindPress
  * @since 1.0.1
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 
  * Convert HTML string to Bricks element
  */
 
-import { brxGlobalProp, brxIframe } from '../../constant.js';
-import { logger } from '../../../common/logger.js';
+import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
+import { logger } from '@/integration/common/logger.js';
 import { parse } from './dom2elements.js';
 
 /**
@@ -60,7 +60,7 @@ async function checkAndRequestClipboardPermission() {
 
 async function htmlPasteHandler() {
     if (!await checkAndRequestClipboardPermission()) {
-        brxGlobalProp.$_showMessage('[Siul] Clipboard access not available');
+        brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
         return;
     }
 
@@ -68,7 +68,7 @@ async function htmlPasteHandler() {
 
     if (!clipboardText || clipboardText.charAt(0) !== '<') {
         logger('Pasted content is not HTML', { module: 'html2bricks', type: 'error' });
-        brxGlobalProp.$_showMessage('[Siul] Pasted content is not HTML');
+        brxGlobalProp.$_showMessage('[WindPress] Pasted content is not HTML');
         return;
     }
 
@@ -92,7 +92,7 @@ async function htmlPasteHandler() {
 
     brxGlobalProp.$_pasteElements();
 
-    brxGlobalProp.$_showMessage('[Siul] HTML pasted');
+    brxGlobalProp.$_showMessage('[WindPress] HTML pasted');
 
     // restore clipboard content
     await navigator.clipboard.writeText(clipboardText);
@@ -119,7 +119,7 @@ document.addEventListener('keydown', (event) => {
 // insert "Paste HTML" menu item after "Paste" menu item
 const pasteItemContextMenu = document.querySelector('#bricks-builder-context-menu li:nth-child(2)');
 const pasteMenu = document.createElement('li');
-pasteMenu.id = 'siulbricks-html2bricks-context-menu';
+pasteMenu.id = 'windpressbricks-html2bricks-context-menu';
 pasteMenu.classList.add('sep');
 pasteMenu.innerHTML = '<span class="label">Paste HTML</span><span class="shortcut">CTRL + SHIFT + V</span>';
 pasteMenu.addEventListener('click', htmlPasteHandler);

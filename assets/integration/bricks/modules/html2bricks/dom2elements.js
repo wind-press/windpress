@@ -10,7 +10,7 @@ function generateId() {
         id = randomId();
     }
 
-    return `siul${id}`;
+    return `windpress${id}`;
 }
 
 /**

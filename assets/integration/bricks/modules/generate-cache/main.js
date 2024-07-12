@@ -7,7 +7,7 @@
  * Generate cache when post saved
  */
 
-const bc = new BroadcastChannel('siul_channel');
+const channel = new BroadcastChannel('windpress');
 
 (function () {
     const __xhr = window.XMLHttpRequest;
@@ -26,7 +26,19 @@ const bc = new BroadcastChannel('siul_channel');
                         const response = JSON.parse(xhr.responseText);
                         if (response.data && response.data.action) {
                             if (response.data.action === 'bricks_save_post') {
-                                bc.postMessage({ key: 'generate-cache' });
+                                // channel.postMessage({ key: 'generate-cache' });
+
+                                // const target = 'windpress/dashboard';
+                                // const task = 'windpress.generate-cache';
+
+                                channel.postMessage({
+                                    source: 'windpress/integration',
+                                    target: 'windpress/dashboard',
+                                    task: 'windpress.generate-cache',
+                                    payload: {
+                                        force_pull: true
+                                    }
+                                });
                             }
                         }
                     }

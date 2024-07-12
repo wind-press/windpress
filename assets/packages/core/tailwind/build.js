@@ -17,9 +17,9 @@ export async function build(opts) {
     const bundleResult = await bundle({
         entrypoint: opts.entrypoint,
         volume: opts.volume
-    })
+    });
 
-    return compile(bundleResult.css).build(opts.candidates)
+    return compile(bundleResult.css).build(opts.candidates);
 }
 
 /**
