@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind css, bricks builder, oxygen builder, breakdance builder
 Requires at least: 6.0
 Tested up to: 6.5
-Stable tag: 0.0.3
+Stable tag: 3.0.0-alpha
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -34,16 +34,15 @@ It's easy to build design with Tailwind CSS v4 thanks to the seamless integratio
 * [LiveCanvas](https://livecanvas.com/?ref=4008)
 * [Oxygen](https://oxygenbuilder.com/)
 * [Timber](https://upstatement.com/timber/)
-* [Blockstudio](https://blockstudio.dev/?ref=7) **[Soon]**
-* [Breakdance](https://breakdance.com/ref/165/) **[Soon]**
-* [Builderius](https://builderius.io/?referral=afdfca82c8) **[Soon]**
-* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Soon]**
+* [Breakdance](https://breakdance.com/ref/165/) **[Soon]** **[Pro]** 
+* [Builderius](https://builderius.io/?referral=afdfca82c8) **[Soon]** **[Pro]**
+* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Soon]** **[Pro]**
 * [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) **[Soon]**
 * [Gutenberg](https://wordpress.org/gutenberg) **[Soon]**
-* [GreenShift](https://greenshiftwp.com/) **[Soon]**
-* [Kadence WP](https://kadencewp.com) **[Soon]**
-* [Pinegrow](https://pinegrow.com/wordpress) **[Soon]**
-* [Zion Builder](https://zionbuilder.io/) **[Soon]**
+* [GreenShift](https://greenshiftwp.com/) **[Soon]** **[Pro]**
+* [Kadence WP](https://kadencewp.com) **[Soon]** **[Pro]**
+* [Pinegrow](https://pinegrow.com/wordpress) **[Soon]** **[Pro]**
+* [Zion Builder](https://zionbuilder.io/) **[Soon]** **[Pro]**
 
 Visit [our website](https://wind.press) for more information.
 
@@ -58,10 +57,12 @@ Visit [our website](https://wind.press) for more information.
 
 == Changelog ==
 
-= 1.0.0 =
-* 🐣 Initial release.
+= 3.0.0 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.17 next)
 * **New**: [Bricks](https://bricksbuilder.io/) integration
 * **New**: [LiveCanvas](https://livecanvas.com/?ref=4008) integration
 * **New**: [Oxygen](https://oxygenbuilder.com/) integration
 * **New**: [Timber](https://upstatement.com/timber/) integration
+
+= 1.0.0 =
+* 🐣 Initial release.
