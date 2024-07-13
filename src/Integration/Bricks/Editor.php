@@ -32,7 +32,7 @@ class Editor
             return;
         }
 
-        $handle = WIND_PRESS::WP_OPTION . ':windpressbricks-editor';
+        $handle = WIND_PRESS::WP_OPTION . ':integration-bricks-editor';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/bricks/main.js', [
             'handle' => $handle,

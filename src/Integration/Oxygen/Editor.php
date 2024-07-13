@@ -29,7 +29,7 @@ class Editor
 
     public function iframe_assets()
     {
-        $handle = WIND_PRESS::WP_OPTION . ':windpressoxygen-iframe';
+        $handle = WIND_PRESS::WP_OPTION . ':integration-oxygen-iframe';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen/iframe/main.js', [
             'handle' => $handle,
@@ -39,7 +39,7 @@ class Editor
 
     public function editor_assets()
     {
-        $handle = WIND_PRESS::WP_OPTION . ':windpressoxygen-editor';
+        $handle = WIND_PRESS::WP_OPTION . ':integration-oxygen-editor';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen/editor/main.js', [
             'handle' => $handle,

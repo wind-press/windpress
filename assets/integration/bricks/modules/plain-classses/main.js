@@ -85,7 +85,7 @@ const tribute = new Tribute({
     autocompleteMode: true,
 
     // Limits the number of items in the menu
-    menuItemLimit: 40,
+    menuItemLimit: 50,
 
     noMatchTemplate: '',
 

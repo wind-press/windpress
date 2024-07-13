@@ -40,6 +40,8 @@ async function getCssContent() {
 async function preloadItems() {
     classLists = getClassList(__unstable__loadDesignSystem(await getCssContent()));
 
+    console.log('classLists', classLists);
+
     channel.postMessage({
         source: 'windpress/autocomplete',
         target: 'any',
