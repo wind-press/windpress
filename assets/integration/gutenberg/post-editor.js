@@ -6,16 +6,11 @@ logger('Loading...');
     let rootContainer;
     let scriptElements;
 
-    logger('waiting for the root container...');
-
     // wait for the root container to be available
     while (!rootContainer) {
         rootContainer = document.querySelector('iframe[name="editor-canvas"]');
         await new Promise(resolve => setTimeout(resolve, 100));
     }
-
-    // wait for the script to be available
-    logger('finding WindPress script...');
 
     // Timeout flag and timer to limit the search duration
     let timeoutOccurred = false;
@@ -46,13 +41,10 @@ logger('Loading...');
         return;
     }
 
-    logger('found WindPress script');
-
     let contentWindow = rootContainer.contentWindow || rootContainer;
     let contentDocument = rootContainer.contentDocument || contentWindow.document;
 
     // wait until contentDocument.head is available
-    logger('waiting for the contentDocument.head to be available...');
     while (!contentDocument.head) {
         await new Promise(resolve => setTimeout(resolve, 300));
     }
