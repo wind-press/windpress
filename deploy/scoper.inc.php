@@ -137,6 +137,7 @@ return [
         'Timber',
         'Blockstudio',
         'Breakdance',
+        'Builderius',
 
         'SiteGround_Optimizer',
     ],

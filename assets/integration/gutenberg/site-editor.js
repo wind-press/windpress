@@ -26,9 +26,8 @@ logger('Loading...');
         let cssElement = document.querySelector('style#siul-tailwindcss-main-css');
         let jitElement = document.querySelector('script#siul-tailwindcss-jit');
         let playElement = document.querySelector('script#siul-tailwindcss-play-cdn');
-        let importMapElement = document.querySelector('script#siul-tailwindcss-importmap');
 
-        if (cssElement && jitElement && playElement && importMapElement) {
+        if (cssElement && jitElement && playElement) {
             clearTimeout(timeout);
             break;
         }
@@ -46,7 +45,6 @@ logger('Loading...');
     // Create a textarea element to manipulate script content
     let textareaPlayElement = document.createElement('textarea');
     let textareaJitElement = document.createElement('textarea');
-    let textareaImportMapElement = document.createElement('textarea');
 
     // Copy the Play CDN script content to the textarea
     textareaPlayElement.innerHTML = document.querySelector('script#siul-tailwindcss-play-cdn').outerHTML;
@@ -55,10 +53,6 @@ logger('Loading...');
     // Copy the JIT script content to the textarea
     textareaJitElement.innerHTML = document.querySelector('script#siul-tailwindcss-jit').outerHTML;
     let jitContent = textareaJitElement.value;
-
-    // Copy the content of import map script
-    textareaImportMapElement.innerHTML = document.querySelector('script#siul-tailwindcss-importmap').outerHTML;
-    let importMapContent = textareaImportMapElement.value;
     
 
     // Function to inject the script and style into the editor canvas
@@ -102,7 +96,6 @@ logger('Loading...');
         let canvasWindow = editorCanvas.contentWindow || editorCanvas;
         let canvasDocument = editorCanvas.contentDocument || canvasWindow.document;
         
-        canvasDocument.head.appendChild(document.createRange().createContextualFragment(importMapContent));
         canvasDocument.head.appendChild(document.createRange().createContextualFragment(jitContent));
         canvasDocument.head.appendChild(document.createRange().createContextualFragment(playContent));
         canvasDocument.head.appendChild(document.querySelector('style#siul-tailwindcss-main-css').cloneNode(true));

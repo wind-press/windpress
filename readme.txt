@@ -30,15 +30,15 @@ WindPress is packed full of features designed to streamline your workflow. Some 
 
 It's easy to build design with Tailwind CSS v4 thanks to the seamless integration with the most popular visual/page builders:
 
-* [Bricks](https://bricksbuilder.io/)
+* [Gutenberg](https://wordpress.org/gutenberg)
+* [Builderius](https://builderius.io/?referral=afdfca82c8)
 * [LiveCanvas](https://livecanvas.com/?ref=4008)
-* [Oxygen](https://oxygenbuilder.com/)
 * [Timber](https://upstatement.com/timber/)
-* [Breakdance](https://breakdance.com/ref/165/) **[Soon]** **[Pro]** 
-* [Builderius](https://builderius.io/?referral=afdfca82c8) **[Soon]** **[Pro]**
-* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Soon]** **[Pro]**
+* [Bricks](https://bricksbuilder.io/) **[Pro]**
+* [Oxygen](https://oxygenbuilder.com/) **[Pro]** 
 * [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) **[Soon]**
-* [Gutenberg](https://wordpress.org/gutenberg) **[Soon]**
+* [Breakdance](https://breakdance.com/ref/165/) **[Soon]** **[Pro]** 
+* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Soon]** **[Pro]**
 * [GreenShift](https://greenshiftwp.com/) **[Soon]** **[Pro]**
 * [Kadence WP](https://kadencewp.com) **[Soon]** **[Pro]**
 * [Pinegrow](https://pinegrow.com/wordpress) **[Soon]** **[Pro]**
@@ -59,9 +59,9 @@ Visit [our website](https://wind.press) for more information.
 
 = 3.0.0 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.17 next)
-* **New**: [Bricks](https://bricksbuilder.io/) integration
+* **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
 * **New**: [LiveCanvas](https://livecanvas.com/?ref=4008) integration
-* **New**: [Oxygen](https://oxygenbuilder.com/) integration
+* **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]**
 * **New**: [Timber](https://upstatement.com/timber/) integration
 
 = 1.0.0 =
