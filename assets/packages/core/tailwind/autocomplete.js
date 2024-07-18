@@ -76,6 +76,16 @@ function getColor(declarations) {
 }
 
 function searchClassList(query) {
+    // if the query is empty, return all classList
+    if (query === '') {
+        return classLists.map((classList) => {
+            return {
+                value: classList.selector,
+                color: getColor(classList.declarations)
+            }
+        });
+    }
+
     // split query by `:` and search for each subquery
     let segment = query.split(':');
     let prefix = segment.slice(0, -1).join(':');
@@ -121,7 +131,7 @@ function searchClassList(query) {
                     selector: classList.selector + '/' + i
                 });
 
-                console.log(classList)
+                // console.log(classList);
             }
         });
 

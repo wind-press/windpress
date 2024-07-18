@@ -62,6 +62,7 @@ Visit [our website](https://wind.press) for more information.
 * **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
 * **New**: [LiveCanvas](https://livecanvas.com/?ref=4008) integration
 * **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]**
+* **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]**
 * **New**: [Timber](https://upstatement.com/timber/) integration
 * **New**: [Builderius](https://builderius.io/?referral=afdfca82c8) integration
 
