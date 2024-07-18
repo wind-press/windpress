@@ -1,40 +1,43 @@
-import './style.scss';
 
 import { createVirtualRef } from '@/dashboard/composables/virtual.js';
 import { logger } from '@/integration/common/logger';
+import { watch } from 'vue';
 import Logo from '~/windpress.svg?raw';
 
-const bricksToolbarSelector = '#bricks-toolbar ul.group-wrapper.right';
+const breakdanceToolbarSelector = '.topbar-section.undo-redo-top-bar-section';
 
-// create element from html string
 const settingButtonHtml = document.createRange().createContextualFragment(/*html*/`
-    <li id="windpressbricks-settings-navbar" data-balloon="WindPress — Bricks settings" data-balloon-pos="bottom">
-        <span class="bricks-svg-wrapper">
-            ${Logo}
-        </span>
-    </li>
+    <div class="topbar-section topbar-section-bl">
+        <div id="windpressbreakdance-settings-button" class="breakdance-toolbar-icon-button">
+            <div class="breakdance-icon" style="width: 18px; height: 18px;">
+                ${Logo}
+            </div>
+        </div>
+    </div>
 `);
 
-const { getVirtualRef } = createVirtualRef({}, { 
+const { getVirtualRef } = createVirtualRef({}, {
     persist: 'windpress.ui.state'
 });
 
-// add the button to the bricks toolbar as the first item
-const bricksToolbar = document.querySelector(bricksToolbarSelector);
-bricksToolbar.insertBefore(settingButtonHtml, bricksToolbar.firstChild);
+// add the button as the previous sibling of the breakdanceToolbar
+const breakdanceToolbar = document.querySelector(breakdanceToolbarSelector);
+breakdanceToolbar.parentNode.insertBefore(settingButtonHtml, breakdanceToolbar.previousElementSibling);
 
 // select the settings button
-const settingsButton = document.querySelector('#windpressbricks-settings-navbar');
+const settingsButton = document.querySelector('#windpressbreakdance-settings-button');
 
 function toggleMinimize() {
     const currentVal = getVirtualRef('window.minimized', false).value;
 
     getVirtualRef('window.minimized', false).value = !currentVal;
+}
 
+function toggleButtonClass(currentVal) {
     if (!currentVal === true) {
-        settingsButton.classList.remove('active');
+        settingsButton.classList.remove('breakdance-toolbar-icon-button-active');
     } else {
-        settingsButton.classList.add('active');
+        settingsButton.classList.add('breakdance-toolbar-icon-button-active');
     }
 }
 
@@ -42,5 +45,12 @@ function toggleMinimize() {
 settingsButton.addEventListener('click', (event) => {
     toggleMinimize();
 });
+
+watch(() => getVirtualRef('window.minimized', false).value, (value) => {
+    toggleButtonClass(!value);
+});
+
+toggleButtonClass(!getVirtualRef('window.minimized', false).value);
+
 
 logger('Module loaded!', { module: 'settings' });

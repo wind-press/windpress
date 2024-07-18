@@ -12,47 +12,26 @@ import { logger } from '@/integration/common/logger';
 const channel = new BroadcastChannel('windpress');
 
 (function () {
-    const __xhr = window.XMLHttpRequest;
-    function XMLHttpRequest() {
+    const { fetch: originalFetch } = window;
+    window.fetch = async (...args) => {
+        const response = await originalFetch(...args);
 
-        const xhr = new __xhr();
-
-        const open = xhr.open;
-
-        xhr.open = function (method, url) {
-            if (method === 'POST' && url.includes('admin-ajax.php')) {
-                const onreadystatechange = xhr.onreadystatechange;
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        const response = JSON.parse(xhr.responseText);
-                        if (response.data && response.data.action) {
-                            if (response.data.action === 'bricks_save_post') {
-                                channel.postMessage({
-                                    source: 'windpress/integration',
-                                    target: 'windpress/dashboard',
-                                    task: 'windpress.generate-cache',
-                                    payload: {
-                                        force_pull: true
-                                    }
-                                });
-                            }
-                        }
+        if(new URL(args[0]).searchParams.get('_breakdance_doing_ajax') === 'yes') {
+            const payload = Object.fromEntries(args[1].body.entries());
+            if (response.ok && response.status === 200 && payload.action === 'breakdance_save') {
+                channel.postMessage({
+                    source: 'windpress/integration',
+                    target: 'windpress/dashboard',
+                    task: 'windpress.generate-cache',
+                    payload: {
+                        force_pull: true
                     }
-
-                    if (onreadystatechange) {
-                        onreadystatechange.apply(this, arguments);
-                    }
-                };
+                });
             }
-
-            open.apply(this, arguments);
         }
 
-        return xhr;
-    }
-
-    window.XMLHttpRequest = XMLHttpRequest;
+        return response;
+    };
 }());
 
 logger('Module loaded!', { module: 'generate-cache' });

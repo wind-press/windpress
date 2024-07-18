@@ -179,13 +179,6 @@ tribute.events.callbacks = function () {
 
 tribute.attach(textInput);
 
-
-
-
-
-
-
-
 bdeV.$store.subscribeAction((action, state) => {
     if (action.type === 'ui/activateElement') {
         activeElementId.value = action.payload;

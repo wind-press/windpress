@@ -35,8 +35,6 @@ class Editor
             return;
         }
 
-        error_log('editor_assets');
-
         $handle = WIND_PRESS::WP_OPTION . ':integration-breakdance-editor';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/breakdance/main.js', [
@@ -64,38 +62,21 @@ class Editor
 
                 let iframeWindow = document.getElementById('iframe');
 
-                // while (!document.getElementById('bricks-builder-iframe')?.contentDocument.querySelector('.brx-body')?.__vue_app__) {
-                //     await new Promise(resolve => setTimeout(resolve, 100));
-                // }
-
-                // const iframeWindow = document.getElementById('iframe');
-
-                // console.log('iframeWindow', iframeWindow);
-
-                // console.log('iframeWindow.contentWindow.windpress', iframeWindow.contentWindow.windpress);
-
                 wp.hooks.addFilter('windpressbreakdance-autocomplete-items-query', 'windpressbreakdance', async (autocompleteItems, text) => {
                     if (!iframeWindow.contentWindow.windpress?.loaded?.module?.autocomplete) {
                         return autocompleteItems;
                     }
 
-                    console.log('query', text);
-                    
                     const windpress_suggestions = iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', text);
-
-                    console.log('windpress_suggestions', windpress_suggestions);
 
                     return [...windpress_suggestions, ...autocompleteItems];
                 });
             });
         JS, 'after');
 
-
         $this->recursive_wp_scripts_render($handle);
-
     }
 
-    // render the enqueued scripts, but recursively render the dependencies first
     public function recursive_wp_scripts_render($handle) {
         $wp_scripts = wp_scripts()->registered[$handle];
 
