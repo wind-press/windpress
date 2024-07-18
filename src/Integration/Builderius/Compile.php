@@ -31,17 +31,15 @@ use WP_Query;
  */
 class Compile
 {
-    private array $post_meta_keys = [];
+    private array $post_meta_keys = [
+        'content_config'
+    ];
 
     public function __invoke(): array
     {
         if (! class_exists(BuilderiusTemplatePostType::class)) {
             return [];
         }
-
-        $this->post_meta_keys = [
-            'content_config'
-        ];
 
         return $this->get_contents();
     }

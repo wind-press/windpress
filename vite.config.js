@@ -28,6 +28,7 @@ export default defineConfig({
 
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',
+                'integration/breakdance': 'assets/integration/breakdance/main.js',
                 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
                 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',

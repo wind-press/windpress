@@ -15,11 +15,14 @@ namespace WindPress\WindPress\Integration\Kadence;
 
 /**
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
+ * 
+ * TODO: Don't depend on the Gutenberg's Compile class. Instead, reduplicate the code here.
  */
 class Compile
 {
     public function __invoke()
     {
+        return [];
         if (!defined('KADENCE_VERSION')) {
             return;
         }

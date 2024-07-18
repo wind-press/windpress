@@ -11,8 +11,9 @@
 
 declare(strict_types=1);
 
-namespace WindPress\WindPress\Integration\Breakdance;
+namespace WindPress\WindPress\Integration\Elementor;
 
+use Elementor\Plugin;
 use WP_Query;
 
 /**
@@ -21,12 +22,12 @@ use WP_Query;
 class Compile
 {
     private array $post_meta_keys = [
-        'breakdance_data'
+        '_elementor_data',
     ];
 
     public function __invoke(): array
     {
-        if (!defined('__BREAKDANCE_VERSION')) {
+        if (! defined('ELEMENTOR_VERSION')) {
             return [];
         }
 
@@ -37,12 +38,15 @@ class Compile
     {
         $contents = [];
 
-        $post_types = apply_filters('f!windpress/integration/breakdance/compile:get_contents.post_types', \Breakdance\Settings\get_allowed_post_types());
+        $post_types = get_option( 'elementor_cpt_support', Plugin::ELEMENTOR_DEFAULT_POST_TYPES );
+
+        $post_types = apply_filters('f!windpress/integration/elementor/compile:get_contents.post_types', $post_types);
 
         $wpQuery = new WP_Query([
             'posts_per_page' => -1,
             'fields' => 'ids',
             'post_type' => $post_types,
+            'post_status' => get_post_stati(),
             // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- This only run by trigger on specific event
             'meta_query' => [
                 'relation' => 'OR',
@@ -67,10 +71,8 @@ class Compile
             $meta_value = get_post_meta($post_id, $post_metum_key, true);
             if ($meta_value) {
                 $contents[] = [
-                    'content' => $meta_value,
                     'name' => $post_id,
-                    'type' => 'json',
-
+                    'content' => $meta_value,
                 ];
             }
         }

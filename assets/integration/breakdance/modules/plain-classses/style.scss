@@ -1,0 +1,173 @@
+.windpressbreakdance-plc-input-container {
+    padding: 10px 10px;
+
+    border-bottom: solid 1px var(--gray200) !important;
+
+    textarea.windpressbreakdance-plc-input {
+        margin-left: 10px;
+        min-height: auto;
+        form-sizing: content;
+        color: var(--gray800);
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        overflow: hidden !important;
+        opacity: .75;
+
+        padding-left: 5.5px;
+        padding-right: 5.5px;
+
+        &:focus-within {
+            outline: 0;
+        }
+
+        &::placeholder {
+            word-spacing: normal !important;
+            opacity: 1 !important;
+        }
+    }
+
+
+    .hit-container {
+        margin-top: 2px;
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        line-height: 26px !important;
+        font-size: 10px;
+        font-family: Consolas, monaco, Courier New, monospace;
+        overflow: hidden !important;
+
+        .hit-backdrop,
+        textarea.windpressbreakdance-plc-input {
+            word-spacing: 8px !important;
+        }
+
+        .hit-backdrop {
+            position: absolute !important;
+            overflow: hidden !important;
+
+            width: 100%;
+            overflow-wrap: break-word;
+        }
+
+        .hit-highlights {
+            width: auto !important;
+            height: auto !important;
+            border-color: transparent !important;
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            color: transparent !important;
+            overflow: hidden !important;
+            border-width: 0 !important;
+        }
+
+        .hit-input {
+            display: block !important;
+            position: relative !important;
+            margin: 0;
+            padding: 0;
+            border-radius: 0;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+        }
+
+        .hit-content {
+            border: 0;
+            background: none transparent !important;
+            padding-left: 5.5px;
+            padding-right: 5.5px;
+            position: relative;
+
+            mark {
+                padding: 0;
+                border-radius: 0.1px;
+
+                &.word {
+                    background-color: var(--gray100);
+                    outline-color: var(--gray100);
+                    outline-width: 5.5px;
+                    outline-style: solid;
+                }
+
+                &.multispace,
+                &.placeholder {
+                    background-color: transparent;
+                }
+
+                &.placeholder {
+                    color: var(--gray600);
+                    opacity: .75;
+                }
+            }
+        }
+    }
+
+}
+
+.windpressbreakdance-tribute-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: auto;
+    overflow: auto;
+    display: block;
+    z-index: 999999;
+    max-height: 50vh;
+    max-width: 100% !important;
+
+    background-color: var(--white);
+    border-radius: 4px;
+
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, .5);
+
+    min-width: 200px;
+
+    ul {
+        margin: 0;
+        margin-top: 2px;
+        padding: 0;
+        list-style: none;
+
+        li {
+            padding: 5px 5px;
+            cursor: pointer;
+            font-size: 11px;
+            position: relative;
+
+            &.highlight {
+                background: var(--gray200);
+            }
+
+            &.no-match {
+                cursor: default;
+            }
+
+            &.menu-highlighted {
+                font-weight: bold;
+            }
+        }
+    }
+
+    li {
+        span.class-name {
+            span {
+                font-weight: bold;
+            }
+        }
+
+        span.class-hint {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            padding-right: 8px;
+            color: transparent;
+        }
+    }
+}

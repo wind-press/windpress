@@ -3,7 +3,7 @@ Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind css, bricks builder, oxygen builder, breakdance builder
 Requires at least: 6.0
-Tested up to: 6.5
+Tested up to: 6.6
 Stable tag: 3.0.0-alpha
 Requires PHP: 7.4
 License: GPLv3
@@ -30,13 +30,13 @@ WindPress is packed full of features designed to streamline your workflow. Some 
 
 It's easy to build design with Tailwind CSS v4 thanks to the seamless integration with the most popular visual/page builders:
 
-* [Gutenberg](https://wordpress.org/gutenberg)
+* [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
 * [Builderius](https://builderius.io/?referral=afdfca82c8)
+* [Gutenberg](https://wordpress.org/gutenberg)
 * [LiveCanvas](https://livecanvas.com/?ref=4008)
 * [Timber](https://upstatement.com/timber/)
 * [Bricks](https://bricksbuilder.io/) **[Pro]**
-* [Oxygen](https://oxygenbuilder.com/) **[Pro]** 
-* [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) **[Soon]**
+* [Oxygen](https://oxygenbuilder.com/) **[Pro]**
 * [Breakdance](https://breakdance.com/ref/165/) **[Soon]** **[Pro]** 
 * [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Soon]** **[Pro]**
 * [GreenShift](https://greenshiftwp.com/) **[Soon]** **[Pro]**
@@ -63,6 +63,7 @@ Visit [our website](https://wind.press) for more information.
 * **New**: [LiveCanvas](https://livecanvas.com/?ref=4008) integration
 * **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]**
 * **New**: [Timber](https://upstatement.com/timber/) integration
+* **New**: [Builderius](https://builderius.io/?referral=afdfca82c8) integration
 
 = 1.0.0 =
 * 🐣 Initial release.

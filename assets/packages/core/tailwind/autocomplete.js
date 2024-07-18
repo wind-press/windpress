@@ -40,8 +40,6 @@ async function getCssContent() {
 async function preloadItems() {
     classLists = getClassList(__unstable__loadDesignSystem(await getCssContent()));
 
-    console.log('classLists', classLists);
-
     channel.postMessage({
         source: 'windpress/autocomplete',
         target: 'any',
@@ -83,11 +81,57 @@ function searchClassList(query) {
     let prefix = segment.slice(0, -1).join(':');
     let q = segment.pop();
 
-    const filteredClassList = classLists.filter((classList) => classList.selector.includes(q));
+    // if `!` exists as the first character on the query, cut it and mark as important
+    let importantModifier = '';
+    if (q.startsWith('!')) {
+        q = q.slice(1);
+        importantModifier = '!';
+    }
+
+    // check if opacity modifier is used, for example `bg-red-500/20`. the opacity modifier is a number between 0 and 100
+    let opacityModifier = false;
+    if (q.includes('/')) {
+        let [_q, opacity] = q.split('/');
+        // if the opacity modifier is not a number between 0 and 100, revert back the split
+        if (opacity === '') {
+            q = _q;
+            opacityModifier = opacity;
+        } else if (isNaN(opacity) || opacity < 0 || opacity > 100) {
+            q = [_q, opacity].join('/');
+        } else {
+            q = _q;
+            opacityModifier = parseInt(opacity);
+        }
+    }
+
+    let filteredClassList = classLists.filter((classList) => classList.selector.includes(q));
+
+    // if opacityModifier is not false, populate the filteredClassList with the opacityModifier (1 to 100)
+    if (opacityModifier !== false) {
+        let tempFilteredClassList = [];
+
+        const loopIncrement = opacityModifier === '' ? 5 : 1;
+        const loopStart = opacityModifier === '' || opacityModifier > 9 ? 0 : Math.floor((opacityModifier * 10 + 1) / 10) * 10;
+        const loopEnd = opacityModifier === '' || opacityModifier > 9 ? 100 : Math.ceil((opacityModifier * 10 + 1) / 10) * 10;
+
+        filteredClassList.forEach((classList) => {
+            for (let i = loopStart; i <= loopEnd; i += loopIncrement) {
+                tempFilteredClassList.push({
+                    ...classList,
+                    selector: classList.selector + '/' + i
+                });
+
+                console.log(classList)
+            }
+        });
+
+        filteredClassList = tempFilteredClassList;
+    }
 
     return filteredClassList.map((classList) => {
         return {
-            value: [prefix, classList.selector].filter(Boolean).join(':'),
+            // value: [prefix, classList.selector].filter(Boolean).join(':'),
+            value: [prefix, (importantModifier ? '!' : '') + classList.selector].filter(Boolean).join(':'),
             color: getColor(classList.declarations)
         }
     });

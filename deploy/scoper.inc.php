@@ -138,6 +138,7 @@ return [
         'Blockstudio',
         'Breakdance',
         'Builderius',
+        'Elementor',
 
         'SiteGround_Optimizer',
     ],
@@ -208,6 +209,8 @@ return [
             'KADENCE_VERSION', // Kadence
 
             '__BREAKDANCE_VERSION', // Breakdance
+
+            'ELEMENTOR_VERSION', // Elementor
         ]
     ),
 

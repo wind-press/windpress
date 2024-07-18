@@ -23,14 +23,14 @@ class Main implements IntegrationInterface
 {
     public function __construct()
     {
-        return;
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
 
-        // if ($this->is_enabled()) {
-        //     add_filter('f!windpress/core/runtime:is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
-        //     add_filter('f!windpress/core/runtime:append_header.exclude_admin', fn (bool $is_exclude_admin): bool => $this->is_exclude_admin($is_exclude_admin));
-        //     add_action('a!yabe/movebender/module/plainclasses:register_autocomplete', fn () => $this->register_movebender_autocomplete());
-        // }
+        if ($this->is_enabled()) {
+            // add_filter('f!windpress/core/runtime:is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
+            // add_filter('f!windpress/core/runtime:append_header.exclude_admin', fn (bool $is_exclude_admin): bool => $this->is_exclude_admin($is_exclude_admin));
+            // add_action('a!yabe/movebender/module/plainclasses:register_autocomplete', fn () => $this->register_movebender_autocomplete());
+            new Editor();
+        }
     }
 
     public function get_name(): string
