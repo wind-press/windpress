@@ -93,7 +93,13 @@ jobs:
             COMPOSER_TOKEN: ${{ secrets.ORGROSUA_DEV_PAT }}
 
         # remove this folders, as it exclusive for the premium version
-        - run: rm -rf src/Integration/{Blockstudio,Breakdance,Beaver,Blocksy,Breakdance,Bricks,Cwicly,Divi,FunnelKit,GreenShift,Kadence,LiveCanvas,Oxygen}
+        # Exclude (Free):
+        # - Gutenberg
+        # - Elementor
+        # - Timber
+        # - Builderius
+        # - LiveCanvas
+        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,FunnelKit,GreenShift,Kadence,LiveCanvas,Oxygen}
 
         # remove custom update library
         - run: composer remove rosua/edd-sl-plugin-updater --ansi

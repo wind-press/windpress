@@ -47,14 +47,14 @@ importers:
         specifier: ^1.7.22
         version: 1.7.22(vue@3.4.31)
       '@master/css':
-        specifier: 2.0.0-rc.43
-        version: 2.0.0-rc.43
+        specifier: 2.0.0-rc.44
+        version: 2.0.0-rc.44
       '@master/css-runtime':
-        specifier: 2.0.0-rc.43
-        version: 2.0.0-rc.43
+        specifier: 2.0.0-rc.44
+        version: 2.0.0-rc.44
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
-        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/54474086c858769a51f5ee876b5d52a8e62498d3
+        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/6ab289343deaa61095a8f55799239ce0f1ee41ea
       '@types/node':
         specifier: ^20.14.10
         version: 20.14.10
@@ -435,11 +435,11 @@ packages:
   '@master/colors@2.1.0':
     resolution: {integrity: sha512-yH3RLrwejqw7cNn59/OGA7WwdY/J9fRABrFNth6nzqzMnd5ac3wquPpvDZX/sQfKUofD765xfw1yxQx5Ob9jhw==}
 
-  '@master/css-runtime@2.0.0-rc.43':
-    resolution: {integrity: sha512-FbO8URwvlL1c+x4EybME4hoj7ASUcAlkrnhA7xGHM6/ERQbciuz0rWlgTbb87Oemv3lIksNz8EpMtLR8+onaJw==}
+  '@master/css-runtime@2.0.0-rc.44':
+    resolution: {integrity: sha512-DbQDF+pCxi0M/vT8C9sNVYNw+1JoW98tQ6xSxEhMAZ3+RT5b2Kzcu97dro4Ztue9ktSf4yy5UuAv9Fqh/fu0BQ==}
 
-  '@master/css@2.0.0-rc.43':
-    resolution: {integrity: sha512-BwP6s0bdQibEbytfC8PgqGNoAAMQrvi6DLMMxWYcFOE2WLQOwDnnTCV8iVlgo0qDjsgCyw3jFFsjnaCDOkGi2A==}
+  '@master/css@2.0.0-rc.44':
+    resolution: {integrity: sha512-cdSeCgQmRgTR7PBZEb6kXDW43SP+1lokLUC+8zqC48ZMG/2outxk79s5ftsTtjRuOiV35GLxHOKKXZvr9Zd64A==}
     hasBin: true
 
   '@master/normal.css@3.1.0':
@@ -638,8 +638,8 @@ packages:
   '@swc/types@0.1.9':
     resolution: {integrity: sha512-qKnCno++jzcJ4lM4NTfYifm1EFSCeIfKiAHAfkENZAV5Kl9PjJIyd2yeeVv6c/2CckuLyv2NmRC5pv6pm2WQBg==}
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/54474086c858769a51f5ee876b5d52a8e62498d3':
-    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/54474086c858769a51f5ee876b5d52a8e62498d3}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/6ab289343deaa61095a8f55799239ce0f1ee41ea':
+    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/6ab289343deaa61095a8f55799239ce0f1ee41ea}
     version: 1.0.0
 
   '@tanstack/virtual-core@3.8.1':
@@ -1802,11 +1802,11 @@ snapshots:
 
   '@master/colors@2.1.0': {}
 
-  '@master/css-runtime@2.0.0-rc.43':
+  '@master/css-runtime@2.0.0-rc.44':
     dependencies:
-      '@master/css': 2.0.0-rc.43
+      '@master/css': 2.0.0-rc.44
 
-  '@master/css@2.0.0-rc.43':
+  '@master/css@2.0.0-rc.44':
     dependencies:
       '@master/colors': 2.1.0
       '@master/normal.css': 3.1.0
@@ -1946,7 +1946,7 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/54474086c858769a51f5ee876b5d52a8e62498d3': {}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/6ab289343deaa61095a8f55799239ce0f1ee41ea': {}
 
   '@tanstack/virtual-core@3.8.1': {}
 
