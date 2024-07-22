@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\Bricks;
 
 use WIND_PRESS;
+use WindPress\WindPress\Admin\AdminPage;
 use WindPress\WindPress\Utils\AssetVite;
 
 /**
@@ -47,6 +48,7 @@ class Editor
             'site_meta' => [
                 'name' => get_bloginfo('name'),
                 'site_url' => get_site_url(),
+                'admin_url' => AdminPage::get_page_url(),
             ],
         ]);
 

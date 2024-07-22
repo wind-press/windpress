@@ -19,6 +19,7 @@ logger('Loading...');
     await import('./modules/variables/main.js');
     await import('./modules/html2bricks/main.js');
     await import('./modules/generate-cache/main.js');
+    await import('./modules/variable-picker/main.js');
 
     logger('Modules loaded!');
 })();
