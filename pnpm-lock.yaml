@@ -127,6 +127,9 @@ importers:
       tributejs:
         specifier: github:zurb/tribute
         version: https://codeload.github.com/zurb/tribute/tar.gz/252ec344a75b624268aef1cdbf80afc30b3cbe2b
+      v-resizable:
+        specifier: ^0.0.14
+        version: 0.0.14
       vue:
         specifier: ^3.4.33
         version: 3.4.33
@@ -1528,6 +1531,9 @@ packages:
   uuid@10.0.0:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
     hasBin: true
+
+  v-resizable@0.0.14:
+    resolution: {integrity: sha512-vL5BZMsgJsTAfuIhKNfJlCi5POwWE3fhXzQ5X5UA5y5T33FRK4qXy5kq5pFySwx3fDuCD05CX2b61508ckgVKg==}
 
   vite-plugin-external@4.3.1:
     resolution: {integrity: sha512-aoukfac66QevFAbRF2ZD81WPSqeqhgEfbfhPYQP9RPWO1en+Lw4HyhWRdvSjYn56gcKUJCtHdFG2jEpYgleLng==}
@@ -2940,6 +2946,8 @@ snapshots:
       which-typed-array: 1.1.15
 
   uuid@10.0.0: {}
+
+  v-resizable@0.0.14: {}
 
   vite-plugin-external@4.3.1:
     dependencies:

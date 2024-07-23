@@ -1,6 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
-import { useStorage, useResizeObserver } from '@vueuse/core';
+import { useStorage } from '@vueuse/core';
 
 const props = defineProps({
     namespace: {
@@ -40,7 +39,7 @@ const expand = useStorage(
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 /* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {

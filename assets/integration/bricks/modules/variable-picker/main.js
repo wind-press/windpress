@@ -7,8 +7,10 @@ import { FontAwesomeIcon } from './font-awesome.js';
 import { logger } from '@/integration/common/logger.js';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
+import VResizable from 'v-resizable';
 
 import App from './App.vue';
+import { brxGlobalProp } from '../../constant.js';
 
 const innerPanelId = "bricks-panel-inner";
 const innerPanel = document.getElementById(innerPanelId);
@@ -47,6 +49,7 @@ app
     .use(FloatingVue, {
         container: '#windpressbricks-variable-app',
     })
+    .use(VResizable)
     ;
 
 app
@@ -89,3 +92,4 @@ app.mount('#windpressbricks-variable-app');
 // });
 
 logger('Module loaded!', { module: 'variable-picker' });
+
