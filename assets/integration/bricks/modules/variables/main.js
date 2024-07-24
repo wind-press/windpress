@@ -44,15 +44,15 @@ async function registerVariables() {
     const variableLists = getVariableList(__unstable__loadDesignSystem(main_css));
     variableLists.forEach(variable => {
         brxGlobalProp.$_state.globalVariables.push({
-            "id": generateId(),
-            "name": variable.key.substring(2),
-            "value": variable.value,
-            "category": "windpress"
+            id: generateId(),
+            name: variable.key.substring(2),
+            value: variable.value,
+            category: "windpress"
         });
     });
 }
-const channel = new BroadcastChannel('windpress');
 
+const channel = new BroadcastChannel('windpress');
 channel.addEventListener('message', async (e) => {
     const data = e.data;
     const source = 'windpress/autocomplete';

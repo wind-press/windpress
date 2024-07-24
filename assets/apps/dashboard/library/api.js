@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'redaxios';
 
 export function useApi(config = {}) {
     return axios.create(Object.assign({

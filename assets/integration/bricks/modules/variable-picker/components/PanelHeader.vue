@@ -4,6 +4,7 @@ import Logo from '~/windpress.svg';
 import { brx } from '@/integration/bricks/constant.js';
 
 const variableApp = inject('variableApp');
+const isOpen = inject('isOpen');
 
 function allowDragPanel() {
     const draggable = variableApp.querySelector('#windpressbricks-variable-app-header');
@@ -69,7 +70,7 @@ onMounted(() => {
             <div v-tooltip="{ placement: 'top', content: `v${windpressbricks._version}` }" class="font:bold flex gap:10 align-items:center cursor:default">
                 WindPress
             </div>
-            <button v-tooltip="{ placement: 'top', content: 'Close' }" class="ml:auto p:6 bg:transparent bg:$(builder-bg-accent):hover r:$(builder-border-radius)">
+            <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="ml:auto p:6 bg:transparent bg:$(builder-bg-accent):hover r:$(builder-border-radius)">
                 <font-awesome-icon :icon="['fas', 'xmark']" class="fg:$(builder-color)" />
             </button>
         </div>

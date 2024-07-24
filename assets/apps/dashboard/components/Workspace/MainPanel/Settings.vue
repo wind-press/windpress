@@ -161,7 +161,6 @@ channel.addEventListener('message', (e) => {
                             </div>
                             <p class="my:0">To access updates when they are available, please provide your license key.</p>
                         </div>
-                        <div></div>
                     </div>
                 </div>
             </div>
@@ -179,7 +178,7 @@ channel.addEventListener('message', (e) => {
                 <div class="flex {bt:1|solid|sideBar-border}>*+* flex:column">
                     <div class="flex flex:column gap:30 p:20">
                         <div class="flex flex:column gap:10">
-                            <span class="font:15">WindPress panel</span>
+                            <span class="font:15">Ubiquitous WindPress panel</span>
                             <div class="flex align-items:center gap:4">
                                 <input type="checkbox" id="enable_front_mission_control" v-model="settingsStore.virtualOptions('general.mission-control.front.enabled', false).value" class="checkbox mt:0">
                                 <label for="enable_front_mission_control" class="font:medium">Enable WindPress panel on the front page</label>
