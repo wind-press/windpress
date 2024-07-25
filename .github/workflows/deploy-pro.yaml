@@ -139,7 +139,7 @@ jobs:
         #       INPUT_LOG: ${{ steps.git-log.outputs.log }}
         #   run: |
         #     git add --all
-        #     git commit -m "Updated Yabe Siul to commit ${{ github.event.after }}" -m "$INPUT_LOG"
+        #     git commit -m "Updated WindPress to commit ${{ github.event.after }}" -m "$INPUT_LOG"
         #     git push --quiet origin main
 
         # publish it to remote repository with tag
@@ -150,7 +150,7 @@ jobs:
               INPUT_LOG: ${{ steps.git-log.outputs.log }}
           run: |
             git add --all
-            git commit -m "Yabe Siul ${GITHUB_REF#refs/tags/}" -m "$INPUT_LOG"
+            git commit -m "WindPress ${GITHUB_REF#refs/tags/}" -m "$INPUT_LOG"
             git push --quiet origin main
             git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
             git push --quiet origin ${GITHUB_REF#refs/tags/}

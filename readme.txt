@@ -58,6 +58,7 @@ Visit [our website](https://wind.press) for more information.
 == Changelog ==
 
 = 3.0.0 =
+* **Improve**: Test compatibility with WordPress 6.6
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.17 next)
 * **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
 * **New**: [LiveCanvas](https://livecanvas.com/?ref=4008) integration
