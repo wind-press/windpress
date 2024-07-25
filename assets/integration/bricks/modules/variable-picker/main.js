@@ -1,7 +1,7 @@
 import 'floating-vue/dist/style.css';
 import './style.scss';
 
-import { createApp, ref, watch } from 'vue';
+import { createApp, nextTick, ref } from 'vue';
 import './master.css.js';
 import { FontAwesomeIcon } from './font-awesome.js';
 import { logger } from '@/integration/common/logger.js';
@@ -15,12 +15,11 @@ const variableApp = document.createElement('windpressbricks-variable-app');
 variableApp.id = 'windpressbricks-variable-app';
 document.body.appendChild(variableApp);
 
-const isOpen = ref(true);
+const isOpen = ref(false);
 const focusedInput = ref(null);
 const tempInputValue = ref(null);
 const recentColorPickerTarget = ref(null);
 const recentVariableSelectionTimestamp = ref(0);
-// const HOVER_VARIABLE_PREVIEW_TIMEOUT = 1000;
 
 const app = createApp(App);
 
@@ -133,9 +132,13 @@ function addTriggers() {
                 e.stopPropagation();
 
                 document?.getSelection()?.removeAllRanges();
-                recentColorPickerTarget.value = e.target;
                 focusedInput.value = null;
                 isOpen.value = true;
+
+                recentColorPickerTarget.value = null; // ensure the watcher is triggered
+                nextTick(() => {
+                    recentColorPickerTarget.value = e.target;
+                });
             });
         });
     }, 100);

@@ -1,5 +1,6 @@
 <script setup>
 import { useStorage } from '@vueuse/core';
+import { ref } from 'vue';
 
 const props = defineProps({
     namespace: {
@@ -12,16 +13,32 @@ const props = defineProps({
     },
 });
 
+const sectionRef = ref(null);
+
 const expand = useStorage(
     `windpressbricks-variable-app.ui.expansion-panels.${props.namespace}`,
     { [`${props.name}`]: false },
     undefined,
     { mergeDefaults: true }
 );
+
+function togglePanel(val) {
+    // expand[props.name] = val === null ? !expand[props.name] : val;
+    expand.value[props.name] = val === null ? !expand.value[props.name] : val;
+}
+
+function scrollIntoView() {
+    sectionRef.value.scrollIntoView();
+}
+
+defineExpose({
+    togglePanel,
+    scrollIntoView
+});
 </script>
 
 <template>
-    <div class="expansion-panel m:10 mr:4">
+    <div ref="sectionRef" class="expansion-panel m:10 mr:4">
         <div @click="expand[name] = !expand[name]" :class="{'bg:$(builder-bg-3)!' : expand[name]}" class="expansion-panel__header flex bg:$(builder-bg-2) bg:$(builder-bg-3):hover justify-content:space-between p:10 r:8 cursor:pointer">
             <div class="flex-grow:1">
                 <slot name="header"></slot>

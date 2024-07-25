@@ -149,7 +149,6 @@ async function selectColor(color) {
         showBricksColorPopUp();
     }
 }
-
 </script>
 
 <template>

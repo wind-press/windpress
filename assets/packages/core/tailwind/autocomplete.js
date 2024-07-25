@@ -130,8 +130,6 @@ function searchClassList(query) {
                     ...classList,
                     selector: classList.selector + '/' + i
                 });
-
-                // console.log(classList);
             }
         });
 
