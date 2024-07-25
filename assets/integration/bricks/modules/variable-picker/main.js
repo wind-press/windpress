@@ -56,8 +56,8 @@ function onInputClick(e) {
     document?.getSelection()?.removeAllRanges();
     e.preventDefault();
     e.stopPropagation();
-    focusedInput.value = input;
-    tempInputValue.value = input.value;
+    focusedInput.value = e.target;
+    tempInputValue.value = e.target.value;
     isOpen.value = true;
 }
 

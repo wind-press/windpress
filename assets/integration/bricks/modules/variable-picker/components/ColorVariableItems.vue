@@ -40,7 +40,7 @@ function onMouseEnter(e, color) {
         return;
     }
 
-    focusedInput.value.value = `var(${variable})`;
+    focusedInput.value.value = `var(${color})`;
     focusedInput.value.dispatchEvent(new Event('input'));
     focusedInput.value.focus();
 }
@@ -95,15 +95,20 @@ function onClick(e, color) {
         }, 5);
         return;
     }
+
+    focusedInput.value.value = `var(${color})`;
+    focusedInput.value.dispatchEvent(new Event('input'));
+    focusedInput.value.focus();
+    tempInputValue.value = `var(${color})`;
+    recentVariableSelectionTimestamp.value = performance.now();
 }
-
-
 
 function showBricksColorPopUp() {
     document.querySelectorAll('.windpressbricks-variable-app-colorpopup').forEach((style) => {
         style.remove();
     });
 }
+
 function hideBricksColorPopUp() {
     if (document.querySelector('.windpressbricks-variable-app-colorpopup')) {
         return;
@@ -118,12 +123,12 @@ function hideBricksColorPopUp() {
 
 async function selectColor(color) {
     hideBricksColorPopUp();
-    const isPopupAlreadyOpen = document.querySelector(".bricks-control-popup .color-palette.grid");
+    const isPopupAlreadyOpen = document.querySelector('.bricks-control-popup .color-palette.grid');
     if (!isPopupAlreadyOpen) {
-        recentColorPickerTarget.value?.closest(".bricks-control-preview")?.click();
+        recentColorPickerTarget.value?.closest('.bricks-control-preview')?.click();
         await new Promise((resolve) => setTimeout(resolve, 25));
     }
-    const colorsGrid = document.querySelector(".bricks-control-popup .color-palette.grid");
+    const colorsGrid = document.querySelector('.bricks-control-popup .color-palette.grid');
     if (colorsGrid) {
         const targetColor = colorsGrid.querySelector(`[data-balloon="var(${color})"]`);
         targetColor?.parentElement?.click();
