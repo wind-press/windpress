@@ -4,6 +4,7 @@ import { useUIStore } from '@/dashboard/stores/ui.js';
 
 import MainCSS from './MainPanel/MainCSS.vue';
 import Settings from './MainPanel/Settings.vue';
+import Wizard from './MainPanel/Wizard.vue';
 
 const ui = useUIStore();
 const twStore = useTailwindStore();
@@ -11,7 +12,7 @@ const twStore = useTailwindStore();
 const panelComponents = {
     'main.css': MainCSS,
     'settings': Settings,
-    // 'wizard': () => import('./MainPanel/Wizard.vue'),
+    'wizard': Wizard,
 };
 </script>
 
