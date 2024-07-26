@@ -11,33 +11,33 @@ import './style.scss';
 
 import { logger } from '@/integration/common/logger.js';
 
-import tippy, { followCursor } from 'tippy.js';
+// import tippy, { followCursor } from 'tippy.js';
 
 import { nextTick, ref, watch } from 'vue';
 import autosize from 'autosize';
 import Tribute from 'tributejs';
 import { debounce, set } from 'lodash-es';
 
-import { createHighlighterCore, loadWasm } from 'shiki/core';
+// import { createHighlighterCore, loadWasm } from 'shiki/core';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
 // import { brxGlobalProp, brxIframeGlobalProp, brxIframe } from '@/integration/breakdance/constant.js';
 import { bdeV, bdeIframe, bdeIframeV } from '@/integration/breakdance/constant.js';
 
-let shikiHighlighter = null;
+// let shikiHighlighter = null;
 
-(async () => {
-    await loadWasm(import('shiki/wasm'));
-    shikiHighlighter = await createHighlighterCore({
-        themes: [
-            import('shiki/themes/dark-plus.mjs'),
-            import('shiki/themes/light-plus.mjs'),
-        ],
-        langs: [
-            import('shiki/langs/css.mjs'),
-        ],
-    });
-})();
+// (async () => {
+//     await loadWasm(import('shiki/wasm'));
+//     shikiHighlighter = await createHighlighterCore({
+//         themes: [
+//             import('shiki/themes/dark-plus.mjs'),
+//             import('shiki/themes/light-plus.mjs'),
+//         ],
+//         langs: [
+//             import('shiki/langs/css.mjs'),
+//         ],
+//     });
+// })();
 
 const textInput = document.createRange().createContextualFragment(/*html*/ `
     <textarea id="windpressbreakdance-plc-input" class="windpressbreakdance-plc-input" rows="2" spellcheck="false"></textarea>

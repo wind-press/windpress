@@ -11,31 +11,31 @@ import './style.scss';
 
 import { logger } from '@/integration/common/logger.js';
 
-import tippy, { followCursor } from 'tippy.js';
+// import tippy, { followCursor } from 'tippy.js';
 
 import { nextTick, ref, watch } from 'vue';
 import autosize from 'autosize';
 import Tribute from 'tributejs';
 
-import { createHighlighterCore, loadWasm } from 'shiki/core';
+// import { createHighlighterCore, loadWasm } from 'shiki/core';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
 import { brxGlobalProp, brxIframeGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
 
-let shikiHighlighter = null;
+// let shikiHighlighter = null;
 
-(async () => {
-    await loadWasm(import('shiki/wasm'));
-    shikiHighlighter = await createHighlighterCore({
-        themes: [
-            import('shiki/themes/dark-plus.mjs'),
-            import('shiki/themes/light-plus.mjs'),
-        ],
-        langs: [
-            import('shiki/langs/css.mjs'),
-        ],
-    });
-})();
+// (async () => {
+//     await loadWasm(import('shiki/wasm'));
+//     shikiHighlighter = await createHighlighterCore({
+//         themes: [
+//             import('shiki/themes/dark-plus.mjs'),
+//             import('shiki/themes/light-plus.mjs'),
+//         ],
+//         langs: [
+//             import('shiki/langs/css.mjs'),
+//         ],
+//     });
+// })();
 
 const textInput = document.createRange().createContextualFragment(/*html*/ `
     <textarea id="windpressbricks-plc-input" class="windpressbricks-plc-input" rows="2" spellcheck="false"></textarea>
@@ -59,8 +59,8 @@ containerActionButtons.appendChild(classSortButton);
 const visibleElementPanel = ref(false);
 const activeElementId = ref(null);
 
-let twConfig = null;
-let screenBadgeColors = [];
+// let twConfig = null;
+// let screenBadgeColors = [];
 
 (async () => {
     
@@ -259,138 +259,138 @@ function onTextInputChanges() {
 
 // Disabled until the feature is stable
 textInput.addEventListener('highlights-updated', function (e) {
-    colorizeBackground();
+    // colorizeBackground();
     // hoverPreviewProvider();
 });
 
-function hoverPreviewProvider() {
-    if (brxIframe.contentWindow.windpress?.loaded?.module?.classNameToCss !== true) {
-        return;
-    }
+// function hoverPreviewProvider() {
+//     if (brxIframe.contentWindow.windpress?.loaded?.module?.classNameToCss !== true) {
+//         return;
+//     }
 
-    let someTippyIsVisible = false;
+//     let someTippyIsVisible = false;
 
-    let registeredTippyElements = [];
+//     let registeredTippyElements = [];
 
-    let detectedMarkWordElement = null;
+//     let detectedMarkWordElement = null;
 
-    const hitContainerEl = document.querySelector('.hit-container');
+//     const hitContainerEl = document.querySelector('.hit-container');
 
-    if (hitContainerEl === null) {
-        return;
-    }
+//     if (hitContainerEl === null) {
+//         return;
+//     }
 
-    // when mouse are entering the `.hit-container` element, get the coordinates of the mouse and check if the mouse is hovering the `mark` element
-    hitContainerEl.addEventListener('mousemove', async function (event) {
-        const x = event.clientX;
-        const y = event.clientY;
+//     // when mouse are entering the `.hit-container` element, get the coordinates of the mouse and check if the mouse is hovering the `mark` element
+//     hitContainerEl.addEventListener('mousemove', async function (event) {
+//         const x = event.clientX;
+//         const y = event.clientY;
 
-        // get all elements that overlap the mouse
-        const elements = document.elementsFromPoint(x, y);
+//         // get all elements that overlap the mouse
+//         const elements = document.elementsFromPoint(x, y);
 
-        // is found the `mark` element
-        const found = elements.some((element) => {
-            if (element.matches('mark[class="word"]')) {
-                detectedMarkWordElement = element;
-                return true;
-            }
-        });
+//         // is found the `mark` element
+//         const found = elements.some((element) => {
+//             if (element.matches('mark[class="word"]')) {
+//                 detectedMarkWordElement = element;
+//                 return true;
+//             }
+//         });
 
-        if (!found) {
-            detectedMarkWordElement = null;
-        }
+//         if (!found) {
+//             detectedMarkWordElement = null;
+//         }
 
 
-        if (detectedMarkWordElement === null) {
-            if (someTippyIsVisible === false) {
-                return;
-            }
-            someTippyIsVisible = false;
+//         if (detectedMarkWordElement === null) {
+//             if (someTippyIsVisible === false) {
+//                 return;
+//             }
+//             someTippyIsVisible = false;
 
-            registeredTippyElements.forEach((tippyInstance) => {
-                tippyInstance.destroy();
-            });
+//             registeredTippyElements.forEach((tippyInstance) => {
+//                 tippyInstance.destroy();
+//             });
 
-            registeredTippyElements = [];
+//             registeredTippyElements = [];
 
-            return;
-        }
+//             return;
+//         }
 
-        if (someTippyIsVisible === detectedMarkWordElement.textContent) {
-            return;
-        } else {
-            registeredTippyElements.forEach((tippyInstance) => {
-                tippyInstance.destroy();
-            });
+//         if (someTippyIsVisible === detectedMarkWordElement.textContent) {
+//             return;
+//         } else {
+//             registeredTippyElements.forEach((tippyInstance) => {
+//                 tippyInstance.destroy();
+//             });
 
-            registeredTippyElements = [];
-        }
+//             registeredTippyElements = [];
+//         }
 
-        const generatedCssCode = brxIframe.contentWindow.windpress.module.classNameToCss.generate(detectedMarkWordElement.textContent);
-        if (generatedCssCode === null) {
-            return null;
-        };
+//         const generatedCssCode = brxIframe.contentWindow.windpress.module.classNameToCss.generate(detectedMarkWordElement.textContent);
+//         if (generatedCssCode === null) {
+//             return null;
+//         };
 
-        someTippyIsVisible = detectedMarkWordElement.textContent;
+//         someTippyIsVisible = detectedMarkWordElement.textContent;
 
-        const tippyInstance = tippy(detectedMarkWordElement, {
-            plugins: [followCursor],
-            allowHTML: true,
-            arrow: false,
-            duration: [500, null],
-            followCursor: true,
-            trigger: 'manual',
+//         const tippyInstance = tippy(detectedMarkWordElement, {
+//             plugins: [followCursor],
+//             allowHTML: true,
+//             arrow: false,
+//             duration: [500, null],
+//             followCursor: true,
+//             trigger: 'manual',
 
-            content: (reference) => {
-                return shikiHighlighter.codeToHtml(generatedCssCode, {
-                    lang: 'css',
-                    theme: 'dark-plus',
-                });
-            }
-        });
+//             content: (reference) => {
+//                 return shikiHighlighter.codeToHtml(generatedCssCode, {
+//                     lang: 'css',
+//                     theme: 'dark-plus',
+//                 });
+//             }
+//         });
 
-        tippyInstance.show();
+//         tippyInstance.show();
 
-        // push the element to the registered tippy elements
-        registeredTippyElements.push(tippyInstance);
+//         // push the element to the registered tippy elements
+//         registeredTippyElements.push(tippyInstance);
 
-        detectedMarkWordElement = null;
-    });
+//         detectedMarkWordElement = null;
+//     });
 
-    // on mouse leave the `.hit-container` element, hide all tippy
-    hitContainerEl.addEventListener('mouseleave', async function (event) {
-        someTippyIsVisible = false;
+//     // on mouse leave the `.hit-container` element, hide all tippy
+//     hitContainerEl.addEventListener('mouseleave', async function (event) {
+//         someTippyIsVisible = false;
 
-        registeredTippyElements.forEach((tippyInstance) => {
-            tippyInstance.destroy();
-        });
+//         registeredTippyElements.forEach((tippyInstance) => {
+//             tippyInstance.destroy();
+//         });
 
-        registeredTippyElements = [];
-    });
-}
+//         registeredTippyElements = [];
+//     });
+// }
 
-function colorizeBackground() {
-    if (twConfig === null) return;
+// function colorizeBackground() {
+//     if (twConfig === null) return;
 
-    if (screenBadgeColors.length === 0) return;
+//     if (screenBadgeColors.length === 0) return;
 
-    const markElements = document.querySelectorAll('.hit-backdrop>.hit-highlights.hit-content>mark[class="word"]');
+//     const markElements = document.querySelectorAll('.hit-backdrop>.hit-highlights.hit-content>mark[class="word"]');
 
-    markElements.forEach((markElement) => {
-        // get the text content of the `mark` element
-        const text = markElement.textContent;
+//     markElements.forEach((markElement) => {
+//         // get the text content of the `mark` element
+//         const text = markElement.textContent;
 
-        // loop through all screen badge colors
-        screenBadgeColors.forEach((screenBadgeColor) => {
-            // if the text content of the `mark` element contains the screen name
-            if (text.includes(screenBadgeColor.screen + ':')) {
-                const ruleVal = `color-mix(in srgb, ${screenBadgeColor.color} 20%, white 1%)`;
-                markElement.style.backgroundColor = ruleVal;
-                markElement.style.outlineColor = ruleVal;
-            }
-        });
-    });
-}
+//         // loop through all screen badge colors
+//         screenBadgeColors.forEach((screenBadgeColor) => {
+//             // if the text content of the `mark` element contains the screen name
+//             if (text.includes(screenBadgeColor.screen + ':')) {
+//                 const ruleVal = `color-mix(in srgb, ${screenBadgeColor.color} 20%, white 1%)`;
+//                 markElement.style.backgroundColor = ruleVal;
+//                 markElement.style.outlineColor = ruleVal;
+//             }
+//         });
+//     });
+// }
 
 const observerAutocomplete = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {

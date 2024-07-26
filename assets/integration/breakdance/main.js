@@ -21,4 +21,5 @@ logger('Loading...');
     await import('./modules/generate-cache/main.js');
 
     logger('Modules loaded!');
+    
 })();

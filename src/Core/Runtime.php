@@ -98,9 +98,9 @@ class Runtime
         }
 
         if (
-            Config::get('general.mission-control.front.enabled', false)
+            Config::get('general.ubiquitous-panel.enabled', true)
             && current_user_can('manage_options')
-            && !apply_filters('f!windpress/core/runtime:append_header.mission_control.is_prevent_load', false)
+            && !apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
         ) {
             add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
         }

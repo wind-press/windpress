@@ -180,7 +180,7 @@ channel.addEventListener('message', (e) => {
                         <div class="flex flex:column gap:10">
                             <span class="font:15">Ubiquitous WindPress panel</span>
                             <div class="flex align-items:center gap:4">
-                                <input type="checkbox" id="enable_front_mission_control" v-model="settingsStore.virtualOptions('general.mission-control.front.enabled', false).value" class="checkbox mt:0">
+                                <input type="checkbox" id="enable_front_mission_control" v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', true).value" class="checkbox mt:0">
                                 <label for="enable_front_mission_control" class="font:medium">Enable WindPress panel on the front page</label>
                             </div>
                             <p class="my:0"> Access the WindPress panel right from the front page and made adjustment as it is on the wp-admin page. </p>

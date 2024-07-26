@@ -58,14 +58,14 @@ Visit [our website](https://wind.press) for more information.
 == Changelog ==
 
 = 3.0.0 =
-* **Improve**: Test compatibility with WordPress 6.6
-* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.17 next)
+* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.18 next)
 * **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
 * **New**: [LiveCanvas](https://livecanvas.com/?ref=4008) integration
 * **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]**
 * **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]**
 * **New**: [Timber](https://upstatement.com/timber/) integration
 * **New**: [Builderius](https://builderius.io/?referral=afdfca82c8) integration
+* **Improve**: Test compatibility with WordPress 6.6
 
 = 1.0.0 =
 * 🐣 Initial release.
