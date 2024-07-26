@@ -1,7 +1,6 @@
 import { __unstable__loadDesignSystem } from 'tailwindcss';
-import { getClassList, getVariableList } from './intellisense';
+import { getClassList, getCssContent, getVariableList } from '../intellisense';
 import { set } from 'lodash-es';
-import { bundle } from './bundle';
 
 let classLists = [];
 let variableLists = [];
@@ -21,20 +20,6 @@ if (mainCssContainer) {
         characterData: true,
         subtree: true
     });
-}
-
-async function getCssContent() {
-    const mainCssElement = document.querySelector('script[type="text/tailwindcss"]');
-    const mainCssContent = mainCssElement?.textContent ? atob(mainCssElement.textContent) : `@import "tailwindcss"`;
-
-    const bundleResult = await bundle({
-        entrypoint: '/main.css',
-        volume: {
-            '/main.css': mainCssContent,
-        }
-    });
-
-    return bundleResult.css;
 }
 
 async function preloadItems() {

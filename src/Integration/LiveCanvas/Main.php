@@ -26,6 +26,8 @@ class Main implements IntegrationInterface
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
 
         if ($this->is_enabled()) {
+            add_filter('f!windpress/core/runtime:is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
+            add_filter('f!windpress/core/runtime:append_header.exclude_admin', fn (bool $is_exclude_admin): bool => $this->is_exclude_admin($is_exclude_admin));
             add_action('lc_editor_before_body_closing', fn () => $this->register_livecanvas_autocomplete());
         }
     }
@@ -62,6 +64,26 @@ class Main implements IntegrationInterface
         return $providers;
     }
 
+    public function is_prevent_load(bool $is_prevent_load): bool
+    {
+        if ($is_prevent_load) {
+            return $is_prevent_load;
+        }
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is not a form submission
+        return isset($_GET['lc_action_launch_editing']) && $_GET['lc_action_launch_editing'] === '1';
+    }
+
+    public function is_exclude_admin(bool $is_exclude_admin): bool
+    {
+        if ($is_exclude_admin) {
+            return $is_exclude_admin;
+        }
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is not a form submission
+        return isset($_GET['lc_page_editing_mode']) && $_GET['lc_page_editing_mode'] === '1';
+    }
+
     public function register_livecanvas_autocomplete()
     {
         echo <<<HTML
@@ -82,7 +104,7 @@ class Main implements IntegrationInterface
                             return {
                                 // color: s.color,
                                 value: s.value,
-                                meta: 'tailwind',
+                                meta: 'TW 4',
                                 caption: s.value,
                                 score: 1000, // Custom score for sorting (optional)
                             };

@@ -153,17 +153,22 @@ class Runtime
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo sprintf("<script id=\"windpress:tw-main-css\" type=\"text/tailwindcss\">%s</script>", base64_encode($main_css));
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/autocomplete.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/autocomplete.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/sort.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/sort.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':sort',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/observer.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/classname-to-css.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
+            'in-footer' => true,
+        ]);
+
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
         ]);

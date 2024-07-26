@@ -2,6 +2,26 @@ import {
     __unstable__loadDesignSystem,
 } from 'tailwindcss';
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
+import { bundle } from './bundle';
+
+/**
+ * Get the CSS content of the main.css file on the current document.
+ * 
+ * @returns {Promise<string>} The CSS content of the main.css file.
+ */
+export async function getCssContent() {
+    const mainCssElement = document.querySelector('script[type="text/tailwindcss"]');
+    const mainCssContent = mainCssElement?.textContent ? atob(mainCssElement.textContent) : `@import "tailwindcss"`;
+
+    const bundleResult = await bundle({
+        entrypoint: '/main.css',
+        volume: {
+            '/main.css': mainCssContent,
+        }
+    });
+
+    return bundleResult.css;
+}
 
 /**
  * @typedef {Object} ClassEntity
@@ -190,4 +210,21 @@ function bigSign(value) {
     } else {
         return -1;
     }
+}
+
+/**
+ * @param {string|DesignSystem} theme 
+ * @param {Array<string>} classList 
+ * @returns 
+ */
+export function candidatesToCss(theme, classes) {
+    let design;
+
+    if (typeof theme === 'string') {
+        design = __unstable__loadDesignSystem(theme);
+    } else {
+        design = theme;
+    }
+
+    return design.candidatesToCss(classes);
 }

@@ -1,21 +1,6 @@
 import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { set } from 'lodash-es';
-import { bundle } from './bundle';
-import { sortClasses } from './intellisense';
-
-async function getCssContent() {
-    const mainCssElement = document.querySelector('script[type="text/tailwindcss"]');
-    const mainCssContent = mainCssElement?.textContent ? atob(mainCssElement.textContent) : `@import "tailwindcss"`;
-
-    const bundleResult = await bundle({
-        entrypoint: '/main.css',
-        volume: {
-            '/main.css': mainCssContent,
-        }
-    });
-
-    return bundleResult.css;
-}
+import { getCssContent, sortClasses } from '../intellisense';
 
 async function classSorter(input) {
     let classes = input

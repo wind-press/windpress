@@ -31,7 +31,6 @@ export async function buildCache(opts) {
         logStore.add({ message: 'No cache provider found', type: 'error' });
 
         throw new Error('No cache provider found');
-        return;
     }
 
     let content_pool = [];

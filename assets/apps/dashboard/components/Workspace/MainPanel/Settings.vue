@@ -225,7 +225,7 @@ channel.addEventListener('message', (e) => {
                                     </a>
                                 </template>
                                 <template v-if="css_cache.file_size">
-                                    <div class="bg:lime-5/.5 bg:lime-80/.5@dark fg:lime-70 fg:lime-30@dark font:12 font:medium ml:8 outline:1|solid|lime-60/.2 px:8 py:2 r:6">{{ prettyBytes(css_cache.file_size, { maximumFractionDigits: 2, space: false }) }}</div>
+                                    <div class="bg:lime-5/.5 bg:lime-80/.5@dark fg:lime-70 fg:lime-30@dark font:12 font:medium ml:8 outline:1|solid|lime-60/.2 px:8 py:2 r:6">{{ prettyBytes(css_cache.file_size, { maximumFractionDigits: 2, space: true }) }}</div>
                                 </template>
                             </p>
                             <div>

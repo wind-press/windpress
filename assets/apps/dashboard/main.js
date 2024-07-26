@@ -51,11 +51,6 @@ if (!document.getElementById('windpress-app')) {
 
     // append the stylesheets to the iframe
     stylesheets.forEach((stylesheet) => {
-        // const link = document.createElement('link');
-        // link.rel = 'stylesheet';
-        // link.href = stylesheet.href;
-        // doc.head.appendChild(stylesheet);
-
         // clone the stylesheet element and append it to the iframe
         const clone = stylesheet.cloneNode(true);
         doc.head.appendChild(clone);

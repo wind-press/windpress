@@ -1,7 +1,7 @@
 import 'floating-vue/dist/style.css';
 import './style.scss';
 
-import { createApp, nextTick, ref } from 'vue';
+import { createApp, nextTick, ref, watch } from 'vue';
 import './master.css.js';
 import { FontAwesomeIcon } from './font-awesome.js';
 import { logger } from '@/integration/common/logger.js';
@@ -169,6 +169,10 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen.value) {
         isOpen.value = false;
     }
+});
+
+watch(isOpen, (value) => {
+    variableApp.style.zIndex = value ? 'calc(Infinity)' : '-1';
 });
 
 logger('Module loaded!', { module: 'variable-picker' });

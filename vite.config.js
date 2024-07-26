@@ -22,9 +22,10 @@ export default defineConfig({
                 dashboard: 'assets/apps/dashboard/main.js',
 
                 // Tailwind
-                'packages/core/tailwind/observer': 'assets/packages/core/tailwind/observer.js',
-                'packages/core/tailwind/autocomplete': 'assets/packages/core/tailwind/autocomplete.js',
-                'packages/core/tailwind/sort': 'assets/packages/core/tailwind/sort.js',
+                'packages/core/tailwind/play/observer': 'assets/packages/core/tailwind/play/observer.js',
+                'packages/core/tailwind/play/autocomplete': 'assets/packages/core/tailwind/play/autocomplete.js',
+                'packages/core/tailwind/play/sort': 'assets/packages/core/tailwind/play/sort.js',
+                'packages/core/tailwind/play/classname-to-css': 'assets/packages/core/tailwind/play/classname-to-css.js',
 
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',
@@ -32,9 +33,6 @@ export default defineConfig({
                 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
                 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
-
-                // // Tailwind
-                // 'integration/lib/compiler': 'assets/integration/common/compiler-bootstrap.js',
             },
             outDir: 'build',
         }),

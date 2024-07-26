@@ -90,8 +90,8 @@ const DomHandler = {
             let rect = el.getBoundingClientRect();
 
             return {
-                top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
-                left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0)
+                top: rect.top + (window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0),
+                left: rect.left + (window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft || 0)
             };
         }
 
