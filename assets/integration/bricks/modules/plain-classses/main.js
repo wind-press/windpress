@@ -22,6 +22,8 @@ import { createHighlighterCore, loadWasm } from 'shiki/core';
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
 import { brxGlobalProp, brxIframeGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
 
+import { debounce } from 'lodash-es';
+
 let shikiHighlighter = null;
 
 (async () => {
@@ -60,7 +62,7 @@ const visibleElementPanel = ref(false);
 const activeElementId = ref(null);
 
 (async () => {
-    
+
 })();
 
 let hit = null; // highlight any text except spaces and new lines
@@ -259,16 +261,20 @@ textInput.addEventListener('highlights-updated', function (e) {
     hoverPreviewProvider();
 });
 
+// create a tippy instance that will be used to show the hover preview, but not yet shown
+let tippyInstance = tippy(document.createElement('div'), {
+    plugins: [followCursor],
+    allowHTML: true,
+    arrow: false,
+    duration: [500, null],
+    followCursor: true,
+    trigger: 'manual',
+});
+
 function hoverPreviewProvider() {
     if (brxIframe.contentWindow.windpress?.loaded?.module?.classnameToCss !== true) {
         return;
     }
-
-    let someTippyIsVisible = false;
-
-    let registeredTippyElements = [];
-
-    let detectedMarkWordElement = null;
 
     const hitContainerEl = document.querySelector('.hit-container');
 
@@ -276,92 +282,53 @@ function hoverPreviewProvider() {
         return;
     }
 
-    // when mouse are entering the `.hit-container` element, get the coordinates of the mouse and check if the mouse is hovering the `mark` element
-    hitContainerEl.addEventListener('mousemove', async function (event) {
+    tippyInstance.reference = hitContainerEl;
+
+    async function showTippy(markWordElement) {
+        const classname = markWordElement.textContent;
+        const generatedCssCode = await brxIframe.contentWindow.windpress.module.classnameToCss.generate(classname);
+        if (generatedCssCode === null || generatedCssCode.trim() === '') {
+            return null;
+        };
+
+        tippyInstance.setContent(shikiHighlighter.codeToHtml(generatedCssCode, {
+            lang: 'css',
+            theme: 'dark-plus',
+        }));
+
+        tippyInstance.show();
+    }
+
+    const currentMarkWordElement = ref(null);
+
+    const debouncedMousemoveHandler = debounce(function (event) {
         const x = event.clientX;
         const y = event.clientY;
 
         // get all elements that overlap the mouse
         const elements = document.elementsFromPoint(x, y);
 
-        // is found the `mark` element
-        const found = elements.some((element) => {
-            if (element.matches('mark[class="word"]')) {
-                detectedMarkWordElement = element;
-                return true;
-            }
+        // find the first `mark` element
+        const firstMarkWordElement = elements.find((element) => {
+            return element.matches('mark[class="word"]');
         });
 
-        if (!found) {
-            detectedMarkWordElement = null;
-        }
+        currentMarkWordElement.value = firstMarkWordElement || null;
+    }, 10);
 
+    // when mouse are entering the `.hit-container` element, get the coordinates of the mouse and check if the mouse is hovering the `mark` element
+    hitContainerEl.addEventListener('mousemove', debouncedMousemoveHandler);
 
-        if (detectedMarkWordElement === null) {
-            if (someTippyIsVisible === false) {
-                return;
-            }
-            someTippyIsVisible = false;
-
-            registeredTippyElements.forEach((tippyInstance) => {
-                tippyInstance.destroy();
-            });
-
-            registeredTippyElements = [];
-
-            return;
-        }
-
-        if (someTippyIsVisible === detectedMarkWordElement.textContent) {
-            return;
-        } else {
-            registeredTippyElements.forEach((tippyInstance) => {
-                tippyInstance.destroy();
-            });
-
-            registeredTippyElements = [];
-        }
-
-        const generatedCssCode = await brxIframe.contentWindow.windpress.module.classnameToCss.generate(detectedMarkWordElement.textContent);
-        if (generatedCssCode === null || generatedCssCode.trim() === '') {
-            return null;
-        };
-
-        someTippyIsVisible = detectedMarkWordElement.textContent;
-
-        const tippyInstance = tippy(detectedMarkWordElement, {
-            plugins: [followCursor],
-            allowHTML: true,
-            arrow: false,
-            duration: [500, null],
-            followCursor: true,
-            trigger: 'manual',
-
-            content: (reference) => {
-                return shikiHighlighter.codeToHtml(generatedCssCode, {
-                    lang: 'css',
-                    theme: 'dark-plus',
-                });
-            }
-        });
-
-        tippyInstance.show();
-
-        // push the element to the registered tippy elements
-        registeredTippyElements.push(tippyInstance);
-
-        detectedMarkWordElement = null;
+    hitContainerEl.addEventListener('mouseleave', function (event) {
+        currentMarkWordElement.value = null;
     });
 
-    // on mouse leave the `.hit-container` element, hide all tippy
-    hitContainerEl.addEventListener('mouseleave', async function (event) {
-        someTippyIsVisible = false;
-
-        registeredTippyElements.forEach((tippyInstance) => {
-            tippyInstance.destroy();
-        });
-
-        registeredTippyElements = [];
+    watch(currentMarkWordElement, (newVal, oldVal) => {
+        if (newVal && newVal !== oldVal) {
+            showTippy(newVal);
+        } else {
+            tippyInstance.hide();
+        }
     });
 }
 

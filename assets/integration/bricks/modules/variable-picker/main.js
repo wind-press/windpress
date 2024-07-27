@@ -110,6 +110,8 @@ function addTriggers() {
                 input?.addEventListener('focus', onFocusCallback);
 
                 input?.setAttribute('windpressbricks-variable-app', 'true');
+                input?.parentNode.setAttribute('data-balloon', 'Shift + click to open the Variable Picker');
+                input?.parentNode.setAttribute('data-balloon-pos', 'bottom-right');
             });
         });
 
