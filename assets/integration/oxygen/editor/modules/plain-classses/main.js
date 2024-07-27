@@ -11,31 +11,33 @@ import './style.scss';
 
 import { logger } from '@/integration/common/logger.js';
 
-// import tippy, { followCursor } from 'tippy.js';
+import tippy, { followCursor } from 'tippy.js';
 
 import { nextTick, ref, watch } from 'vue';
 import autosize from 'autosize';
 import Tribute from 'tributejs';
 
-// import { createHighlighterCore, loadWasm } from 'shiki/core';
+import { createHighlighterCore, loadWasm } from 'shiki/core';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
 import { oxygenScope, iframeScope, oxyIframe } from '@/integration/oxygen/editor/constant.js';
 
-// let shikiHighlighter = null;
+import { debounce } from 'lodash-es';
 
-// (async () => {
-//     await loadWasm(import('shiki/wasm'));
-//     shikiHighlighter = await createHighlighterCore({
-//         themes: [
-//             import('shiki/themes/dark-plus.mjs'),
-//             import('shiki/themes/light-plus.mjs'),
-//         ],
-//         langs: [
-//             import('shiki/langs/css.mjs'),
-//         ],
-//     });
-// })();
+let shikiHighlighter = null;
+
+(async () => {
+    await loadWasm(import('shiki/wasm'));
+    shikiHighlighter = await createHighlighterCore({
+        themes: [
+            import('shiki/themes/dark-plus.mjs'),
+            import('shiki/themes/light-plus.mjs'),
+        ],
+        langs: [
+            import('shiki/langs/css.mjs'),
+        ],
+    });
+})();
 
 const textInput = document.createRange().createContextualFragment(/*html*/ `
     <textarea id="windpressoxygen-plc-input" class="windpressoxygen-plc-input" rows="2" spellcheck="false"></textarea>
@@ -295,138 +297,79 @@ function onTextInputChanges() {
 };
 
 textInput.addEventListener('highlights-updated', function (e) {
-    // colorizeBackground();
-    // hoverPreviewProvider();
+    hoverPreviewProvider();
 });
 
-// function hoverPreviewProvider() {
-//     if (oxyIframe.contentWindow.windpress?.loaded?.module?.classNameToCss !== true) {
-//         return;
-//     }
+// create a tippy instance that will be used to show the hover preview, but not yet shown
+let tippyInstance = tippy(document.createElement('div'), {
+    plugins: [followCursor],
+    allowHTML: true,
+    arrow: false,
+    duration: [500, null],
+    followCursor: true,
+    trigger: 'manual',
+});
 
-//     let someTippyIsVisible = false;
+function hoverPreviewProvider() {
+    if (oxyIframe.contentWindow.windpress?.loaded?.module?.classnameToCss !== true) {
+        return;
+    }
 
-//     let registeredTippyElements = [];
+    const hitContainerEl = document.querySelector('.hit-container');
 
-//     let detectedMarkWordElement = null;
+    if (hitContainerEl === null) {
+        return;
+    }
 
-//     const hitContainerEl = document.querySelector('.hit-container');
+    tippyInstance.reference = hitContainerEl;
 
-//     if (hitContainerEl === null) {
-//         return;
-//     }
+    async function showTippy(markWordElement) {
+        const classname = markWordElement.textContent;
+        const generatedCssCode = await oxyIframe.contentWindow.windpress.module.classnameToCss.generate(classname);
+        if (generatedCssCode === null || generatedCssCode.trim() === '') {
+            return null;
+        };
 
-//     // when mouse are entering the `.hit-container` element, get the coordinates of the mouse and check if the mouse is hovering the `mark` element
-//     hitContainerEl.addEventListener('mousemove', function (event) {
-//         const x = event.clientX;
-//         const y = event.clientY;
+        tippyInstance.setContent(shikiHighlighter.codeToHtml(generatedCssCode, {
+            lang: 'css',
+            theme: 'dark-plus',
+        }));
 
-//         // get all elements that overlap the mouse
-//         const elements = document.elementsFromPoint(x, y);
+        tippyInstance.show();
+    }
 
-//         // is found the `mark` element
-//         const found = elements.some((element) => {
-//             if (element.matches('mark[class="word"]')) {
-//                 detectedMarkWordElement = element;
-//                 return true;
-//             }
-//         });
+    const currentMarkWordElement = ref(null);
 
-//         if (!found) {
-//             detectedMarkWordElement = null;
-//         }
+    const debouncedMousemoveHandler = debounce(function (event) {
+        const x = event.clientX;
+        const y = event.clientY;
 
+        // get all elements that overlap the mouse
+        const elements = document.elementsFromPoint(x, y);
 
-//         if (detectedMarkWordElement === null) {
-//             if (someTippyIsVisible === false) {
-//                 return;
-//             }
-//             someTippyIsVisible = false;
+        // find the first `mark` element
+        const firstMarkWordElement = elements.find((element) => {
+            return element.matches('mark[class="word"]');
+        });
 
-//             registeredTippyElements.forEach((tippyInstance) => {
-//                 tippyInstance.destroy();
-//             });
+        currentMarkWordElement.value = firstMarkWordElement || null;
+    }, 10);
 
-//             registeredTippyElements = [];
+    // when mouse are entering the `.hit-container` element, get the coordinates of the mouse and check if the mouse is hovering the `mark` element
+    hitContainerEl.addEventListener('mousemove', debouncedMousemoveHandler);
 
-//             return;
-//         }
+    hitContainerEl.addEventListener('mouseleave', function (event) {
+        currentMarkWordElement.value = null;
+    });
 
-//         if (someTippyIsVisible === detectedMarkWordElement.textContent) {
-//             return;
-//         } else {
-//             registeredTippyElements.forEach((tippyInstance) => {
-//                 tippyInstance.destroy();
-//             });
-
-//             registeredTippyElements = [];
-//         }
-
-//         const generatedCssCode = oxyIframe.contentWindow.windpress.module.classNameToCss.generate(detectedMarkWordElement.textContent);
-//         if (generatedCssCode === null) {
-//             return null;
-//         };
-
-//         someTippyIsVisible = detectedMarkWordElement.textContent;
-
-//         const tippyInstance = tippy(detectedMarkWordElement, {
-//             plugins: [followCursor],
-//             allowHTML: true,
-//             arrow: false,
-//             duration: [500, null],
-//             followCursor: true,
-//             trigger: 'manual',
-
-//             content: (reference) => {
-//                 return shikiHighlighter.codeToHtml(generatedCssCode, {
-//                     lang: 'css',
-//                     theme: 'dark-plus',
-//                 });
-//             }
-//         });
-
-//         tippyInstance.show();
-
-//         // push the element to the registered tippy elements
-//         registeredTippyElements.push(tippyInstance);
-
-//         detectedMarkWordElement = null;
-//     });
-
-//     // on mouse leave the `.hit-container` element, hide all tippy
-//     hitContainerEl.addEventListener('mouseleave', function (event) {
-//         someTippyIsVisible = false;
-
-//         registeredTippyElements.forEach((tippyInstance) => {
-//             tippyInstance.destroy();
-//         });
-
-//         registeredTippyElements = [];
-//     });
-// }
-
-// function colorizeBackground() {
-//     if (twConfig === null) return;
-
-//     if (screenBadgeColors.length === 0) return;
-
-//     const markElements = document.querySelectorAll('.hit-backdrop>.hit-highlights.hit-content>mark[class="word"]');
-
-//     markElements.forEach((markElement) => {
-//         // get the text content of the `mark` element
-//         const text = markElement.textContent;
-
-//         // loop through all screen badge colors
-//         screenBadgeColors.forEach((screenBadgeColor) => {
-//             // if the text content of the `mark` element contains the screen name
-//             if (text.includes(screenBadgeColor.screen + ':')) {
-//                 const ruleVal = `color-mix(in srgb, ${screenBadgeColor.color} 20%, white 1%)`;
-//                 markElement.style.backgroundColor = ruleVal;
-//                 markElement.style.outlineColor = ruleVal;
-//             }
-//         });
-//     });
-// }
+    watch(currentMarkWordElement, (newVal, oldVal) => {
+        if (newVal && newVal !== oldVal) {
+            showTippy(newVal);
+        } else {
+            tippyInstance.hide();
+        }
+    });
+}
 
 const observerAutocomplete = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {

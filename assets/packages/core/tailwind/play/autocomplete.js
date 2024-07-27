@@ -123,7 +123,6 @@ function searchClassList(query) {
 
     return filteredClassList.map((classList) => {
         return {
-            // value: [prefix, classList.selector].filter(Boolean).join(':'),
             value: [prefix, (importantModifier ? '!' : '') + classList.selector].filter(Boolean).join(':'),
             color: getColor(classList.declarations)
         }

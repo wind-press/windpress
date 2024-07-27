@@ -17,7 +17,7 @@ logger('Loading...');
     await import('./modules/settings/main.js');
     await import('./modules/plain-classses/main.js');
     // await import('./modules/variables/main.js');
-    // await import('./modules/html2bricks/main.js');
+    // await import('./modules/html2breakdance/main.js');
     await import('./modules/generate-cache/main.js');
 
     logger('Modules loaded!');

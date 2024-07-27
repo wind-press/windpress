@@ -11,33 +11,32 @@ import './style.scss';
 
 import { logger } from '@/integration/common/logger.js';
 
-// import tippy, { followCursor } from 'tippy.js';
+import tippy, { followCursor } from 'tippy.js';
 
 import { nextTick, ref, watch } from 'vue';
 import autosize from 'autosize';
 import Tribute from 'tributejs';
 import { debounce, set } from 'lodash-es';
 
-// import { createHighlighterCore, loadWasm } from 'shiki/core';
+import { createHighlighterCore, loadWasm } from 'shiki/core';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
-// import { brxGlobalProp, brxIframeGlobalProp, brxIframe } from '@/integration/breakdance/constant.js';
-import { bdeV, bdeIframe, bdeIframeV } from '@/integration/breakdance/constant.js';
+import { bdeV, bdeIframe, bdeIframeCanvas, bdeIframeV } from '@/integration/breakdance/constant.js';
 
-// let shikiHighlighter = null;
+let shikiHighlighter = null;
 
-// (async () => {
-//     await loadWasm(import('shiki/wasm'));
-//     shikiHighlighter = await createHighlighterCore({
-//         themes: [
-//             import('shiki/themes/dark-plus.mjs'),
-//             import('shiki/themes/light-plus.mjs'),
-//         ],
-//         langs: [
-//             import('shiki/langs/css.mjs'),
-//         ],
-//     });
-// })();
+(async () => {
+    await loadWasm(import('shiki/wasm'));
+    shikiHighlighter = await createHighlighterCore({
+        themes: [
+            import('shiki/themes/dark-plus.mjs'),
+            import('shiki/themes/light-plus.mjs'),
+        ],
+        langs: [
+            import('shiki/langs/css.mjs'),
+        ],
+    });
+})();
 
 const textInput = document.createRange().createContextualFragment(/*html*/ `
     <textarea id="windpressbreakdance-plc-input" class="windpressbreakdance-plc-input" rows="2" spellcheck="false"></textarea>
@@ -66,13 +65,6 @@ containerActionButtons.appendChild(classSortButton);
 
 const visibleElementPanel = ref(false); // 0 = hidden, > 0 = visible
 const activeElementId = ref(null);
-
-let twConfig = null;
-let screenBadgeColors = [];
-
-(async () => {
-    
-})();
 
 let hit = null; // highlight any text except spaces and new lines
 
@@ -345,7 +337,7 @@ textInput.addEventListener('tribute-active-true', function (e) {
 
 function previewAddClass(className) {
     const activeEl = bdeIframeV.$store.getters['ui/activeElement'].id;
-    const elementNode = bdeIframe.querySelector(`[data-node-id="${activeEl}"]`);
+    const elementNode = bdeIframeCanvas.querySelector(`[data-node-id="${activeEl}"]`);
     // add class to the element
     elementNode.classList.add(className);
 
@@ -366,11 +358,86 @@ function previewTributeEventCallbackUpDown() {
 
 function resetTributeClass() {
     const activeEl = bdeIframeV.$store.getters['ui/activeElement'].id;
-    const elementNode = bdeIframe.querySelector(`[data-node-id="${activeEl}"]`);
+    const elementNode = bdeIframeCanvas.querySelector(`[data-node-id="${activeEl}"]`);
     if (elementNode.dataset.tributeClassName) {
         elementNode.classList.remove(elementNode.dataset.tributeClassName);
         elementNode.dataset.tributeClassName = '';
     }
+}
+
+textInput.addEventListener('highlights-updated', function (e) {
+    hoverPreviewProvider();
+});
+
+// create a tippy instance that will be used to show the hover preview, but not yet shown
+let tippyInstance = tippy(document.createElement('div'), {
+    plugins: [followCursor],
+    allowHTML: true,
+    arrow: false,
+    duration: [500, null],
+    followCursor: true,
+    trigger: 'manual',
+});
+
+function hoverPreviewProvider() {
+    if (bdeIframe.contentWindow.windpress?.loaded?.module?.classnameToCss !== true) {
+        return;
+    }
+
+    const hitContainerEl = document.querySelector('.hit-container');
+
+    if (hitContainerEl === null) {
+        return;
+    }
+
+    tippyInstance.reference = hitContainerEl;
+
+    async function showTippy(markWordElement) {
+        const classname = markWordElement.textContent;
+        const generatedCssCode = await bdeIframe.contentWindow.windpress.module.classnameToCss.generate(classname);
+        if (generatedCssCode === null || generatedCssCode.trim() === '') {
+            return null;
+        };
+
+        tippyInstance.setContent(shikiHighlighter.codeToHtml(generatedCssCode, {
+            lang: 'css',
+            theme: document.querySelector('div#app.theme--light') !== null ? 'light-plus' : 'dark-plus',
+        }));
+
+        tippyInstance.show();
+    }
+
+    const currentMarkWordElement = ref(null);
+
+    const debouncedMousemoveHandler = debounce(function (event) {
+        const x = event.clientX;
+        const y = event.clientY;
+
+        // get all elements that overlap the mouse
+        const elements = document.elementsFromPoint(x, y);
+
+        // find the first `mark` element
+        const firstMarkWordElement = elements.find((element) => {
+            return element.matches('mark[class="word"]');
+        });
+
+        currentMarkWordElement.value = firstMarkWordElement || null;
+    }, 10);
+
+    // when mouse are entering the `.hit-container` element, get the coordinates of the mouse and check if the mouse is hovering the `mark` element
+    hitContainerEl.addEventListener('mousemove', debouncedMousemoveHandler);
+
+    hitContainerEl.addEventListener('mouseleave', function (event) {
+        currentMarkWordElement.value = null;
+    });
+
+    watch(currentMarkWordElement, (newVal, oldVal) => {
+        if (newVal && newVal !== oldVal) {
+            showTippy(newVal);
+        } else {
+            tippyInstance.hide();
+        }
+    });
 }
 
 logger('Module loaded!', { module: 'plain-classes' });
