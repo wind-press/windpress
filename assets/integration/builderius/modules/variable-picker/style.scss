@@ -1,0 +1,31 @@
+#windpressbuilderius-variable-app {
+    font-family: Inter, sans-serif;
+    z-index: -1;
+    height: 500px;
+    width: 300px;
+    position: fixed;
+    left: calc(50% - 200px);
+    top: calc(50% - 300px);
+
+    svg.inline-svg {
+        display: inline-block;
+        height: 1em;
+        vertical-align: -.125em;
+    }
+
+    .v-popper--theme-tooltip {
+        .v-popper__inner {
+            background-color: var(--base-2);
+            color: var(--primary-1);
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            text-transform: none;
+            white-space: nowrap;
+        }
+    
+        .v-popper__arrow-outer {
+            border-color: var(--base-2);
+        }
+    }
+}
