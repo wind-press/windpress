@@ -37,6 +37,11 @@ class Editor
 
         $handle = WIND_PRESS::WP_OPTION . ':integration-builderius-editor';
 
+        AssetVite::get_instance()->enqueue_asset('assets/integration/builderius/main.js', [
+            'handle' => $handle,
+            'in_footer' => true,
+        ]);
+
         wp_register_script($handle, false);
         wp_enqueue_script($handle);
 

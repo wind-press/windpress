@@ -26,7 +26,7 @@ use WindPress\WindPress\Utils\Notice;
 /**
  * Manage the plugin lifecycle and provides a single point of entry to the plugin.
  *
- * @since 1.0.0
+ * @since 3.0.0
  */
 final class Plugin
 {

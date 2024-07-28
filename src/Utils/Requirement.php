@@ -18,7 +18,7 @@ use WIND_PRESS;
 /**
  * Check plugin requirements.
  *
- * @since 1.0.0
+ * @since 3.0.0
  */
 class Requirement
 {

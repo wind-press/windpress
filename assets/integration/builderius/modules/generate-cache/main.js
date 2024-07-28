@@ -20,20 +20,27 @@ const channel = new BroadcastChannel('windpress');
         const open = xhr.open;
 
         xhr.open = function (method, url) {
-            if (method === 'POST' && url.includes('admin-ajax.php')) {
+            if (method === 'POST' && url.includes('v2/builderius')) {
                 const onreadystatechange = xhr.onreadystatechange;
 
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        if (xhr.responseText === 'Save') {
-                            channel.postMessage({
-                                source: 'windpress/integration',
-                                target: 'windpress/dashboard',
-                                task: 'windpress.generate-cache',
-                                payload: {
-                                    force_pull: true
-                                }
-                            });
+
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+
+                            if (response.commit_entity?.errors?.length === 0 || response.commit_global?.errors?.length === 0) {
+                                channel.postMessage({
+                                    source: 'windpress/integration',
+                                    target: 'windpress/dashboard',
+                                    task: 'windpress.generate-cache',
+                                    payload: {
+                                        force_pull: true
+                                    }
+                                });
+                            }
+                        } catch (err) {
+                            logger('Failed to intercept the response.', err, { module: 'generate-cache' });
                         }
                     }
 

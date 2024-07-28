@@ -1,7 +1,7 @@
 /**
  * @module generate-cache 
  * @package WindPress
- * @since 2.0.0
+ * @since 3.0.0
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 
  * Generate cache when post saved

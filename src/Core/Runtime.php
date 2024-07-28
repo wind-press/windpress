@@ -19,7 +19,7 @@ use WindPress\WindPress\Utils\AssetVite;
 use WindPress\WindPress\Utils\Config;
 
 /**
- * @since 1.0.0
+ * @since 3.0.0
  * 
  * TODO: This class is not yet implemented, it's just temporary for Universal Editor testing purpose.
  */

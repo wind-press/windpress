@@ -14,7 +14,7 @@ declare(strict_types=1);
 /**
  * Plugin constants.
  *
- * @since 1.0.0
+ * @since 3.0.0
  */
 class WIND_PRESS
 {

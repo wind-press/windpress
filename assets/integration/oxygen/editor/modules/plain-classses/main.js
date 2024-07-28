@@ -1,7 +1,7 @@
 /**
  * @module plain-classes 
  * @package WindPress
- * @since 1.0.0
+ * @since 3.0.0
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 
  * Add plain classes to the element panel.

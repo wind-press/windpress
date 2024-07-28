@@ -1,7 +1,7 @@
 /**
  * @module color-palette 
  * @package WindPress
- * @since 1.0.0
+ * @since 3.0.0
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  * 
  * Register the color entry to the Bricks' color manager.

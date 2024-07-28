@@ -18,7 +18,7 @@ use WindPress\WindPress\Utils\Cache as UtilsCache;
 use WindPress\WindPress\Utils\Common;
 
 /**
- * @since 1.0.0
+ * @since 3.0.0
  */
 class Cache
 {

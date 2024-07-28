@@ -19,7 +19,7 @@ use Throwable;
 /**
  * Debug tools for the plugin.
  *
- * @since 1.0.0
+ * @since 3.0.0
  */
 class Debug
 {

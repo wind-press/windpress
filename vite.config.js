@@ -34,6 +34,7 @@ export default defineConfig({
                 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
                 'integration/livecanvas': 'assets/integration/livecanvas/main.js',
+                'integration/builderius': 'assets/integration/builderius/main.js',
             },
             outDir: 'build',
         }),

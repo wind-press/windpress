@@ -24,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 /**
  * Accessor for the plugin config.
  *
- * @since 1.0.0
+ * @since 3.0.0
  */
 class Config
 {
