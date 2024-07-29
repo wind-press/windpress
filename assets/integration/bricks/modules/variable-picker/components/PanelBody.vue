@@ -182,8 +182,6 @@ watch(focusedInput, (value) => {
         const isFontSize = ['typography', 'font'].some(key => dataControlKey.includes(key));
         const isSpacing = ['padding', 'margin', 'gap', 'width', 'height'].some(key => dataControlKey.includes(key));
         const isColorInput = value.parentElement?.parentElement?.classList.contains('color-input');
-        const isBorder = ['_border'].includes(dataControlKey);
-        const isColsOrRows = ['_gridTemplateColumns', '_gridTemplateRows'].some(key => dataControlKey.includes(key.toLocaleLowerCase()));
 
         sectionTypography.value.togglePanel(false);
         sectionSpacing.value.togglePanel(false);
@@ -230,7 +228,7 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbricks-variable-app-body" class="rel w:full h:full overflow-y:scroll!">
+    <div id="windpressbricks-variable-app-body" class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(builder-border-color)>div:not(:last-child)">
         <ExpansionPanel namespace="variable" name="color" ref="sectionColor">
             <template #header>
                 <span class="font:semibold">Color</span>

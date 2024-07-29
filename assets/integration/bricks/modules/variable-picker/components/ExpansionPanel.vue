@@ -23,7 +23,6 @@ const expand = useStorage(
 );
 
 function togglePanel(val) {
-    // expand[props.name] = val === null ? !expand[props.name] : val;
     expand.value[props.name] = val === null ? !expand.value[props.name] : val;
 }
 
@@ -38,8 +37,8 @@ defineExpose({
 </script>
 
 <template>
-    <div ref="sectionRef" class="expansion-panel m:10 mr:4">
-        <div @click="expand[name] = !expand[name]" :class="{'bg:$(builder-bg-3)!' : expand[name]}" class="expansion-panel__header flex bg:$(builder-bg-2) bg:$(builder-bg-3):hover justify-content:space-between p:10 r:8 cursor:pointer">
+    <div ref="sectionRef" class="expansion-panel mx:10 py:8 mr:4">
+        <div @click="expand[name] = !expand[name]" :class="{}" class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer">
             <div class="flex-grow:1">
                 <slot name="header"></slot>
             </div>

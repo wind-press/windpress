@@ -64,15 +64,15 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="windpressbreakdance-variable-app-header" class=" cursor:grab bb:1|solid|$(gray200)">
-        <div class="flex gap:10 align-items:center px:12 py:10 fg:$(bdedark)">
-            <a :href="windpressbreakdance.site_meta.admin_url" target="_blank" v-tooltip="{ placement: 'top', content: 'Open WindPress plugin' }" class="flex align-items:center fg:$(bdedark) fg:$(blue600):hover">
+    <div id="windpressbreakdance-variable-app-header" class="cursor:grab bb:1|solid|$(gray200)">
+        <div class="flex gap:10 align-items:center fg:var(dark)">
+            <div class="flex align-items:center px:12 py:2">
                 <inline-svg :src="Logo" class="inline-svg fill:current font:24" />
-            </a>
-            <div v-tooltip="{ placement: 'top', content: `v${windpressbreakdance._version}` }" class="text-transform:none font:medium flex gap:10 align-items:center cursor:default">
+            </div>
+            <div v-tooltip="{ placement: 'top', content: `v${windpressbreakdance._version}` }" class="text-transform:none font:medium text:center flex-grow:1 gap:10 align-items:center cursor:default px:12 py:2">
                 WindPress
             </div>
-            <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="ml:auto py:4 px:8 r:4 fg:$(blue600):hover bg:$(blue50):hover">
+            <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="flex align-items:center py:10 px:12 fg:$(blue600):hover bg:$(blue50):hover">
                 <font-awesome-icon :icon="['fas', 'xmark']" class=" font:16" />
             </button>
         </div>

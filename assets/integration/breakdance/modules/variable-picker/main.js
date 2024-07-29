@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from './font-awesome.js';
 import { logger } from '@/integration/common/logger.js';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
-import VResizable from 'v-resizable';
 import App from './App.vue';
 import { observe } from './utility.js';
 import { bde } from '@/integration/breakdance/constant.js';
@@ -20,7 +19,6 @@ const isOpen = ref(false);
 const focusedInput = ref(null);
 const tempInputValue = ref(null);
 const recentVariableSelectionTimestamp = ref(0);
-const recentActiveSelector = ref(null);
 
 const app = createApp(App);
 
@@ -36,7 +34,6 @@ app
     .use(FloatingVue, {
         container: '#windpressbreakdance-variable-app',
     })
-    .use(VResizable)
     ;
 
 app
@@ -67,31 +64,8 @@ function onFocusCallback(e) {
 const breakdanceInputs = {
     includedFields: [
         'div.breakdance-control-wrapper-input-wrapper div.breakdance-text-input-wrapper',
-        // 'div.uniCssInput',
-        // 'div.uniCssColorpicker',
-        // 'div[data-control="number"]',
-        // {
-        //     selector: 'div[data-control="text"]',
-        //     hasChild: [
-        //         "#_cssTransition",
-        //         "#_transformOrigin",
-        //         "#_flexBasis",
-        //         "#_overflow",
-        //         "#_gridTemplateColumns",
-        //         "#_gridTemplateRows",
-        //         "#_gridAutoColumns",
-        //         "#_gridAutoRows",
-        //         "#_objectPosition",
-        //         '[id^="raw-"]',
-        //     ],
-        // },
     ],
     excludedFields: [
-        // ".control-query",
-        // 'div[data-controlkey="start"]',
-        // 'div[data-controlkey="perPage"]',
-        // 'div[data-controlkey="perMove"]',
-        // 'div[data-controlkey="speed"]',
     ],
 };
 
@@ -105,7 +79,7 @@ function addTriggers() {
                 : [...document.querySelectorAll(field.selector)].filter((n) => field.hasChild.some((c) => n.querySelector(c)));
             wrappers.forEach((wrapper) => {
                 const input = wrapper.querySelector("input[type='text']");
-                if (input?.getAttribute('windpressbreakdance-variable-app') === 'true') {
+                if (input?.getAttribute('windpressbreakdance-variable-app') === 'listened') {
                     return;
                 }
 
@@ -114,9 +88,7 @@ function addTriggers() {
                 input?.removeEventListener('focus', onFocusCallback);
                 input?.addEventListener('focus', onFocusCallback);
 
-                input?.setAttribute('windpressbreakdance-variable-app', 'true');
-                input?.parentNode.setAttribute('data-tooltip-place', 'top');
-                input?.parentNode.setAttribute('data-tooltip-content', 'Shift + click to open the Variable Picker');
+                input?.setAttribute('windpressbreakdance-variable-app', 'listened');
 
                 shouldReset = true;
             });
@@ -159,6 +131,5 @@ document.addEventListener('keydown', (e) => {
 watch(isOpen, (value) => {
     variableApp.style.zIndex = value ? 'calc(Infinity)' : '-1';
 });
-
 
 logger('Module loaded!', { module: 'variable-picker' });

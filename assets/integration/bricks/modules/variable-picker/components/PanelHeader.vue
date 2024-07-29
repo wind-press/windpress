@@ -65,12 +65,14 @@ onMounted(() => {
 
 <template>
     <div id="windpressbricks-variable-app-header" class="bg:$(builder-bg) cursor:grab bb:1|solid|$(builder-border-color)">
-        <div class="flex gap:10 align-items:center px:12 py:8">
-            <a :href="windpressbricks.site_meta.admin_url" target="_blank" v-tooltip="{ placement: 'top', content: 'Open WindPress plugin' }" class="flex align-items:center fg:$(builder-color-accent):hover"><inline-svg :src="Logo" class="inline-svg fill:current font:24" /></a>
-            <div v-tooltip="{ placement: 'top', content: `v${windpressbricks._version}` }" class="font:bold flex gap:10 align-items:center cursor:default">
+        <div class="flex gap:10 align-items:center">
+            <div class="flex align-items:center px:12 py:2">
+                <inline-svg :src="Logo" class="inline-svg fill:current font:24" />
+            </div>
+            <div v-tooltip="{ placement: 'top', content: `v${windpressbricks._version}` }" class="font:bold gap:10 text:center flex-grow:1 align-items:center cursor:default px:12 py:2">
                 WindPress
             </div>
-            <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="ml:auto p:6 bg:transparent bg:$(builder-bg-accent):hover r:$(builder-border-radius)">
+            <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="flex align-items:center py:10 px:12 bg:transparent bg:$(builder-bg-accent):hover">
                 <font-awesome-icon :icon="['fas', 'xmark']" class="fg:$(builder-color)" />
             </button>
         </div>

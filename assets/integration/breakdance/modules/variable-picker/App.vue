@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-show="isOpen" id="windpressbreakdance-variable-app-container" ref="containerRef" v-resizable.br="{ minWidth: 300, minHeight: 500 }" class="v-application flex flex:column w:full h:full  r:10 overflow:hidden outline:1|solid|$(blue200)">
+    <div v-show="isOpen" id="windpressbreakdance-variable-app-container" ref="containerRef" class="v-application flex flex:column w:full h:full">
         <PanelHeader />
         <Suspense>
             <PanelBody />

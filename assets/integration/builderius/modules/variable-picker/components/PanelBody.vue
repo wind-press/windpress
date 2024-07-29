@@ -19,6 +19,7 @@ const HOVER_VARIABLE_PREVIEW_TIMEOUT = 1000;
 const focusedInput = inject('focusedInput');
 const recentVariableSelectionTimestamp = inject('recentVariableSelectionTimestamp');
 const tempInputValue = inject('tempInputValue');
+const variableApp = inject('variableApp');
 
 async function constructVariableList() {
     // get design system
@@ -27,14 +28,11 @@ async function constructVariableList() {
     // register variables
     const variableLists = getVariableList(__unstable__loadDesignSystem(main_css));
 
-    // add css variable to the style element and wrap it for the `windpressbuilderius-variable-app-body` element
-    let variableAppBodyEl = document.querySelector('#windpressbuilderius-variable-app-body');
-
-    let styleElement = variableAppBodyEl.querySelector('style#windpressbuilderius-variable-app-body-style');
+    let styleElement = variableApp.querySelector('style#windpressbuilderius-variable-app-body-style');
     if (!styleElement) {
         styleElement = document.createElement('style');
         styleElement.id = 'windpressbuilderius-variable-app-body-style';
-        variableAppBodyEl.appendChild(styleElement);
+        variableApp.appendChild(styleElement);
     }
 
     styleElement.innerHTML = `
@@ -302,7 +300,7 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbuilderius-variable-app-body" class="rel w:full h:full overflow-y:scroll!">
+    <div id="windpressbuilderius-variable-app-body" class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(primary-3)>div:not(:last-child)">
         <ExpansionPanel namespace="variable" name="color" ref="sectionColor">
             <template #header>
                 <span class="font:semibold">Color</span>

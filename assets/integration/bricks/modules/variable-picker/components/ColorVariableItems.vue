@@ -152,7 +152,7 @@ async function selectColor(color) {
 </script>
 
 <template>
-    <div class="{m:10;pb:15}>div bb:1|solid|$(builder-border-color)>div:not(:last-child)">
+    <div class="{m:10;pb:15}>div">
         <div v-for="(color, key) in variableItems" :key="key" class="">
             <div class="variable-section-title font:14 my:10">
                 {{ key }}
@@ -166,7 +166,7 @@ async function selectColor(color) {
 
             <!-- if has shades and shades > 0 -->
             <template v-if="color.shades && Object.keys(color.shades).length > 0">
-                <div :class="[{}, true ? `grid-template-cols:repeat(${Object.keys(color.shades).length},auto)` : '']" class="variable-section-items grid r:4 overflow:hidden">
+                <div :class="[{}, Object.keys(color.shades).length > 1 ? 'rl:4>div:first-child>button rr:4>div:last-child>button': '', true ? `grid-template-cols:repeat(${Object.keys(color.shades).length},auto)` : '']" class="variable-section-items grid r:4 overflow:hidden">
                     <div v-for="(shade, shadeKey) in color.shades" :key="shadeKey" class="flex gap:10">
                         <button @click="(event) => onClick(event, shade.key)" @mouseenter="(event) => onMouseEnter(event, shade.key)" @mouseleave="onMouseLeave" v-tooltip="{ placement: 'top', content: `var(${shade.key}, ${shade.value})` }" :class="`bg:\$\(${shade.key.slice(2)}\)`" class="w:full h:24 border:1|solid|transparent border:white:hover"></button>
                     </div>

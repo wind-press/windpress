@@ -56,8 +56,7 @@ export default defineConfig({
         lightningcss: true,
     },
     build: {
-        // target: 'esnext',
-        target: 'modules',
+        // target: 'modules',
     },
     publicDir: 'assets/static',
     resolve: {

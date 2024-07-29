@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from './font-awesome.js';
 import { logger } from '@/integration/common/logger.js';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
-import VResizable from 'v-resizable';
 import App from './App.vue';
 import { observe } from './utility.js';
 
@@ -47,7 +46,6 @@ app
     .use(FloatingVue, {
         container: '#windpressbuilderius-variable-app',
     })
-    .use(VResizable)
     ;
 
 app
@@ -75,47 +73,22 @@ function onFocusCallback(e) {
     focusedInput.value = e.target;
 }
 
-const builderiusInputs = {
-    includedFields: [
-        'div.uniCssInput',
-        'div.uniCssColorpicker',
-        // 'div[data-control="number"]',
-        // {
-        //     selector: 'div[data-control="text"]',
-        //     hasChild: [
-        //         "#_cssTransition",
-        //         "#_transformOrigin",
-        //         "#_flexBasis",
-        //         "#_overflow",
-        //         "#_gridTemplateColumns",
-        //         "#_gridTemplateRows",
-        //         "#_gridAutoColumns",
-        //         "#_gridAutoRows",
-        //         "#_objectPosition",
-        //         '[id^="raw-"]',
-        //     ],
-        // },
-    ],
-    excludedFields: [
-        // ".control-query",
-        // 'div[data-controlkey="start"]',
-        // 'div[data-controlkey="perPage"]',
-        // 'div[data-controlkey="perMove"]',
-        // 'div[data-controlkey="speed"]',
-    ],
-};
+const builderiusInputs = [
+    'div.uniCssInput',
+    'div.uniCssColorpicker',
+];
 
 function addTriggers() {
     setTimeout(() => {
         let shouldReset = false;
 
-        builderiusInputs.includedFields.forEach((field) => {
+        builderiusInputs.forEach((field) => {
             const wrappers = typeof field === 'string'
                 ? [...document.querySelectorAll(field)]
                 : [...document.querySelectorAll(field.selector)].filter((n) => field.hasChild.some((c) => n.querySelector(c)));
             wrappers.forEach((wrapper) => {
                 const input = wrapper.querySelector("input[type='text']");
-                if (input?.getAttribute('windpressbuilderius-variable-app') === 'true') {
+                if (input?.getAttribute('windpressbuilderius-variable-app') === 'listened') {
                     return;
                 }
 
@@ -124,9 +97,7 @@ function addTriggers() {
                 input?.removeEventListener('focus', onFocusCallback);
                 input?.addEventListener('focus', onFocusCallback);
 
-                input?.setAttribute('windpressbuilderius-variable-app', 'true');
-                input?.parentNode.setAttribute('data-tooltip-place', 'top');
-                input?.parentNode.setAttribute('data-tooltip-content', 'Shift + click to open the Variable Picker');
+                input?.setAttribute('windpressbuilderius-variable-app', 'listened');
 
                 shouldReset = true;
             });

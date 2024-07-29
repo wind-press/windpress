@@ -37,8 +37,8 @@ defineExpose({
 </script>
 
 <template>
-    <div ref="sectionRef" class="expansion-panel m:10 mr:4">
-        <div @click="expand[name] = !expand[name]" :class="{'bg:$(primary-3)!' : expand[name]}" class="expansion-panel__header flex bg:$(primary-2) bg:$(primary-3):hover justify-content:space-between p:10 r:8 cursor:pointer">
+    <div ref="sectionRef" class="expansion-panel mx:10 py:8">
+        <div @click="expand[name] = !expand[name]" class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer">
             <div class="flex-grow:1">
                 <slot name="header"></slot>
             </div>

@@ -1,17 +1,19 @@
 #windpressbreakdance-variable-app {
     font-family: Inter, sans-serif;
     z-index: -1;
-    height: 500px;
-    width: 300px;
+    height: 600px;
+    width: 400px;
     position: fixed;
     left: calc(50% - 200px);
     top: calc(50% - 300px);
     box-shadow: 0 11px 15px -7px #0003, 0 24px 38px 3px #00000024, 0 9px 46px 8px #0000001f;
+    border-radius: 0.625rem;
+    overflow: hidden;
+    outline: 0.0625rem solid var(--blue200);
 
     .flex {
         flex: initial;
     }
-    
 
     svg.inline-svg {
         display: inline-block;
@@ -29,7 +31,7 @@
             text-transform: none;
             white-space: nowrap;
         }
-    
+
         .v-popper__arrow-outer {
             border-color: var(--gray600);
         }
