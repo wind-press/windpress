@@ -1,4 +1,5 @@
-import { brxGlobalProp, brxIframeGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
+import { logger } from '@/integration/common/logger.js';
+import { brxGlobalProp } from '@/integration/bricks/constant.js';
 
 export function getActiveElement() {
     if (brxGlobalProp.$_state.activePanel !== "element") {

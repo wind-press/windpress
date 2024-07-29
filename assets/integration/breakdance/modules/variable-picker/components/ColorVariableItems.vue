@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="{m:10;pb:15}>div bb:1|solid|$(primary-3)>div:not(:last-child)">
+    <div class="{m:10;pb:15}>div bb:1|solid|$(gray200)>div:not(:last-child)">
         <div v-for="(color, key) in variableItems" :key="key" class="">
             <div class="variable-section-title font:14 my:10">
                 {{ key }}

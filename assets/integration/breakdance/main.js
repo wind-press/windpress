@@ -16,9 +16,9 @@ logger('Loading...');
     // TODO: dynamic import the features based on the enabled modules
     await import('./modules/settings/main.js');
     await import('./modules/plain-classses/main.js');
-    // await import('./modules/variables/main.js');
     // await import('./modules/html2breakdance/main.js');
     await import('./modules/generate-cache/main.js');
+    await import('./modules/variable-picker/main.js');
 
     logger('Modules loaded!');
     

@@ -10,22 +10,11 @@ import FloatingVue from 'floating-vue';
 import VResizable from 'v-resizable';
 import App from './App.vue';
 import { observe } from './utility.js';
+import { bde } from '@/integration/breakdance/constant.js';
 
-const variableApp = document.createElement('windpressbuilderius-variable-app');
-variableApp.id = 'windpressbuilderius-variable-app';
-document.body.appendChild(variableApp);
-
-// Copy the Editor CSS variables to the Variable App
-for (const rule of document.getElementById('builderius-builder-css').sheet.cssRules) {
-    if (rule.selectorText && rule.selectorText.includes('#builderiusPanel')) {
-        for (let i = 0; i < rule.style.length; i++) {
-            const propertyName = rule.style[i];
-            if (propertyName.startsWith('--')) {
-                variableApp.style.setProperty(propertyName, rule.style.getPropertyValue(propertyName).trim());
-            }
-        }
-    }
-}
+const variableApp = document.createElement('windpressbreakdance-variable-app');
+variableApp.id = 'windpressbreakdance-variable-app';
+bde.appendChild(variableApp);
 
 const isOpen = ref(false);
 const focusedInput = ref(null);
@@ -35,7 +24,7 @@ const recentActiveSelector = ref(null);
 
 const app = createApp(App);
 
-app.config.globalProperties.windpressbuilderius = window.windpressbuilderius;
+app.config.globalProperties.windpressbreakdance = window.windpressbreakdance;
 
 app.provide('variableApp', variableApp);
 app.provide('isOpen', isOpen);
@@ -45,7 +34,7 @@ app.provide('recentVariableSelectionTimestamp', recentVariableSelectionTimestamp
 
 app
     .use(FloatingVue, {
-        container: '#windpressbuilderius-variable-app',
+        container: '#windpressbreakdance-variable-app',
     })
     .use(VResizable)
     ;
@@ -55,7 +44,7 @@ app
     .component('inline-svg', InlineSvg)
     ;
 
-app.mount('#windpressbuilderius-variable-app');
+app.mount('#windpressbreakdance-variable-app');
 
 
 function onInputClick(e) {
@@ -75,10 +64,11 @@ function onFocusCallback(e) {
     focusedInput.value = e.target;
 }
 
-const builderiusInputs = {
+const breakdanceInputs = {
     includedFields: [
-        'div.uniCssInput',
-        'div.uniCssColorpicker',
+        'div.breakdance-control-wrapper-input-wrapper div.breakdance-text-input-wrapper',
+        // 'div.uniCssInput',
+        // 'div.uniCssColorpicker',
         // 'div[data-control="number"]',
         // {
         //     selector: 'div[data-control="text"]',
@@ -109,13 +99,13 @@ function addTriggers() {
     setTimeout(() => {
         let shouldReset = false;
 
-        builderiusInputs.includedFields.forEach((field) => {
+        breakdanceInputs.includedFields.forEach((field) => {
             const wrappers = typeof field === 'string'
                 ? [...document.querySelectorAll(field)]
                 : [...document.querySelectorAll(field.selector)].filter((n) => field.hasChild.some((c) => n.querySelector(c)));
             wrappers.forEach((wrapper) => {
                 const input = wrapper.querySelector("input[type='text']");
-                if (input?.getAttribute('windpressbuilderius-variable-app') === 'true') {
+                if (input?.getAttribute('windpressbreakdance-variable-app') === 'true') {
                     return;
                 }
 
@@ -124,21 +114,13 @@ function addTriggers() {
                 input?.removeEventListener('focus', onFocusCallback);
                 input?.addEventListener('focus', onFocusCallback);
 
-                input?.setAttribute('windpressbuilderius-variable-app', 'true');
+                input?.setAttribute('windpressbreakdance-variable-app', 'true');
                 input?.parentNode.setAttribute('data-tooltip-place', 'top');
                 input?.parentNode.setAttribute('data-tooltip-content', 'Shift + click to open the Variable Picker');
 
                 shouldReset = true;
             });
         });
-
-        const currentSelector = document.querySelector('div.uniSystemSelectClasses__valueWrapper span.uniSystemSelectClasses__placeholder')
-            ? '%root%'
-            : document.querySelector('div.uniSystemSelectClasses__valueWrapper div.uniModuleCssSelectorItemSelected span')?.innerText;
-
-        if (recentActiveSelector.value !== currentSelector) {
-            recentActiveSelector.value = currentSelector;
-        }
 
         if (shouldReset) {
             focusedInput.value = null;
@@ -149,7 +131,7 @@ function addTriggers() {
 
 let isObserverRunning = false;
 observe({
-    selector: `.uniLeftPanelOuter`,
+    selector: 'div:has(>div.breakdance-add-panel)',
     options: {
         subtree: true,
         childList: true,
@@ -178,11 +160,5 @@ watch(isOpen, (value) => {
     variableApp.style.zIndex = value ? 'calc(Infinity)' : '-1';
 });
 
-watch(recentActiveSelector, (value, oldValue) => {
-    if (value !== oldValue) {
-        focusedInput.value = null;
-        tempInputValue.value = null;
-    }
-});
 
 logger('Module loaded!', { module: 'variable-picker' });

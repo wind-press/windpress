@@ -14,6 +14,3 @@ const isOpen = inject('isOpen');
         </Suspense>
     </div>
 </template>
-
-<style lang="scss" scoped>
-</style>

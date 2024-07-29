@@ -160,7 +160,7 @@ async function selectColor(color) {
 
             <template v-if="color.DEFAULT">
                 <div class="variable-section-items">
-                    <button @click="(event) => onClick(event, color.DEFAULT.key)" @mouseenter="(event) => onMouseEnter(event, color.DEFAULT.key)" @mouseleave="onMouseLeave" v-tooltip="{ placement: 'top', content: `var(${color.DEFAULT.key})` }" :class="`bg:\$\(${color.DEFAULT.key.slice(2)}\)`" class="w:full r:4 h:24 border:1|solid|transparent border:white:hover"></button>
+                    <button @click="(event) => onClick(event, color.DEFAULT.key)" @mouseenter="(event) => onMouseEnter(event, color.DEFAULT.key)" @mouseleave="onMouseLeave" v-tooltip="{ placement: 'top', content: `var(${color.DEFAULT.key}, ${color.DEFAULT.value})` }" :class="`bg:\$\(${color.DEFAULT.key.slice(2)}\)`" class="w:full r:4 h:24 border:1|solid|transparent border:white:hover"></button>
                 </div>
             </template>
 
@@ -168,7 +168,7 @@ async function selectColor(color) {
             <template v-if="color.shades && Object.keys(color.shades).length > 0">
                 <div :class="[{}, true ? `grid-template-cols:repeat(${Object.keys(color.shades).length},auto)` : '']" class="variable-section-items grid r:4 overflow:hidden">
                     <div v-for="(shade, shadeKey) in color.shades" :key="shadeKey" class="flex gap:10">
-                        <button @click="(event) => onClick(event, shade.key)" @mouseenter="(event) => onMouseEnter(event, shade.key)" @mouseleave="onMouseLeave" v-tooltip="{ placement: 'top', content: `var(${shade.key})` }" :class="`bg:\$\(${shade.key.slice(2)}\)`" class="w:full h:24 border:1|solid|transparent border:white:hover"></button>
+                        <button @click="(event) => onClick(event, shade.key)" @mouseenter="(event) => onMouseEnter(event, shade.key)" @mouseleave="onMouseLeave" v-tooltip="{ placement: 'top', content: `var(${shade.key}, ${shade.value})` }" :class="`bg:\$\(${shade.key.slice(2)}\)`" class="w:full h:24 border:1|solid|transparent border:white:hover"></button>
                     </div>
                 </div>
             </template>

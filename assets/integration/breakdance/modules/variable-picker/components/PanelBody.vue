@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
-import { uniIframe } from '@/integration/builderius/constant.js';
+import { bdeIframe } from '@/integration/breakdance/constant.js';
 import { getVariableList } from '@/packages/core/tailwind';
 import { __unstable__loadDesignSystem } from 'tailwindcss';
 import ExpansionPanel from './ExpansionPanel.vue';
@@ -22,23 +22,23 @@ const tempInputValue = inject('tempInputValue');
 
 async function constructVariableList() {
     // get design system
-    const main_css = await uniIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
+    const main_css = await bdeIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
 
     // register variables
     const variableLists = getVariableList(__unstable__loadDesignSystem(main_css));
 
-    // add css variable to the style element and wrap it for the `windpressbuilderius-variable-app-body` element
-    let variableAppBodyEl = document.querySelector('#windpressbuilderius-variable-app-body');
+    // add css variable to the style element and wrap it for the `windpressbreakdance-variable-app-body` element
+    let variableAppBodyEl = document.querySelector('#windpressbreakdance-variable-app-body');
 
-    let styleElement = variableAppBodyEl.querySelector('style#windpressbuilderius-variable-app-body-style');
+    let styleElement = variableAppBodyEl.querySelector('style#windpressbreakdance-variable-app-body-style');
     if (!styleElement) {
         styleElement = document.createElement('style');
-        styleElement.id = 'windpressbuilderius-variable-app-body-style';
+        styleElement.id = 'windpressbreakdance-variable-app-body-style';
         variableAppBodyEl.appendChild(styleElement);
     }
 
     styleElement.innerHTML = `
-        #windpressbuilderius-variable-app-body {
+        #windpressbreakdance-variable-app-body {
             ${variableLists.map((variable) => `${variable.key}:${variable.value};`).join('')}
         }
     `;
@@ -196,43 +196,48 @@ const sectionSpacing = ref(null);
 
 watch(focusedInput, (value) => {
     if (value) {
-        // get the name attribute of the focused input
-        const name = value.getAttribute('name');
-
-        const isColorInput = ['color', 'backgroundColor'].some((keyword) => name.includes(keyword));
-        const isFontSize = ['fontSize'].some((keyword) => name.includes(keyword));
-        const isSpacing = ['padding', 'margin', 'gap', 'width', 'height'].some((keyword) => name.includes(keyword));
+        // get the attribute of the closest control for the focused input
+        const control = value.closest('[data-test-id]');
+        const isColorInput = ['color'].some((keyword) => control.getAttribute('data-test-id').includes(keyword));
+        const isFontSize = ['fontSize'].some((keyword) => control.getAttribute('data-test-id').includes(keyword));
+        const isSpacing = ['spacing', 'size-width'].some((keyword) => control.getAttribute('data-test-id').includes(keyword));
 
         sectionTypography.value.togglePanel(false);
         sectionSpacing.value.togglePanel(false);
         sectionColor.value.togglePanel(false);
+
+        async function swithUnitCustom() {
+            while (value.parentElement.parentElement.parentElement.querySelector('div.dropdown>button.breakdance-unit-input-unit') === null) {
+                await new Promise((resolve) => setTimeout(resolve, 10));
+            }
+
+            value.parentElement.parentElement.parentElement.querySelector('div.dropdown>button.breakdance-unit-input-unit').click();
+
+            while (document.querySelector('.v-menu__content.menuable__content__active .dropdown-content .v-list .v-list-item:last-child .v-list-item__title') === null) {
+                await new Promise((resolve) => setTimeout(resolve, 10));
+            }
+
+            document.querySelector('.v-menu__content.menuable__content__active .dropdown-content .v-list .v-list-item:last-child .v-list-item__title').click();
+
+            setTimeout(() => {
+                value.focus();
+            }, 100);
+        }
+
         if (isColorInput) {
             sectionColor.value.togglePanel(true);
             sectionColor.value.scrollIntoView();
         } else if (isFontSize) {
             sectionTypography.value.togglePanel(true);
             sectionTypography.value.scrollIntoView();
+            swithUnitCustom();
         } else if (isSpacing) {
             sectionSpacing.value.togglePanel(true);
             sectionSpacing.value.scrollIntoView();
+            swithUnitCustom();
         }
     }
 });
-
-function reactWorkaroundInputUpdate(el, val) {
-    const setter = Object.getOwnPropertyDescriptor(el, 'value').set;
-    const prototype = Object.getPrototypeOf(el);
-    const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
-
-    if (setter && setter !== prototypeValueSetter) {
-        prototypeValueSetter.call(el, val);
-    } else {
-        setter.call(el, val);
-    }
-
-    const event = new Event('input', { bubbles: true });
-    el.dispatchEvent(event);
-}
 
 function onMouseEnter(e, varKey) {
     const timeElapsedBetweenSelections = performance.now() - recentVariableSelectionTimestamp.value;
@@ -243,12 +248,9 @@ function onMouseEnter(e, varKey) {
         return;
     }
 
-    // focusedInput.value.value = `var(${varKey})`;
-    // focusedInput.value.dispatchEvent(new Event('input'));
-    // focusedInput.value.focus();
-
-    // React workaround
-    reactWorkaroundInputUpdate(focusedInput.value, `var(${varKey})`);
+    focusedInput.value.value = `var(${varKey})`;
+    focusedInput.value.dispatchEvent(new Event('input'));
+    focusedInput.value.focus();
 }
 
 function onMouseLeave(e) {
@@ -256,12 +258,9 @@ function onMouseLeave(e) {
         return;
     }
 
-    // focusedInput.value.value = tempInputValue.value;
-    // focusedInput.value.dispatchEvent(new Event('input'));
-    // focusedInput.value.focus();
-
-    // React workaround
-    reactWorkaroundInputUpdate(focusedInput.value, tempInputValue.value);
+    focusedInput.value.value = tempInputValue.value;
+    focusedInput.value.dispatchEvent(new Event('input'));
+    focusedInput.value.focus();
 }
 
 function onClick(e, varKey) {
@@ -269,12 +268,9 @@ function onClick(e, varKey) {
         return;
     }
 
-    // focusedInput.value.value = `var(${varKey})`;
-    // focusedInput.value.dispatchEvent(new Event('input'));
-    // focusedInput.value.focus();
-
-    // React workaround
-    reactWorkaroundInputUpdate(focusedInput.value, `var(${varKey})`);
+    focusedInput.value.value = `var(${varKey})`;
+    focusedInput.value.dispatchEvent(new Event('input'));
+    focusedInput.value.focus();
 
     tempInputValue.value = `var(${varKey})`;
     recentVariableSelectionTimestamp.value = performance.now();
@@ -302,7 +298,7 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbuilderius-variable-app-body" class="rel w:full h:full overflow-y:scroll!">
+    <div id="windpressbreakdance-variable-app-body" class="rel w:full h:full overflow-y:scroll!">
         <ExpansionPanel namespace="variable" name="color" ref="sectionColor">
             <template #header>
                 <span class="font:semibold">Color</span>
@@ -334,7 +330,7 @@ channel.addEventListener('message', async (e) => {
 </template>
 
 <style lang="scss" scoped>
-#windpressbuilderius-variable-app-body {
-    scrollbar-color: var(--primary-4) transparent;
+#windpressbreakdance-variable-app-body {
+    scrollbar-color: var(--gray300) transparent;
 }
 </style>
