@@ -107,6 +107,12 @@ jobs:
         # decrease the version
         # - run: php ./deploy/decrease-version.php
 
+        # update the README.md content: replace "orgrosua/windpress" to "orgrosua/windpress-free"
+        - run: |
+          sed -i 's/orgrosua\/windpress/orgrosua\/windpress-free/g' README.md
+          sed -i 's/orgrosua\/windpress-free\/actions/orgrosua\/windpress\/actions/g' README.md
+          sed -i 's/orgrosua\/windpress-free\.git/orgrosua\/windpress\.git/g' README.md
+
         # cleanup the decrease-version.php to avoid scanned by humbug/php-scoper
         # - run: rm deploy/decrease-version.php
 
