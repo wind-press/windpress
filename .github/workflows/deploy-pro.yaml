@@ -38,7 +38,7 @@ jobs:
         - run: rm -rf ecs.php rector.php
 
         # clean up the .wordpress-org directory as it is not needed in the PRO build
-        - run: rm -rf .wordpress-org
+        - run: rm -rf .wordpress-org README.md CHANGELOG.md
 
         # Use pnpm to install dependencies and build the assets.
         - uses: actions/setup-node@v4

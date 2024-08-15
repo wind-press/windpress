@@ -1,10 +1,10 @@
 === WindPress ===
 Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
-Tags: tailwind css, bricks builder, oxygen builder, breakdance builder
+Tags: tailwind css, bricks builder, oxygen builder, breakdance builder, gutenberg, elementor 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.0.0-alpha.8
+Stable tag: 3.0.0-alpha.9
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -30,19 +30,23 @@ WindPress is packed full of features designed to streamline your workflow. Some 
 
 It's easy to build design with Tailwind CSS v4 thanks to the seamless integration with the most popular visual/page builders:
 
-* [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
-* [Builderius](https://builderius.io/?referral=afdfca82c8)
-* [Gutenberg](https://wordpress.org/gutenberg)
-* [LiveCanvas](https://livecanvas.com/?ref=4008)
 * [Timber](https://upstatement.com/timber/)
-* [Bricks](https://bricksbuilder.io/) **[Pro]**
-* [Oxygen](https://oxygenbuilder.com/) **[Pro]**
-* [Breakdance](https://breakdance.com/ref/165/) **[Soon]** **[Pro]** 
-* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Soon]** **[Pro]**
-* [GreenShift](https://greenshiftwp.com/) **[Soon]** **[Pro]**
-* [Kadence WP](https://kadencewp.com) **[Soon]** **[Pro]**
-* [Pinegrow](https://pinegrow.com/wordpress) **[Soon]** **[Pro]**
-* [Zion Builder](https://zionbuilder.io/) **[Soon]** **[Pro]**
+* [Breakdance](https://breakdance.com/ref/165/) — **Pro**
+* [Bricks](https://bricksbuilder.io/) — **Pro**
+* [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
+* [LiveCanvas](https://livecanvas.com/) — **Pro**
+* [Oxygen](https://oxygenbuilder.com/) — **Pro**
+
+Planned / In Progress
+
+* [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
+* [Gutenberg](https://wordpress.org/gutenberg)
+* [GreenShift](https://greenshiftwp.com/)
+* [Kadence WP](https://kadencewp.com)
+* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
+* [Pinegrow](https://pinegrow.com/wordpress)
+* [Zion Builder](https://zionbuilder.io/)
+
 
 Visit [our website](https://wind.press) for more information.
 
@@ -58,7 +62,7 @@ Visit [our website](https://wind.press) for more information.
 == Changelog ==
 
 = 3.0.0 =
-* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.18 next)
+* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.19 next)
 * **New**: [Timber](https://upstatement.com/timber/) integration
 * **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
 * **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]**
