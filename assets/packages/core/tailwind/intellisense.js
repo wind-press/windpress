@@ -35,11 +35,11 @@ export async function getCssContent() {
  * @param {string|DesignSystem} theme - The main.css content.
  * @returns {ClassEntity} The data with ClassEntity type.
  */
-export function getClassList(theme) {
+export async function getClassList(theme) {
     let design;
 
     if (typeof theme === 'string') {
-        design = __unstable__loadDesignSystem(theme);
+        design = await __unstable__loadDesignSystem(theme);
     } else {
         design = theme;
     }
@@ -145,11 +145,11 @@ function unsupportedUtilityList() {
     ];
 }
 
-export function getVariableList(theme) {
+export async function getVariableList(theme) {
     let design;
 
     if (typeof theme === 'string') {
-        design = __unstable__loadDesignSystem(theme);
+        design = await __unstable__loadDesignSystem(theme);
     } else {
         design = theme;
     }
@@ -179,11 +179,11 @@ export function getVariableList(theme) {
  * @param {Array<string>} classList 
  * @returns 
  */
-export function sortClasses(theme, classList) {
+export async function sortClasses(theme, classList) {
     let design;
 
     if (typeof theme === 'string') {
-        design = __unstable__loadDesignSystem(theme);
+        design = await __unstable__loadDesignSystem(theme);
     } else {
         design = theme;
     }
@@ -217,11 +217,11 @@ function bigSign(value) {
  * @param {Array<string>} classList 
  * @returns 
  */
-export function candidatesToCss(theme, classes) {
+export async function candidatesToCss(theme, classes) {
     let design;
 
     if (typeof theme === 'string') {
-        design = __unstable__loadDesignSystem(theme);
+        design = await __unstable__loadDesignSystem(theme);
     } else {
         design = theme;
     }

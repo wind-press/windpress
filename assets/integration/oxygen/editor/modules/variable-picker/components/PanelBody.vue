@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
-import { uniIframe } from '@/integration/builderius/constant.js';
+import { oxyIframe } from '@/integration/oxygen/editor/constant.js';
 import { getVariableList } from '@/packages/core/tailwind';
 import { __unstable__loadDesignSystem } from 'tailwindcss';
 import ExpansionPanel from './ExpansionPanel.vue';
@@ -23,20 +23,20 @@ const variableApp = inject('variableApp');
 
 async function constructVariableList() {
     // get design system
-    const main_css = await uniIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
+    const main_css = await oxyIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
 
     // register variables
     const variableLists = await getVariableList(await __unstable__loadDesignSystem(main_css));
 
-    let styleElement = variableApp.querySelector('style#windpressbuilderius-variable-app-body-style');
+    let styleElement = variableApp.querySelector('style#windpressoxygen-variable-app-body-style');
     if (!styleElement) {
         styleElement = document.createElement('style');
-        styleElement.id = 'windpressbuilderius-variable-app-body-style';
+        styleElement.id = 'windpressoxygen-variable-app-body-style';
         variableApp.appendChild(styleElement);
     }
 
     styleElement.innerHTML = `
-        #windpressbuilderius-variable-app-body {
+        #windpressoxygen-variable-app-body, #oxygen-sidebar {
             ${variableLists.map((variable) => `${variable.key}:${variable.value};`).join('')}
         }
     `;
@@ -194,43 +194,38 @@ const sectionSpacing = ref(null);
 
 watch(focusedInput, (value) => {
     if (value) {
-        // get the name attribute of the focused input
-        const name = value.getAttribute('name');
-
-        const isColorInput = ['color', 'backgroundColor'].some((keyword) => name.includes(keyword));
-        const isFontSize = ['fontSize'].some((keyword) => name.includes(keyword));
-        const isSpacing = ['padding', 'margin', 'gap', 'width', 'height'].some((keyword) => name.includes(keyword));
+        // get the attribute of the closest control for the focused input
+        const control = value;
+        const isColorInput = control?.parentElement?.classList.contains('oxygen-color-picker');
+        const isFontSize = ['font-size'].some((keyword) => control?.getAttribute('data-option')?.includes(keyword));
+        const isSpacing = ['padding', 'margin', 'gap', 'width', 'height'].some((keyword) => control?.getAttribute('data-option')?.includes(keyword));
 
         sectionTypography.value.togglePanel(false);
         sectionSpacing.value.togglePanel(false);
         sectionColor.value.togglePanel(false);
+
+        async function swithUnitCustom() {
+            value.parentElement.querySelector('.oxygen-measure-box-unit-selector .oxygen-measure-box-units .oxygen-measure-box-unit:last-child').click();
+
+            setTimeout(() => {
+                value.focus();
+            }, 100);
+        }
+
         if (isColorInput) {
             sectionColor.value.togglePanel(true);
             sectionColor.value.scrollIntoView();
         } else if (isFontSize) {
             sectionTypography.value.togglePanel(true);
             sectionTypography.value.scrollIntoView();
+            swithUnitCustom();
         } else if (isSpacing) {
             sectionSpacing.value.togglePanel(true);
             sectionSpacing.value.scrollIntoView();
+            swithUnitCustom();
         }
     }
 });
-
-function reactWorkaroundInputUpdate(el, val) {
-    const setter = Object.getOwnPropertyDescriptor(el, 'value').set;
-    const prototype = Object.getPrototypeOf(el);
-    const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
-
-    if (setter && setter !== prototypeValueSetter) {
-        prototypeValueSetter.call(el, val);
-    } else {
-        setter.call(el, val);
-    }
-
-    const event = new Event('input', { bubbles: true });
-    el.dispatchEvent(event);
-}
 
 function onMouseEnter(e, varKey) {
     const timeElapsedBetweenSelections = performance.now() - recentVariableSelectionTimestamp.value;
@@ -241,12 +236,9 @@ function onMouseEnter(e, varKey) {
         return;
     }
 
-    // focusedInput.value.value = `var(${varKey})`;
-    // focusedInput.value.dispatchEvent(new Event('input'));
-    // focusedInput.value.focus();
-
-    // React workaround
-    reactWorkaroundInputUpdate(focusedInput.value, `var(${varKey})`);
+    focusedInput.value.value = `var(${varKey})`;
+    focusedInput.value.dispatchEvent(new Event('input'));
+    focusedInput.value.focus();
 }
 
 function onMouseLeave(e) {
@@ -254,12 +246,9 @@ function onMouseLeave(e) {
         return;
     }
 
-    // focusedInput.value.value = tempInputValue.value;
-    // focusedInput.value.dispatchEvent(new Event('input'));
-    // focusedInput.value.focus();
-
-    // React workaround
-    reactWorkaroundInputUpdate(focusedInput.value, tempInputValue.value);
+    focusedInput.value.value = tempInputValue.value;
+    focusedInput.value.dispatchEvent(new Event('input'));
+    focusedInput.value.focus();
 }
 
 function onClick(e, varKey) {
@@ -267,15 +256,17 @@ function onClick(e, varKey) {
         return;
     }
 
-    // focusedInput.value.value = `var(${varKey})`;
-    // focusedInput.value.dispatchEvent(new Event('input'));
-    // focusedInput.value.focus();
-
-    // React workaround
-    reactWorkaroundInputUpdate(focusedInput.value, `var(${varKey})`);
+    focusedInput.value.value = `var(${varKey})`;
+    focusedInput.value.dispatchEvent(new Event('input'));
+    focusedInput.value.focus();
 
     tempInputValue.value = `var(${varKey})`;
     recentVariableSelectionTimestamp.value = performance.now();
+
+    const isColorInput = focusedInput.value?.parentElement?.classList.contains('oxygen-color-picker');
+    if (isColorInput && focusedInput.value.parentElement.querySelector('.oxygen-color-picker-color button')) {
+        focusedInput.value.parentElement.querySelector('.oxygen-color-picker-color button').style.backgroundColor = `var(${varKey})`;
+    }
 }
 
 onMounted(() => {
@@ -300,7 +291,7 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbuilderius-variable-app-body" class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(primary-3)>div:not(:last-child)">
+    <div id="windpressoxygen-variable-app-body" class="bg:$(oxy-dark) fg:$(oxy-light-text) rel w:full h:full overflow-y:scroll! bb:1|solid|gray-60>div:not(:last-child)">
         <ExpansionPanel namespace="variable" name="color" ref="sectionColor">
             <template #header>
                 <span class="font:semibold">Color</span>
@@ -332,7 +323,7 @@ channel.addEventListener('message', async (e) => {
 </template>
 
 <style lang="scss" scoped>
-#windpressbuilderius-variable-app-body {
-    scrollbar-color: var(--primary-4) transparent;
+#windpressoxygen-variable-app-body {
+    scrollbar-color: var(--oxy-mid) transparent;
 }
 </style>

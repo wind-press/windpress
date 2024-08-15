@@ -19,7 +19,7 @@ export async function build(opts) {
         volume: opts.volume
     });
 
-    return compile(bundleResult.css).build(opts.candidates);
+    return (await compile(bundleResult.css)).build(opts.candidates);
 }
 
 /**

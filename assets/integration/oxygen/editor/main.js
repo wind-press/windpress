@@ -13,6 +13,7 @@ logger('Loading...');
     await import('./modules/settings/main.js');
     await import('./modules/plain-classses/main.js');
     await import('./modules/generate-cache/main.js');
+    await import('./modules/variable-picker/main.js');
 
     logger('Modules loaded!');
 })();

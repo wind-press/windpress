@@ -21,7 +21,7 @@ const { getVirtualRef } = createVirtualRef({}, {
 const oxygenToolbar = document.querySelector(oxygenToolbarSelector);
 oxygenToolbar.insertBefore(settingButtonHtml, oxygenToolbar.firstChild);
 window.tippy('.windpressoxygen-settings-button', {
-    content: 'Siul — Oxygen settings (coming soon)',
+    content: 'WindPress — Oxygen settings',
     animation: 'shift-toward',
     placement: 'bottom',
 });

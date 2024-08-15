@@ -22,7 +22,7 @@ async function constructVariableList() {
     const main_css = await brxIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
 
     // register variables
-    const variableLists = getVariableList(__unstable__loadDesignSystem(main_css));
+    const variableLists = await getVariableList(await __unstable__loadDesignSystem(main_css));
 
     /**
      * Color

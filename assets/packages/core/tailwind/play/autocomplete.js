@@ -23,7 +23,7 @@ if (mainCssContainer) {
 }
 
 async function preloadItems() {
-    classLists = getClassList(__unstable__loadDesignSystem(await getCssContent()));
+    classLists = await getClassList(await __unstable__loadDesignSystem(await getCssContent()));
 
     channel.postMessage({
         source: 'windpress/autocomplete',

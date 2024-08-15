@@ -7,9 +7,9 @@ async function classSorter(input) {
         .split(/\s+/)
         .filter((x) => x !== "" && x !== "|");
 
-    const design = __unstable__loadDesignSystem(await getCssContent());
+    const design = await __unstable__loadDesignSystem(await getCssContent());
 
-    return sortClasses(design, classes).join(" ");
+    return (await sortClasses(design, classes)).join(" ");
 }
 
 // if the wp-hooks is available

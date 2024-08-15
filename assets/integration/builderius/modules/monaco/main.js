@@ -31,7 +31,7 @@ async function updateMainCss() {
             const wordInfo = model.getWordUntilPosition(position);
 
             // register variables
-            const variables = getVariableList(__unstable__loadDesignSystem(main_css)).map(entry => {
+            const variables = getVariableList(await __unstable__loadDesignSystem(main_css)).map(entry => {
                 return {
                     kind: entry.key.includes('--color') ? window.Builderius.API.monaco.languages.CompletionItemKind.Color : window.Builderius.API.monaco.languages.CompletionItemKind.Variable,
                     label: entry.key,

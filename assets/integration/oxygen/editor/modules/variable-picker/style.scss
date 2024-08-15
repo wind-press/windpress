@@ -1,0 +1,35 @@
+#windpressoxygen-variable-app {
+    font-family: Inter, sans-serif;
+    z-index: -1;
+    height: 600px;
+    width: 400px;
+    position: fixed;
+    left: calc(50% - 200px);
+    top: calc(50% - 300px);
+    box-shadow: 0 11px 15px -7px #0003, 0 24px 38px 3px #00000024, 0 9px 46px 8px #0000001f;
+    border-radius: 0.625rem;
+    overflow: hidden;
+    outline: 0.0625rem solid var(--oxy-light);
+
+    svg.inline-svg {
+        display: inline-block;
+        height: 1em;
+        vertical-align: -.125em;
+    }
+
+    .v-popper--theme-tooltip {
+        .v-popper__inner {
+            background-color: var(--oxy-mid);
+            color: var(--oxy-light-text);
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            text-transform: none;
+            white-space: nowrap;
+        }
+
+        .v-popper__arrow-outer {
+            border-color: var(--oxy-mid);
+        }
+    }
+}

@@ -26,7 +26,7 @@ async function constructVariableList() {
     const main_css = await bdeIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
 
     // register variables
-    const variableLists = getVariableList(__unstable__loadDesignSystem(main_css));
+    const variableLists = await getVariableList(await __unstable__loadDesignSystem(main_css));
 
     let styleElement = variableApp.querySelector('style#windpressbreakdance-variable-app-body-style');
     if (!styleElement) {
