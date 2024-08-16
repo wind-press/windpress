@@ -1,7 +1,7 @@
 === WindPress ===
 Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
-Tags: tailwind css, bricks builder, oxygen builder, breakdance builder, gutenberg, elementor 
+Tags: tailwind css, bricks builder, oxygen builder, gutenberg, elementor 
 Requires at least: 6.0
 Tested up to: 6.6
 Stable tag: 3.0.0-alpha.12

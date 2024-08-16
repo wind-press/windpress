@@ -100,6 +100,7 @@ jobs:
         # - Builderius (Planned)
         # - LiveCanvas (Planned)
         - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,FunnelKit,GreenShift,Kadence,LiveCanvas,Oxygen}
+        - run: rm -rf assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen} 
 
         # remove custom update library
         - run: composer remove rosua/edd-sl-plugin-updater --ansi
@@ -131,9 +132,12 @@ jobs:
         # prefix the namespaces
         - run: sh deploy/deploy-scoped-free.sh orgrosua-deploy orgrosua-prefixed
 
-        # copy repository meta files
-        # - run: |
-        #     cp CHANGELOG.md orgrosua-prefixed/
+        # copy the orgrosua-prefixed to wp-repo-prefixed, create a new folder for it
+        - run: mkdir wp-repo-prefixed
+        - run: cp -a orgrosua-prefixed/. wp-repo-prefixed
+
+        # remove the assets folder from wp-repo-prefixed
+        - run: rm -rf wp-repo-prefixed/assets
 
         # deploy to WordPress.org SVN repository
         # - name: WordPress Plugin Deploy
@@ -142,7 +146,7 @@ jobs:
         #     SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         #     SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         #     SLUG: windpress
-        #     BUILD_DIR: orgrosua-prefixed
+        #     BUILD_DIR: wp-repo-prefixed
         #     VERSION: ${{ env.TAG_NAME }}
 
         # clone remote repository, so we can push it
@@ -161,9 +165,6 @@ jobs:
 
         # copy files to remote repository
         - run: cp -a orgrosua-prefixed/. remote-repository
-
-        # exclude some assets' integration folders
-        - run: rm -rf remote-repository/assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen} 
 
         # setup git
         - working-directory: remote-repository
