@@ -127,9 +127,9 @@ class Runtime
                 return;
             }
 
-            // CSS content are processed by lightningcss library and it's safe to be printed directly.
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo sprintf("<style id=\"%s-css\">\n%s\n</style>", esc_attr($handle), wp_strip_all_tags($css_clean));
+            wp_register_style($handle, false, [], false);
+            wp_add_inline_style($handle, wp_strip_all_tags($css_clean));
+            wp_print_styles($handle);
         } else {
             $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
             wp_register_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
@@ -151,7 +151,7 @@ class Runtime
 
         // Script content are base64 encoded to prevent it from being executed by the browser.
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        echo sprintf("<script id=\"windpress:tw-main-css\" type=\"text/tailwindcss\">%s</script>", base64_encode($main_css));
+        echo sprintf("<script id=\"windpress:tw-main-css\" type=\"text/tailwindcss\">%s</script>", esc_html(base64_encode($main_css)));
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/autocomplete.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',

@@ -59,6 +59,11 @@ Visit [our website](https://wind.press) for more information.
 
 == Frequently Asked Questions ==
 
+= Where I can find a non-compiled version of your javascript and/or CSS related source code? =
+
+The source code is available on [GitHub](https://github.com/orgrosua/windpress-free).
+Some files exclusively available on the Pro version are not included in the repository.
+
 == Changelog ==
 
 = 3.0.0 =

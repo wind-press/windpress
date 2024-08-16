@@ -309,7 +309,9 @@ class AssetVite
             window.__vite_plugin_react_preamble_installed__ = true;
         ";
 
-        wp_add_inline_script(self::VITE_CLIENT_SCRIPT_HANDLE, $script, $script_position);
+        // escape the script to prevent it from being executed by the browser
+        wp_add_inline_script(self::VITE_CLIENT_SCRIPT_HANDLE, esc_js($script), $script_position);
+
         add_filter(
             'wp_inline_script_attributes',
             function (array $attributes) use ($script_position): array {

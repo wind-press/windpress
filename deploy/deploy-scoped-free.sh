@@ -55,10 +55,16 @@ php -d memory_limit=-1 php-scoper.phar add-prefix --output-dir "../$RESULT_DIREC
 # clean deploy files and directories
 rm -rf "$DEPLOY_DIRECTORY"
 rm -rf "$RESULT_DIRECTORY/deploy"
-rm -f "$RESULT_DIRECTORY/composer.json"
 rm -f "$RESULT_DIRECTORY/composer.lock"
 rm -f "$RESULT_DIRECTORY/.gitattributes"
 rm -f "$RESULT_DIRECTORY/.gitignore"
 rm -f "$RESULT_DIRECTORY/.phpcs.xml"
+
+# WordPress new plugin submission requirements: should distribute the composer.json file
+
+# WordPress new plugin submission review
+rm -f "$RESULT_DIRECTORY/vendor/paragonie/random_compat/build-phar.sh"
+rm -f "$RESULT_DIRECTORY/vendor/paragonie/random_compat/dist/random_compat.phar.pubkey"
+rm -f "$RESULT_DIRECTORY/vendor/paragonie/random_compat/dist/random_compat.phar.pubkey.asc"
 
 note "Finished"

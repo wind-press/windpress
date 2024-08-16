@@ -81,7 +81,7 @@ jobs:
         - run: pnpm build
 
         # clean up the assets dev files
-        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js
+        - run: rm -rf node_modules pnpm-lock.yaml
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
         - uses: shivammathur/setup-php@v2
@@ -97,8 +97,8 @@ jobs:
         # - Gutenberg
         # - Elementor
         # - Timber
-        # - Builderius
-        # - LiveCanvas
+        # - Builderius (Planned)
+        # - LiveCanvas (Planned)
         - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,FunnelKit,GreenShift,Kadence,LiveCanvas,Oxygen}
 
         # remove custom update library
@@ -129,7 +129,7 @@ jobs:
             coverage: none
 
         # prefix the namespaces
-        - run: sh deploy/deploy-scoped.sh orgrosua-deploy orgrosua-prefixed
+        - run: sh deploy/deploy-scoped-free.sh orgrosua-deploy orgrosua-prefixed
 
         # copy repository meta files
         # - run: |
@@ -161,6 +161,9 @@ jobs:
 
         # copy files to remote repository
         - run: cp -a orgrosua-prefixed/. remote-repository
+
+        # exclude some assets' integration folders
+        - run: rm -rf remote-repository/assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen} 
 
         # setup git
         - working-directory: remote-repository
