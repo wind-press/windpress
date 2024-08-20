@@ -21,7 +21,7 @@
   </a>
   <a href="https://github.com/wind-press/windpress/actions">
     <picture>
-    <img src="https://img.shields.io/github/actions/workflow/status/wind-press/windpress/deploy-pro.yaml" alt="Build Status" />
+    <img src="https://img.shields.io/github/actions/workflow/status/wind-press/windpress/deploy.yaml" alt="Build Status" />
     </picture>
   </a>
   <br />
