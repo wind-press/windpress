@@ -31,7 +31,6 @@ note "Starts"
 
 # clean the directory which may contain files from previous runs
 note "Cleaning directories"
-rm -rf "$DEPLOY_DIRECTORY"
 rm -rf "$RESULT_DIRECTORY"
 
 # download whitelist of php-scoper
