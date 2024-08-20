@@ -29,6 +29,11 @@ RESULT_DIRECTORY=$2
 
 note "Starts"
 
+# clean the directory which may contain files from previous runs
+note "Cleaning directories"
+rm -rf "$DEPLOY_DIRECTORY"
+rm -rf "$RESULT_DIRECTORY"
+
 # download whitelist of php-scoper
 note "Downloading whitelist of php-scoper"
 wget https://github.com/orgrosua/php-scoper-wordpress-excludes/archive/refs/heads/master.zip -O "php-scoper-wordpress-excludes-master.zip"
@@ -43,7 +48,7 @@ unzip "php-scoper-wordpress-excludes-master.zip" -d "$DEPLOY_DIRECTORY/deploy"
 
 # 2. scope it
 note "Download php-scoper"
-wget https://github.com/humbug/php-scoper/releases/download/0.18.11/php-scoper.phar -N --no-verbose
+wget https://github.com/humbug/php-scoper/releases/download/0.18.14/php-scoper.phar -N --no-verbose
 
 # Work around possible PHP memory limits
 note "Running scoper to $RESULT_DIRECTORY"
@@ -60,5 +65,10 @@ rm -f "$RESULT_DIRECTORY/composer.lock"
 rm -f "$RESULT_DIRECTORY/.gitattributes"
 rm -f "$RESULT_DIRECTORY/.gitignore"
 rm -f "$RESULT_DIRECTORY/.phpcs.xml"
+
+# WordPress new plugin submission review
+rm -f "$RESULT_DIRECTORY/vendor/paragonie/random_compat/build-phar.sh"
+rm -f "$RESULT_DIRECTORY/vendor/paragonie/random_compat/dist/random_compat.phar.pubkey"
+rm -f "$RESULT_DIRECTORY/vendor/paragonie/random_compat/dist/random_compat.phar.pubkey.asc"
 
 note "Finished"

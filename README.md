@@ -9,19 +9,19 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/orgrosua/windpress/tags">
+  <a href="https://github.com/wind-press/windpress/tags">
     <picture>
-    <img src="https://img.shields.io/github/v/tag/orgrosua/windpress.svg" alt="GitHub Release" />
+    <img src="https://img.shields.io/github/v/tag/wind-press/windpress.svg" alt="GitHub Release" />
     </picture>
   </a>
-  <a href="https://github.com/orgrosua/windpress/blob/master/LICENSE">
+  <a href="https://github.com/wind-press/windpress/blob/master/LICENSE">
     <picture>
-    <img src="https://img.shields.io/github/license/orgrosua/windpress.svg" alt="MIT License" />
+    <img src="https://img.shields.io/github/license/wind-press/windpress.svg" alt="MIT License" />
     </picture>
   </a>
-  <a href="https://github.com/orgrosua/windpress/actions">
+  <a href="https://github.com/wind-press/windpress/actions">
     <picture>
-    <img src="https://img.shields.io/github/actions/workflow/status/orgrosua/windpress/deploy-pro.yaml" alt="Build Status" />
+    <img src="https://img.shields.io/github/actions/workflow/status/wind-press/windpress/deploy-pro.yaml" alt="Build Status" />
     </picture>
   </a>
   <br />
@@ -94,7 +94,7 @@ Seamless integration with the most popular visual/page builders:
 1. Clone the repository to your `wp-content/plugins` directory:
 
     ```bash
-    git clone https://github.com/orgrosua/windpress.git windpress-dev
+    git clone https://github.com/wind-press/windpress.git windpress-dev
     cd windpress-dev
     ```
 2. Install the PHP dependencies:
@@ -119,7 +119,7 @@ Seamless integration with the most popular visual/page builders:
 
 ## Sponsors
 
-If you like this project, please consider supporting it by becoming a sponsor.
+If you like this project, please consider supporting us by becoming a sponsor.
 
 <a aria-label="GitHub Sponsors" href="https://github.com/sponsors/suabahasa">
     <picture>

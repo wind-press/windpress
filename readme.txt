@@ -47,6 +47,7 @@ Planned / In Progress
 * [Pinegrow](https://pinegrow.com/wordpress)
 * [Zion Builder](https://zionbuilder.io/)
 
+Note: The core feature will remain available on all versions, but some integrations may be added or removed from the free version in the future.
 
 Visit [our website](https://wind.press) for more information.
 
@@ -59,10 +60,9 @@ Visit [our website](https://wind.press) for more information.
 
 == Frequently Asked Questions ==
 
-= Where I can find a non-compiled version of your javascript and/or CSS related source code? =
+= Contributing? =
 
-The source code is available on [GitHub](https://github.com/orgrosua/windpress-free).
-Some files exclusively available on the Pro version are not included in the repository.
+The source code is available on [GitHub](https://github.com/wind-press/windpress).
 
 == Changelog ==
 

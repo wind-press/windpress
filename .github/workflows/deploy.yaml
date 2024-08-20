@@ -1,12 +1,10 @@
-# builds the content of http://github.com/orgrosua/windpress
+# builds the content of http://github.com/wind-press/windpress
 # inspiration from https://github.com/rectorphp/rector-src/blob/main/.github/workflows/build_scoped_rector.yaml
 # TODO: trigger the FREE build only when the PRO build is successful. reference: https://github.blog/changelog/2022-09-08-github-actions-use-github_token-with-workflow_dispatch-and-repository_dispatch/
-name: Build PRO
+name: Deploy the Plugin
 
 on:
   push:
-    # branches:
-    #   - main
     tags:
       - '*'
 
@@ -15,30 +13,17 @@ env:
   COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
-  build_scoped_orgrosua:
+  build_scoped_windpress:
     # Don't run on forks.
-    if: github.repository == 'orgrosua/windpress'
+    if: github.repository == 'wind-press/windpress'
 
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
-        # sometime, when 2 or more consecutive PRs merged, the checkout orgrosua/windpress is overlapped
-        # and reverting other commit change
-        # this should not happen on create a tag, so wait first
-        # - name: "Wait before checkout orgrosua/windpress on create a tag"
-        #   if: "startsWith(github.ref, 'refs/tags/')"
-        #   run: sleep 120
-
         - uses: actions/checkout@v4
           with:
             fetch-depth: 0
-
-        # clean up the dev files
-        - run: rm -rf ecs.php rector.php
-
-        # clean up the .wordpress-org directory as it is not needed in the PRO build
-        - run: rm -rf .wordpress-org README.md CHANGELOG.md
 
         # Use pnpm to install dependencies and build the assets.
         - uses: actions/setup-node@v4
@@ -66,11 +51,13 @@ jobs:
         - run: npm config set "@fortawesome:registry" https://npm.fontawesome.com/
         - run: npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
 
+        # install dependencies and build the assets
         - run: pnpm install
         - run: pnpm build
 
-        # clean up the assets dev files
+        # clean up the dev files
         - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js
+        - run: rm -rf ecs.php rector.php
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
         - uses: shivammathur/setup-php@v2
@@ -79,13 +66,13 @@ jobs:
             coverage: none
           # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
           env:
-            COMPOSER_TOKEN: ${{ secrets.ORGROSUA_DEV_PAT }}
+            COMPOSER_TOKEN: ${{ secrets.ORG_DEV_PAT }}
 
         # install only prod dependencies
         - run: composer install --no-dev --classmap-authoritative --ansi
 
         # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
-        - run: rsync --exclude orgrosua-deploy -av * orgrosua-deploy --quiet
+        - run: rsync --exclude windpress-deploy -av * windpress-deploy --quiet
 
         # humbug/php-scoper requires php ^8.2
         - uses: shivammathur/setup-php@v2
@@ -94,19 +81,15 @@ jobs:
             coverage: none
           
         # prefix the namespaces
-        - run: sh deploy/deploy-scoped.sh orgrosua-deploy orgrosua-prefixed
-
-        # copy repository meta files
-        # - run: |
-        #     cp CHANGELOG.md orgrosua-prefixed/
+        - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
 
         # clone remote repository, so we can push it
         - uses: "actions/checkout@v4"
           with:
-            repository: orgrosua/windpress-pro
+            repository: wind-press/windpress-deployed
             ref: main
             path: remote-repository
-            token: ${{ secrets.ORGROSUA_DEV_PAT }}
+            token: ${{ secrets.ORG_DEV_PAT }}
 
         # remove remote files, to avoid piling up dead code in remote repository
         - working-directory: remote-repository
@@ -115,7 +98,10 @@ jobs:
             git clean -fxd
 
         # copy files to remote repository
-        - run: cp -a orgrosua-prefixed/. remote-repository
+        - run: cp -a windpress-prefixed/. remote-repository
+
+        # clean up the .wordpress-org directory as it is not needed
+        - run: rm -rf remote-repository/.wordpress-org
 
         # setup git
         - working-directory: remote-repository
@@ -128,19 +114,8 @@ jobs:
           id: git-log
           run: |
               echo "log<<EOF" >> $GITHUB_OUTPUT
-              echo "$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='https://github.com/orgrosua/windpress/commit/%H %s')" >> $GITHUB_OUTPUT
+              echo "$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='https://github.com/wind-press/windpress/commit/%H %s')" >> $GITHUB_OUTPUT
               echo 'EOF' >> $GITHUB_OUTPUT
-
-        # publish it to remote repository without tag
-        # - name: "Commit Prefixed - main"
-        #   working-directory: remote-repository
-        #   if: "!startsWith(github.ref, 'refs/tags/')"
-        #   env:
-        #       INPUT_LOG: ${{ steps.git-log.outputs.log }}
-        #   run: |
-        #     git add --all
-        #     git commit -m "Updated WindPress to commit ${{ github.event.after }}" -m "$INPUT_LOG"
-        #     git push --quiet origin main
 
         # publish it to remote repository with tag
         - name: "Commit Prefixed - tag"
@@ -154,3 +129,56 @@ jobs:
             git push --quiet origin main
             git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
             git push --quiet origin ${GITHUB_REF#refs/tags/}
+
+        # WordPress.org build
+
+        # keep this folders (Free):
+        # - Gutenberg
+        # - Elementor
+        # - Timber
+        # - Builderius (Planned)
+        # - LiveCanvas (Planned)
+        # else, remove the premium version
+        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,GreenShift,Kadence,LiveCanvas,Oxygen}
+        - run: rm -rf assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen} 
+
+        # remove custom update library
+        - run: composer remove rosua/edd-sl-plugin-updater --ansi
+
+        # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
+        - uses: shivammathur/setup-php@v2
+          with:
+            php-version: 7.4
+            coverage: none
+          # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+          env:
+            COMPOSER_TOKEN: ${{ secrets.ORG_DEV_PAT }}
+
+        # install only prod dependencies
+        - run: composer install --no-dev --classmap-authoritative --ansi
+
+        # remove the $NESTED_DIRECTORY directory, then
+        # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop        
+        - run: rm -rf windpress-deploy
+        - run: rsync --exclude windpress-deploy -av * windpress-deploy --quiet
+
+        # humbug/php-scoper requires php ^8.2
+        - uses: shivammathur/setup-php@v2
+          with:
+            php-version: 8.2
+            coverage: none
+          
+        # prefix the namespaces
+        - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
+
+        # deploy to WordPress.org SVN repository
+        # - name: WordPress Plugin Deploy
+        #   uses: 10up/action-wordpress-plugin-deploy@stable
+        #   env:
+        #     SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+        #     SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        #     SLUG: windpress
+        #     BUILD_DIR: windpress-prefixed
+        #     VERSION: ${{ env.TAG_NAME }}
+
+
