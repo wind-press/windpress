@@ -21,7 +21,8 @@ use WP_Query;
 class Compile
 {
     private array $post_meta_keys = [
-        'breakdance_data'
+        'breakdance_data',
+        '_breakdance_data',
     ];
 
     public function __invoke(): array
