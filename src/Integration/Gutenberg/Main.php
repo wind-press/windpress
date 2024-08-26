@@ -79,9 +79,14 @@ class Main implements IntegrationInterface
             // wp_enqueue_script(WIND_PRESS::WP_OPTION . '-gutenberg-fse', plugin_dir_url(WIND_PRESS::FILE) . 'build/public/gutenberg/fse.js', [], WIND_PRESS::VERSION, true);
         } else {
             // wp_enqueue_script(WIND_PRESS::WP_OPTION . '-gutenberg-observer', plugin_dir_url(WIND_PRESS::FILE) . 'build/public/gutenberg/observer.js', [], WIND_PRESS::VERSION, true);
-            AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/post-editor.js', [
-                'handle' => WIND_PRESS::WP_OPTION . ':integration-gutenberg-post-editor',
+            // AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/post-editor.js', [
+            //     'handle' => WIND_PRESS::WP_OPTION . ':integration-gutenberg-post-editor',
+            //     'in-footer' => true,
+            // ]);
+            AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/block-editor.jsx', [
+                'handle' => WIND_PRESS::WP_OPTION . ':integration-gutenberg-block-editor',
                 'in-footer' => true,
+                'dependencies' => ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n', 'react', 'react-dom'],
             ]);
         }
     }

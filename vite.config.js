@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import react from "@vitejs/plugin-react";
 import { v4wp } from '@kucrut/vite-for-wp';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { wp_scripts } from '@kucrut/vite-for-wp/plugins';
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from "vite-plugin-top-level-await";
 import path from 'path';
@@ -33,12 +35,17 @@ export default defineConfig({
                 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
                 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
+                'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
                 'integration/livecanvas': 'assets/integration/livecanvas/main.js',
                 'integration/builderius': 'assets/integration/builderius/main.js',
             },
             outDir: 'build',
         }),
         vue(),
+        wp_scripts(),
+        react({
+            jsxRuntime: 'classic',
+        }),
         {
             name: 'override-config',
             config: () => ({
