@@ -29,6 +29,7 @@
     <img src="https://img.shields.io/wordpress/plugin/stars/windpress.svg?logo=wordpress" alt="WordPress plugin rating" />
     </picture>
   </a>
+  <br />
   <a href="https://github.com/wind-press/windpress/tags">
     <picture>
     <img src="https://img.shields.io/github/v/tag/wind-press/windpress.svg" alt="GitHub Release" />
