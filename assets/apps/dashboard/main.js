@@ -3,6 +3,7 @@ import 'floating-vue/dist/style.css';
 import './master.css.js';
 import './monaco-editor.js';
 
+import { __, _n, sprintf } from '@wordpress/i18n';
 import { createApp, watch } from 'vue';
 import { createPinia } from 'pinia';
 import FloatingVue from 'floating-vue';
@@ -18,6 +19,15 @@ import { useUIStore } from './stores/ui.js';
 const pinia = createPinia();
 const app = createApp(App);
 
+// if in iframe, access the parent window's wp object
+if (window.self !== window.top) {
+    window.wp = window.top.wp;
+    window.windpress = window.top.windpress;
+}
+
+app.config.globalProperties.__ = __;
+app.config.globalProperties._n = _n;
+app.config.globalProperties.sprintf = sprintf;
 app.config.globalProperties.windpress = window.windpress;
 
 app

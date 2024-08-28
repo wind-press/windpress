@@ -2,7 +2,9 @@
 
 <template>
     <div class="h:full px:8">
-        <h2 class="font:20 font:bold fg:gray-80 fg:gray-10@dark">Coming Soon</h2>
+        <h2 class="font:20 font:bold fg:gray-80 fg:gray-10@dark">
+            Coming Soon
+        </h2>
         <p class="font:14 fg:gray-60 fg:gray-30@dark">
             We are dedicated to providing you with an exceptional customization experience.
             <br>

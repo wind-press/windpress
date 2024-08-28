@@ -52,7 +52,7 @@ function doSave() {
                 </button>
             </div>
             <button @click="doSave" class="button button-secondary b:transparent! fg:sky-80! fg:sky-40!@dark b:sky-80!:hover bg:transparent!" v-ripple>
-                Save
+                {{ __('Save', 'windpress') }}
             </button>
         </div>
     </div>

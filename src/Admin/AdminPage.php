@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Admin;
 
+use EDD_SL\PluginUpdater;
 use WIND_PRESS;
 use WindPress\WindPress\Utils\AssetVite;
+use WindPress\WindPress\Utils\Common;
 
 class AdminPage
 {
@@ -69,6 +71,7 @@ class AdminPage
 
         wp_localize_script($handle, 'windpress', [
             '_version' => WIND_PRESS::VERSION,
+            '_via_wp_org' => !Common::is_updater_library_available(),
             '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
             'rest_api' => [
                 'nonce' => wp_create_nonce('wp_rest'),

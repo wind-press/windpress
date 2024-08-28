@@ -5,8 +5,8 @@
         #wpbody-content {
             padding-bottom: 0;
 
-            /* Hide the notice nag */
-            .notice {
+            /* hide the notice nag if it doesn't have .windpress-notice */
+            .notice:not(.windpress-notice) {
                 display: none;
             }
         }
@@ -86,6 +86,12 @@
         border-radius: 3px;
         cursor: pointer;
 
+        &:hover {
+            color: #1e63a0;
+            background: #f0f2f3;
+            border-color: #1e63a0;
+        }
+
         &.disabled,
         &:disabled,
         &[disabled],
@@ -97,6 +103,56 @@
             box-shadow: none !important;
             transform: none !important;
         }
+
+        // .button.button-primary
+        &.button-primary {
+            color: white;
+            background: #2271b1;
+            border-color: #2271b1;
+
+            &:hover {
+                background: #1e63a0;
+                border-color: #1e63a0;
+            }
+
+            &:active {
+                background: #1a5691;
+                border-color: #1a5691;
+            }
+        }
+
+        // .button.button-link
+        &.button-link {
+            color: #2271b1;
+            background: transparent;
+            border-color: transparent;
+
+            &:hover {
+                color: #1e63a0;
+                background: transparent;
+                border-color: transparent;
+            }
+
+            &:active {
+                color: #1a5691;
+                background: transparent;
+                border-color: transparent;
+            }
+
+            // .button.button-link.button-link-delete
+            &.button-link-delete {
+                color: #d54e21;
+
+                &:hover {
+                    color: #c43e11;
+                }
+
+                &:active {
+                    color: #b33e11;
+                }
+            }
+        }
+        
     }
 
     input[type=color],

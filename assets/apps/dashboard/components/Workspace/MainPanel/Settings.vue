@@ -1,5 +1,6 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
+import { __ } from '@wordpress/i18n';
 import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
 import { Switch } from '@headlessui/vue';
@@ -32,7 +33,7 @@ function doLicenseChange() {
         promise,
         resp => notifier.success(resp.message),
         err => notifier.alert(err.message),
-        `${licenseStore.license.key && licenseStore.isActivated ? 'Deactivating' : 'Activating'} license...`
+        licenseStore.license.key && licenseStore.isActivated ? __('Deactivating license...', 'windpress') : __('Activating license...', 'windpress')
     );
 }
 
@@ -63,7 +64,7 @@ function doSave() {
         promise,
         resp => notifier.success(resp.message),
         err => notifier.alert(err.message),
-        'Storing settings...'
+        __('Saving settings...', 'windpress')
     );
 }
 
@@ -132,34 +133,46 @@ channel.addEventListener('message', (e) => {
         <div class="sections">
             <div class="sections__header flex  justify-content:space-between px:24 py:16">
                 <div class="flex-grow:1">
-                    <span class="font:18 font:semibold">License</span>
+                    <span class="font:18 font:semibold">{{ __('License', 'windpress') }}</span>
                 </div>
             </div>
             <div class="sections__body transition:max-height|0.2s|ease-out">
                 <div class="{bt:1|solid|sideBar-border}>*+* ">
                     <div class="p:20">
-                        <div class="flex flex:column gap:10">
-                            <span class="font:15">License key</span>
+                        <div v-if="!windpress._via_wp_org" class="flex flex:column gap:10">
+                            <span class="font:15">
+                                {{ __('License Key', 'windpress') }}
+                            </span>
                             <div class="flex gap:6">
                                 <input v-model="licenseKey" type="password" id="license_key" :disabled="licenseStore.isActivated" class="max-w:400 w:full">
                                 <button @click="doLicenseChange" type="button" :disabled="!licenseKey || busyStore.isBusy" class="button button-secondary inline-flex align-items:center gap:8">
                                     <font-awesome-icon v-if="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate')" :icon="['fas', 'circle-notch']" class="@rotate|1s|infinite|linear" />
                                     <template v-if="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate')">
-                                        {{ licenseStore.isActivated ? 'Deactivating' : 'Activating' }}
+                                        {{ licenseStore.isActivated ? __('Deactivating', 'windpress') : __('Activating', 'windpress') }}
                                     </template>
                                     <template v-else>
-                                        {{ licenseStore.isActivated ? 'Deactivate' : 'Activate' }}
+                                        {{ licenseStore.isActivated ? __('Deactivate', 'windpress') : __('Activate', 'windpress') }}
                                     </template>
-
                                 </button>
                             </div>
                             <div v-if="licenseStore.license.key" class="flex align-items:center font:medium">
-                                Status:
+                                {{ __('Status', 'windpress') }}:
                                 <span :class="licenseStore.isActivated ? 'bg:green-80' : 'bg:yellow-70'" class="fg:white font:regular ml:10 px:6 py:4 r:4 user-select:none">
                                     {{ licenseStore.isActivated ? 'Active' : 'Inactive' }}
                                 </span>
                             </div>
-                            <p class="my:0">To access updates when they are available, please provide your license key.</p>
+                            <p class="my:0">{{ __('To access updates when they are available, please provide your license key.', 'windpress') }}</p>
+                        </div>
+                        <div v-else class="flex flex:column gap:10">
+                            <div class="flex align-items:center font:medium">
+                                <span>
+                                    You are using the <a href="https://wordpress.org/plugins/windpress/" target="_blank">WordPress.org</a> edition.
+                                </span>
+                                <a href="https://wind.press/#pricing" target="_blank" rel="noopener noreferrer" class="ml:6 text-decoration:none bg:crimson-10 fg:crimson-80 px:6 py:3 r:4 b:1|solid|crimson-90/.2 user-select:none">
+                                    {{ __('Upgrade to Pro', 'windpress') }}
+                                    <font-awesome-icon :icon="['fas', 'arrow-up-right-from-square']" class="ml:2 translateY(-0)" />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -171,19 +184,19 @@ channel.addEventListener('message', (e) => {
         <div class="sections">
             <div class="sections__header flex  justify-content:space-between px:24 py:16">
                 <div class="flex-grow:1">
-                    <span class="font:18 font:semibold">General</span>
+                    <span class="font:18 font:semibold">{{ __('General', 'windpress') }}</span>
                 </div>
             </div>
             <div class="sections__body transition:max-height|0.2s|ease-out">
                 <div class="flex {bt:1|solid|sideBar-border}>*+* flex:column">
                     <div class="flex flex:column gap:30 p:20">
                         <div class="flex flex:column gap:10">
-                            <span class="font:15">Ubiquitous WindPress panel</span>
+                            <span class="font:15">{{ __('Ubiquitous WindPress panel', 'windpress') }}</span>
                             <div class="flex align-items:center gap:4">
                                 <input type="checkbox" id="enable_front_mission_control" v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', true).value" class="checkbox mt:0">
-                                <label for="enable_front_mission_control" class="font:medium">Enable WindPress panel on the front page</label>
+                                <label for="enable_front_mission_control" class="font:medium">{{ __('Enable WindPress panel on the front page', 'windpress') }}</label>
                             </div>
-                            <p class="my:0"> Access the WindPress panel right from the front page and made adjustment as it is on the wp-admin page. </p>
+                            <p class="my:0"> {{ __('Access the WindPress panel right from the front page and made adjustment as it is on the wp-admin page.', 'windpress') }} </p>
                         </div>
                     </div>
                 </div>
@@ -195,29 +208,29 @@ channel.addEventListener('message', (e) => {
         <div class="sections">
             <div class="sections__header flex  justify-content:space-between px:24 py:16">
                 <div class="flex-grow:1">
-                    <span class="font:18 font:semibold">Performance</span>
+                    <span class="font:18 font:semibold">{{ __('Performance', 'windpress') }}</span>
                 </div>
             </div>
             <div class="sections__body transition:max-height|0.2s|ease-out">
                 <div class="flex {bt:1|solid|sideBar-border}>*+*  flex:column">
                     <div class="flex flex:column gap:30 p:20">
                         <div class="flex flex:column gap:10">
-                            <span class="font:15">Cached CSS</span>
+                            <span class="font:15">{{ __('Cached CSS', 'windpress') }}</span>
                             <div class="flex align-items:center gap:4">
                                 <input type="checkbox" id="enable_cached_css" v-model="settingsStore.virtualOptions('performance.cache.enabled', false).value" class="checkbox mt:0">
-                                <label for="enable_cached_css" class="font:medium">Use cached CSS if available</label>
+                                <label for="enable_cached_css" class="font:medium">{{ __('Use cached CSS if available', 'windpress') }}</label>
                             </div>
                             <div class="flex align-items:center gap:4">
                                 <input type="checkbox" id="force_cdn_admin" v-model="settingsStore.virtualOptions('performance.cache.exclude_admin', false).value" class="checkbox mt:0">
-                                <label for="force_cdn_admin" class="font:medium">Admin always uses the Play CDN</label>
+                                <label for="force_cdn_admin" class="font:medium">{{ __('Admin always uses the Play CDN', 'windpress') }}</label>
                             </div>
                             <div class="flex align-items:center gap:4">
                                 <input type="checkbox" id="inline_cached_css" v-model="settingsStore.virtualOptions('performance.cache.inline_load', false).value" class="checkbox mt:0">
-                                <label for="inline_cached_css" class="font:medium">Load the cached CSS inline</label>
+                                <label for="inline_cached_css" class="font:medium">{{ __('Load the cached CSS inline', 'windpress') }}</label>
                             </div>
-                            <p class="my:0">Serve the CSS file from the cache instead of generating it on the fly using Play CDN.</p>
+                            <p class="my:0">{{ __('Serve the CSS file from the cache instead of generating it on the fly using Play CDN.', 'windpress') }}</p>
                             <p class="flex gap-x:4 my:0">
-                                <span class="font:medium">Last Generated:</span>
+                                <span class="font:medium">{{ __('Last Generated', 'windpress') }}:</span>
                                 <template v-if="css_cache.last_generated">
                                     {{ new dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
                                     <a :href="`${css_cache.file_url}?ver=${css_cache.last_generated}`" target="_blank">
@@ -231,7 +244,7 @@ channel.addEventListener('message', (e) => {
                             <div>
                                 <button @click="doGenerateCache" :disabled="busyStore.isBusy" type="button" class="button button-secondary inline-flex align-items:center gap:8">
                                     <font-awesome-icon v-if="busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate')" :icon="['fas', 'circle-notch']" class="@rotate|1s|infinite|linear" />
-                                    {{ busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate') ? 'Generating' : 'Generate' }}
+                                    {{ busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate') ? __('Generating...', 'windpress') : __('Generate', 'windpress') }}
                                 </button>
                             </div>
                         </div>
@@ -245,7 +258,7 @@ channel.addEventListener('message', (e) => {
         <div class="sections">
             <div class="sections__header flex  justify-content:space-between px:24 py:16">
                 <div class="flex-grow:1">
-                    <span class="font:18 font:semibold">Integrations</span>
+                    <span class="font:18 font:semibold">{{ __('Integrations', 'windpress') }}</span>
                 </div>
             </div>
             <div class="sections__body transition:max-height|0.2s|ease-out">

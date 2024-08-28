@@ -32,6 +32,10 @@ import {
     faBolt,
     faBroom,
     faCircle,
+    faRectanglePro,
+    faArrowUpRightFromSquare,
+    faFaceSmileHearts,
+    faHourglassClock,
 } from '@fortawesome/pro-solid-svg-icons';
 
 import {
@@ -80,6 +84,10 @@ library.add(
     faBolt,
     faBroom,
     faCircle,
+    faRectanglePro,
+    faArrowUpRightFromSquare,
+    faFaceSmileHearts,
+    faHourglassClock,
 
     /** far */
     faHeartRegular,

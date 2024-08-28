@@ -3,7 +3,7 @@
 
 <template>
     <div class="explorer-header px:20 py:10 uppercase font:12">
-        Explorer: WordPress
+        {{ __('Explorer: WordPress', 'windpress') }}
     </div>
 
     <div class="folders-content">

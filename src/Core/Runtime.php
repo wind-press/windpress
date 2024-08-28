@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Core;
 
+use EDD_SL\PluginUpdater;
 use Exception;
 use WIND_PRESS;
 use WindPress\WindPress\Utils\AssetVite;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
 
 /**
@@ -34,16 +36,12 @@ class Runtime
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Singletons should not be cloneable.
      */
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     /**
      * Singletons should not be restorable from strings.
@@ -92,9 +90,9 @@ class Runtime
         $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
 
         if ($is_cache_enabled && $this->is_cache_exists() && !$is_exclude_admin) {
-            add_action('wp_head', fn () => $this->enqueue_css_cache(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_css_cache(), 1_000_001);
         } else {
-            add_action('wp_head', fn () => $this->enqueue_play_cdn(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
         }
 
         if (
@@ -102,7 +100,7 @@ class Runtime
             && current_user_can('manage_options')
             && !apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
         ) {
-            add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_front_panel(), 1_000_001);
         }
     }
 
@@ -181,12 +179,14 @@ class Runtime
         AssetVite::get_instance()->enqueue_asset('assets/apps/dashboard/main.js', [
             'handle' => $handle,
             'in_footer' => true,
+            'dependencies' => ['wp-i18n', 'wp-hooks'],
         ]);
 
         wp_set_script_translations($handle, 'windpress');
 
         wp_localize_script($handle, 'windpress', [
             '_version' => WIND_PRESS::VERSION,
+            '_via_wp_org' => !Common::is_updater_library_available(),
             '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
             'rest_api' => [
                 'nonce' => wp_create_nonce('wp_rest'),
