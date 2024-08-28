@@ -21,6 +21,7 @@ use WindPress\WindPress\Admin\AdminPage;
 use WindPress\WindPress\Api\Router as ApiRouter;
 use WindPress\WindPress\Core\Runtime;
 use WindPress\WindPress\Integration\Loader as IntegrationLoader;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Notice;
 
 /**
@@ -47,16 +48,12 @@ final class Plugin
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Singletons should not be cloneable.
      */
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     /**
      * Singletons should not be restorable from strings.
@@ -93,8 +90,8 @@ final class Plugin
         do_action('a!windpress/plugin:boot.start');
 
         // (de)activation hooks.
-        register_activation_hook(WIND_PRESS::FILE, fn () => $this->activate_plugin());
-        register_deactivation_hook(WIND_PRESS::FILE, fn () => $this->deactivate_plugin());
+        register_activation_hook(WIND_PRESS::FILE, fn() => $this->activate_plugin());
+        register_deactivation_hook(WIND_PRESS::FILE, fn() => $this->deactivate_plugin());
 
         // upgrade hooks.
         add_action('upgrader_process_complete', function (WP_Upgrader $wpUpgrader, array $options): void {
@@ -109,8 +106,8 @@ final class Plugin
 
         $this->maybe_update_plugin();
 
-        add_action('plugins_loaded', fn () => $this->plugins_loaded(), 9);
-        add_action('init', fn () => $this->init_plugin());
+        add_action('plugins_loaded', fn() => $this->plugins_loaded(), 9);
+        add_action('init', fn() => $this->init_plugin());
 
         do_action('a!windpress/plugin:boot.end');
     }
@@ -177,8 +174,8 @@ final class Plugin
         IntegrationLoader::get_instance()->register_integrations();
 
         if (is_admin()) {
-            add_action('admin_notices', static fn () => Notice::admin_notices());
-            add_filter('plugin_action_links_' . plugin_basename(WIND_PRESS::FILE), fn ($links) => $this->plugin_action_links($links));
+            add_action('admin_notices', static fn() => Notice::admin_notices());
+            add_filter('plugin_action_links_' . plugin_basename(WIND_PRESS::FILE), fn($links) => $this->plugin_action_links($links));
         }
 
         do_action('a!windpress/plugin:plugins_loaded.end');
@@ -201,6 +198,14 @@ final class Plugin
             esc_url(sprintf('%s#/settings', $base_url)),
             esc_html__('Settings', 'windpress')
         ));
+
+        if (!Common::is_updater_library_available()) {
+            array_unshift($links, sprintf(
+                '<a href="%s" style="color:#067b34;font-weight:600;" target="_blank">%s</a>',
+                esc_url(Common::plugin_data('PluginURI') . '?utm_source=WordPress&utm_campaign=liteplugin&utm_medium=plugin-action-links&utm_content=Upgrade#pricing'),
+                esc_html__('Upgrade to Pro', 'windpress')
+            ));
+        }
 
         return $links;
     }
