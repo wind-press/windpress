@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -69,7 +69,7 @@ The source code is available on [GitHub](https://github.com/wind-press/windpress
 
 == Changelog ==
 
-= 3.0.2 =
+= 3.0.3 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.20 next)
 * **New**: [Timber](https://upstatement.com/timber/) integration
 * **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
