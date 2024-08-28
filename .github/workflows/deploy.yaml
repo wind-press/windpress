@@ -141,6 +141,13 @@ jobs:
 
         # WordPress.org build
 
+        - run: ls -la
+
+        # remove the $NESTED_DIRECTORY directory
+        - run: rm -rf windpress-deploy remote-repository windpress-prefixed
+        # remove the vendor directory
+        - run: rm -rf vendor
+
         # keep this folders (Free):
         # - Gutenberg
         # - Elementor
@@ -150,6 +157,8 @@ jobs:
         # else, remove the premium version
         - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,GreenShift,Kadence,LiveCanvas,Oxygen}
         - run: rm -rf assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen} 
+
+        - run: ls -la
 
         # remove custom update library
         - run: composer remove rosua/edd-sl-plugin-updater --ansi
@@ -166,9 +175,7 @@ jobs:
         # install only prod dependencies
         - run: composer install --no-dev --classmap-authoritative --ansi
 
-        # remove the $NESTED_DIRECTORY directory, then
         # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop        
-        - run: rm -rf windpress-deploy remote-repository windpress-prefixed
         - run: rsync --exclude windpress-deploy -av * windpress-deploy --quiet
 
         # humbug/php-scoper requires php ^8.2
