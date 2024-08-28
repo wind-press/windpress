@@ -9,6 +9,26 @@
 </p>
 
 <p align="center">
+  <a href="https://downloads.wordpress.org/plugin/windpress.zip">
+    <picture>
+    <img src="https://img.shields.io/wordpress/plugin/v/windpress.svg?logo=wordpress&label=version" alt="WordPress plugin version" />
+    </picture>
+  </a>
+  <a href="https://wordpress.org/plugins/windpress/advanced/">
+    <picture>
+    <img src="https://img.shields.io/wordpress/plugin/dt/windpress.svg?logo=wordpress" alt="WordPress plugin downloads" />
+    </picture>
+  </a>
+  <a href="https://wordpress.org/plugins/windpress/">
+    <picture>
+    <img src="https://img.shields.io/wordpress/plugin/installs/windpress.svg?logo=wordpress" alt="WordPress plugin active installs" />
+    </picture>
+  </a>
+  <a href="https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post">
+    <picture>
+    <img src="https://img.shields.io/wordpress/plugin/stars/windpress.svg?logo=wordpress" alt="WordPress plugin rating" />
+    </picture>
+  </a>
   <a href="https://github.com/wind-press/windpress/tags">
     <picture>
     <img src="https://img.shields.io/github/v/tag/wind-press/windpress.svg" alt="GitHub Release" />

@@ -34,6 +34,15 @@ jobs:
           with:
             version: 8
 
+        # Get the current tag from github.ref, where the tag name is the version number.
+        # tag name pattern: X.Y.Z, where X, Y, Z are integers
+        # save the tag name as `TAG_NAME` variable to file $GITHUB_ENV
+        # Note, set-output is deprecated, so use alternative instead of ::set-output
+        - name: "Get the current tag"
+          id: get_tag
+          run: |
+            echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
         - name: Get pnpm store directory
           shell: bash
           run: |
@@ -172,13 +181,11 @@ jobs:
         - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
 
         # deploy to WordPress.org SVN repository
-        # - name: WordPress Plugin Deploy
-        #   uses: 10up/action-wordpress-plugin-deploy@stable
-        #   env:
-        #     SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-        #     SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-        #     SLUG: windpress
-        #     BUILD_DIR: windpress-prefixed
-        #     VERSION: ${{ env.TAG_NAME }}
-
-
+        - name: WordPress Plugin Deploy
+          uses: 10up/action-wordpress-plugin-deploy@stable
+          env:
+            SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+            SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+            SLUG: windpress
+            BUILD_DIR: windpress-prefixed
+            VERSION: ${{ env.TAG_NAME }}

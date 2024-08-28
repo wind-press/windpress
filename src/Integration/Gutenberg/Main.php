@@ -26,6 +26,9 @@ class Main implements IntegrationInterface
 {
     public function __construct()
     {
+        // TODO: implement the integration
+        return;
+
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
 
         if ($this->is_enabled()) {
