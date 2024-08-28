@@ -7,10 +7,11 @@
  * Plugin Name:         WindPress
  * Plugin URI:          https://wind.press
  * Description:         The most effortless Tailwind CSS v4 integration for WordPress
- * Version:             3.0.0-alpha.14
+ * Version:             3.0.0
  * Requires at least:   6.0
  * Requires PHP:        7.4
  * Author:              WindPress
+ * Author URI:          https://wind.press
  * Donate link:         https://ko-fi.com/Q5Q75XSF7
  * Text Domain:         windpress
  * Domain Path:         /languages

@@ -1,10 +1,10 @@
 === WindPress ===
 Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
-Tags: tailwind css, bricks builder, oxygen builder, gutenberg, elementor 
+Tags: tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.0.0-alpha.14
+Stable tag: 3.0.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -13,20 +13,23 @@ The most effortless Tailwind CSS v4 integration for WordPress.
 
 == Description ==
 
-### WindPress: the #1 Tailwind CSS v4 integration plugin for WordPress.
+### WindPress: the only Tailwind CSS v4 integration plugin for WordPress.
 
 WindPress is a platform agnostic Tailwind CSS v4 integration plugin for WordPress that allows you to use the full power of Tailwind CSS v4 within the WordPress ecosystem.
 
-### FEATURES
+Current [Tailwind CSS](https://tailwindcss.com/) version: 4.0.0-alpha.20 next
+
+### Features
 
 WindPress is packed full of features designed to streamline your workflow. Some of our favorites are:
 
+* **Plug and play**: Start using Tailwind CSS in WordPress in seconds — no setup is required.
 * **Customizable Configuration**: The plugin comes with a default Tailwind CSS configuration, but you can easily customize it to fit your needs.
 * **Easy to use**: Simplified and intuitive settings to get you up and running quickly.
-* **Lightweight and blazingly fast**: The plugin dashboard built on top of WordPress REST API, and a modern JavaScript framework for an instant, responsive user experience. It has a small footprint and won't slow down your site.
-* **Compile on the browser. No server is required**: Generate the final CSS file in the browser without server-side tools. None of your data is transferred over the network.  
+* **Lightweight**: The plugin dashboard built on top of WordPress REST API, and a modern JavaScript framework for an instant, responsive user experience. Yet it has a small footprint and won't slow down your site.
+* **Blazingly fast**: Cache makes your WordPress site blazing fast. Generate the final CSS file in the browser without server-side tools. None of your data is transferred over the network
 
-### SEAMLESS INTEGRATION
+### Seamless Integration
 
 It's easy to build design with Tailwind CSS v4 thanks to the seamless integration with the most popular visual/page builders:
 
@@ -67,7 +70,7 @@ The source code is available on [GitHub](https://github.com/wind-press/windpress
 == Changelog ==
 
 = 3.0.0 =
-* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.19 next)
+* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.20 next)
 * **New**: [Timber](https://upstatement.com/timber/) integration
 * **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
 * **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]**
