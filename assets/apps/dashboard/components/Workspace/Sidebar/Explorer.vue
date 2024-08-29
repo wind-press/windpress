@@ -1,4 +1,5 @@
 <script setup>
+import { __ } from '@wordpress/i18n';
 </script>
 
 <template>

@@ -1,4 +1,5 @@
 <script setup>
+import { __ } from '@wordpress/i18n';
 import Explorer from './Sidebar/Explorer.vue';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 

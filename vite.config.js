@@ -64,6 +64,34 @@ export default defineConfig({
     },
     build: {
         target: 'modules',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'monaco-editor': ['monaco-editor'],
+                },
+                chunkFileNames: (chunkInfo) => {
+                    // add .min to the filename to exclude it from the `wp i18n make-pot` command.
+                    // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
+                    const excludeFromI18n = ['monaco-editor', 'lib', 'wasm', 'runtime-core.esm-bundler', '_plugin-vue_export-helper'];
+                    return excludeFromI18n.includes(chunkInfo.name) ? '[name]-[hash].min.js' : '[name]-[hash].js';
+                },
+            },
+            plugins: [
+                {
+                    name: 'rename-workers',
+                    generateBundle(_, bundle) {
+                        // if the fila name is in the format of `*.worker-*.js` and doesn't have '.min.js`, rename it to `*.worker-*.min.js`
+                        const workerFiles = Object.keys(bundle).filter(file => file.includes('.worker-') && !file.includes('.min.js'));
+
+                        workerFiles.forEach((file) => {
+                            const newFileName = file.replace('.js', '.min.js');
+                            bundle[newFileName] = { ...bundle[file], fileName: newFileName };
+                            delete bundle[file];
+                        });
+                    }
+                }
+            ],
+        },
     },
     publicDir: 'assets/static',
     resolve: {

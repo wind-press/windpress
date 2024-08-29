@@ -97,12 +97,12 @@ function handleCssEditorMount(editor, monaco) {
     editorCssRef.value = editor;
 
     monaco.languages.registerCompletionItemProvider('css', {
-        provideCompletionItems(model, position) {
+        async provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position);
 
             const theme = twTheme + twStore.data.main_css.current;
 
-            const variables = getVariableList(theme).map(entry => {
+            const variables = (await getVariableList(theme)).map(entry => {
                 return {
                     kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
                     label: entry.key,

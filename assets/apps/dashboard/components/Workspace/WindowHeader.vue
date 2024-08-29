@@ -1,5 +1,6 @@
 <script setup>
 import Logo from '~/windpress.svg';
+import { __ } from '@wordpress/i18n';
 import { useColorMode } from '@vueuse/core';
 import { useUIStore } from '@/dashboard/stores/ui';
 

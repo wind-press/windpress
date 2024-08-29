@@ -1,4 +1,5 @@
 <script setup>
+import { __ } from '@wordpress/i18n';
 import { storeToRefs } from 'pinia';
 import { useNoticeStore } from '@/dashboard/stores/notice';
 

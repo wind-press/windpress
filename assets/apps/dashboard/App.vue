@@ -1,5 +1,6 @@
 <script setup>
 import Logo from '~/windpress.svg';
+import { __ } from '@wordpress/i18n';
 import { useUIStore } from './stores/ui';
 import { buildCache } from './components/compiler.js';
 import { useBusyStore } from './stores/busy';

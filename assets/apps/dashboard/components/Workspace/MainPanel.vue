@@ -1,4 +1,5 @@
 <script setup>
+import { __ } from '@wordpress/i18n';
 import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 
