@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Core;
 
-use EDD_SL\PluginUpdater;
 use Exception;
 use WIND_PRESS;
 use WindPress\WindPress\Utils\AssetVite;

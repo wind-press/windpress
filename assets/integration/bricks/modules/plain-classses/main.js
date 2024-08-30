@@ -61,10 +61,6 @@ containerActionButtons.appendChild(classSortButton);
 const visibleElementPanel = ref(false);
 const activeElementId = ref(null);
 
-(async () => {
-
-})();
-
 let hit = null; // highlight any text except spaces and new lines
 
 autosize(textInput);

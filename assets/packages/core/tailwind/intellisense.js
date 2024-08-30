@@ -3,6 +3,7 @@ import {
 } from 'tailwindcss';
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
 import { bundle } from './bundle';
+import {compileAstNodes, compileCandidates} from '@tailwindcss/root/packages/tailwindcss/src/compile';
 
 /**
  * Get the CSS content of the main.css file on the current document.
@@ -64,8 +65,10 @@ export async function getClassList(theme) {
      * @returns {ClassEntity}
      */
     const prepareClass = (classEntity) => {
-        const rule = design.compileAstNodes(classEntity.selector)?.node;
-        const nodes = rule?.nodes;
+        const astNodes = compileCandidates([classEntity.selector], design).astNodes;
+
+        // if astNodes array is not empty, merge all child's nodes into one array
+        const nodes = astNodes.length ? astNodes.reduce((acc, node) => acc.concat(node.nodes), []) : [];
 
         let css = design.candidatesToCss([classEntity.selector]).at(0);
 

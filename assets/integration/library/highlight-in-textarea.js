@@ -245,7 +245,8 @@ HighlightInTextarea.prototype = {
         });
 
         // this keeps scrolling aligned when input ends with a newline
-        input = input.replace(/\n({{hit-mark-stop}})?$/, '\n\n$1');
+        // input = input.replace(/\n({{hit-mark-stop}})?$/, '\n\n$1');
+        input = input.replace(/\n({{hit-mark-stop}})?$/, '\n$1');
 
         // encode HTML entities
         input = input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
