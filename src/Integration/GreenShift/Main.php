@@ -23,7 +23,6 @@ class Main implements IntegrationInterface
 {
     public function __construct()
     {
-        return;
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
         
         if ($this->is_enabled()) {
@@ -52,7 +51,7 @@ class Main implements IntegrationInterface
         $providers[] = [
             'id' => $this->get_name(),
             'name' => 'GreenShift',
-            'description' => 'GreenShift integration',
+            'description' => 'The Gutenberg/Block Editor backs this integration with no exclusive features.',
             'callback' => fn () => [],
             'enabled' => $this->is_enabled(),
             'meta' => [
