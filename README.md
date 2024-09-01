@@ -138,6 +138,10 @@ Seamless integration with the most popular visual/page builders:
     ```
 
 
+## Star History
+
+<a href="https://star-history.com/#wind-press/windpress&Date"> <picture> <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date&theme=dark" /> <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> </picture> </a>
+
 ## Sponsors
 
 If you like this project, please consider supporting us by becoming a sponsor.

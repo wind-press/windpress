@@ -33,6 +33,7 @@ WindPress is packed full of features designed to streamline your workflow. Some 
 
 It's easy to build design with Tailwind CSS v4 thanks to the seamless integration with the most popular visual/page builders:
 
+* [Gutenberg](https://wordpress.org/gutenberg)
 * [Timber](https://upstatement.com/timber/)
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
@@ -43,7 +44,6 @@ It's easy to build design with Tailwind CSS v4 thanks to the seamless integratio
 Planned / In Progress
 
 * [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
-* [Gutenberg](https://wordpress.org/gutenberg)
 * [GreenShift](https://greenshiftwp.com/)
 * [Kadence WP](https://kadencewp.com)
 * [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
@@ -55,6 +55,7 @@ Note: The core feature will remain available on all versions, but some integrati
 Visit [our website](https://wind.press) for more information.
 
 = Love WindPress? =
+- Give a [5-star review](https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post)
 - Purchase the [Pro version](https://wind.press)
 - Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943)
 
@@ -67,6 +68,9 @@ Visit [our website](https://wind.press) for more information.
 
 The source code is available on [GitHub](https://github.com/wind-press/windpress).
 
+Please feel free to contribute, report issues, or make suggestions.
+Star the repository if you like it.
+
 == Changelog ==
 
 Note: The Pro version has a version number with one higher minor version than the Free version.
@@ -74,6 +78,9 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= unreleased =
+* **New**: [Gutenberg](https://wordpress.org/gutenberg) integration
 
 = 3.1.6 =
 * **Improve**: Internationalization (i18n) support

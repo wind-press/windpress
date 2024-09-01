@@ -6,11 +6,15 @@ logger('Loading...');
     let rootContainer;
     let scriptElements;
 
+    logger('waiting for the rootContainer...');
+
     // wait for the root container to be available
     while (!rootContainer) {
         rootContainer = document.querySelector('iframe[name="editor-canvas"]');
         await new Promise(resolve => setTimeout(resolve, 100));
     }
+
+    logger('finding WindPress script...');
 
     // Timeout flag and timer to limit the search duration
     let timeoutOccurred = false;
@@ -25,7 +29,7 @@ logger('Loading...');
         // filter the script elements. Search for the script with the id prefixed with 'windpress:' except 'windpress:integration-'
         scriptElements = Array.from(scriptElements).filter(scriptElement => {
             let id = scriptElement.getAttribute('id');
-            return id && id.startsWith('windpress:') && !id.startsWith('windpress:integration-');
+            return id && (id.startsWith('windpress:') || id.startsWith('vite-client')) && !id.startsWith('windpress:integration-');
         });
 
         if (scriptElements.length > 0) {
@@ -41,6 +45,8 @@ logger('Loading...');
         return;
     }
 
+    logger('found WindPress script');
+
     let contentWindow = rootContainer.contentWindow || rootContainer;
     let contentDocument = rootContainer.contentDocument || contentWindow.document;
 
@@ -53,7 +59,7 @@ logger('Loading...');
     logger('injecting WindPress script into the root container');
 
     let injectedScript = contentDocument.querySelectorAll('script');
-    
+
     // check if the script is already injected if it has any script's id that starts with 'windpress:'
     let isScriptInjected = Array.from(injectedScript).some(script => {
         let id = script.getAttribute('id');
@@ -66,6 +72,6 @@ logger('Loading...');
             contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
         });
     } else {
-        logger('WindPress script is already injected');
+        logger('WindPress script is already injected, skipping the injection process...');
     }
 })();

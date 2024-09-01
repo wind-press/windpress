@@ -139,9 +139,6 @@ tribute.events.callbacks = function () {
     };
 };
 
-
-
-
 // create a tippy instance that will be used to show the hover preview, but not yet shown
 let tippyInstance = tippy(document.createElement('div'), {
     plugins: [followCursor],
@@ -217,7 +214,6 @@ const currentBlockId = ref(null);
 const latestClasses = ref(null);
 const latestTributeClassName = ref(null);
 
-
 function previewTributeEventCallbackUpDown() {
     let li = tribute.menu.querySelector('li.highlight>span.class-name');
 
@@ -229,7 +225,6 @@ function previewTributeEventCallbackUpDown() {
 
     previewAddClass(li.dataset.tributeClassName);
 }
-
 
 let menuAutocompleteItemeEl = null;
 const observerAutocomplete = new MutationObserver(function (mutations) {

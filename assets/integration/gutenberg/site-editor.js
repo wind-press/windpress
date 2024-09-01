@@ -1,19 +1,21 @@
 import { logger } from '@/integration/common/logger.js';
+import { debounce } from 'lodash-es';
 
 logger('Loading...');
 
 (async () => {
-    let siteEditor;
+    let rootContainer;
+    let scriptElements;
 
-    console.log('waiting for the siteEditor...');
+    logger('waiting for the rootContainer...');
 
     // wait for the root container to be available
-    while (!siteEditor) {
-        siteEditor = document.querySelector('div#site-editor');
+    while (!rootContainer) {
+        rootContainer = document.querySelector('div#site-editor');
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 
-    console.log('finding SIUL script and style...');
+    logger('finding WindPress script...');
 
     // Timeout flag and timer to limit the search duration
     let timeoutOccurred = false;
@@ -21,13 +23,17 @@ logger('Loading...');
         timeoutOccurred = true;
     }, 45000); // 45 seconds timeout
 
-    // wait for the script and style to be available
+    // wait for the script to be available
     while (!timeoutOccurred) {
-        let cssElement = document.querySelector('style#siul-tailwindcss-main-css');
-        let jitElement = document.querySelector('script#siul-tailwindcss-jit');
-        let playElement = document.querySelector('script#siul-tailwindcss-play-cdn');
+        scriptElements = document.querySelectorAll('script');
 
-        if (cssElement && jitElement && playElement) {
+        // filter the script elements. Search for the script with the id prefixed with 'windpress:' except 'windpress:integration-'
+        scriptElements = Array.from(scriptElements).filter(scriptElement => {
+            let id = scriptElement.getAttribute('id');
+            return id && (id.startsWith('windpress:') || id.startsWith('vite-client')) && !id.startsWith('windpress:integration-');
+        });
+
+        if (scriptElements.length > 0) {
             clearTimeout(timeout);
             break;
         }
@@ -36,30 +42,15 @@ logger('Loading...');
     }
 
     if (timeoutOccurred) {
-        console.log('time out! failed to find SIUL script and style');
+        logger('time out! failed to find WindPress script');
         return;
     }
 
-    console.log('found SIUL script and style');
+    logger('found WindPress script');
 
-    // Create a textarea element to manipulate script content
-    let textareaPlayElement = document.createElement('textarea');
-    let textareaJitElement = document.createElement('textarea');
-
-    // Copy the Play CDN script content to the textarea
-    textareaPlayElement.innerHTML = document.querySelector('script#siul-tailwindcss-play-cdn').outerHTML;
-    let playContent = textareaPlayElement.value;
-
-    // Copy the JIT script content to the textarea
-    textareaJitElement.innerHTML = document.querySelector('script#siul-tailwindcss-jit').outerHTML;
-    let jitContent = textareaJitElement.value;
-    
-
-    // Function to inject the script and style into the editor canvas
-    let injectIntoEditorCanvas = async () => {
+    async function injectIntoEditorCanvas() {
         let editorCanvas;
 
-        // Timeout flag to limit search duration
         let timeoutOccurred = false;
         let timeout = setTimeout(() => {
             timeoutOccurred = true;
@@ -67,7 +58,7 @@ logger('Loading...');
 
         // wait for the editor canvas to be available
         while (!timeoutOccurred) {
-            let editorCanvas = document.querySelector('iframe.edit-site-visual-editor__editor-canvas');
+            editorCanvas = document.querySelector('iframe.edit-site-visual-editor__editor-canvas');
             if (editorCanvas) {
                 clearTimeout(timeout);
                 break;
@@ -77,35 +68,56 @@ logger('Loading...');
         }
 
         if (timeoutOccurred) {
-            console.log('time out! failed to find editor canvas');
+            logger('time out! failed to find editor canvas');
             return;
         }
 
-        console.log('found editor canvas');
-        
-        console.log('waiting for the canvas loader to be removed...');
+        logger('found editor canvas');
+
+        logger('waiting for the canvas loader to be removed...');
 
         while (document.querySelector('div.edit-site-canvas-loader') !== null) {
             await new Promise(resolve => setTimeout(resolve, 200));
         }
 
-        console.log('canvas loader removed');
+        logger('canvas loader removed');
 
-        editorCanvas = document.querySelector('iframe.edit-site-visual-editor__editor-canvas');
+        let contentWindow = editorCanvas.contentWindow || editorCanvas;
+        let contentDocument = editorCanvas.contentDocument || contentWindow.document;
 
-        let canvasWindow = editorCanvas.contentWindow || editorCanvas;
-        let canvasDocument = editorCanvas.contentDocument || canvasWindow.document;
-        
-        canvasDocument.head.appendChild(document.createRange().createContextualFragment(jitContent));
-        canvasDocument.head.appendChild(document.createRange().createContextualFragment(playContent));
-        canvasDocument.head.appendChild(document.querySelector('style#siul-tailwindcss-main-css').cloneNode(true));
-    };
+        // wait until contentDocument.head is available
+        while (!contentDocument.head) {
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
+
+        // Inject the script into the root iframe
+        logger('injecting WindPress script into the root container');
+
+        let injectedScript = contentDocument.querySelectorAll('script');
+
+        // check if the script is already injected if it has any script's id that starts with 'windpress:'
+        let isScriptInjected = Array.from(injectedScript).some(script => {
+            let id = script.getAttribute('id');
+            return id && id.startsWith('windpress:');
+        });
+
+        if (!isScriptInjected) {
+            logger('starting the root injection process...');
+            scriptElements.forEach(scriptElement => {
+                contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+            });
+        } else {
+            logger('WindPress script is already injected, skipping the injection process...');
+        }
+    }
+
+    const injectIntoEditorCanvasDebounced = debounce(injectIntoEditorCanvas, 1000);
 
     // Set up a mutation observer to react to changes in the site editor
     new MutationObserver(() => {
-        injectIntoEditorCanvas();
-    }).observe(siteEditor, {
-        subtree: false,
+        injectIntoEditorCanvasDebounced();
+    }).observe(rootContainer, {
+        subtree: true,
         childList: true
     });
 })();

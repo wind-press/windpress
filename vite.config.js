@@ -35,6 +35,7 @@ export default defineConfig({
                 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
                 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
+                'integration/gutenberg/site-editor': 'assets/integration/gutenberg/site-editor.js',
                 'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
                 'integration/livecanvas': 'assets/integration/livecanvas/main.js',
                 'integration/builderius': 'assets/integration/builderius/main.js',
