@@ -17,6 +17,7 @@ use WindPress\WindPress\Integration\IntegrationInterface;
 use WindPress\WindPress\Utils\Config;
 
 /**
+ * Tested with GreenShift version 9.4
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Main implements IntegrationInterface
@@ -26,7 +27,7 @@ class Main implements IntegrationInterface
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
         
         if ($this->is_enabled()) {
-            add_filter('f!windpress/integration/gutenberg/compile:get_contents.post_types', fn (array $post_types): array => (new Compile())($post_types));
+            (new Compile())();
         }
     }
 
@@ -51,12 +52,12 @@ class Main implements IntegrationInterface
         $providers[] = [
             'id' => $this->get_name(),
             'name' => 'GreenShift',
-            'description' => 'The Gutenberg/Block Editor backs this integration with no exclusive features.',
+            'description' => 'The GreenShift integration. It requires the Gutenberg/Block Editor integration enabled.',
             'callback' => fn () => [],
             'enabled' => $this->is_enabled(),
             'meta' => [
                 'experimental' => true,
-            ]
+            ],
         ];
 
         return $providers;

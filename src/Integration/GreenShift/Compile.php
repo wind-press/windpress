@@ -21,12 +21,20 @@ class Compile
     /**
      * @param array $post_types
      */
-    public function __invoke($post_types): array
+    public function __invoke()
     {
         if (!defined('GREENSHIFT_DIR_PATH')) {
-            return $post_types;
+            return;
         }
 
+        add_filter('f!windpress/integration/gutenberg/compile:get_contents.post_types', fn (array $post_types): array => $this->get_post_types($post_types));
+    }
+
+    /**
+     * @param array $post_types
+     */
+    public function get_post_types($post_types): array
+    {
         $post_types[] = 'wp_block';
 
         return $post_types;

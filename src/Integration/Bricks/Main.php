@@ -17,6 +17,7 @@ use WindPress\WindPress\Integration\IntegrationInterface;
 use WindPress\WindPress\Utils\Config;
 
 /**
+ * Tested with Bricks version 1.10.3
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Main implements IntegrationInterface
