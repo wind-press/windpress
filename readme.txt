@@ -97,5 +97,5 @@ Pro version 1.**1**.4
 * **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]**
 * **Improve**: Test compatibility with WordPress 6.6
 
-= 1.0.0 =
+= 1.1.0 =
 * 🐣 Initial release.
