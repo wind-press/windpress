@@ -206,7 +206,7 @@ return [
             'GREENSHIFT_DIR_PATH', // Greenshift
 
             'KADENCE_BLOCKS_VERSION', // Kadence Blocks
-            'KADENCE_VERSION', // Kadence
+            'KADENCE_VERSION', // Kadence Theme
 
             '__BREAKDANCE_VERSION', // Breakdance
 

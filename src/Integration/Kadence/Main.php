@@ -17,13 +17,13 @@ use WindPress\WindPress\Integration\IntegrationInterface;
 use WindPress\WindPress\Utils\Config;
 
 /**
+ * Tested with Kadence theme version 1.2.9 and Kadence Blocks version 3.2.52
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Main implements IntegrationInterface
 {
     public function __construct()
     {
-        return;
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
         
         if ($this->is_enabled()) {
@@ -52,7 +52,7 @@ class Main implements IntegrationInterface
         $providers[] = [
             'id' => $this->get_name(),
             'name' => 'Kadence WP',
-            'description' => 'Kadence WP integration',
+            'description' => 'The Kadence WP integration. It requires the Gutenberg/Block Editor integration enabled.',
             'callback' => fn () => [],
             'enabled' => $this->is_enabled(),
             'meta' => [

@@ -22,8 +22,7 @@ class Compile
 {
     public function __invoke()
     {
-        return [];
-        if (!defined('KADENCE_VERSION')) {
+        if (!defined('KADENCE_VERSION') && !defined('KADENCE_BLOCKS_VERSION')) {
             return;
         }
 

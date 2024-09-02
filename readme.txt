@@ -35,6 +35,7 @@ It's easy to build design with Tailwind CSS v4 thanks to the seamless integratio
 
 * [Gutenberg](https://wordpress.org/gutenberg) / Block Editor
 * [GreenShift](https://greenshiftwp.com/)
+* [Kadence WP](https://kadencewp.com)
 * [Timber](https://upstatement.com/timber/)
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
@@ -45,7 +46,6 @@ It's easy to build design with Tailwind CSS v4 thanks to the seamless integratio
 Planned / In Progress
 
 * [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
-* [Kadence WP](https://kadencewp.com)
 * [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
 * [Pinegrow](https://pinegrow.com/wordpress)
 * [Zion Builder](https://zionbuilder.io/)
@@ -82,6 +82,7 @@ Pro version 1.**1**.4
 = unreleased =
 * **New**: [Gutenberg](https://wordpress.org/gutenberg) integration.
 * **New**: [GreenShift](https://greenshiftwp.com) integration.
+* **New**: [Kadence WP](https://kadencewp.com) integration.
 
 = 3.1.6 =
 * **Improve**: Internationalization (i18n) support

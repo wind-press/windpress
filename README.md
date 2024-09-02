@@ -85,6 +85,9 @@ Use Tailwind CSS within the block editor, page builders, plugins, and themes —
 
 Seamless integration with the most popular visual/page builders:
 
+* [Gutenberg](https://wordpress.org/gutenberg)
+* [GreenShift](https://greenshiftwp.com/)
+* [Kadence WP](https://kadencewp.com)
 * [Timber](https://upstatement.com/timber/)
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
@@ -95,9 +98,6 @@ Seamless integration with the most popular visual/page builders:
 #### Planned / In Progress
 
 * [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
-* [Gutenberg](https://wordpress.org/gutenberg)
-* [GreenShift](https://greenshiftwp.com/)
-* [Kadence WP](https://kadencewp.com)
 * [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
 * [Pinegrow](https://pinegrow.com/wordpress)
 * [Zion Builder](https://zionbuilder.io/)
