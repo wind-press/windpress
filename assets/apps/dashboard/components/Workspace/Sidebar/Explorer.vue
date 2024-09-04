@@ -1,10 +1,9 @@
 <script setup>
-import { __ } from '@wordpress/i18n';
 </script>
 
 <template>
     <div class="explorer-header px:20 py:10 uppercase font:12">
-        {{ __('Explorer: WordPress', 'windpress') }}
+        {{ wp_i18n.__('Explorer: WordPress', 'windpress') }}
     </div>
 
     <div class="folders-content">

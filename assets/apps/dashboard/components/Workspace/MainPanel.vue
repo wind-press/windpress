@@ -1,5 +1,4 @@
 <script setup>
-import { __ } from '@wordpress/i18n';
 import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 
@@ -36,11 +35,11 @@ const panelComponents = {
             </div>
             <div :class="{ active: ui.virtualState('main-panel.tab.active').value === 'wizard' }" @click="ui.virtualState('main-panel.tab.active').value = 'wizard'" class="tab-head__item">
                 <font-awesome-icon :icon="['fas', 'bolt']" class="mr:2" />
-                {{ __('Wizard', 'windpress') }}
+                {{ wp_i18n.__('Wizard', 'windpress') }}
             </div>
             <div :class="{ active: ui.virtualState('main-panel.tab.active').value === 'settings' }" @click="ui.virtualState('main-panel.tab.active').value = 'settings'" class="tab-head__item">
                 <font-awesome-icon :icon="['fas', 'gear']" class="mr:2" />
-                {{ __('Settings', 'windpress') }}
+                {{ wp_i18n.__('Settings', 'windpress') }}
             </div>
             <div class="tab-head__space flex-grow:1 br:hidden!"></div>
         </div>

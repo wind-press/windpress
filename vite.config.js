@@ -78,7 +78,7 @@ export default defineConfig({
                 chunkFileNames: (chunkInfo) => {
                     // add .min to the filename to exclude it from the `wp i18n make-pot` command.
                     // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
-                    const excludeFromI18n = ['monaco-editor', 'lib', 'wasm', 'runtime-core.esm-bundler', '_plugin-vue_export-helper'];
+                    const excludeFromI18n = ['monaco-editor', 'lib', 'wasm', 'runtime-core.esm-bundler', '_plugin-vue_export-helper', 'plugin', 'highlight-in-textarea'];
                     return excludeFromI18n.includes(chunkInfo.name) ? '[name]-[hash].min.js' : '[name]-[hash].js';
                 },
             },

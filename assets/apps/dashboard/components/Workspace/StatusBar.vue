@@ -28,7 +28,7 @@ function rebuildCache() {
     <div class="status-bar flex fg:statusBar-foreground bg:statusBar-background bt:1|solid|statusBar-border">
         <div class="flex flex:row gap:2 w:full">
             <div class="flex flex-grow:1">
-                <div @click="rebuildCache" v-tooltip="{ placement: 'top', content: __('Rebuild Cache', 'windpress') }" class="flex flex:row bg:statusBarItem-remoteBackground fg:statusBarItem-remoteForeground px:12 py:6 align-items:center cursor:pointer" v-ripple>
+                <div @click="rebuildCache" v-tooltip="{ placement: 'top', content: wp_i18n.__('Rebuild Cache', 'windpress') }" class="flex flex:row bg:statusBarItem-remoteBackground fg:statusBarItem-remoteForeground px:12 py:6 align-items:center cursor:pointer" v-ripple>
                     <font-awesome-icon :icon="['fas', 'broom']" />
                 </div>
             </div>

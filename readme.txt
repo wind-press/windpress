@@ -81,7 +81,8 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.21 next)
-* **Improve**: Support Tailwind CSS plugins loaded from CDN with the `@plugin` directive.
+* **Improve**: Support Tailwind CSS plugins loaded from CDN with the `@plugin` directive
+* **Improve**: Internationalization (i18n) support on the admin dashboard
 
 = 3.1.8 =
 * **New**: [Gutenberg](https://wordpress.org/gutenberg) integration.

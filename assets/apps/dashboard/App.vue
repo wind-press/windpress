@@ -1,6 +1,5 @@
 <script setup>
 import Logo from '~/windpress.svg';
-import { __ } from '@wordpress/i18n';
 import { useUIStore } from './stores/ui';
 import { buildCache } from './components/compiler.js';
 import { useBusyStore } from './stores/busy';
@@ -76,14 +75,14 @@ const askForReviewClick = (action) => {
             <p>
                 <button @click="askForReviewClick('done')" class="button button-primary">
                     <font-awesome-icon :icon="['fas', 'face-smile-hearts']" />
-                    {{ __('OK, you deserve it!', 'windpress') }}
+                    {{ wp_i18n.__('OK, you deserve it!', 'windpress') }}
                 </button>
                 <button @click="askForReviewClick('later')" class="button button-secondary float:right ml:8">
                     <font-awesome-icon :icon="['fas', 'hourglass-clock']" />
-                    {{ __('Maybe later', 'windpress') }}
+                    {{ wp_i18n.__('Maybe later', 'windpress') }}
                 </button>
                 <button @click="askForReviewClick('never')" class="button button-link button-link-delete float:right">
-                    {{ __('Never ask again', 'windpress') }}
+                    {{ wp_i18n.__('Never ask again', 'windpress') }}
                 </button>
             </p>
         </div>

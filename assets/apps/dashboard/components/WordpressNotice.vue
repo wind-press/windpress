@@ -1,5 +1,4 @@
 <script setup>
-import { __ } from '@wordpress/i18n';
 import { storeToRefs } from 'pinia';
 import { useNoticeStore } from '@/dashboard/stores/notice';
 
@@ -12,7 +11,7 @@ const { notices } = storeToRefs(store);
         <div v-for="notice in notices" :key="notice.id" :class="`notice windpress-notice notice-${notice.type} is-dismissible`" class="my:10">
             <div v-html="notice.message"></div>
             <button type="button" @click="store.remove(notice.id)" class="notice-dismiss">
-                <span class="screen-reader-text">{{ __('Dismiss this notice.', 'windpress') }}</span>
+                <span class="screen-reader-text">{{ wp_i18n.__('Dismiss this notice.', 'windpress') }}</span>
             </button>
         </div>
     </TransitionGroup>

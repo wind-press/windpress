@@ -14,6 +14,7 @@ import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor';
 import App from './App.vue';
 import vRipple from './directives/ripple/ripple.js';
 import { useUIStore } from './stores/ui.js';
+import { __ } from '@wordpress/i18n';
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -24,6 +25,9 @@ if (window.self !== window.top) {
     window.windpress = window.top.windpress;
 }
 
+app.config.globalProperties.wp_i18n = {
+    __,
+};
 app.config.globalProperties.windpress = window.windpress;
 
 app

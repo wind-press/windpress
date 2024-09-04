@@ -1,6 +1,5 @@
 <script setup>
 import Logo from '~/windpress.svg';
-import { __ } from '@wordpress/i18n';
 import { useColorMode } from '@vueuse/core';
 import { useUIStore } from '@/dashboard/stores/ui';
 
@@ -53,7 +52,7 @@ function doSave() {
                 </button>
             </div>
             <button @click="doSave" class="button button-secondary b:transparent! fg:sky-80! fg:sky-40!@dark b:sky-80!:hover bg:transparent!" v-ripple>
-                {{ __('Save', 'windpress') }}
+                {{ wp_i18n.__('Save', 'windpress') }}
             </button>
         </div>
     </div>
