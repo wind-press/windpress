@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
 import { oxyIframe } from '@/integration/oxygen/editor/constant.js';
-import { getVariableList } from '@/packages/core/tailwind';
-import { __unstable__loadDesignSystem } from 'tailwindcss';
+import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
 import ExpansionPanel from './ExpansionPanel.vue';
 import { set } from 'lodash-es';
 import CommonVariableItems from './CommonVariableItems.vue';
@@ -26,7 +25,7 @@ async function constructVariableList() {
     const main_css = await oxyIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
 
     // register variables
-    const variableLists = await getVariableList(await __unstable__loadDesignSystem(main_css));
+    const variableLists = await getVariableList(await loadDesignSystem(main_css));
 
     let styleElement = variableApp.querySelector('style#windpressoxygen-variable-app-body-style');
     if (!styleElement) {

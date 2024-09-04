@@ -8,9 +8,8 @@
  */
 
 import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList } from '@/packages/core/tailwind';
+import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
 import { logger } from '@/integration/common/logger';
-import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { customAlphabet } from 'nanoid';
 
 const randomId = () => customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 6)();
@@ -41,7 +40,7 @@ async function registerVariables() {
     const main_css = await brxIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
 
     // register variables
-    const variableLists = await getVariableList(await __unstable__loadDesignSystem(main_css));
+    const variableLists = await getVariableList(await loadDesignSystem(main_css));
     variableLists.forEach(variable => {
         brxGlobalProp.$_state.globalVariables.push({
             id: generateId(),

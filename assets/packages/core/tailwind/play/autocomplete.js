@@ -1,4 +1,4 @@
-import { __unstable__loadDesignSystem } from 'tailwindcss';
+import { loadDesignSystem } from '../design-system';
 import { getClassList, getCssContent, getVariableList } from '../intellisense';
 import { set } from 'lodash-es';
 
@@ -23,7 +23,7 @@ if (mainCssContainer) {
 }
 
 async function preloadItems() {
-    classLists = await getClassList(await __unstable__loadDesignSystem(await getCssContent()));
+    classLists = await getClassList(await loadDesignSystem(await getCssContent()));
 
     channel.postMessage({
         source: 'windpress/autocomplete',

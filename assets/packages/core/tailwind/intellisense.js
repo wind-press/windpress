@@ -1,6 +1,4 @@
-import {
-    __unstable__loadDesignSystem,
-} from 'tailwindcss';
+import { loadDesignSystem } from './design-system';
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
 import { bundle } from './bundle';
 import { compileCandidates } from '@tailwindcss/root/packages/tailwindcss/src/compile';
@@ -40,7 +38,7 @@ export async function getClassList(theme) {
     let design;
 
     if (typeof theme === 'string') {
-        design = await __unstable__loadDesignSystem(theme);
+        design = await loadDesignSystem(theme);
     } else {
         design = theme;
     }
@@ -152,7 +150,7 @@ export async function getVariableList(theme) {
     let design;
 
     if (typeof theme === 'string') {
-        design = await __unstable__loadDesignSystem(theme);
+        design = await loadDesignSystem(theme);
     } else {
         design = theme;
     }
@@ -186,7 +184,7 @@ export async function sortClasses(theme, classList) {
     let design;
 
     if (typeof theme === 'string') {
-        design = await __unstable__loadDesignSystem(theme);
+        design = await loadDesignSystem(theme);
     } else {
         design = theme;
     }
@@ -224,7 +222,7 @@ export async function candidatesToCss(theme, classes) {
     let design;
 
     if (typeof theme === 'string') {
-        design = await __unstable__loadDesignSystem(theme);
+        design = await loadDesignSystem(theme);
     } else {
         design = theme;
     }

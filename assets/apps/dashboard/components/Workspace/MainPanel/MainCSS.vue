@@ -85,6 +85,25 @@ function handleCssEditorMount(editor, monaco) {
                                             url: 'https://tailwindcss.com/blog/tailwindcss-v4-alpha#:~:text=the%20special%20%40theme%20directive%20tells%20tailwind%20to%20make%20new%20utilities%20and%20variants%20available%20based%20on%20those%20variables'
                                         }
                                     ],
+                                },
+                                {
+                                    name: '@plugin',
+                                    status: 'standard',
+                                    description: 'The special `@plugin` directive tells Tailwind to load a plugin',
+                                    references: [
+                                        {
+                                            name: 'Twitter',
+                                            url: 'https://x.com/adamwathan/status/1830716239381176647',
+                                        },
+                                        {
+                                            name: 'GitHub PR: Support plugin options in CSS tailwindlabs/tailwindcss#14264',
+                                            url: 'https://github.com/tailwindlabs/tailwindcss/pull/14264'
+                                        },
+                                        {
+                                            name: 'GitHub PR: Support loading plugins in CSS tailwindlabs/tailwindcss-intellisense#1044',
+                                            url: 'https://github.com/tailwindlabs/tailwindcss-intellisense/pull/1044'
+                                        }
+                                    ],
                                 }
                             ],
                         }

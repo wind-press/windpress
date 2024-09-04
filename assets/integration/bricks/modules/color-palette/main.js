@@ -8,9 +8,8 @@
  */
 
 import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList } from '@/packages/core/tailwind';
+import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
 import { logger } from '@/integration/common/logger';
-import { __unstable__loadDesignSystem } from 'tailwindcss';
 import crc32 from 'buffer-crc32';
 
 function generateHash(input) {
@@ -25,7 +24,7 @@ async function registerPallete() {
     // get design system
     const main_css = await brxIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
 
-    const variableLists = await getVariableList(await __unstable__loadDesignSystem(main_css));
+    const variableLists = await getVariableList(await loadDesignSystem(main_css));
 
     const colors = [];
     variableLists

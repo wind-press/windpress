@@ -9,8 +9,7 @@
 
 import { logger } from '@/integration/common/logger';
 import { uniIframe } from '@/integration/builderius/constant.js';
-import { getVariableList } from '@/packages/core/tailwind';
-import { __unstable__loadDesignSystem } from 'tailwindcss';
+import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
 
 function naturalExpand(value, total = null) {
     const length = typeof total === 'number' ? total.toString().length : 8
@@ -26,7 +25,7 @@ async function updateMainCss() {
 (async function () {
     updateMainCss();
 
-    const design = await __unstable__loadDesignSystem(main_css);
+    const design = await loadDesignSystem(main_css);
 
     window.Builderius.API.monaco.languages.registerCompletionItemProvider('builderius-css', {
         provideCompletionItems(model, position) {

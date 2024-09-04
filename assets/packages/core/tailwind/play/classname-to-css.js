@@ -1,4 +1,4 @@
-import { __unstable__loadDesignSystem } from 'tailwindcss';
+import { loadDesignSystem } from '../design-system';
 import { set } from 'lodash-es';
 import { candidatesToCss, getCssContent } from '../intellisense';
 
@@ -7,7 +7,7 @@ async function classnameToCss(input) {
         .split(/\s+/)
         .filter((x) => x !== "" && x !== "|");
 
-    const design = await __unstable__loadDesignSystem(await getCssContent());
+    const design = await loadDesignSystem(await getCssContent());
 
     return (await candidatesToCss(design, classes)).join(" ");
 }

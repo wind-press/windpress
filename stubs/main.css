@@ -8,6 +8,12 @@
     --color-content: var(--color-gray-900);
 }
 
+/* @plugin "https://esm.sh/@tailwindcss/typography"; */
+
+/* @plugin "https://esm.sh/@tailwindcss/forms" {
+    strategy: class,
+} */
+
 @layer base {
     /* ... */
 }
