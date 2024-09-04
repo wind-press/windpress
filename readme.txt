@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.1.8
+Stable tag: 3.1.9
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -17,7 +17,7 @@ The most effortless Tailwind CSS v4 integration for WordPress.
 
 WindPress is a platform agnostic Tailwind CSS v4 integration plugin for WordPress that allows you to use the full power of Tailwind CSS v4 within the WordPress ecosystem.
 
-Current [Tailwind CSS](https://tailwindcss.com/) version: 4.0.0-alpha.21 next
+**Current [Tailwind CSS](https://tailwindcss.com/) version**: 4.0.0-alpha.21 next
 
 ### Features
 
@@ -58,13 +58,14 @@ Visit [our website](https://wind.press) for more information.
 - Give a [5-star review](https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post)
 - Purchase the [Pro version](https://wind.press)
 - Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943)
+- Sponsor us on [GitHub](https://github.com/sponsors/suabahasa) or [Ko-fi](https://ko-fi.com/Q5Q75XSF7)
 
 = Credits =
 - Image by [Pixel perfect](https://www.flaticon.com/free-icon/wind_727964) on Flaticon
 
 == Frequently Asked Questions ==
 
-= Contributing? =
+= How to contribute to WindPress? =
 
 The source code is available on [GitHub](https://github.com/wind-press/windpress).
 
@@ -79,7 +80,7 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.1.9 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.21 next)
 * **Improve**: Support Tailwind CSS plugins loaded from CDN with the `@plugin` directive
 * **Improve**: Internationalization (i18n) support on the admin dashboard
