@@ -1,4 +1,3 @@
-import 'floating-vue/dist/style.css';
 import './style.scss';
 
 import { createApp, ref, watch } from 'vue';

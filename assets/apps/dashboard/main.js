@@ -1,5 +1,4 @@
 import './styles/app.scss';
-import 'floating-vue/dist/style.css';
 import './master.css.js';
 import './monaco-editor.js';
 
