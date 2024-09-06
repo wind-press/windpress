@@ -22,6 +22,17 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "scripts": {
+        "complete-check": [
+            "@check-ecs",
+            "@phpstan",
+            "phpunit"
+        ],
+        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "rector": "vendor/bin/rector process --ansi",
+        "check-ecs": "vendor/bin/ecs check --ansi",
+        "fix-ecs": "vendor/bin/ecs check --fix --ansi"
+    },
     "require": {
         "php": ">=7.4",
         "hidehalo/nanoid-php": "^1.1",
@@ -31,5 +42,9 @@
         "symfony/finder": "^5.4",
         "symfony/property-access": "^5.4",
         "symfony/stopwatch": "^5.4"
+    },
+    "require-dev": {
+        "rector/rector": "^1.2",
+        "symplify/easy-coding-standard": "^12.3"
     }
 }
