@@ -15,8 +15,8 @@ namespace WindPress\WindPress\Integration;
 
 use Exception;
 use ReflectionClass;
-use WIND_PRESS;
 use Symfony\Component\Finder\Finder;
+use WIND_PRESS;
 
 class Loader
 {

@@ -32,7 +32,7 @@ class Editor
 
     public function editor_assets()
     {
-        if (!(isset($_GET['builderius_template']) && $_GET['builderius_template'] && isset($_GET['builderius']))) {
+        if (! (isset($_GET['builderius_template']) && $_GET['builderius_template'] && isset($_GET['builderius']))) {
             return;
         }
 

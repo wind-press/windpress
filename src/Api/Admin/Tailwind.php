@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Api\Admin;
 
 use WIND_PRESS;
-use WP_REST_Request;
-use WP_REST_Response;
-use WP_REST_Server;
 use WindPress\WindPress\Api\AbstractApi;
 use WindPress\WindPress\Api\ApiInterface;
 use WindPress\WindPress\Utils\Common;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_REST_Server;
 
 class Tailwind extends AbstractApi implements ApiInterface
 {
@@ -83,7 +83,7 @@ class Tailwind extends AbstractApi implements ApiInterface
                     'prepend' => apply_filters('f!windpress/core/runtime:main_css.prepend', ''),
                     'append' => apply_filters('f!windpress/core/runtime:main_css.append', ''),
                 ],
-            ]
+            ],
         ]);
     }
 

@@ -15,21 +15,19 @@ namespace WindPress\WindPress\Integration\Kadence;
 
 /**
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
- * 
+ *
  * TODO: Don't depend on the Gutenberg's Compile class. Instead, reduplicate the code here.
  */
 class Compile
 {
     public function __invoke()
     {
-        if (!defined('KADENCE_VERSION') && !defined('KADENCE_BLOCKS_VERSION')) {
+        if (! defined('KADENCE_VERSION') && ! defined('KADENCE_BLOCKS_VERSION')) {
             return;
         }
 
         add_filter('f!windpress/integration/gutenberg/compile:get_contents.post_types', fn (array $post_types): array => $this->get_post_types($post_types));
-        add_filter('f!windpress/integration/gutenberg/compile:get_contents.render', function ($should_render, \WP_Post $post): bool {
-            return $post->post_type !== 'kadence_form' && $post->post_type !== 'kadence_element';
-        }, 10, 2);
+        add_filter('f!windpress/integration/gutenberg/compile:get_contents.render', fn ($should_render, \WP_Post $wpPost): bool => $wpPost->post_type !== 'kadence_form' && $wpPost->post_type !== 'kadence_element', 10, 2);
     }
 
     /**

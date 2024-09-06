@@ -58,7 +58,7 @@ class Main implements IntegrationInterface
             'enabled' => $this->is_enabled(),
             'meta' => [
                 'experimental' => true,
-            ]
+            ],
         ];
 
         return $providers;

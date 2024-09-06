@@ -61,7 +61,7 @@ class Main implements IntegrationInterface
 
     public function is_exclude_admin(bool $is_exclude_admin): bool
     {
-        if ($is_exclude_admin || !$this->is_preview()) {
+        if ($is_exclude_admin || ! $this->is_preview()) {
             return $is_exclude_admin;
         }
 

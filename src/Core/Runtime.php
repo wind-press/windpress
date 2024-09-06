@@ -21,7 +21,7 @@ use WindPress\WindPress\Utils\Config;
 
 /**
  * @since 3.0.0
- * 
+ *
  * TODO: This class is not yet implemented, it's just temporary for Universal Editor testing purpose.
  */
 class Runtime
@@ -35,12 +35,16 @@ class Runtime
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Singletons should not be cloneable.
      */
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * Singletons should not be restorable from strings.
@@ -60,7 +64,7 @@ class Runtime
      */
     public static function get_instance(): self
     {
-        if (!isset(self::$instance)) {
+        if (! isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -69,7 +73,7 @@ class Runtime
 
     public function init()
     {
-        if (!is_admin()) {
+        if (! is_admin()) {
             $is_prevent_load = apply_filters('f!windpress/core/runtime:is_prevent_load', false);
 
             if ($is_prevent_load) {
@@ -88,18 +92,18 @@ class Runtime
         $is_exclude_admin = Config::get('performance.cache.exclude_admin', false) && current_user_can('manage_options');
         $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
 
-        if ($is_cache_enabled && $this->is_cache_exists() && !$is_exclude_admin) {
-            add_action('wp_head', fn() => $this->enqueue_css_cache(), 1_000_001);
+        if ($is_cache_enabled && $this->is_cache_exists() && ! $is_exclude_admin) {
+            add_action('wp_head', fn () => $this->enqueue_css_cache(), 1_000_001);
         } else {
-            add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
+            add_action('wp_head', fn () => $this->enqueue_play_cdn(), 1_000_001);
         }
 
         if (
             Config::get('general.ubiquitous-panel.enabled', true)
             && current_user_can('manage_options')
-            && !apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
+            && ! apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
         ) {
-            add_action('wp_head', fn() => $this->enqueue_front_panel(), 1_000_001);
+            add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
         }
     }
 
@@ -110,7 +114,7 @@ class Runtime
 
     public function enqueue_css_cache()
     {
-        if (!$this->is_cache_exists()) {
+        if (! $this->is_cache_exists()) {
             return;
         }
 
@@ -134,7 +138,6 @@ class Runtime
         }
     }
 
-
     public function enqueue_play_cdn($display = true)
     {
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
@@ -148,7 +151,7 @@ class Runtime
 
         // Script content are base64 encoded to prevent it from being executed by the browser.
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        echo sprintf("<script id=\"windpress:tw-main-css\" type=\"text/tailwindcss\">%s</script>", esc_html(base64_encode($main_css)));
+        echo sprintf('<script id="windpress:tw-main-css" type="text/tailwindcss">%s</script>', esc_html(base64_encode($main_css)));
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/autocomplete.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
@@ -185,7 +188,7 @@ class Runtime
 
         wp_localize_script($handle, 'windpress', [
             '_version' => WIND_PRESS::VERSION,
-            '_via_wp_org' => !Common::is_updater_library_available(),
+            '_via_wp_org' => ! Common::is_updater_library_available(),
             '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
             'rest_api' => [
                 'nonce' => wp_create_nonce('wp_rest'),

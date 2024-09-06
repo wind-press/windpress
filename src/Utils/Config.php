@@ -15,11 +15,11 @@ namespace WindPress\WindPress\Utils;
 
 use ArrayAccess;
 use Exception;
-use WIND_PRESS;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use WIND_PRESS;
 
 /**
  * Accessor for the plugin config.
@@ -98,7 +98,7 @@ class Config
      * @param  mixed  $value
      * @param  bool  $overwrite
      * @return mixed
-     * 
+     *
      * @see https://github.com/laravel/framework/blob/a84c4f41d3fb1c57684bb417b1f0858300e769d0/src/Illuminate/Collections/helpers.php#L109
      */
     public static function data_set(&$target, $key, $value, $overwrite = true)
@@ -106,7 +106,7 @@ class Config
         $segments = is_array($key) ? $key : explode('.', $key);
 
         if (($segment = array_shift($segments)) === '*') {
-            if (!self::array_accessible($target)) {
+            if (! self::array_accessible($target)) {
                 $target = [];
             }
 
@@ -121,22 +121,22 @@ class Config
             }
         } elseif (self::array_accessible($target)) {
             if ($segments) {
-                if (!self::array_exists($target, $segment)) {
+                if (! self::array_exists($target, $segment)) {
                     $target[$segment] = [];
                 }
 
                 self::data_set($target[$segment], $segments, $value, $overwrite);
-            } elseif ($overwrite || !self::array_exists($target, $segment)) {
+            } elseif ($overwrite || ! self::array_exists($target, $segment)) {
                 $target[$segment] = $value;
             }
         } elseif (is_object($target)) {
             if ($segments) {
-                if (!isset($target->{$segment})) {
+                if (! isset($target->{$segment})) {
                     $target->{$segment} = [];
                 }
 
                 self::data_set($target->{$segment}, $segments, $value, $overwrite);
-            } elseif ($overwrite || !isset($target->{$segment})) {
+            } elseif ($overwrite || ! isset($target->{$segment})) {
                 $target->{$segment} = $value;
             }
         } else {
@@ -158,7 +158,7 @@ class Config
      * @param  \ArrayAccess|array  $array
      * @param  string|int  $key
      * @return bool
-     * 
+     *
      * @see https://github.com/laravel/framework/blob/a84c4f41d3fb1c57684bb417b1f0858300e769d0/src/Illuminate/Collections/Arr.php#L164
      */
     public static function array_exists($array, $key)
@@ -179,7 +179,7 @@ class Config
      *
      * @param  mixed  $value
      * @return bool
-     * 
+     *
      * @see https://github.com/laravel/framework/blob/a84c4f41d3fb1c57684bb417b1f0858300e769d0/src/Illuminate/Collections/Arr.php#L21
      */
     public static function array_accessible($value)

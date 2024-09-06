@@ -38,8 +38,8 @@ class Front
             $dom = $html5->loadHTML($output);
 
             // traverse the DOM and merge the `plainclass` attribute with the `class` attribute
-            $xpath = new DOMXPath($dom);
-            $nodes = $xpath->query('//*[@plainclass]');
+            $domxPath = new DOMXPath($dom);
+            $nodes = $domxPath->query('//*[@plainclass]');
             foreach ($nodes as $node) {
                 $plainclass = $node->getAttribute('plainclass');
                 $node->removeAttribute('plainclass');
@@ -49,7 +49,7 @@ class Front
 
             // save the modified HTML
             $output = $html5->saveHTML($dom);
-        } catch (\Throwable $th) {
+        } catch (\Throwable $throwable) {
             //throw $th;
         }
 

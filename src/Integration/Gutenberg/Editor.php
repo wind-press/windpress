@@ -24,14 +24,14 @@ class Editor
 {
     public function __construct()
     {
-        add_action('enqueue_block_editor_assets', fn() => $this->enqueue_block_editor_assets());
+        add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets());
     }
 
     public function enqueue_block_editor_assets()
     {
         $screen = get_current_screen();
         if (is_admin() && $screen->is_block_editor()) {
-            add_action('admin_head', fn() => $this->admin_head(), 1_000_001);
+            add_action('admin_head', fn () => $this->admin_head(), 1_000_001);
         }
     }
 

@@ -18,12 +18,9 @@ namespace WindPress\WindPress\Integration\GreenShift;
  */
 class Compile
 {
-    /**
-     * @param array $post_types
-     */
     public function __invoke()
     {
-        if (!defined('GREENSHIFT_DIR_PATH')) {
+        if (! defined('GREENSHIFT_DIR_PATH')) {
             return;
         }
 

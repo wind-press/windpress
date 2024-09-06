@@ -29,7 +29,6 @@ class Editor
 
     public function register_livecanvas_autocomplete()
     {
-
         $handle = WIND_PRESS::WP_OPTION . ':integration-livecanvas-editor';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/livecanvas/main.js', [
@@ -96,11 +95,12 @@ class Editor
                 });
             </script>
         HTML;
-    
+
         $this->recursive_wp_scripts_render($handle);
     }
 
-    public function recursive_wp_scripts_render($handle) {
+    public function recursive_wp_scripts_render($handle)
+    {
         $wp_scripts = wp_scripts()->registered[$handle];
 
         if (isset($wp_scripts->deps)) {

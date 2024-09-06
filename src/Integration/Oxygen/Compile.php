@@ -58,17 +58,16 @@ class Compile
             'fields' => 'ids',
             'post_type' => $post_types,
             // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- This only run by trigger on specific event
-            'meta_query' => [
+            'meta_query' => array_merge([
                 'relation' => 'OR',
-                ...array_map(
-                    static fn ($meta_key) => [
-                        'key' => $meta_key,
-                        'compare' => '!=',
-                        'value' => '',
-                    ],
-                    apply_filters('f!windpress/integration/oxygen/compile:get_contents.post_meta_keys', $this->post_meta_keys)
-                ),
-            ],
+            ], array_map(
+                static fn ($meta_key) => [
+                    'key' => $meta_key,
+                    'compare' => '!=',
+                    'value' => '',
+                ],
+                apply_filters('f!windpress/integration/oxygen/compile:get_contents.post_meta_keys', $this->post_meta_keys)
+            )),
         ]);
 
         foreach ($wpQuery->posts as $post_id) {

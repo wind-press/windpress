@@ -29,7 +29,7 @@ class Editor
 
     public function editor_assets()
     {
-        if (!function_exists('bricks_is_builder_main') || !\bricks_is_builder_main()) {
+        if (! function_exists('bricks_is_builder_main') || ! \bricks_is_builder_main()) {
             return;
         }
 

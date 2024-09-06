@@ -25,7 +25,7 @@ class Main implements IntegrationInterface
     public function __construct()
     {
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
-        
+
         if ($this->is_enabled()) {
             (new Compile())();
         }
@@ -57,7 +57,7 @@ class Main implements IntegrationInterface
             'enabled' => $this->is_enabled(),
             'meta' => [
                 'experimental' => true,
-            ]
+            ],
         ];
 
         return $providers;

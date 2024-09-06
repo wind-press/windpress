@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Api\Admin\Settings;
 
 use WIND_PRESS;
-use WP_REST_Request;
-use WP_REST_Response;
-use WP_REST_Server;
 use WindPress\WindPress\Api\AbstractApi;
 use WindPress\WindPress\Api\ApiInterface;
 use WindPress\WindPress\Core\Cache as CoreCache;
 use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Debug;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_REST_Server;
 
 class Cache extends AbstractApi implements ApiInterface
 {
@@ -159,7 +159,7 @@ class Cache extends AbstractApi implements ApiInterface
             ], 500);
         }
 
-        $event = $stopwatch->stop('cache-provider:' . $provider['id']);
+        $stopwatchEvent = $stopwatch->stop('cache-provider:' . $provider['id']);
 
         return new WP_REST_Response([
             'metadata' => [
@@ -167,8 +167,8 @@ class Cache extends AbstractApi implements ApiInterface
                 'provider_name' => $provider['name'],
                 'profiling' => [
                     'unix_timestamp' => time(),
-                    'duration' => $event->getDuration() . ' ms',
-                    'memory' => sprintf('%.2F MiB', $event->getMemory() / 1024 / 1024),
+                    'duration' => $stopwatchEvent->getDuration() . ' ms',
+                    'memory' => sprintf('%.2F MiB', $stopwatchEvent->getMemory() / 1024 / 1024),
                 ],
                 'next_batch' => $result['metadata']['next_batch'] ?? false,
             ],

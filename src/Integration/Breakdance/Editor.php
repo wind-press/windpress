@@ -32,7 +32,7 @@ class Editor
 
     public function editor_assets()
     {
-        if (!(isset($_GET['breakdance']) && $_GET['breakdance'] === 'builder')) {
+        if (! (isset($_GET['breakdance']) && $_GET['breakdance'] === 'builder')) {
             return;
         }
 
@@ -79,7 +79,8 @@ class Editor
         $this->recursive_wp_scripts_render($handle);
     }
 
-    public function recursive_wp_scripts_render($handle) {
+    public function recursive_wp_scripts_render($handle)
+    {
         $wp_scripts = wp_scripts()->registered[$handle];
 
         if (isset($wp_scripts->deps)) {

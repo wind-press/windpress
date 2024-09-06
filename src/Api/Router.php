@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Api;
 
 use ReflectionClass;
-use WIND_PRESS;
 use Symfony\Component\Finder\Finder;
+use WIND_PRESS;
 
 class Router
 {

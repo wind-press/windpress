@@ -65,7 +65,7 @@ class Main implements IntegrationInterface
 
     public function is_prevent_load(bool $is_prevent_load): bool
     {
-        if ($is_prevent_load || !function_exists('bricks_is_builder_main')) {
+        if ($is_prevent_load || ! function_exists('bricks_is_builder_main')) {
             return $is_prevent_load;
         }
 
@@ -74,7 +74,7 @@ class Main implements IntegrationInterface
 
     public function is_exclude_admin(bool $is_exclude_admin): bool
     {
-        if ($is_exclude_admin || !function_exists('bricks_is_builder_iframe')) {
+        if ($is_exclude_admin || ! function_exists('bricks_is_builder_iframe')) {
             return $is_exclude_admin;
         }
 

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Utils;
 
-use WIND_PRESS;
 use Exception;
+use WIND_PRESS;
 use WP_HTML_Tag_Processor;
 
 /**
@@ -26,7 +26,7 @@ use WP_HTML_Tag_Processor;
  */
 class AssetVite
 {
-    const VITE_CLIENT_SCRIPT_HANDLE = 'vite-client';
+    public const VITE_CLIENT_SCRIPT_HANDLE = 'vite-client';
 
     /**
      * Stores the instance, implementing a Singleton pattern.
@@ -66,7 +66,7 @@ class AssetVite
      */
     public static function get_instance(): self
     {
-        if (!isset(self::$instance)) {
+        if (! isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -86,7 +86,6 @@ class AssetVite
      *                      - 'css-dependencies'  (array)  An array of handles for CSS assets this CSS asset depends on.
      *                      - 'css-media'         (string) The media attribute value for the stylesheet tag.
      *                      - 'css-only'          (bool)   Whether this asset is only CSS.
-     * @return bool
      */
     public function enqueue_asset(string $entry, array $options): bool
     {
@@ -106,7 +105,6 @@ class AssetVite
      *                      - 'css-dependencies'  (array)  An array of handles for CSS assets this CSS asset depends on.
      *                      - 'css-media'         (string) The media attribute value for the stylesheet tag.
      *                      - 'css-only'          (bool)   Whether this asset is only CSS.
-     * @return array|null
      */
     public function register_asset(string $entry, array $options): ?array
     {
@@ -145,7 +143,7 @@ class AssetVite
 
         foreach ($file_names as $file_name) {
             $is_dev = $file_name === $dev_manifest;
-            $manifest_path = "{$manifest_dir}/{$file_name}.json";
+            $manifest_path = sprintf('%s/%s.json', $manifest_dir, $file_name);
 
             if (isset($manifests[$manifest_path])) {
                 return $manifests[$manifest_path];
@@ -158,20 +156,20 @@ class AssetVite
             unset($manifest_path);
         }
 
-        if (!isset($manifest_path)) {
+        if (! isset($manifest_path)) {
             throw new Exception(esc_html(sprintf('[Vite] No manifest found in %s.', $manifest_dir)));
         }
 
         $manifest = wp_json_file_decode($manifest_path);
 
-        if (!$manifest) {
+        if (! $manifest) {
             throw new Exception(esc_html(sprintf('[Vite] Failed to read manifest file %s.', $manifest_path)));
         }
 
         /**
          * Filter manifest data
          *
-         * @param array  $manifest      Manifest data.
+         * @param array  $handle      Manifest data.
          * @param string $manifest_dir  Manifest directory path.
          * @param string $manifest_path Manifest file path.
          * @param bool   $is_dev        Whether this is a manifest for development assets.
@@ -196,8 +194,6 @@ class AssetVite
      * @since 0.1.0
      *
      * @param string $handle Script handle.
-     *
-     * @return void
      */
     public function filter_script_tag(string $handle): void
     {
@@ -223,19 +219,19 @@ class AssetVite
             return $tag;
         }
 
-        $processor = new WP_HTML_Tag_Processor($tag);
+        $wphtmlTagProcessor = new WP_HTML_Tag_Processor($tag);
 
         $script_found = false;
 
         do {
-            $script_found = $processor->next_tag('script');
-        } while ($processor->get_attribute('src') !== $src);
+            $script_found = $wphtmlTagProcessor->next_tag('script');
+        } while ($wphtmlTagProcessor->get_attribute('src') !== $src);
 
         if ($script_found) {
-            $processor->set_attribute('type', 'module');
+            $wphtmlTagProcessor->set_attribute('type', 'module');
         }
 
-        return $processor->get_updated_html();
+        return $wphtmlTagProcessor->get_updated_html();
     }
 
     /**
@@ -245,15 +241,13 @@ class AssetVite
      *
      * @param object $manifest Asset manifest.
      * @param string $entry    Asset entry name.
-     *
-     * @return string
      */
     public function generate_development_asset_src(object $manifest, string $entry): string
     {
         return sprintf(
             '%s/%s',
             untrailingslashit($manifest->data->origin),
-            trim(preg_replace('/[\/]{2,}/', '/', "{$manifest->data->base}/{$entry}"), '/')
+            trim(preg_replace('/[\/]{2,}/', '/', sprintf('%s/%s', $manifest->data->base, $entry)), '/')
         );
     }
 
@@ -263,8 +257,6 @@ class AssetVite
      * @since 0.1.0
      *
      * @param object $manifest Asset manifest.
-     *
-     * @return void
      */
     public function register_vite_client_script(object $manifest): void
     {
@@ -285,7 +277,6 @@ class AssetVite
      * @since 0.8.0
      *
      * @param object $manifest Asset manifest.
-     * @return void
      */
     public function inject_react_refresh_preamble_script(object $manifest): void
     {
@@ -295,7 +286,7 @@ class AssetVite
             return;
         }
 
-        if (!in_array('vite:react-refresh', $manifest->data->plugins, true)) {
+        if (! in_array('vite:react-refresh', $manifest->data->plugins, true)) {
             return;
         }
 
@@ -315,7 +306,7 @@ class AssetVite
         add_filter(
             'wp_inline_script_attributes',
             function (array $attributes) use ($script_position): array {
-                if (isset($attributes['id']) && $attributes['id'] === self::VITE_CLIENT_SCRIPT_HANDLE . "-js-{$script_position}") {
+                if (isset($attributes['id']) && $attributes['id'] === self::VITE_CLIENT_SCRIPT_HANDLE . ('-js-' . $script_position)) {
                     $attributes['type'] = 'module';
                 }
 
@@ -353,7 +344,7 @@ class AssetVite
 
         // This is a development script, browsers shouldn't cache it.
         // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-        if (!wp_register_script($options['handle'], $src, $dependencies, null, $options['in-footer'])) {
+        if (! wp_register_script($options['handle'], $src, $dependencies, null, $options['in-footer'])) {
             return null;
         }
 
@@ -390,7 +381,7 @@ class AssetVite
     {
         $url = $this->prepare_asset_url($manifest->dir);
 
-        if (!isset($manifest->data->{$entry})) {
+        if (! isset($manifest->data->{$entry})) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 wp_die(esc_html(sprintf('[Vite] Entry %s not found.', $entry)));
             }
@@ -403,9 +394,9 @@ class AssetVite
             'styles' => [],
         ];
         $item = $manifest->data->{$entry};
-        $src = "{$url}/{$item->file}";
+        $src = sprintf('%s/%s', $url, $item->file);
 
-        if (!$options['css-only']) {
+        if (! $options['css-only']) {
             $this->filter_script_tag($options['handle']);
 
             // Don't worry about browser caching as the version is embedded in the file name.
@@ -415,13 +406,13 @@ class AssetVite
             }
         }
 
-        if (!empty($item->css)) {
+        if (! empty($item->css)) {
             foreach ($item->css as $index => $css_file_path) {
-                $style_handle = "{$options['handle']}-{$index}";
+                $style_handle = sprintf('%s-%s', $options['handle'], $index);
 
                 // Don't worry about browser caching as the version is embedded in the file name.
                 // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-                if (wp_register_style($style_handle, "{$url}/{$css_file_path}", $options['css-dependencies'], null, $options['css-media'])) {
+                if (wp_register_style($style_handle, sprintf('%s/%s', $url, $css_file_path), $options['css-dependencies'], null, $options['css-media'])) {
                     $assets['styles'][] = $style_handle;
                 }
             }
@@ -501,16 +492,14 @@ class AssetVite
      * @param string $manifest_dir Path to directory containing manifest file, usually `build` or `dist`.
      * @param string $entry        Entrypoint to enqueue.
      * @param array  $options      Enqueue options.
-     *
-     * @return array
      */
     public function _register_asset(string $manifest_dir, string $entry, array $options): ?array
     {
         try {
             $manifest = $this->get_manifest($manifest_dir);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                wp_die(esc_html($e->getMessage()));
+                wp_die(esc_html($exception->getMessage()));
             }
 
             return null;
@@ -534,14 +523,12 @@ class AssetVite
      * @param string $manifest_dir Path to directory containing manifest file, usually `build` or `dist`.
      * @param string $entry        Entrypoint to enqueue.
      * @param array  $options      Enqueue options.
-     *
-     * @return bool
      */
     public function _enqueue_asset(string $manifest_dir, string $entry, array $options): bool
     {
         $assets = $this->_register_asset($manifest_dir, $entry, $options);
 
-        if (is_null($assets)) {
+        if ($assets === null) {
             return false;
         }
 

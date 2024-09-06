@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Api\Admin\Settings;
 
 use WIND_PRESS;
+use WindPress\WindPress\Api\AbstractApi;
+use WindPress\WindPress\Api\ApiInterface;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use WindPress\WindPress\Api\AbstractApi;
-use WindPress\WindPress\Api\ApiInterface;
 
 class Options extends AbstractApi implements ApiInterface
 {

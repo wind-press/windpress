@@ -26,23 +26,23 @@ class Debug
     /**
      * The stopwatch instance.
      */
-    private static Stopwatch $stopwatch_instance;
+    private static Stopwatch $stopwatch;
 
     /**
      * Get the stopwatch instance.
      */
     public static function stopwatch(): Stopwatch
     {
-        if (! isset(self::$stopwatch_instance)) {
-            self::$stopwatch_instance = new Stopwatch(true);
+        if (! isset(self::$stopwatch)) {
+            self::$stopwatch = new Stopwatch(true);
         }
 
-        return self::$stopwatch_instance;
+        return self::$stopwatch;
     }
 
     public static function shutdown()
     {
-        if (isset(self::$stopwatch_instance)) {
+        if (isset(self::$stopwatch)) {
             // self::shutdown_stopwatch();
         }
     }
