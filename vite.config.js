@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import react from "@vitejs/plugin-react";
+import react from '@vitejs/plugin-react';
 import { v4wp } from '@kucrut/vite-for-wp';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { wp_scripts } from '@kucrut/vite-for-wp/plugins';
 import wasm from 'vite-plugin-wasm';
-import topLevelAwait from "vite-plugin-top-level-await";
+import topLevelAwait from 'vite-plugin-top-level-await';
 import path from 'path';
-import svgr from "vite-plugin-svgr";
+import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
     plugins: [
