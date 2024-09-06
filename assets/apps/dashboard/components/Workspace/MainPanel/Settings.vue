@@ -165,8 +165,11 @@ channel.addEventListener('message', (e) => {
                         </div>
                         <div v-else class="flex flex:column gap:10">
                             <div class="flex align-items:center font:medium">
-                                <span>
-                                    You are using the <a href="https://wordpress.org/plugins/windpress/" target="_blank">WordPress.org</a> edition.
+                                <span v-html="wp_i18n.sprintf(
+                                    wp_i18n.__('You are using the %sWordPress.org%s edition.', 'windpress'),
+                                    '<a href=&quot;https://wordpress.org/plugins/windpress/&quot; target=&quot;_blank&quot;>',
+                                    '</a>'
+                                )">
                                 </span>
                                 <a href="https://wind.press/#pricing" target="_blank" rel="noopener noreferrer" class="ml:6 text-decoration:none bg:crimson-10 fg:crimson-80 px:6 py:3 r:4 b:1|solid|crimson-90/.2 user-select:none">
                                     {{ wp_i18n.__('Upgrade to Pro', 'windpress') }}

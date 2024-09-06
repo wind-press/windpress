@@ -51,8 +51,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'Kadence WP',
-            'description' => 'The Kadence WP integration. It requires the Gutenberg/Block Editor integration enabled.',
+            'name' => __('Kadence WP', 'windpress'),
+            'description' => __('The Kadence WP integration. It requires the Gutenberg/Block Editor integration enabled.', 'windpress'),
             'callback' => fn () => [],
             'enabled' => $this->is_enabled(),
             'meta' => [

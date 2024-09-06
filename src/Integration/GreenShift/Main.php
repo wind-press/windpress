@@ -51,8 +51,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'GreenShift',
-            'description' => 'The GreenShift integration. It requires the Gutenberg/Block Editor integration enabled.',
+            'name' => __('GreenShift', 'windpress'),
+            'description' => __('The GreenShift integration. It requires the Gutenberg/Block Editor integration enabled.', 'windpress'),
             'callback' => fn () => [],
             'enabled' => $this->is_enabled(),
             'meta' => [

@@ -53,8 +53,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'Oxygen Builder',
-            'description' => 'Oxygen Builder integration',
+            'name' => __('Oxygen Builder', 'windpress'),
+            'description' => __('Oxygen Builder integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
         ];

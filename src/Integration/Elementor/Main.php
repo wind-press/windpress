@@ -50,8 +50,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'Elementor',
-            'description' => 'Elementor integration',
+            'name' => __('Elementor', 'windpress'),
+            'description' => __('Elementor integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
         ];

@@ -52,8 +52,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'Breakdance Builder',
-            'description' => 'Breakdance Builder integration',
+            'name' => __('Breakdance Builder', 'windpress'),
+            'description' => __('Breakdance Builder integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
         ];

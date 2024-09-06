@@ -69,9 +69,12 @@ const askForReviewClick = (action) => {
     <div :class="{ 'hide-universal': ui.virtualState('window.minimized', false).value }" class="windpress-container my:40 px:40 font:13 h:calc(100vh-80px-var(--wp-admin--admin-bar--height))">
         <!-- Ask for reviews -->
         <div v-if="!windpress.is_universal && isAskForReview" class="notice windpress-notice notice-info my:10">
-            <p>
-                <strong>WindPress</strong> will always try to make you smile. If you smile, please consider giving us a <span class="fg:yellow-50">★★★★★</span> rating. It would mean a lot to us!
-            </p>
+            <p v-html="wp_i18n.sprintf(
+                wp_i18n.__('%sWindPress%s will always try to make you smile. If you smile, please consider giving us a %s rating. It would mean a lot to us!', 'windpress'),
+                '<strong>',
+                '</strong>',
+                '<span class=&quot;fg:yellow-50&quot;>★★★★★</span>'
+            )"></p>
             <p>
                 <button @click="askForReviewClick('done')" class="button button-primary">
                     <font-awesome-icon :icon="['fas', 'face-smile-hearts']" />

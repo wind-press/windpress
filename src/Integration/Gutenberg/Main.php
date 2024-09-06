@@ -50,8 +50,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'Gutenberg',
-            'description' => 'Gutenberg/Block Editor integration',
+            'name' => __('Gutenberg', 'windpress'),
+            'description' => __('Gutenberg/Block Editor integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
         ];

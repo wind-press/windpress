@@ -52,8 +52,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'LiveCanvas',
-            'description' => 'LiveCanvas integration',
+            'name' => __('LiveCanvas', 'windpress'),
+            'description' => __('LiveCanvas integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
             'meta' => [

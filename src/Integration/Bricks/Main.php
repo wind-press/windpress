@@ -54,8 +54,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'Bricks Builder',
-            'description' => 'Bricks Builder integration',
+            'name' => __('Bricks Builder', 'windpress'),
+            'description' => __('Bricks Builder integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
         ];

@@ -46,8 +46,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => 'Timber',
-            'description' => 'Timber integration',
+            'name' => __('Timber', 'windpress'),
+            'description' => __('Timber integration', 'windpress'),
             'callback' => Compile::class,
         ];
 
