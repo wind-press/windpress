@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.1.9
+Stable tag: 3.1.10
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -17,7 +17,7 @@ The most effortless Tailwind CSS v4 integration for WordPress.
 
 WindPress is a platform agnostic Tailwind CSS v4 integration plugin for WordPress that allows you to use the full power of Tailwind CSS v4 within the WordPress ecosystem.
 
-**Current [Tailwind CSS](https://tailwindcss.com/) version**: 4.0.0-alpha.21 next
+**Current [Tailwind CSS](https://tailwindcss.com/) version**: 4.0.0-alpha.23 next
 
 ### Features
 
@@ -80,9 +80,15 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= 3.1.10 =
+* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.23 next)
+* **New**: Initial support on Tailwind CSS configs loaded from CDN with the `@config` directive
+* **Improve**: Internationalization (i18n) support on the admin dashboard
+* **Fix**: Some style issues on the admin dashboard
+
 = 3.1.9 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.21 next)
-* **Improve**: Support Tailwind CSS plugins loaded from CDN with the `@plugin` directive
+* **New**: Initial support on Tailwind CSS plugins loaded from CDN with the `@plugin` directive
 * **Improve**: Internationalization (i18n) support on the admin dashboard
 
 = 3.1.8 =
