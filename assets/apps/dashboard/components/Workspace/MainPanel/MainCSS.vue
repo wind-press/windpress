@@ -3,8 +3,6 @@ import { shallowRef, onBeforeMount } from 'vue';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 import { useNotifier } from '@/dashboard/library/notifier';
-
-import twTheme from 'tailwindcss/theme.css?inline';
 import { getVariableList } from '@/packages/core/tailwind';
 
 const notifier = useNotifier();
@@ -119,7 +117,7 @@ function handleCssEditorMount(editor, monaco) {
         async provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position);
 
-            const theme = twTheme + twStore.data.main_css.current;
+            const theme = twStore.data.main_css.current;
 
             const variables = (await getVariableList(theme)).map(entry => {
                 return {
