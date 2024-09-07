@@ -35,7 +35,7 @@ rm -rf "$RESULT_DIRECTORY"
 
 # download whitelist of php-scoper
 note "Downloading whitelist of php-scoper"
-wget https://github.com/orgrosua/php-scoper-wordpress-excludes/archive/refs/heads/master.zip -O "php-scoper-wordpress-excludes-master.zip"
+wget https://github.com/snicco/php-scoper-wordpress-excludes/archive/refs/heads/master.zip -O "php-scoper-wordpress-excludes-master.zip"
 
 # extract whitelist of php-scoper
 note "Extracting whitelist of php-scoper"
