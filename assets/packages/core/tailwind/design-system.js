@@ -1,5 +1,6 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/root/packages/tailwindcss/src';
 import { loadPlugin } from './plugin';
+import { loadConfig } from './config';
 import { bundle } from './bundle';
 
 export async function loadDesignSystem(css, opts = {}) {
@@ -12,6 +13,7 @@ export async function loadDesignSystem(css, opts = {}) {
 
     return __unstable__loadDesignSystem(bundleResult.css, {
         ...opts,
-        loadPlugin
+        loadPlugin,
+        loadConfig
     });
 }

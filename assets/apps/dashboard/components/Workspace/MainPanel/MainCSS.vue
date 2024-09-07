@@ -102,7 +102,26 @@ function handleCssEditorMount(editor, monaco) {
                                             url: 'https://github.com/tailwindlabs/tailwindcss-intellisense/pull/1044'
                                         }
                                     ],
-                                }
+                                },
+                                {
+                                    name: '@config',
+                                    status: 'standard',
+                                    description: 'The special `@config` directive tells Tailwind to load a config',
+                                    references: [
+                                        {
+                                            name: 'Twitter',
+                                            url: 'https://x.com/adamwathan/status/1830716239381176647',
+                                        },
+                                        {
+                                            name: 'GitHub PR: Support loading config files via @config tailwindlabs/tailwindcss#14239',
+                                            url: 'https://github.com/tailwindlabs/tailwindcss/pull/14239'
+                                        },
+                                        {
+                                            name: 'GitHub PR: Support loading plugins in CSS tailwindlabs/tailwindcss-intellisense#1044',
+                                            url: 'https://github.com/tailwindlabs/tailwindcss-intellisense/pull/1044'
+                                        }
+                                    ],
+                                },
                             ],
                         }
                     }
