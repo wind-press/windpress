@@ -28,8 +28,12 @@ class Main implements IntegrationInterface
 
         if ($this->is_enabled()) {
             add_filter('f!windpress/core/runtime:is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
-            add_filter('f!windpress/core/runtime:append_header.mission_control.is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
+            add_filter('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
             add_filter('f!windpress/core/runtime:append_header.exclude_admin', fn (bool $is_exclude_admin): bool => $this->is_exclude_admin($is_exclude_admin));
+            
+            // TODO: There is issue preventing the integration to work properly, so let disabled it temporarily until the issue is resolved. 
+            add_filter('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', fn (bool $is_prevent_load): bool => true);
+            
             new Editor();
         }
     }
