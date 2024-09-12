@@ -16,12 +16,12 @@ namespace WindPress\WindPress\Api\Admin;
 use WIND_PRESS;
 use WindPress\WindPress\Api\AbstractApi;
 use WindPress\WindPress\Api\ApiInterface;
-use WindPress\WindPress\Utils\Common;
+use WindPress\WindPress\Core\Volume as CoreVolume;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 
-class Tailwind extends AbstractApi implements ApiInterface
+class Volume extends AbstractApi implements ApiInterface
 {
     public function __construct()
     {
@@ -29,7 +29,7 @@ class Tailwind extends AbstractApi implements ApiInterface
 
     public function get_prefix(): string
     {
-        return 'admin/tailwind';
+        return 'admin/volume';
     }
 
     public function register_custom_endpoints(): void
@@ -57,29 +57,8 @@ class Tailwind extends AbstractApi implements ApiInterface
 
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        $tailwind_data = [
-            'wizard' => null,
-        ];
-
-        $tailwind_data = apply_filters('f!windpress/api/admin/tailwind:index', json_decode(wp_json_encode($tailwind_data)));
-
         return new WP_REST_Response([
-            'tailwind' => $tailwind_data,
+            'entries' => CoreVolume::get_entries(),
         ]);
     }
-
-    // public function store(WP_REST_Request $wprestRequest): WP_REST_Response
-    // {
-    //     $payload = $wprestRequest->get_json_params();
-
-    //     $main_css = $payload['tailwind']['main_css'];
-
-    //     $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
-
-    //     Common::save_file($main_css, $main_css_path);
-
-    //     return new WP_REST_Response([
-    //         'message' => 'data stored successfully',
-    //     ]);
-    // }
 }

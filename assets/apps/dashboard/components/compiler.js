@@ -10,6 +10,15 @@ export async function buildCache(opts) {
     const twStore = useTailwindStore();
     const logStore = useLogStore();
 
+    // TODO: remove this - for testing only
+    await api
+        .get('admin/volume/index')
+        .then((resp) => {
+            console.log(resp.data);
+        });
+
+    return;
+
     const options = Object.assign({
         force_pull: false,
         store: true,
