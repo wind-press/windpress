@@ -215,7 +215,7 @@ channel.addEventListener('message', async (e) => {
     const data = e.data;
     const source = 'windpress/autocomplete';
     const target = 'any';
-    const task = 'windpress.main_css.saved.done';
+    const task = 'windpress.code-editor.saved.done';
 
     if (data.source === source && data.task === task) {
         setTimeout(() => {

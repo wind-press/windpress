@@ -101,8 +101,9 @@ export function initListener(mainCssContainer, applyStyles) {
         const data = e.data;
         const source = 'windpress/dashboard';
         const target = 'windpress/observer';
-        const task = 'windpress.main_css.saved';
+        const task = 'windpress.code-editor.saved';
 
+        // TODO: implement the volume-based observer 
         if (data.source === source && data.target === target && data.task === task) {
             mainCssContainer.textContent = btoa(data.payload.main_css.current);
 

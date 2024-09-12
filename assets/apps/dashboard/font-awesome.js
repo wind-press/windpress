@@ -51,8 +51,13 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 
 import {
+} from '@fortawesome/pro-light-svg-icons';
+
+import {
     faNpm,
     faFacebook,
+    faJsSquare,
+    faCss3Alt,
 } from '@fortawesome/free-brands-svg-icons';
 
 /* add icons to the library */
@@ -100,9 +105,13 @@ library.add(
     faBoxArchiveRegular,
     faMasksTheaterRegular,
 
+    /** fal */
+
     /** fab */
     faNpm,
     faFacebook,
+    faJsSquare,
+    faCss3Alt,
 );
 
 export { library, FontAwesomeIcon };

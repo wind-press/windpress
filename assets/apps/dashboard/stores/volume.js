@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { useApi } from '@/dashboard/library/api.js';
 import { useBusyStore } from './busy.js';
 import { useNotifier } from '@/dashboard/library/notifier.js';
-import { isEqual } from 'lodash-es';
+import { cloneDeep, isEqual } from 'lodash-es';
 
 export const useVolumeStore = defineStore('volume', () => {
     const busyStore = useBusyStore();
@@ -16,6 +16,23 @@ export const useVolumeStore = defineStore('volume', () => {
     const data = reactive({
         entries: [],
     });
+
+    const initData = reactive({
+        entries: [],
+    });
+
+    const activeViewEntryRelativePath = ref(null);
+
+    function addNewEntry(fileName) {
+        data.entries.push({
+            name: fileName,
+            content: `/* file: custom/${fileName} */\n\n`,
+            relative_path: `custom/${fileName}`,
+            handler: 'internal',
+        });
+
+        activeViewEntryRelativePath.value = `custom/${fileName}`;
+    }
 
     /**
      * Pull the data from the server.
@@ -32,7 +49,14 @@ export const useVolumeStore = defineStore('volume', () => {
             })
             .then(response => response.data)
             .then((res) => {
-                data.entries = res.entries;
+                const entries = res.entries;
+                const mainCssIndex = entries.findIndex((entry) => entry.relative_path === 'main.css');
+                if (mainCssIndex !== -1) {
+                    const mainCss = entries.splice(mainCssIndex, 1);
+                    entries.unshift(...mainCss);
+                }
+                data.entries = entries;
+
                 updateInitValues();
             })
             .catch((error) => {
@@ -49,7 +73,6 @@ export const useVolumeStore = defineStore('volume', () => {
      * @returns {Promise} A promise
      */
     async function doPush() {
-        return;
         busyStore.add('volume.doPush');
 
         return api
@@ -58,7 +81,7 @@ export const useVolumeStore = defineStore('volume', () => {
                 url: '/admin/volume/store',
                 data: {
                     volume: {
-                        entries: data.entries.current,
+                        entries: data.entries,
                     }
                 },
             })
@@ -82,7 +105,15 @@ export const useVolumeStore = defineStore('volume', () => {
      * Store the initial values.
      */
     function updateInitValues() {
-        
+        if (data.entries.length === 0) {
+            return;
+        }
+
+        if (activeViewEntryRelativePath.value === null) {
+            activeViewEntryRelativePath.value = 'main.css';
+        }
+
+        initData.entries = cloneDeep(data.entries);
     }
 
     /**
@@ -95,6 +126,8 @@ export const useVolumeStore = defineStore('volume', () => {
 
     return {
         data,
+        activeViewEntryRelativePath,
+        addNewEntry,
         doPull,
         doPush,
         hasChanged,

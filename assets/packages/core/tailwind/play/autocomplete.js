@@ -28,7 +28,7 @@ async function preloadItems() {
     channel.postMessage({
         source: 'windpress/autocomplete',
         target: 'any',
-        task: `windpress.main_css.saved.done`
+        task: `windpress.code-editor.saved.done`
     });
 }
 
@@ -44,7 +44,7 @@ export function initListener(mainCssContainer, preloadItems) {
         const data = e.data;
         const source = 'windpress/dashboard';
         const target = 'windpress/observer';
-        const task = 'windpress.main_css.saved';
+        const task = 'windpress.code-editor.saved';
 
         if (data.source === source && data.target === target && data.task === task) {
             await preloadItems();
