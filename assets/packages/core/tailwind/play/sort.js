@@ -1,13 +1,18 @@
 import { loadDesignSystem } from '../design-system';
 import { set } from 'lodash-es';
-import { getCssContent, sortClasses } from '../intellisense';
+import { sortClasses } from '../intellisense';
+import { decodeVFSContainer } from '../bundle';
+
+const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
 async function classSorter(input) {
     let classes = input
         .split(/\s+/)
         .filter((x) => x !== "" && x !== "|");
 
-    const design = await loadDesignSystem(await getCssContent());
+    const volume = decodeVFSContainer(vfsContainer.textContent);
+
+    const design = await loadDesignSystem({ volume });
 
     return (await sortClasses(design, classes)).join(" ");
 }

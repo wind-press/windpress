@@ -1,4 +1,5 @@
-import { useTailwindStore } from '@/dashboard/stores/tailwind';
+import { encodeBase64 } from '@std/encoding/base64';
+import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
@@ -7,8 +8,9 @@ import { build, find_tw_candidates, optimize } from '@/packages/core/tailwind';
 const api = useApi();
 
 export async function buildCache(opts) {
-    const twStore = useTailwindStore();
+    const volumeStore = useVolumeStore();
     const logStore = useLogStore();
+
 
     const options = Object.assign({
         force_pull: false,
@@ -17,8 +19,8 @@ export async function buildCache(opts) {
 
     let providers = [];
 
-    if (options.force_pull === true || twStore.data.main_css.init === null) {
-        await twStore.doPull();
+    if (options.force_pull === true || volumeStore.data.entries.length === 0) {
+        await volumeStore.doPull();
     }
 
     await api
@@ -96,9 +98,7 @@ export async function buildCache(opts) {
     const result = await build({
         candidates: candidates,
         entrypoint: '/main.css',
-        volume: {
-            '/main.css': twStore.data.main_css.current,
-        }
+        volume: volumeStore.getKVEntries(),
     });
 
     const normal = await optimize(result);
@@ -117,7 +117,7 @@ export async function buildCache(opts) {
         await api
             .post('admin/settings/cache/store', {
                 // @see https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
-                content: btoa(String.fromCodePoint(...new TextEncoder().encode(minified.css))),
+                content: encodeBase64(minified.css),
             })
             .then((resp) => {
                 css_cache = resp.data.cache;

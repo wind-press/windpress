@@ -44,33 +44,20 @@ class Tailwind extends AbstractApi implements ApiInterface
             ]
         );
 
-        register_rest_route(
-            self::API_NAMESPACE,
-            $this->get_prefix() . '/store',
-            [
-                'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
-            ]
-        );
+        // register_rest_route(
+        //     self::API_NAMESPACE,
+        //     $this->get_prefix() . '/store',
+        //     [
+        //         'methods' => WP_REST_Server::CREATABLE,
+        //         'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
+        //         'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+        //     ]
+        // );
     }
 
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
-        $stub_main_css = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/main.css');
-
-        $main_css = $stub_main_css;
-
-        $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
-        if (file_exists($main_css_path)) {
-            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
-            $main_css = file_get_contents($main_css_path);
-        }
-
         $tailwind_data = [
-            'main_css' => $main_css,
-            '_main_css' => $stub_main_css,
             'wizard' => null,
         ];
 
@@ -78,27 +65,21 @@ class Tailwind extends AbstractApi implements ApiInterface
 
         return new WP_REST_Response([
             'tailwind' => $tailwind_data,
-            '_custom' => [
-                'main_css' => [
-                    'prepend' => apply_filters('f!windpress/core/runtime:main_css.prepend', ''),
-                    'append' => apply_filters('f!windpress/core/runtime:main_css.append', ''),
-                ],
-            ],
         ]);
     }
 
-    public function store(WP_REST_Request $wprestRequest): WP_REST_Response
-    {
-        $payload = $wprestRequest->get_json_params();
+    // public function store(WP_REST_Request $wprestRequest): WP_REST_Response
+    // {
+    //     $payload = $wprestRequest->get_json_params();
 
-        $main_css = $payload['tailwind']['main_css'];
+    //     $main_css = $payload['tailwind']['main_css'];
 
-        $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
+    //     $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
 
-        Common::save_file($main_css, $main_css_path);
+    //     Common::save_file($main_css, $main_css_path);
 
-        return new WP_REST_Response([
-            'message' => 'data stored successfully',
-        ]);
-    }
+    //     return new WP_REST_Response([
+    //         'message' => 'data stored successfully',
+    //     ]);
+    // }
 }

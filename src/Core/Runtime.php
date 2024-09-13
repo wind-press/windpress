@@ -35,16 +35,12 @@ class Runtime
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Singletons should not be cloneable.
      */
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     /**
      * Singletons should not be restorable from strings.
@@ -93,9 +89,9 @@ class Runtime
         $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
 
         if ($is_cache_enabled && $this->is_cache_exists() && ! $is_exclude_admin) {
-            add_action('wp_head', fn () => $this->enqueue_css_cache(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_css_cache(), 1_000_001);
         } else {
-            add_action('wp_head', fn () => $this->enqueue_play_cdn(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
         }
 
         if (
@@ -103,7 +99,7 @@ class Runtime
             && current_user_can('manage_options')
             && ! apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
         ) {
-            add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_front_panel(), 1_000_001);
         }
     }
 
@@ -140,18 +136,11 @@ class Runtime
 
     public function enqueue_play_cdn($display = true)
     {
-        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
-        $stub_main_css = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/main.css');
-        $main_css = $stub_main_css;
-        $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
-        if (file_exists($main_css_path)) {
-            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
-            $main_css = file_get_contents($main_css_path);
-        }
+        $volumeEntries = array_reduce(Volume::get_entries(), fn($carry, $entry) => $carry + ['/' . $entry['relative_path'] => $entry['content']], []);
 
         // Script content are base64 encoded to prevent it from being executed by the browser.
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        echo sprintf('<script id="windpress:tw-main-css" type="text/tailwindcss">%s</script>', esc_html(base64_encode($main_css)));
+        echo sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/autocomplete.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',

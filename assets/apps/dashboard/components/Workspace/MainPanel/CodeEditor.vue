@@ -1,13 +1,13 @@
 <script setup>
-import { shallowRef, onBeforeMount } from 'vue';
+import { shallowRef, onBeforeMount, computed } from 'vue';
 import { useUIStore } from '@/dashboard/stores/ui.js';
-import { useTailwindStore } from '@/dashboard/stores/tailwind.js';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { getVariableList } from '@/packages/core/tailwind';
+import { useVolumeStore } from '@/dashboard/stores/volume';
 
 const notifier = useNotifier();
 const ui = useUIStore();
-const twStore = useTailwindStore();
+const volumeStore = useVolumeStore();
 
 const MONACO_EDITOR_OPTIONS = {
     automaticLayout: true,
@@ -17,52 +17,73 @@ const MONACO_EDITOR_OPTIONS = {
 };
 
 /** @type {?import('monaco-editor').editor.IStandaloneCodeEditor} */
-const editorCssRef = shallowRef();
-
-function naturalExpand(value, total = null) {
-    const length = typeof total === 'number' ? total.toString().length : 8
-    return ('0'.repeat(length) + value).slice(-length)
-}
+const editorElementRef = shallowRef();
 
 function doSave() {
-    const promise = twStore.doPush();
+    const promise = volumeStore.doPush();
 
     notifier.async(
         promise,
         resp => notifier.success(resp.message),
         err => notifier.alert(err.message),
-        'Storing main.css...'
+        'Storing data...'
     );
 
-    promise.finally(() => {
-        channel.postMessage({
-            source: 'windpress/dashboard',
-            target: 'windpress/observer',
-            task: 'windpress.main_css.saved',
-            payload: {
-                main_css: {
-                    current: twStore.data.main_css.current,
-                    init: twStore.data.main_css.init,
+    promise
+        .then(() => {
+            volumeStore.doPull();
+        })
+        .finally(() => {
+            channel.postMessage({
+                source: 'windpress/dashboard',
+                target: 'windpress/observer',
+                task: 'windpress.code-editor.saved',
+                payload: {
+                    volume: volumeStore.getKVEntries()
                 }
-            }
+            });
         });
-    });
 }
+
+const currentEntry = computed(() => {
+    return volumeStore.data.entries.find(entry => entry.relative_path === volumeStore.activeViewEntryRelativePath);
+});
+
+const currentLanguage = computed(() => {
+    if (volumeStore.activeViewEntryRelativePath?.endsWith('.css')) {
+        return 'css';
+    } else if (volumeStore.activeViewEntryRelativePath?.endsWith('.js')) {
+        return 'javascript';
+    }
+
+    return '';
+});
+
+const entryValue = computed({
+    get() {
+        return currentEntry.value?.content || '';
+    },
+    set(val) {
+        if (currentEntry.value) {
+            currentEntry.value.content = val;
+        }
+    }
+});
+
+const editorReadOnly = computed(() => {
+    return currentEntry.value?.handler === 'read-only';
+});
 
 onBeforeMount(() => {
     // set the monaco editor content
     (async () => {
-        if (twStore.data.main_css.init === null) {
-            await twStore.doPull();
+        if (volumeStore.data.entries.length === 0) {
+            await volumeStore.doPull();
         }
-
-        // if (Object.keys(settingsStore.options).length === 0) {
-        //     await settingsStore.doPull();
-        // }
     })();
 });
 
-function handleCssEditorMount(editor, monaco) {
+function handleEditorMount(editor, monaco) {
     monaco.languages.css.cssDefaults.setOptions(
         Object.assign(
             monaco.languages.css.cssDefaults.options,
@@ -130,15 +151,18 @@ function handleCssEditorMount(editor, monaco) {
         )
     );
 
-    editorCssRef.value = editor;
+    editorElementRef.value = editor;
+
+    function naturalExpand(value, total = null) {
+        const length = typeof total === 'number' ? total.toString().length : 8
+        return ('0'.repeat(length) + value).slice(-length)
+    }
 
     monaco.languages.registerCompletionItemProvider('css', {
         async provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position);
 
-            const theme = twStore.data.main_css.current;
-
-            const variables = (await getVariableList(theme)).map(entry => {
+            const variables = (await getVariableList({ volume: volumeStore.getKVEntries(), })).map(entry => {
                 return {
                     kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
                     label: entry.key,
@@ -185,7 +209,7 @@ channel.addEventListener('message', (e) => {
 </script>
 
 <template>
-    <vue-monaco-editor v-model:value="twStore.data.main_css.current" language="css" path="file:///main.css" :options="MONACO_EDITOR_OPTIONS" @mount="handleCssEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
+    <vue-monaco-editor v-model:value="entryValue" :language="currentLanguage" :path="`file:///${volumeStore.activeViewEntryRelativePath}`" :options="{ ...MONACO_EDITOR_OPTIONS, readOnly: editorReadOnly }" @mount="handleEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
 </template>
 
 <style lang="scss">

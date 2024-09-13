@@ -3,17 +3,17 @@ import { loadPlugin } from './plugin';
 import { loadConfig } from './config';
 import { bundle } from './bundle';
 
-export async function loadDesignSystem(css, opts = {}) {
+export async function loadDesignSystem({ entrypoint = '/main.css', volume = {}, ...opts } = {}) {
+    opts = { entrypoint, volume, ...opts };  
+
     const bundleResult = await bundle({
-        entrypoint: '/main.css',
-        volume: {
-            '/main.css': css,
-        }
+        entrypoint: opts.entrypoint,
+        volume: opts.volume
     });
 
     return __unstable__loadDesignSystem(bundleResult.css, {
         ...opts,
         loadPlugin,
-        loadConfig
+        loadConfig: async (configPath) => loadConfig(configPath, opts.volume)
     });
 }

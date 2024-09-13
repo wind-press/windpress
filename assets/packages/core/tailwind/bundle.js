@@ -6,6 +6,7 @@ import twTheme from '@tailwindcss/root/packages/tailwindcss/theme.css?inline';
 import twPreflight from '@tailwindcss/root/packages/tailwindcss/preflight.css?inline';
 import twUtilities from '@tailwindcss/root/packages/tailwindcss/utilities.css?inline';
 import twIndex from '@tailwindcss/root/packages/tailwindcss/index.css?inline';
+import { decodeBase64 } from '@std/encoding/base64';
 
 const twVolume = {
     '/tailwindcss/index.css': twIndex,
@@ -44,6 +45,14 @@ export async function bundle(opts) {
                         if (specifier.startsWith('@')) {
                             specifier = specifier.replace('@/', '')
                             originatingFile = '/'
+                        }
+
+                        // Resolve relative path as absolute path
+                        if (specifier.startsWith('./')) {
+                            specifier = path.resolve(
+                                path.dirname(originatingFile),
+                                specifier
+                            )
                         }
 
                         /*
@@ -85,4 +94,8 @@ export async function bundle(opts) {
     return {
         css: result.css
     };
+}
+
+export function decodeVFSContainer(vfsContainer) {
+    return JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer)));
 }

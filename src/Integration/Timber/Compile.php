@@ -54,8 +54,7 @@ class Compile
 
             $contents[] = [
                 'name' => $file->getRelativePathname(),
-                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
-                'content' => file_get_contents($template_file),
+                'content' => $file->getContents(),
             ];
         }
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
 import { brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwind';
 import ExpansionPanel from './ExpansionPanel.vue';
 import { set } from 'lodash-es';
 import CommonVariableItems from './CommonVariableItems.vue';
@@ -17,11 +17,11 @@ const focusedInput = inject('focusedInput');
 const recentColorPickerTarget = inject('recentColorPickerTarget');
 
 async function constructVariableList() {
-    // get design system
-    const main_css = await brxIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
+    const vfsContainer = brxIframe.contentWindow.document.querySelector('script[type="text/tailwindcss"]');
+    const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables
-    const variableLists = await getVariableList(await loadDesignSystem(main_css));
+    const variableLists = await getVariableList({ volume });
 
     /**
      * Color
@@ -215,7 +215,7 @@ channel.addEventListener('message', async (e) => {
     const data = e.data;
     const source = 'windpress/autocomplete';
     const target = 'any';
-    const task = 'windpress.main_css.saved.done';
+    const task = 'windpress.code-editor.saved.done';
 
     if (data.source === source && data.task === task) {
         setTimeout(() => {
