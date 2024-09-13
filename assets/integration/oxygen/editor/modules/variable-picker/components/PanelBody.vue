@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
 import { oxyIframe } from '@/integration/oxygen/editor/constant.js';
-import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwind';
 import ExpansionPanel from './ExpansionPanel.vue';
 import { set } from 'lodash-es';
 import CommonVariableItems from './CommonVariableItems.vue';
@@ -21,11 +21,11 @@ const tempInputValue = inject('tempInputValue');
 const variableApp = inject('variableApp');
 
 async function constructVariableList() {
-    // get design system
-    const main_css = await oxyIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
+    const vfsContainer = oxyIframe.contentWindow.document.querySelector('script[type="text/tailwindcss"]');
+    const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables
-    const variableLists = await getVariableList(await loadDesignSystem(main_css));
+    const variableLists = await getVariableList({ volume });
 
     let styleElement = variableApp.querySelector('style#windpressoxygen-variable-app-body-style');
     if (!styleElement) {
