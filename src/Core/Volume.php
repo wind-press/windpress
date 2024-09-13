@@ -28,6 +28,10 @@ class Volume
 
         $data_dir = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR;
 
+        if (! file_exists($data_dir)) {
+            wp_mkdir_p($data_dir);
+        }
+
         $finder = new Finder();
 
         $finder
