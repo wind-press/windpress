@@ -1,3 +1,4 @@
+import { decodeBase64, encodeBase64 } from '@std/encoding/base64';
 import { build } from '../build';
 
 /**
@@ -5,16 +6,16 @@ import { build } from '../build';
  */
 let styleContainer;
 
-const mainCssContainer = document.querySelector('script[type="text/tailwindcss"]');
+const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
-if (mainCssContainer) {
-    initListener(mainCssContainer, applyStyles);
+if (vfsContainer) {
+    initListener(vfsContainer, applyStyles);
 
-    const mainCssObserver = new MutationObserver(async () => {
+    const vfsObserver = new MutationObserver(async () => {
         await applyStyles();
     });
 
-    mainCssObserver.observe(mainCssContainer, {
+    vfsObserver.observe(vfsContainer, {
         characterData: true,
         subtree: true
     });
@@ -66,10 +67,7 @@ async function applyStyles() {
 
     document.querySelectorAll('[class]').forEach((element) => {
         element.classList.forEach((className) => candidates.add(className));
-    })
-
-    const mainCssElement = document.querySelector('script[type="text/tailwindcss"]');
-    const mainCssContent = mainCssElement?.textContent ? atob(mainCssElement.textContent) : `@import "tailwindcss"`;
+    });
 
     if (document.body && candidates.size > 0) {
         if (!styleContainer || !styleContainer.isConnected) {
@@ -79,10 +77,8 @@ async function applyStyles() {
 
         styleContainer.textContent = await build({
             candidates: Array.from(candidates),
-            entrypoint: '/index.css',
-            volume: {
-                '/index.css': mainCssContent
-            }
+            entrypoint: '/main.css',
+            volume: JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer.textContent)))
         });
     }
 }
@@ -94,7 +90,7 @@ await applyStyles();
  * @param {Element} mainCssContainer
  * @param {Function} applyStyles
  */
-export function initListener(mainCssContainer, applyStyles) {
+export function initListener(vfsContainer, applyStyles) {
     const channel = new BroadcastChannel('windpress');
 
     channel.addEventListener('message', async (e) => {
@@ -103,9 +99,8 @@ export function initListener(mainCssContainer, applyStyles) {
         const target = 'windpress/observer';
         const task = 'windpress.code-editor.saved';
 
-        // TODO: implement the volume-based observer 
         if (data.source === source && data.target === target && data.task === task) {
-            mainCssContainer.textContent = btoa(data.payload.main_css.current);
+            vfsContainer.textContent = encodeBase64(JSON.stringify(data.payload.volume));
 
             await applyStyles();
         }

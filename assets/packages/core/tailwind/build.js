@@ -23,7 +23,7 @@ export async function build(opts) {
 
     return (await compile(bundleResult.css, {
         loadPlugin,
-        loadConfig
+        loadConfig: async (configPath) => loadConfig(configPath, opts.volume)
     })).build(opts.candidates);
 }
 

@@ -138,7 +138,7 @@ class Common
 
         // if write is successful continue
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
-        $saved_content = file_get_contents($file_path);
+        $saved_content = $wp_filesystem->get_contents($file_path);
 
         // if read is successful continue
         if ($saved_content === false) {

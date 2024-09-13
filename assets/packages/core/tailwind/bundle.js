@@ -46,6 +46,14 @@ export async function bundle(opts) {
                             originatingFile = '/'
                         }
 
+                        // Resolve relative path as absolute path
+                        if (specifier.startsWith('./')) {
+                            specifier = path.resolve(
+                                path.dirname(originatingFile),
+                                specifier
+                            )
+                        }
+
                         /*
                          * Resolve default import if no extension is specified
                          * */

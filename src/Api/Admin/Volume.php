@@ -68,8 +68,6 @@ class Volume extends AbstractApi implements ApiInterface
 
         $entries = $payload['volume']['entries'];
 
-        error_log(print_r($entries, true));
-
         CoreVolume::save_entries($entries);
 
         return new WP_REST_Response([

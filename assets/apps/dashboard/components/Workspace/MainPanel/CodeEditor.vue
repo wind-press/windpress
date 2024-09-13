@@ -35,12 +35,17 @@ function doSave() {
             volumeStore.doPull();
         })
         .finally(() => {
+            const volume = volumeStore.data.entries.reduce((acc, entry) => {
+                acc[`/${entry.relative_path}`] = entry.content;
+                return acc;
+            }, {});
+
             channel.postMessage({
                 source: 'windpress/dashboard',
                 target: 'windpress/observer',
                 task: 'windpress.code-editor.saved',
                 payload: {
-                    volume: cloneDeep(volumeStore.data.entries),
+                    volume
                 }
             });
         });
@@ -160,8 +165,6 @@ function handleEditorMount(editor, monaco) {
             const wordInfo = model.getWordUntilPosition(position);
 
             const theme = volumeStore.data.entries.find(entry => entry.relative_path === 'main.css')?.content || '';
-            // const theme = volumeStore.data.entries.find(entry => entry.relative_path === volumeStore.activeViewEntryRelativePath)?.content || '';
-            // console.log('theme', theme);
 
             const variables = (await getVariableList(theme)).map(entry => {
                 return {
