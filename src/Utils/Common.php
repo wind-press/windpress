@@ -146,15 +146,15 @@ class Common
         }
     }
 
-	/**
-	 * Deletes a file or directory.
-	 *
-	 * @param string       $file      Path to the file or directory.
-	 * @param bool         $recursive Optional. If set to true, deletes files and folders recursively.
-	 *                                Default false.
-	 * @param string|false $type      Type of resource. 'f' for file, 'd' for directory.
-	 *                                Default false.
-	 */
+    /**
+     * Deletes a file or directory.
+     *
+     * @param string       $file      Path to the file or directory.
+     * @param bool         $recursive Optional. If set to true, deletes files and folders recursively.
+     *                                Default false.
+     * @param string|false $type      Type of resource. 'f' for file, 'd' for directory.
+     *                                Default false.
+     */
     public static function delete_file($file_path, $recursive = false, $type = false): void
     {
         /**

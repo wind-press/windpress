@@ -140,7 +140,6 @@ class Runtime
 
         // Script content are base64 encoded to prevent it from being executed by the browser.
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        // echo sprintf('<script id="windpress:tw-main-css" type="text/tailwindcss">%s</script>', esc_html(base64_encode($main_css)));
         echo sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/autocomplete.js', [
