@@ -1,7 +1,6 @@
 import { loadDesignSystem } from '../design-system';
 import { set } from 'lodash-es';
 import { candidatesToCss } from '../intellisense';
-import { decodeBase64 } from '@std/encoding/base64';
 
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
@@ -10,7 +9,7 @@ async function classnameToCss(input) {
         .split(/\s+/)
         .filter((x) => x !== "" && x !== "|");
 
-    const volume = JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer.textContent)));
+    const volume = decodeVFSContainer(vfsContainer.textContent);
 
     const design = await loadDesignSystem({ volume });
 

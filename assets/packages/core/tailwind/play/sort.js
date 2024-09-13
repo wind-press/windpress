@@ -1,7 +1,7 @@
 import { loadDesignSystem } from '../design-system';
 import { set } from 'lodash-es';
 import { sortClasses } from '../intellisense';
-import { decodeBase64 } from '@std/encoding/base64';
+import { decodeVFSContainer } from '../bundle';
 
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
@@ -10,7 +10,7 @@ async function classSorter(input) {
         .split(/\s+/)
         .filter((x) => x !== "" && x !== "|");
 
-    const volume = JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer.textContent)));
+    const volume = decodeVFSContainer(vfsContainer.textContent);
 
     const design = await loadDesignSystem({ volume });
 

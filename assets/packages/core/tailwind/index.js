@@ -1,4 +1,4 @@
-export { bundle } from './bundle';
+export { bundle, decodeVFSContainer } from './bundle';
 export { build, optimize } from './build';
 export { find_tw_candidates } from '@windpress/oxide-parser-wasm';
 export { getClassList, getVariableList, sortClasses } from './intellisense';

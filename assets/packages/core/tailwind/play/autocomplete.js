@@ -1,7 +1,7 @@
-import { decodeBase64 } from '@std/encoding/base64';
 import { loadDesignSystem } from '../design-system';
 import { getClassList } from '../intellisense';
 import { set } from 'lodash-es';
+import { decodeVFSContainer } from '../bundle';
 
 let classLists = [];
 let variableLists = [];
@@ -24,7 +24,7 @@ if (vfsContainer) {
 }
 
 async function preloadItems() {
-    const volume = JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer.textContent)));
+    const volume = decodeVFSContainer(vfsContainer.textContent);
 
     classLists = await getClassList(await loadDesignSystem({ volume }));
 

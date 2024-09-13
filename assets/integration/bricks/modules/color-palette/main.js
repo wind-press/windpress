@@ -8,7 +8,7 @@
  */
 
 import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwind';
 import { logger } from '@/integration/common/logger';
 import crc32 from 'buffer-crc32';
 
@@ -21,10 +21,10 @@ async function registerPallete() {
     // drop color palette with the name of windpress
     brxGlobalProp.$_state.colorPalette = brxGlobalProp.$_state.colorPalette.filter(palette => palette.name !== 'windpress');
 
-    // get design system
-    const main_css = await brxIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
+    const vfsContainer = brxIframe.contentWindow.document.querySelector('script[type="text/tailwindcss"]');
+    const volume = decodeVFSContainer(vfsContainer.textContent);
 
-    const variableLists = await getVariableList(await loadDesignSystem(main_css));
+    const variableLists = await getVariableList({ volume });
 
     const colors = [];
     variableLists

@@ -1,5 +1,6 @@
-import { decodeBase64, encodeBase64 } from '@std/encoding/base64';
+import { encodeBase64 } from '@std/encoding/base64';
 import { build } from '../build';
+import { decodeVFSContainer } from '../bundle';
 
 /**
  * @type {HTMLStyleElement}
@@ -78,7 +79,7 @@ async function applyStyles() {
         styleContainer.textContent = await build({
             candidates: Array.from(candidates),
             entrypoint: '/main.css',
-            volume: JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer.textContent)))
+            volume: decodeVFSContainer(vfsContainer.textContent)
         });
     }
 }
