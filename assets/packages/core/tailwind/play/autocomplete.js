@@ -1,5 +1,6 @@
+import { decodeBase64 } from '@std/encoding/base64';
 import { loadDesignSystem } from '../design-system';
-import { getClassList, getCssContent, getVariableList } from '../intellisense';
+import { getClassList } from '../intellisense';
 import { set } from 'lodash-es';
 
 let classLists = [];
@@ -7,23 +8,25 @@ let variableLists = [];
 
 const channel = new BroadcastChannel('windpress');
 
-const mainCssContainer = document.querySelector('script[type="text/tailwindcss"]');
+const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
-if (mainCssContainer) {
-    initListener(mainCssContainer, preloadItems);
+if (vfsContainer) {
+    initListener();
 
-    const mainCssObserver = new MutationObserver(async () => {
+    const vfsObserver = new MutationObserver(async () => {
         await preloadItems();
     });
 
-    mainCssObserver.observe(mainCssContainer, {
+    vfsObserver.observe(vfsContainer, {
         characterData: true,
         subtree: true
     });
 }
 
 async function preloadItems() {
-    classLists = await getClassList(await loadDesignSystem(await getCssContent()));
+    const volume = JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer.textContent)));
+
+    classLists = await getClassList(await loadDesignSystem({ volume }));
 
     channel.postMessage({
         source: 'windpress/autocomplete',
@@ -35,11 +38,7 @@ async function preloadItems() {
 // Ensure the items generated once (on load)
 await preloadItems();
 
-/**
- * @param {Element} mainCssContainer
- * @param {Function} preloadItems
- */
-export function initListener(mainCssContainer, preloadItems) {
+export function initListener() {
     channel.addEventListener('message', async (e) => {
         const data = e.data;
         const source = 'windpress/dashboard';
@@ -132,15 +131,7 @@ function searchClassList(query) {
 // check if the wp-hooks is available
 if (window.wp?.hooks) {
     window.wp.hooks.addFilter('windpress.module.autocomplete', 'windpress', searchClassList);
-    window.wp.hooks.addFilter('windpress.module.design_system.main_css', 'windpress', async () => {
-        return await getCssContent();
-    });
 }
 
 set(window, 'windpress.loaded.module.autocomplete', true);
 set(window, 'windpress.module.autocomplete.query', (q) => searchClassList(q));
-
-set(window, 'windpress.loaded.module.design_system', true);
-set(window, 'windpress.module.design_system.main_css', async () => {
-    return await getCssContent();
-});

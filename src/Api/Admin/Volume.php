@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Api\Admin;
 
-use WIND_PRESS;
 use WindPress\WindPress\Api\AbstractApi;
 use WindPress\WindPress\Api\ApiInterface;
 use WindPress\WindPress\Core\Volume as CoreVolume;

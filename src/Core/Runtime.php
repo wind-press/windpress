@@ -147,15 +147,15 @@ class Runtime
             'in-footer' => true,
         ]);
 
-        // AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/sort.js', [
-        //     'handle' => WIND_PRESS::WP_OPTION . ':sort',
-        //     'in-footer' => true,
-        // ]);
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/sort.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':sort',
+            'in-footer' => true,
+        ]);
 
-        // AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/classname-to-css.js', [
-        //     'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
-        //     'in-footer' => true,
-        // ]);
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/classname-to-css.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
+            'in-footer' => true,
+        ]);
 
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',

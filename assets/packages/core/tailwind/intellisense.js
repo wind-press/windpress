@@ -1,26 +1,6 @@
 import { loadDesignSystem } from './design-system';
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
-import { bundle } from './bundle';
 import { compileCandidates } from '@tailwindcss/root/packages/tailwindcss/src/compile';
-
-/**
- * Get the CSS content of the main.css file on the current document.
- * 
- * @returns {Promise<string>} The CSS content of the main.css file.
- */
-export async function getCssContent() {
-    const mainCssElement = document.querySelector('script[type="text/tailwindcss"]');
-    const mainCssContent = mainCssElement?.textContent ? atob(mainCssElement.textContent) : `@import "tailwindcss"`;
-
-    const bundleResult = await bundle({
-        entrypoint: '/main.css',
-        volume: {
-            '/main.css': mainCssContent,
-        }
-    });
-
-    return bundleResult.css;
-}
 
 /**
  * @typedef {Object} ClassEntity
@@ -31,10 +11,98 @@ export async function getCssContent() {
  */
 
 /**
- * @param {string|DesignSystem} theme - The main.css content.
- * @returns {Promise<ClassEntity>} The data with ClassEntity type.
+ * @param {DesignSystem} design
  */
-export async function getClassList(theme) {
+function getUtilityList(design) {
+    return design.getClassList().map((classEntry) => ({
+        kind: 'utility',
+        selector: classEntry[0]
+    }));
+}
+
+/**
+ * @param {DesignSystem} design
+ */
+function getVariantList(design) {
+    return design.getVariants().map((classEntry) => ({
+        kind: 'variant',
+        selector: classEntry.name
+    }));
+}
+
+/**
+ * A list of utilities that for some reason are missing from the getUtilityList call
+ */
+function unsupportedUtilityList() {
+    return [
+        {
+            kind: 'utility',
+            selector: 'flex'
+        }
+    ];
+}
+
+export async function getVariableList(args = {}) {
+    let design = args.theme ? args : await loadDesignSystem(args);
+
+    return Array.from(design.theme.entries()).map(
+        (entry, index) => {
+            const variable = entry[0];
+
+            const defaultValue = entry[1].value;
+            const calculatedValue = `${parseFloat(defaultValue) * 16}px`;
+
+            const isCalculated = defaultValue.includes('rem');
+
+            return {
+                key: variable,
+                value: isCalculated
+                    ? calculatedValue
+                    : defaultValue,
+                index
+            }
+        }
+    );
+}
+
+/**
+ * @param {string|DesignSystem} theme 
+ * @param {Array<string>} classList 
+ * @returns 
+ */
+export async function sortClasses(args = {}, classList) {
+    let design = args.theme ? args : await loadDesignSystem(args);
+
+    return defaultSort(design.getClassOrder(classList));
+}
+
+function defaultSort(arrayOfTuples) {
+    return arrayOfTuples
+        .sort(([, a], [, z]) => {
+            if (a === z) return 0;
+            if (a === null) return -1;
+            if (z === null) return 1;
+            return bigSign(a - z);
+        })
+        .map(([className]) => className);
+}
+
+function bigSign(value) {
+    if (value > 0n) {
+        return 1;
+    } else if (value === 0n) {
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
+/**
+ * @param {string|DesignSystem} theme 
+ * @param {Array<string>} classList 
+ * @returns 
+ */
+export async function candidatesToCss(theme, classes) {
     let design;
 
     if (typeof theme === 'string') {
@@ -42,6 +110,16 @@ export async function getClassList(theme) {
     } else {
         design = theme;
     }
+
+    return design.candidatesToCss(classes);
+}
+
+
+/**
+ * @returns {Promise<ClassEntity>} The data with ClassEntity type.
+ */
+export async function getClassList(args = {}) {
+    let design = args.theme ? args : await loadDesignSystem(args);
 
     /** @type {ClassEntity[]} */
     const classList = getUtilityList(design).concat(
@@ -112,120 +190,4 @@ export async function getClassList(theme) {
         .filter(excludeUtilities)
         .map(prepareClass)
         .sort(sortselectors);
-}
-
-/**
- * @param {DesignSystem} design
- */
-function getUtilityList(design) {
-    return design.getClassList().map((classEntry) => ({
-        kind: 'utility',
-        selector: classEntry[0]
-    }));
-}
-
-/**
- * @param {DesignSystem} design
- */
-function getVariantList(design) {
-    return design.getVariants().map((classEntry) => ({
-        kind: 'variant',
-        selector: classEntry.name
-    }));
-}
-
-/**
- * A list of utilities that for some reason are missing from the getUtilityList call
- */
-function unsupportedUtilityList() {
-    return [
-        {
-            kind: 'utility',
-            selector: 'flex'
-        }
-    ];
-}
-
-export async function getVariableList(theme) {
-    let design;
-
-    if (typeof theme === 'string') {
-        design = await loadDesignSystem(theme);
-    } else {
-        design = theme;
-    }
-
-    return Array.from(design.theme.entries()).map(
-        (entry, index) => {
-            const variable = entry[0];
-
-            const defaultValue = entry[1].value;
-            const calculatedValue = `${parseFloat(defaultValue) * 16}px`;
-
-            const isCalculated = defaultValue.includes('rem');
-
-            return {
-                key: variable,
-                value: isCalculated
-                    ? calculatedValue
-                    : defaultValue,
-                index
-            }
-        }
-    );
-}
-
-/**
- * @param {string|DesignSystem} theme 
- * @param {Array<string>} classList 
- * @returns 
- */
-export async function sortClasses(theme, classList) {
-    let design;
-
-    if (typeof theme === 'string') {
-        design = await loadDesignSystem(theme);
-    } else {
-        design = theme;
-    }
-
-    return defaultSort(design.getClassOrder(classList));
-}
-
-function defaultSort(arrayOfTuples) {
-    return arrayOfTuples
-        .sort(([, a], [, z]) => {
-            if (a === z) return 0;
-            if (a === null) return -1;
-            if (z === null) return 1;
-            return bigSign(a - z);
-        })
-        .map(([className]) => className);
-}
-
-function bigSign(value) {
-    if (value > 0n) {
-        return 1;
-    } else if (value === 0n) {
-        return 0;
-    } else {
-        return -1;
-    }
-}
-
-/**
- * @param {string|DesignSystem} theme 
- * @param {Array<string>} classList 
- * @returns 
- */
-export async function candidatesToCss(theme, classes) {
-    let design;
-
-    if (typeof theme === 'string') {
-        design = await loadDesignSystem(theme);
-    } else {
-        design = theme;
-    }
-
-    return design.candidatesToCss(classes);
 }

@@ -15,7 +15,12 @@ await init(lightningcssWasmFile);
  * @param {string} opts.entrypoint
  * @param {Record<string, string>} opts.volume
  */
-export async function build(opts) {
+// export async function loadDesignSystem({ entrypoint = '/main.css', volume = {}, ...opts } = {}) {
+// export async function build(opts = { candidates: [], entrypoint: '/main.css', volume: {}, ...opts }) {
+
+export async function build({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts } = {}) {
+    opts = { candidates, entrypoint, volume, ...opts };  
+
     const bundleResult = await bundle({
         entrypoint: opts.entrypoint,
         volume: opts.volume

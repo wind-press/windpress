@@ -9,7 +9,7 @@ let styleContainer;
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
 if (vfsContainer) {
-    initListener(vfsContainer, applyStyles);
+    initListener();
 
     const vfsObserver = new MutationObserver(async () => {
         await applyStyles();
@@ -86,11 +86,7 @@ async function applyStyles() {
 // Ensure the styles are applied once (on load)
 await applyStyles();
 
-/**
- * @param {Element} mainCssContainer
- * @param {Function} applyStyles
- */
-export function initListener(vfsContainer, applyStyles) {
+export function initListener() {
     const channel = new BroadcastChannel('windpress');
 
     channel.addEventListener('message', async (e) => {

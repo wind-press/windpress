@@ -95,16 +95,10 @@ export async function buildCache(opts) {
     // convert to set to remove duplicates, then back to array
     const candidates = Array.from(new Set(candidates_pool));
 
-    // create a volume object with key-value pairs (relative_path: content) from the volumeStore.data.entries array
-    const volume = volumeStore.data.entries.reduce((acc, entry) => {
-        acc[`/${entry.relative_path}`] = entry.content;
-        return acc;
-    }, {});
-
     const result = await build({
         candidates: candidates,
         entrypoint: '/main.css',
-        volume
+        volume: volumeStore.getKVEntries(),
     });
 
     const normal = await optimize(result);

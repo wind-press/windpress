@@ -34,6 +34,14 @@ export const useVolumeStore = defineStore('volume', () => {
         activeViewEntryRelativePath.value = `custom/${fileName}`;
     }
 
+    function getKVEntries() {
+        // create a volume object with key-value pairs (relative_path: content) from the volumeStore.data.entries array
+        return data.entries.reduce((acc, entry) => {
+            acc[`/${entry.relative_path}`] = entry.content;
+            return acc;
+        }, {});
+    }
+
     /**
      * Pull the data from the server.
      *
@@ -128,6 +136,7 @@ export const useVolumeStore = defineStore('volume', () => {
         data,
         activeViewEntryRelativePath,
         addNewEntry,
+        getKVEntries,
         doPull,
         doPush,
         hasChanged,

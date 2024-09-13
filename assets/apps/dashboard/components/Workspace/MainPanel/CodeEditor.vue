@@ -4,7 +4,6 @@ import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { getVariableList } from '@/packages/core/tailwind';
 import { useVolumeStore } from '@/dashboard/stores/volume';
-import { cloneDeep } from 'lodash-es';
 
 const notifier = useNotifier();
 const ui = useUIStore();
@@ -35,17 +34,12 @@ function doSave() {
             volumeStore.doPull();
         })
         .finally(() => {
-            const volume = volumeStore.data.entries.reduce((acc, entry) => {
-                acc[`/${entry.relative_path}`] = entry.content;
-                return acc;
-            }, {});
-
             channel.postMessage({
                 source: 'windpress/dashboard',
                 target: 'windpress/observer',
                 task: 'windpress.code-editor.saved',
                 payload: {
-                    volume
+                    volume: volumeStore.getKVEntries()
                 }
             });
         });
@@ -74,6 +68,10 @@ const entryValue = computed({
             currentEntry.value.content = val;
         }
     }
+});
+
+const editorReadOnly = computed(() => {
+    return currentEntry.value?.handler === 'read-only';
 });
 
 onBeforeMount(() => {
@@ -164,9 +162,7 @@ function handleEditorMount(editor, monaco) {
         async provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position);
 
-            const theme = volumeStore.data.entries.find(entry => entry.relative_path === 'main.css')?.content || '';
-
-            const variables = (await getVariableList(theme)).map(entry => {
+            const variables = (await getVariableList({ volume: volumeStore.getKVEntries(), })).map(entry => {
                 return {
                     kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
                     label: entry.key,
@@ -213,7 +209,7 @@ channel.addEventListener('message', (e) => {
 </script>
 
 <template>
-    <vue-monaco-editor v-model:value="entryValue" :language="currentLanguage" :path="`file:///${volumeStore.activeViewEntryRelativePath}`" :options="MONACO_EDITOR_OPTIONS" @mount="handleEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
+    <vue-monaco-editor v-model:value="entryValue" :language="currentLanguage" :path="`file:///${volumeStore.activeViewEntryRelativePath}`" :options="{ ...MONACO_EDITOR_OPTIONS, readOnly: editorReadOnly }" @mount="handleEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
 </template>
 
 <style lang="scss">
