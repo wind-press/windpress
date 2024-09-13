@@ -57,7 +57,7 @@ class Volume
         $stubs_main_css = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/main.css');
 
         // check if 'main.css' already exists and content is not empty, else use the stubs
-        $main_css_key = array_search('main.css', array_column($entries, 'name'));
+        $main_css_key = array_search('main.css', array_column($entries, 'name'), true);
 
         if ($main_css_key === false) {
             $entries[] = [
@@ -106,7 +106,7 @@ class Volume
                     do_action('f!windpress/core/volume:save_entries.entry', $entry);
 
                     // use specific handler instead for efficient handling
-                    do_action("f!windpress/core/volume:save_entries.entry.{$entry['handler']}", $entry);
+                    do_action('f!windpress/core/volume:save_entries.entry.' . $entry['handler'], $entry);
                 }
 
                 continue;
@@ -122,7 +122,7 @@ class Volume
                     continue;
                 }
 
-                $entry['relative_path'] = "custom/{$file_name}";
+                $entry['relative_path'] = 'custom/' . $file_name;
 
                 $entry['signature'] = wp_create_nonce(sprintf('%s:%s', WIND_PRESS::WP_OPTION, $entry['relative_path']));
             }

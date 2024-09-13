@@ -22,7 +22,9 @@ use WP_REST_Server;
 
 class Volume extends AbstractApi implements ApiInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function get_prefix(): string
     {
@@ -36,8 +38,8 @@ class Volume extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/index',
             [
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->index($wprestRequest),
-                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->index($wprestRequest),
+                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -46,8 +48,8 @@ class Volume extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/store',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
-                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
+                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
     }
