@@ -3,7 +3,9 @@ import { onMounted } from 'vue';
 import { __ } from '@wordpress/i18n';
 import { useVolumeStore } from '@/dashboard/stores/volume.js';
 import { useNotifier } from '@/dashboard/library/notifier';
+import { useUIStore } from '@/dashboard/stores/ui.js';
 
+const ui = useUIStore();
 const volumeStore = useVolumeStore();
 const notifier = useNotifier();
 
@@ -34,6 +36,12 @@ function addNewEntry() {
     volumeStore.addNewEntry(fileName);
 }
 
+function switchToEntry(entry) {
+    volumeStore.activeViewEntryRelativePath = entry.relative_path;
+
+    ui.virtualState('main-panel.tab.active', 'code-editor').value = 'code-editor'
+}
+
 onMounted(() => {
     if (!volumeStore.data.entries.length) {
         volumeStore.doPull();
@@ -55,7 +63,7 @@ onMounted(() => {
 
     <div class="folders-content ">
         <div class="folders-items flex flex:col {w:30}>.folders-item_.item-icon {w:full;font:1rem;max-w:20}_.item-icon_svg">
-            <div v-for="entry in volumeStore.data.entries" @click="volumeStore.activeViewEntryRelativePath = entry.relative_path" :class="volumeStore.activeViewEntryRelativePath === entry.relative_path ? 'bg:gray-20/.4 bg:gray-20/.2@dark' : ''" class="folders-item folders-file px:14 py:6 cursor:pointer flex">
+            <div v-for="entry in volumeStore.data.entries" @click="switchToEntry(entry)" :class="volumeStore.activeViewEntryRelativePath === entry.relative_path ? 'bg:gray-20/.4 bg:gray-20/.2@dark' : ''" class="folders-item folders-file px:14 py:6 cursor:pointer flex">
                 <div class="item-icon">
                     <template v-if="entry.relative_path === 'main.css'">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 54 33" class="h:1em mr:2 vertical-align:-0.125em">
