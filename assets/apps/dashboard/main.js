@@ -20,8 +20,13 @@ const app = createApp(App);
 
 // if in iframe, access the parent window's wp object
 if (window.self !== window.top) {
-    window.wp = window.top.wp;
-    window.windpress = window.top.windpress;
+    if (!window.wp && window.top.wp) {
+        window.wp = window.top.wp;
+    }
+
+    if (!window.windpress && window.top.windpress) {
+        window.windpress = window.top.windpress;
+    }
 }
 
 app.config.globalProperties.wp_i18n = {

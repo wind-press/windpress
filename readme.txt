@@ -82,6 +82,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.24 next)
+* **Fix**: The Ubiquitous Panel feature issue on the Bricks editor
 
 = 3.1.11 =
 * **Change**: Temporary disable the Ubiquitous Panel feature on the Bricks editor due to causing issue with the integration.
