@@ -56,7 +56,7 @@ const codeEditorTitle = computed(() => {
             </div>
             <div class="tab-head__space flex-grow:1 br:hidden!"></div>
         </div>
-        <div class="tab-body h:full bg:editor-background overflow:auto!">
+        <div :class="{'overflow:auto!': ui.virtualState('main-panel.tab.active', 'code-editor').value !== 'code-editor'}" class="tab-body h:full bg:editor-background">
             <div class="content-panel h:full">
                 <!-- content -->
                 <div class="h:full">

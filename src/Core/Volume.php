@@ -133,7 +133,12 @@ class Volume
             }
 
             try {
-                Common::save_file($entry['content'], $data_dir . $entry['relative_path']);
+                // if the relative path is starts with 'custom/', it is a custom file.
+                if (empty($entry['content']) && strpos($entry['relative_path'], 'custom/') === 0) {
+                    Common::delete_file($data_dir . $entry['relative_path']);
+                } else {
+                    Common::save_file($entry['content'], $data_dir . $entry['relative_path']);
+                }
             } catch (\Throwable $th) {
                 if (WP_DEBUG_LOG) {
                     error_log($th->__toString());

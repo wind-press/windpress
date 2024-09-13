@@ -145,4 +145,32 @@ class Common
             throw new Exception('The saved file is not readable.', 500);
         }
     }
+
+	/**
+	 * Deletes a file or directory.
+	 *
+	 * @param string       $file      Path to the file or directory.
+	 * @param bool         $recursive Optional. If set to true, deletes files and folders recursively.
+	 *                                Default false.
+	 * @param string|false $type      Type of resource. 'f' for file, 'd' for directory.
+	 *                                Default false.
+	 */
+    public static function delete_file($file_path, $recursive = false, $type = false): void
+    {
+        /**
+         * @var \WP_Filesystem_Base $wp_filesystem
+         */
+        global $wp_filesystem;
+
+        if (! $wp_filesystem) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
+
+        $result = $wp_filesystem->delete($file_path, $recursive, $type);
+
+        if ($result === false) {
+            throw new Exception('Failed to delete the file.', 500);
+        }
+    }
 }

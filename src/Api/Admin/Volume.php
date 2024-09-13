@@ -44,15 +44,15 @@ class Volume extends AbstractApi implements ApiInterface
             ]
         );
 
-        // register_rest_route(
-        //     self::API_NAMESPACE,
-        //     $this->get_prefix() . '/store',
-        //     [
-        //         'methods' => WP_REST_Server::CREATABLE,
-        //         'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
-        //         'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
-        //     ]
-        // );
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/store',
+            [
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
+                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+            ]
+        );
     }
 
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
@@ -61,4 +61,20 @@ class Volume extends AbstractApi implements ApiInterface
             'entries' => CoreVolume::get_entries(),
         ]);
     }
+
+    public function store(WP_REST_Request $wprestRequest): WP_REST_Response
+    {
+        $payload = $wprestRequest->get_json_params();
+
+        $entries = $payload['volume']['entries'];
+
+        error_log(print_r($entries, true));
+
+        CoreVolume::save_entries($entries);
+
+        return new WP_REST_Response([
+            'message' => 'data stored successfully',
+        ]);
+    }
+
 }

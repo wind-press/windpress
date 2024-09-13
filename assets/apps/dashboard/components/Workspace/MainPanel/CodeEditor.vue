@@ -4,7 +4,7 @@ import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { getVariableList } from '@/packages/core/tailwind';
 import { useVolumeStore } from '@/dashboard/stores/volume';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 const notifier = useNotifier();
 const ui = useUIStore();
@@ -30,16 +30,20 @@ function doSave() {
         'Storing data...'
     );
 
-    promise.finally(() => {
-        channel.postMessage({
-            source: 'windpress/dashboard',
-            target: 'windpress/observer',
-            task: 'windpress.code-editor.saved',
-            payload: {
-                volume: cloneDeep(volumeStore.data.entries),
-            }
+    promise
+        .then(() => {
+            volumeStore.doPull();
+        })
+        .finally(() => {
+            channel.postMessage({
+                source: 'windpress/dashboard',
+                target: 'windpress/observer',
+                task: 'windpress.code-editor.saved',
+                payload: {
+                    volume: cloneDeep(volumeStore.data.entries),
+                }
+            });
         });
-    });
 }
 
 const currentEntry = computed(() => {
@@ -54,10 +58,6 @@ const currentLanguage = computed(() => {
     }
 
     return '';
-});
-
-const currentPath = computed(() => {
-    return `file:///${volumeStore.activeViewEntryRelativePath}`;
 });
 
 const entryValue = computed({
@@ -210,7 +210,7 @@ channel.addEventListener('message', (e) => {
 </script>
 
 <template>
-    <vue-monaco-editor v-model:value="entryValue" :language="currentLanguage" :path="currentPath" :options="MONACO_EDITOR_OPTIONS" @mount="handleEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
+    <vue-monaco-editor v-model:value="entryValue" :language="currentLanguage" :path="`file:///${volumeStore.activeViewEntryRelativePath}`" :options="MONACO_EDITOR_OPTIONS" @mount="handleEditorMount" :theme="ui.virtualState('window.color-mode', 'light').value === 'light' ? 'vs' : 'vs-dark'" />
 </template>
 
 <style lang="scss">
