@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.1.11
+Stable tag: 3.1.12
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -63,6 +63,8 @@ Visit [our website](https://wind.press) for more information.
 = Credits =
 - Image by [Pixel perfect](https://www.flaticon.com/free-icon/wind_727964) on Flaticon
 
+Affiliate Disclosure: This readme.txt may contain affiliate links. If you decide to make a purchase through these links, we may earn a commission at no extra cost to you.
+
 == Frequently Asked Questions ==
 
 = How to contribute to WindPress? =
@@ -80,8 +82,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.1.12 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.24 next)
+* **New**: A simple local CSS and JavaScript file support to manage the Tailwind CSS customizations
 * **Fix**: The Ubiquitous Panel feature issue on the Bricks editor
 
 = 3.1.11 =
