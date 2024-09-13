@@ -42,6 +42,30 @@ function unsupportedUtilityList() {
     ];
 }
 
+function defaultSort(arrayOfTuples) {
+    return arrayOfTuples
+        .sort(([, a], [, z]) => {
+            if (a === z) return 0;
+            if (a === null) return -1;
+            if (z === null) return 1;
+            return bigSign(a - z);
+        })
+        .map(([className]) => className);
+}
+
+function bigSign(value) {
+    if (value > 0n) {
+        return 1;
+    } else if (value === 0n) {
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
+/**
+ * @param {object|DesignSystem} args 
+ */
 export async function getVariableList(args = {}) {
     let design = args.theme ? args : await loadDesignSystem(args);
 
@@ -66,9 +90,8 @@ export async function getVariableList(args = {}) {
 }
 
 /**
- * @param {string|DesignSystem} theme 
+ * @param {object|DesignSystem} args 
  * @param {Array<string>} classList 
- * @returns 
  */
 export async function sortClasses(args = {}, classList) {
     let design = args.theme ? args : await loadDesignSystem(args);
@@ -76,46 +99,19 @@ export async function sortClasses(args = {}, classList) {
     return defaultSort(design.getClassOrder(classList));
 }
 
-function defaultSort(arrayOfTuples) {
-    return arrayOfTuples
-        .sort(([, a], [, z]) => {
-            if (a === z) return 0;
-            if (a === null) return -1;
-            if (z === null) return 1;
-            return bigSign(a - z);
-        })
-        .map(([className]) => className);
-}
-
-function bigSign(value) {
-    if (value > 0n) {
-        return 1;
-    } else if (value === 0n) {
-        return 0;
-    } else {
-        return -1;
-    }
-}
-
 /**
- * @param {string|DesignSystem} theme 
- * @param {Array<string>} classList 
- * @returns 
+ * @param {object|DesignSystem} args 
+ * @param {Array<string>} classes 
  */
-export async function candidatesToCss(theme, classes) {
-    let design;
-
-    if (typeof theme === 'string') {
-        design = await loadDesignSystem(theme);
-    } else {
-        design = theme;
-    }
+export async function candidatesToCss(args = {}, classes) {
+    let design = args.theme ? args : await loadDesignSystem(args);
 
     return design.candidatesToCss(classes);
 }
 
 
 /**
+ * @param {object|DesignSystem} args 
  * @returns {Promise<ClassEntity>} The data with ClassEntity type.
  */
 export async function getClassList(args = {}) {

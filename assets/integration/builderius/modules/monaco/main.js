@@ -9,30 +9,23 @@
 
 import { logger } from '@/integration/common/logger';
 import { uniIframe } from '@/integration/builderius/constant.js';
-import { getVariableList, loadDesignSystem } from '@/packages/core/tailwind';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwind';
 
 function naturalExpand(value, total = null) {
     const length = typeof total === 'number' ? total.toString().length : 8
     return ('0'.repeat(length) + value).slice(-length)
 }
 
-let main_css = '';
-
-async function updateMainCss() {
-    main_css = await uniIframe.contentWindow.wp.hooks.applyFilters('windpress.module.design_system.main_css');
-}
-
 (async function () {
-    updateMainCss();
-
-    const design = await loadDesignSystem(main_css);
+    const vfsContainer = uniIframe.contentWindow.document.querySelector('script[type="text/tailwindcss"]');
+    const volume = decodeVFSContainer(vfsContainer.textContent);
 
     window.Builderius.API.monaco.languages.registerCompletionItemProvider('builderius-css', {
         provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position);
 
             // register variables
-            const variables = getVariableList(design).map(entry => {
+            const variables = getVariableList({ volume }).map(entry => {
                 return {
                     kind: entry.key.includes('--color') ? window.Builderius.API.monaco.languages.CompletionItemKind.Color : window.Builderius.API.monaco.languages.CompletionItemKind.Variable,
                     label: entry.key,
@@ -66,7 +59,6 @@ channel.addEventListener('message', async (e) => {
 
     if (data.source === source && data.task === task) {
         setTimeout(() => {
-            updateMainCss();
         }, 1000);
     }
 });

@@ -1,6 +1,7 @@
 import { loadDesignSystem } from '../design-system';
 import { set } from 'lodash-es';
 import { candidatesToCss } from '../intellisense';
+import { decodeVFSContainer } from '../bundle';
 
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
