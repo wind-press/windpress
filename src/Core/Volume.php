@@ -65,7 +65,7 @@ class Volume
 
         if ($main_css_key === false) {
             $entries[] = [
-                'file_name' => 'main.css',
+                'name' => 'main.css',
                 'relative_path' => 'main.css',
                 'content' => $stubs_main_css,
                 'handler' => 'internal',
