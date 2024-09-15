@@ -82,6 +82,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Improve**: Relative path support for the local CSS and JavaScript files
+
 = 3.1.14 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.24 next)
 * **New**: A simple local CSS and JavaScript file support to manage the Tailwind CSS customizations

@@ -10,30 +10,30 @@ const volumeStore = useVolumeStore();
 const notifier = useNotifier();
 
 function addNewEntry() {
-    const fileName = prompt(__('Enter the file name (css or js)', 'windpress'), 'theme.css');
+    const filePath = prompt(__('Enter the file name (css or js)', 'windpress'), 'theme.css');
 
-    if (!fileName) {
+    if (!filePath) {
         notifier.alert(__('File name is required', 'windpress'));
         return;
     }
 
-    if (!fileName.endsWith('.css') && !fileName.endsWith('.js')) {
+    if (!filePath.endsWith('.css') && !filePath.endsWith('.js')) {
         notifier.alert(__('File extension must be .css or .js', 'windpress'));
         return;
     }
 
-    // only alphabet, numbers, dash, underscore, and dot are allowed
-    if (!/^[a-zA-Z0-9_.-]+$/.test(fileName)) {
-        notifier.alert(__('Only alphanumeric, dash, underscore, and dot are allowed', 'windpress'));
+    // only alphabet, numbers, dash, underscore, forward slash, and dot are allowed.
+    if (!/^[a-zA-Z0-9_.-\/]+$/.test(filePath)) {
+        notifier.alert(__('Only alphanumeric, dash, underscore, forward slash, and dot are allowed', 'windpress'));
         return;
     }
 
-    if (volumeStore.data.entries.find(entry => entry.relative_path === `custom/${fileName}`)) {
-        notifier.alert(__(`A file named "custom/${fileName}" already exists`, 'windpress'));
+    if (volumeStore.data.entries.find(entry => entry.relative_path === `${filePath}`)) {
+        notifier.alert(__(`A file named "${filePath}" already exists`, 'windpress'));
         return;
     }
 
-    volumeStore.addNewEntry(fileName);
+    volumeStore.addNewEntry(filePath);
 }
 
 function switchToEntry(entry) {
@@ -78,10 +78,10 @@ onMounted(() => {
                         </svg>
                     </template>
                     <template v-else-if="entry.relative_path.endsWith('.js')">
-                        <font-awesome-icon :icon="['fab', 'js-square']" />
+                        <font-awesome-icon :icon="['fab', 'js-square']" class="fg:#f0db4f" />
                     </template>
                     <template v-else-if="entry.relative_path.endsWith('.css')">
-                        <font-awesome-icon :icon="['fab', 'css3-alt']" />
+                        <font-awesome-icon :icon="['fab', 'css3-alt']" class="fg:#264de4 " />
                     </template>
                 </div>
                 <span>

@@ -119,14 +119,18 @@ class Volume
             // if the signature is not set, it is a new entry.
             if (! isset($entry['signature'])) {
                 // sanitize the file name.
-                $file_name = sanitize_file_name(pathinfo($entry['name'], PATHINFO_BASENAME));
+                add_filter('sanitize_file_name_chars', [static::class, 'sanitize_file_name_chars'], 10, 2);
+                // split the path, and sanitize each part.
+                $entry['relative_path'] = implode('/', array_map('sanitize_file_name', explode('/', $entry['relative_path'])));
+                $entry['relative_path'] = sanitize_file_name($entry['relative_path']);
+                remove_filter('sanitize_file_name_chars', [static::class, 'sanitize_file_name_chars'], 10);
+
+                $entry['name'] = pathinfo($entry['relative_path'], PATHINFO_BASENAME);
 
                 // only handle a css and js files.
-                if (! in_array(pathinfo($file_name, PATHINFO_EXTENSION), ['css', 'js'], true)) {
+                if (! in_array(pathinfo($entry['name'], PATHINFO_EXTENSION), ['css', 'js'], true)) {
                     continue;
                 }
-
-                $entry['relative_path'] = 'custom/' . $file_name;
 
                 $entry['signature'] = wp_create_nonce(sprintf('%s:%s', WIND_PRESS::WP_OPTION, $entry['relative_path']));
             }
@@ -137,8 +141,8 @@ class Volume
             }
 
             try {
-                // if the relative path is starts with 'custom/', it is a custom file.
-                if (empty($entry['content']) && strpos($entry['relative_path'], 'custom/') === 0) {
+                // if the content is empty, delete the file.
+                if (empty($entry['content'])) {
                     Common::delete_file($data_dir . $entry['relative_path']);
                 } else {
                     Common::save_file($entry['content'], $data_dir . $entry['relative_path']);
@@ -149,5 +153,11 @@ class Volume
                 }
             }
         }
+    }
+
+    public static function sanitize_file_name_chars(array $special_chars, $filename_raw)
+    {
+        // allow dir
+        return array_diff($special_chars, ['/']);
     }
 }

@@ -23,15 +23,36 @@ export const useVolumeStore = defineStore('volume', () => {
 
     const activeViewEntryRelativePath = ref(null);
 
-    function addNewEntry(fileName) {
+    function cleanPath(path) {
+        // remove ? [ ] \ = < > : ; , ' " & $ # * ( ) | ~ ` ! { } % + ’ « » ” “ \0
+        path = path.replace(/[?[\]\\=<>:;,\'"&$#*()|~`!{}%+’«»”“\0]+/g, '');
+        // %20, + into -
+        path = path.replace(/%20|\+/g, '-');
+        // multi . into .
+        path = path.replace(/\.{2,}/g, '.');
+        // multi / into /
+        path = path.replace(/\/{2,}/g, '/');
+        // \r, \n, \t, space, - into -
+        path = path.replace(/[\r\n\t -]+/g, '-');
+        // remove leading and trailing ., -, _, /, and space
+        path = path.replace(/^[._\/ -]+|[._\/ -]+$/g, '');
+
+        return path;
+    }
+
+    function addNewEntry(filePath) {
+        // split the file path and directory path and remove any unwanted characters
+        let filePathParts = filePath.split('/').map((pathPart) => cleanPath(pathPart)).join('/');
+        filePathParts = cleanPath(filePathParts);
+
         data.entries.push({
-            name: fileName,
-            content: `/* file: custom/${fileName} */\n\n`,
-            relative_path: `custom/${fileName}`,
+            name: filePathParts.split('/').pop(),
+            content: `/* file: ${filePathParts} */\n\n`,
+            relative_path: `${filePathParts}`,
             handler: 'internal',
         });
 
-        activeViewEntryRelativePath.value = `custom/${fileName}`;
+        activeViewEntryRelativePath.value = `${filePathParts}`;
     }
 
     function getKVEntries() {

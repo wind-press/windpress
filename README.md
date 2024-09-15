@@ -109,6 +109,7 @@ Seamless integration with the most popular visual/page builders:
 - [Node.js](https://nodejs.org/)
 - [pnpm](https://pnpm.io)
 - [Composer](https://getcomposer.org/)
+- [Font Awesome Pro](https://docs.fontawesome.com/web/setup/packages#1-configure-pro-package-access)
 
 ### Getting Started
 
