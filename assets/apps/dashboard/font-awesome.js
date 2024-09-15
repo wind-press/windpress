@@ -36,6 +36,7 @@ import {
     faArrowUpRightFromSquare,
     faFaceSmileHearts,
     faHourglassClock,
+    faStarShooting,
 } from '@fortawesome/pro-solid-svg-icons';
 
 import {
@@ -93,6 +94,7 @@ library.add(
     faArrowUpRightFromSquare,
     faFaceSmileHearts,
     faHourglassClock,
+    faStarShooting,
 
     /** far */
     faHeartRegular,

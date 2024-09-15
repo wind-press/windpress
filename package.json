@@ -67,7 +67,7 @@
     "monaco-editor": "^0.51.0",
     "nanoid": "^5.0.7",
     "pinia": "^2.2.2",
-    "postcss": "^8.4.45",
+    "postcss": "^8.4.47",
     "postcss-import": "^16.1.0",
     "postcss-nested": "^6.2.0",
     "pretty-bytes": "^6.1.1",
