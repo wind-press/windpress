@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.1.14
+Stable tag: 3.1.15
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -82,9 +82,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.1.15 =
+* **Improve**: Added the bundled Tailwind CSS version number on the settings page
 * **Improve**: Relative path support for the local CSS and JavaScript files
-* **Improve**: Added Tailwind CSS version number on the settings page
 
 = 3.1.14 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.24 next)
