@@ -17,7 +17,7 @@ The most effortless Tailwind CSS v4 integration for WordPress.
 
 WindPress is a platform agnostic Tailwind CSS v4 integration plugin for WordPress that allows you to use the full power of Tailwind CSS v4 within the WordPress ecosystem.
 
-**Current [Tailwind CSS](https://tailwindcss.com/) version**: 4.0.0-alpha.24 next
+**[Tailwind CSS](https://tailwindcss.com/) version**: 4.0.0-alpha.24 next
 
 ### Features
 
@@ -84,6 +84,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **Improve**: Relative path support for the local CSS and JavaScript files
+* **Improve**: Added Tailwind CSS version number on the settings page
 
 = 3.1.14 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.24 next)

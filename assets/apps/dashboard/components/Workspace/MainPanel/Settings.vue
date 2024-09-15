@@ -9,6 +9,7 @@ import { useBusyStore } from '@/dashboard/stores/busy';
 import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { useApi } from '@/dashboard/library/api';
+import { version as tw_version } from '@tailwindcss/root/packages/tailwindcss/package.json';
 
 const notifier = useNotifier();
 const licenseStore = useLicenseStore();
@@ -194,6 +195,17 @@ channel.addEventListener('message', (e) => {
                 <div class="flex {bt:1|solid|sideBar-border}>*+* flex:column">
                     <div class="flex flex:column gap:30 p:20">
                         <div class="flex flex:column gap:10">
+                            <div class="flex align-items:center font:15 font:medium">
+                                {{ wp_i18n.__('Tailwind CSS version', 'windpress') }}:
+                                <span class="font:regular ml:10">
+                                    {{ tw_version }}
+                                    <a href="https://github.com/tailwindlabs/tailwindcss/releases" target="_blank">
+                                        <font-awesome-icon :icon="['far', 'arrow-up-right-from-square']" />
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex:column gap:10">
                             <span class="font:15">{{ wp_i18n.__('Ubiquitous WindPress panel', 'windpress') }}</span>
                             <div class="flex align-items:center gap:4">
                                 <input type="checkbox" id="enable_front_ubiquitous_panel" v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', true).value" class="checkbox mt:0">
@@ -296,6 +308,4 @@ channel.addEventListener('message', (e) => {
             </div>
         </div>
     </div>
-
-
 </template>
