@@ -3,14 +3,6 @@ import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compar
 import { compileCandidates } from '@tailwindcss/root/packages/tailwindcss/src/compile';
 
 /**
- * @typedef {Object} ClassEntity
- * @property {'utility' | 'variant'} kind - The kind of class entity.
- * @property {string} selector - The CSS selector.
- * @property {Declaration[]} [declarations] - An optional array of declarations.
- * @property {string|null} [css] - An optional CSS string or null.
- */
-
-/**
  * @param {DesignSystem} design
  */
 function getUtilityList(design) {
