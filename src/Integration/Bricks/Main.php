@@ -25,6 +25,7 @@ class Main implements IntegrationInterface
     public function __construct()
     {
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
+        add_action('a!windpress/admin/admin_page:enqueue_scripts.before', fn () => $this->enqueue_scripts_before(), 1_000_001);
 
         if ($this->is_enabled()) {
             add_filter('f!windpress/core/runtime:is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
@@ -80,5 +81,14 @@ class Main implements IntegrationInterface
         }
 
         return bricks_is_builder_iframe();
+    }
+
+    /**
+     * Remove Bricks's admin scripts and styles from WindPress admin page.
+     */
+    public function enqueue_scripts_before()
+    {
+        wp_dequeue_style('bricks-admin');
+        wp_dequeue_script('bricks-admin');
     }
 }

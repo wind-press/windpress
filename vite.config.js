@@ -84,6 +84,13 @@ export default defineConfig({
             ],
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: 'modern-compiler',
+            },
+        },
+    },
     publicDir: 'assets/static',
     resolve: {
         alias: {

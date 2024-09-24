@@ -1,7 +1,6 @@
 import { compile } from '@tailwindcss/root/packages/tailwindcss/src';
 import { bundle } from './bundle.js';
-import { loadPlugin } from './plugin.js';
-import { loadConfig } from './config.js';
+import { loadModule } from './module.js';
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
 import init, { Features, transform } from 'lightningcss-wasm';
 
@@ -24,8 +23,7 @@ export async function build({ candidates = [], entrypoint = '/main.css', volume 
     });
 
     return (await compile(bundleResult.css, {
-        loadPlugin,
-        loadConfig: async (configPath) => loadConfig(configPath, opts.volume)
+        loadModule: async (modulePath, base, resourceHint) => loadModule(modulePath, base, resourceHint, opts.volume)
     })).build(opts.candidates);
 }
 

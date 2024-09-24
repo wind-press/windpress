@@ -1,6 +1,7 @@
 import { loadDesignSystem } from './design-system';
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
 import { compileCandidates } from '@tailwindcss/root/packages/tailwindcss/src/compile';
+import parseValue from 'postcss-value-parser';
 
 /**
  * @param {DesignSystem} design
@@ -64,11 +65,15 @@ export async function getVariableList(args = {}) {
     return Array.from(design.theme.entries()).map(
         (entry, index) => {
             const variable = entry[0];
+            let isCalculated = false;
+            let calculatedValue = null;
 
             const defaultValue = entry[1].value;
-            const calculatedValue = `${parseFloat(defaultValue) * 16}px`;
 
-            const isCalculated = defaultValue.includes('rem');
+            if (typeof defaultValue === 'string' && defaultValue.includes('rem')) {
+                calculatedValue = `${parseFloat(defaultValue) * 16}px`;
+                isCalculated = true;
+            }
 
             return {
                 key: variable,
@@ -91,6 +96,44 @@ export async function sortClasses(args = {}, classList) {
     return defaultSort(design.getClassOrder(classList));
 }
 
+function addPixelEquivalentsToValue(value, rootFontSize) {
+    if (!value.includes('rem')) {
+        return value;
+    }
+
+    let commentPool = [];
+
+    parseValue(value).walk((node) => {
+        if (node.type !== 'word') {
+            return true
+        }
+
+
+        let unit = parseValue.unit(node.value)
+        if (!unit || unit.unit !== 'rem') {
+            return false
+        }
+
+
+        let commentStr = ` /* ${parseFloat(unit.number) * rootFontSize}px */`
+
+        commentPool.push({
+            content: commentStr,
+            sourceEndIndex: node.sourceEndIndex
+        })
+
+        return false
+    });
+
+    let offset = 0;
+    commentPool.forEach((comment) => {
+        value = value.slice(0, comment.sourceEndIndex + offset) + comment.content + value.slice(comment.sourceEndIndex + offset)
+        offset += comment.content.length
+    });
+
+    return value;
+}
+
 /**
  * @param {object|DesignSystem} args 
  * @param {Array<string>} classes 
@@ -98,7 +141,11 @@ export async function sortClasses(args = {}, classList) {
 export async function candidatesToCss(args = {}, classes) {
     let design = args.theme ? args : await loadDesignSystem(args);
 
-    return design.candidatesToCss(classes);
+    let css = design.candidatesToCss(classes);
+
+    css = css.map((value) => addPixelEquivalentsToValue(value, 16));
+
+    return css;
 }
 
 
@@ -122,7 +169,6 @@ export async function getClassList(args = {}) {
     const excludeUtilities = (classEntity) => {
         return classEntity.selector !== '*';
     };
-
 
     /**
      * @param {ClassEntity} classEntity 

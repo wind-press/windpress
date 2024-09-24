@@ -14,7 +14,9 @@ async function classnameToCss(input) {
 
     const design = await loadDesignSystem({ volume });
 
-    return (await candidatesToCss(design, classes)).join(" ");
+    let css = await candidatesToCss(design, classes);
+
+    return Array.isArray(css) ? css.join(" ") : css;
 }
 
 // if the wp-hooks is available

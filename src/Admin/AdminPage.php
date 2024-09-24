@@ -49,7 +49,9 @@ class AdminPage
 
     private function render()
     {
+        do_action('a!windpress/admin/admin_page:render.before');
         echo '<div id="windpress-app" class=""></div>';
+        do_action('a!windpress/admin/admin_page:render.after');
     }
 
     private function init_hooks()
@@ -59,6 +61,8 @@ class AdminPage
 
     private function enqueue_scripts()
     {
+        do_action('a!windpress/admin/admin_page:enqueue_scripts.before');
+
         $handle = WIND_PRESS::WP_OPTION . ':admin';
 
         AssetVite::get_instance()->enqueue_asset('assets/apps/dashboard/main.js', [
@@ -87,5 +91,7 @@ class AdminPage
                 'site_url' => get_site_url(),
             ],
         ]);
+
+        do_action('a!windpress/admin/admin_page:enqueue_scripts.after');
     }
 }
