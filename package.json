@@ -41,7 +41,7 @@
     "@master/css-runtime": "2.0.0-rc.45",
     "@std/encoding": "npm:@jsr/std__encoding@^1.0.5",
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
-    "@types/node": "^20.16.6",
+    "@types/node": "^20.16.7",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vueuse/core": "^11.1.0",
     "@vueuse/integrations": "^11.1.0",
