@@ -1,15 +1,15 @@
-=== WindPress ===
+=== WindPress - Tailwind CSS integration for WordPress ===
 Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.1.15
+Stable tag: 3.1.17
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-The most effortless Tailwind CSS v4 integration for WordPress.
+Integrate Tailwind CSS into WordPress seamlessly, in just seconds. Works well with the block editor, page builders, plugins, themes, and custom code.
 
 == Description ==
 
@@ -27,7 +27,14 @@ WindPress is packed full of features designed to streamline your workflow. Some 
 * **Customizable Configuration**: The plugin comes with a default Tailwind CSS configuration, but you can easily customize it to fit your needs.
 * **Easy to use**: Simplified and intuitive settings to get you up and running quickly.
 * **Lightweight**: The plugin dashboard built on top of WordPress REST API, and a modern JavaScript framework for an instant, responsive user experience. Yet it has a small footprint and won't slow down your site.
-* **Blazingly fast**: Cache makes your WordPress site blazing fast. Generate the final CSS file in the browser without server-side tools. None of your data is transferred over the network
+* **Blazingly fast**: Cache makes your WordPress site blazing fast. Generate the final optimized CSS file in the browser without server-side tools. None of your data is transferred over the network.
+
+And some specific integrations also include the following features:
+
+* **Autocompletion**: As you type, Tailwind CSS class names will be suggested automatically.
+* **Variable Picker**: Easily select Tailwind CSS themes' colors, fonts, and other variables from a panel.
+* **HTML to native elements**: Convert Tailwind CSS HTML to native elements in the editor.
+* **Ubiquitous Panel**: A floating panel that allows you to quickly access the WindPress settings from anywhere on the page.
 
 ### Seamless Integration
 
@@ -82,7 +89,7 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.1.17 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.25 next)
 
 = 3.1.15 =

@@ -1,13 +1,11 @@
 <?php
 
 /**
- * WindPress - The most effortless Tailwind CSS v4 integration for WordPress
- *
  * @wordpress-plugin
  * Plugin Name:         WindPress
  * Plugin URI:          https://wind.press
- * Description:         The most effortless Tailwind CSS v4 integration for WordPress
- * Version:             3.1.15
+ * Description:         Integrate Tailwind CSS into WordPress seamlessly, in just seconds. Works well with the block editor, page builders, plugins, themes, and custom code.
+ * Version:             3.1.17
  * Requires at least:   6.0
  * Requires PHP:        7.4
  * Author:              WindPress
