@@ -21,8 +21,6 @@ use WindPress\WindPress\Utils\Config;
 
 /**
  * @since 3.0.0
- *
- * TODO: This class is not yet implemented, it's just temporary for Universal Editor testing purpose.
  */
 class Runtime
 {
@@ -35,16 +33,12 @@ class Runtime
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Singletons should not be cloneable.
      */
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     /**
      * Singletons should not be restorable from strings.
@@ -54,6 +48,16 @@ class Runtime
     public function __wakeup()
     {
         throw new Exception('Cannot unserialize a singleton.');
+    }
+
+    /**
+     * Get the Tailwind CSS version.
+     *
+     * @return int
+     */
+    public static function tailwindcss_version()
+    {
+        return (int) apply_filters('f!windpress/core/runtime:tailwindcss_version', Config::get('general.tailwindcss.version', 4));
     }
 
     /**
@@ -93,9 +97,9 @@ class Runtime
         $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
 
         if ($is_cache_enabled && $this->is_cache_exists() && ! $is_exclude_admin) {
-            add_action('wp_head', fn () => $this->enqueue_css_cache(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_css_cache(), 1_000_001);
         } else {
-            add_action('wp_head', fn () => $this->enqueue_play_cdn(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
         }
 
         if (
@@ -103,7 +107,7 @@ class Runtime
             && current_user_can('manage_options')
             && ! apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
         ) {
-            add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
+            add_action('wp_head', fn() => $this->enqueue_front_panel(), 1_000_001);
         }
     }
 
@@ -140,7 +144,7 @@ class Runtime
 
     public function enqueue_play_cdn($display = true)
     {
-        $volumeEntries = array_reduce(Volume::get_entries(), fn ($carry, $entry) => $carry + [
+        $volumeEntries = array_reduce(Volume::get_entries(), fn($carry, $entry) => $carry + [
             '/' . $entry['relative_path'] => $entry['content'],
         ], []);
 
@@ -148,6 +152,19 @@ class Runtime
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
 
+        $tailwindcss_version = static::tailwindcss_version();
+
+        if ($tailwindcss_version === 3) {
+            $this->enqueue_play_cdn_v3();
+        } elseif ($tailwindcss_version === 4) {
+            $this->enqueue_play_cdn_v4();
+        }
+    }
+
+    public function enqueue_play_cdn_v3() {}
+
+    public function enqueue_play_cdn_v4()
+    {
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind-v4/play/autocomplete.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
             'in-footer' => true,
@@ -183,6 +200,7 @@ class Runtime
 
         wp_localize_script($handle, 'windpress', [
             '_version' => WIND_PRESS::VERSION,
+            '_tailwind_version' => static::tailwindcss_version(),
             '_via_wp_org' => ! Common::is_updater_library_available(),
             '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
             'rest_api' => [

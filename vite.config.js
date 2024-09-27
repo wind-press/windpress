@@ -23,7 +23,7 @@ export default defineConfig({
             input: {
                 dashboard: 'assets/apps/dashboard/main.js',
 
-                // Tailwind
+                // Tailwind v4
                 'packages/core/tailwind-v4/play/observer': 'assets/packages/core/tailwind-v4/play/observer.js',
                 'packages/core/tailwind-v4/play/autocomplete': 'assets/packages/core/tailwind-v4/play/autocomplete.js',
                 'packages/core/tailwind-v4/play/sort': 'assets/packages/core/tailwind-v4/play/sort.js',
