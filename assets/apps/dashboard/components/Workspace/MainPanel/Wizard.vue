@@ -3,7 +3,7 @@ import postcss from 'postcss';
 import tailwindcssNesting from 'tailwindcss/src/postcss-plugins/nesting';
 import processTailwindFeatures from 'https://esm.sh/tailwindcss@3/src/processTailwindFeatures';
 import resolveConfig from 'tailwindcss/src/public/resolve-config.js';
-import { importLocalModule } from '@/packages/core/tailwind/module';
+import { importLocalModule } from '@/packages/core/tailwind-v4/module';
 
 function prepareConfig(configStr) {
     let config = configStr

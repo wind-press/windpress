@@ -45,7 +45,7 @@
     "@vitejs/plugin-vue": "^5.1.4",
     "@vueuse/core": "^11.1.0",
     "@vueuse/integrations": "^11.1.0",
-    "@windpress/oxide-parser-wasm": "^1.0.5",
+    "@windpress/oxide-parser-wasm": "^1.0.6",
     "@wordpress/block-editor": "^14.3.0",
     "@wordpress/blocks": "^13.8.0",
     "@wordpress/components": "^28.8.0",

@@ -2,7 +2,7 @@
 import { shallowRef, onBeforeMount, computed } from 'vue';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useNotifier } from '@/dashboard/library/notifier';
-import { getVariableList } from '@/packages/core/tailwind';
+import { getVariableList } from '@/packages/core/tailwind-v4';
 import { useVolumeStore } from '@/dashboard/stores/volume';
 
 const notifier = useNotifier();

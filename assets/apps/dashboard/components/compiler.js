@@ -3,7 +3,7 @@ import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
-import { build, find_tw_candidates, optimize } from '@/packages/core/tailwind';
+import { build, find_tw_candidates, optimize } from '@/packages/core/tailwind-v4';
 
 const api = useApi();
 

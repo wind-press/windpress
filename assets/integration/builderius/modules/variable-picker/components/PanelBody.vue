@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
 import { uniIframe } from '@/integration/builderius/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwind';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwind-v4';
 import ExpansionPanel from './ExpansionPanel.vue';
 import { set } from 'lodash-es';
 import CommonVariableItems from './CommonVariableItems.vue';
