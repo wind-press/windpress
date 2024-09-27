@@ -148,22 +148,22 @@ class Runtime
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/autocomplete.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind-v4/play/autocomplete.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/sort.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind-v4/play/sort.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':sort',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/classname-to-css.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind-v4/play/classname-to-css.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/observer.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind-v4/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
         ]);

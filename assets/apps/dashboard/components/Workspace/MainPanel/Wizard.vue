@@ -1,88 +1,7 @@
 <script setup>
-import postcss from 'postcss';
-import tailwindcssNesting from 'tailwindcss/src/postcss-plugins/nesting';
-import processTailwindFeatures from 'https://esm.sh/tailwindcss@3/src/processTailwindFeatures';
-import resolveConfig from 'tailwindcss/src/public/resolve-config.js';
-import { importLocalModule } from '@/packages/core/tailwind-v4/module';
-
-function prepareConfig(configStr) {
-    let config = configStr
-        // catch multi-line import statements and replace them with single line
-        .replace(/import\s+({[^}]+})\s+from\s+['"](.+)['"]/g, (_m, $1, $2) => {
-            return `import ${$1.replace(/\n/g, '')} from '${$2}'`;
-        })
-        // do the rest
-        .split('\n')
-        .map((line, i) =>
-            line.replace(
-                /\bimport\s+(.+)\s+from\s+['"](.+)['"]/g,
-                (_m, variable, url) => {
-                    return `const ${variable.indexOf('{') === -1
-                        ? `{default: ${variable}}`
-                        : variable.replace(/\s+as\s+/, ': ')
-                        } = await import('${url}')`;
-                }
-            )
-        )
-        .map((line, i) =>
-            line.replace(
-                /\brequire\(([^)]*)\)/g,
-                (_m, id) =>
-                    `(await require(${id.trim() === '' ? 'undefined' : id}, ${i + 1}))`
-            )
-        )
-        .join('\n');
-
-    return /*js*/ `
-        import { parse as parsePackage } from 'https://esm.sh/parse-package-name';
-
-        class RequireError extends Error {
-            constructor(message, line) {
-                super(message);
-                this.name = 'RequireError';
-                this.line = line;
-            }
-        }
-
-        let importShim;
-        try {
-            await (0, eval)('import("")');
-        } catch (error) {
-            if (error instanceof TypeError) {
-                importShim = (0, eval)('u=>import(u)');
-            } else {
-                var s = document.createElement('script');
-                s.src = 'https://esm.sh/shimport/index.js?raw';
-                document.head.appendChild(s);
-                importShim = __shimport__.load;
-            }
-        }
-
-        const require = async (m, line) => {
-            if (typeof m !== 'string') {
-                throw new RequireError('The "id" argument must be of type string. Received ' + typeof m, line)
-            }
-            if (m === '') {
-                throw new RequireError("The argument 'id' must be a non-empty string. Received ''", line)
-            }
-            let result
-            try {
-                const _m = parsePackage(m);
-                const href = 'https://esm.sh/' + _m.name + '@' + _m.version + _m.path
-                result = await importShim(href)
-            } catch (error) {
-                console.error(error)
-                throw new RequireError("Cannot find module '" + m + "'", line)
-            }
-            return result.default || result
-        }
-        ${config}
-    `;
-}
-
+import { build, optimize } from '@/packages/core/tailwind-v3';
 
 (async () => {
-    const processor = postcss();
 
     let mainCss = /*css*/ `
         @tailwind base;
@@ -93,7 +12,7 @@ function prepareConfig(configStr) {
     let contents = [
         {
             content: `
-                <h1 class="text-3xl font-bold underline">
+                <h1 class="text-3xl font-bold underline lg:bg-white md:w-32">
                     Hello world!
                 </h1>
             `
@@ -104,7 +23,7 @@ function prepareConfig(configStr) {
         import daisyui from 'https://esm.sh/daisyui?bundle-deps';
 
         export default {
-            safelist: ['bg-red-500','bg-red-600'],
+            // safelist: ['bg-red-500','bg-red-600'],
             corePlugins: {
                 preflight: false,
             },
@@ -115,37 +34,26 @@ function prepareConfig(configStr) {
         }
     `;
 
-    console.log('configStr: ', prepareConfig(configStr));
+    const volume = {
+        '/tailwind.config.js': configStr,
+        '/main.css': mainCss,
+    };
 
-    const configJs = resolveConfig(await importLocalModule('./tailwind.config.js', null, 'config', { '/tailwind.config.js': prepareConfig(configStr) }));
-
-    console.log('twConfigJs resolved: ', configJs);
-
-    let twPostcssPlugin = Object.assign(
-        function (opts) {
-            return {
-                postcssPlugin: 'tailwindcss',
-                async Once(root, { result }) {
-                    console.log('configJs', configJs);
-                    await processTailwindFeatures(({ createContext }) => {
-                        return () => createContext(
-                            configJs,
-                            contents.map((content) => (typeof content === 'string' ? { content } : content))
-                        )
-                    })(root, result);
-                },
-            };
+    let compiled = await build({
+        entrypoint: {
+            css: '/main.css',
+            config: '/tailwind.config.js',
         },
-        { postcss: true }
-    )
+        contents,
+        volume,
+    });
 
-    processor.use(twPostcssPlugin);
+    let optimized = await optimize(compiled, true);
 
-    processor.use(tailwindcssNesting());
+    console.log(compiled);
 
-    let processed_css = await processor.process(mainCss, { from: undefined, }).then((result) => result.css);
+    console.log(optimized.css);
 
-    console.log(processed_css);
 
 })();
 
