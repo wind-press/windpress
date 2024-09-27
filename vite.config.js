@@ -101,4 +101,7 @@ export default defineConfig({
             '@/packages': path.resolve(__dirname, './assets/packages'),
         },
     },
+    define: {
+        // __dirname: __dirname,
+    }
 });

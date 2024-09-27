@@ -21,13 +21,13 @@ export async function loadModule(modulePath, base, resourceHint, volume = {}) {
 
 }
 
-async function importCdnModule(path, base, resourceHint) {
+export async function importCdnModule(path, base, resourceHint) {
     let module = await import(/* @vite-ignore */ path).then((m) => m.default ?? m);
 
     return module;
 }
 
-async function importLocalModule(modulePath, base, resourceHint, volume = {}) {
+export async function importLocalModule(modulePath, base, resourceHint, volume = {}) {
     // relative path as absolute path
     if (modulePath.startsWith('./')) {
         modulePath = path.resolve(
