@@ -2,6 +2,7 @@ import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_
 import init, { transform, browserslistToTargets } from 'lightningcss-wasm';
 import browserslist from 'browserslist';
 import { compile } from './compile';
+import { version as tw3_version } from 'tailwindcss/package.json';
 
 await init(lightningcssWasmFile);
 
@@ -16,7 +17,9 @@ await init(lightningcssWasmFile);
 export async function build({ contents = [], entrypoint = {}, volume = {}, ...opts } = {}) {
     opts = { contents, entrypoint, volume, ...opts };
 
-    return await compile(opts);
+    let result = await compile(opts);
+
+    return `/*! tailwindcss v${tw3_version} | MIT License | https://tailwindcss.com */\n${result}`;
 }
 
 /**

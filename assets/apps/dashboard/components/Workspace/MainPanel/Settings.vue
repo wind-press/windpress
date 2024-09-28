@@ -76,7 +76,8 @@ function doGenerateCache() {
         target: 'windpress/dashboard',
         task: 'windpress.generate-cache',
         payload: {
-            force_pull: true
+            force_pull: true,
+            tailwindcss_version: Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value),
         }
     });
 }

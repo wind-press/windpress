@@ -3,7 +3,8 @@ import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
-import { build, find_tw_candidates, optimize } from '@/packages/core/tailwindcss-v4';
+import { build as buildV4, find_tw_candidates, optimize as optimizeV4 } from '@/packages/core/tailwindcss-v4';
+import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwindcss-v3';
 
 const api = useApi();
 
@@ -11,10 +12,10 @@ export async function buildCache(opts) {
     const volumeStore = useVolumeStore();
     const logStore = useLogStore();
 
-
     const options = Object.assign({
         force_pull: false,
         store: true,
+        tailwindcss_version: 4,
     }, opts);
 
     let providers = [];
@@ -84,25 +85,42 @@ export async function buildCache(opts) {
 
     logStore.add({ message: 'Building cache...', type: 'info' });
 
-    const candidates_pool = [];
+    let normal = null;
+    let minified = null;
 
-    contents.forEach((content) => {
-        const candidates = find_tw_candidates(content);
+    if (options.tailwindcss_version === 4) {
+        const candidates_pool = [];
 
-        candidates_pool.push(...candidates);
-    });
+        contents.forEach((content) => {
+            const candidates = find_tw_candidates(content);
 
-    // convert to set to remove duplicates, then back to array
-    const candidates = Array.from(new Set(candidates_pool));
+            candidates_pool.push(...candidates);
+        });
 
-    const result = await build({
-        candidates: candidates,
-        entrypoint: '/main.css',
-        volume: volumeStore.getKVEntries(),
-    });
+        // convert to set to remove duplicates, then back to array
+        const candidates = Array.from(new Set(candidates_pool));
 
-    const normal = await optimize(result);
-    const minified = await optimize(result, true);
+        const result = await buildV4({
+            candidates: candidates,
+            entrypoint: '/main.css',
+            volume: volumeStore.getKVEntries(),
+        });
+
+        normal = (await optimizeV4(result)).css;
+        minified = (await optimizeV4(result, true)).css;
+    } else if (options.tailwindcss_version === 3) {
+        const result = await buildV3({
+            entrypoint: {
+                css: '/main.css',
+                config: '/tailwind.config.js',
+            },
+            contents,
+            volume: volumeStore.getKVEntries(),
+        });
+
+        normal = (await optimizeV3(result)).css;
+        minified = (await optimizeV3(result, true)).css;
+    }
 
     logStore.add({ message: 'Cache built', type: 'success' });
 
@@ -117,7 +135,7 @@ export async function buildCache(opts) {
         await api
             .post('admin/settings/cache/store', {
                 // @see https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
-                content: encodeBase64(minified.css),
+                content: encodeBase64(minified),
             })
             .then((resp) => {
                 css_cache = resp.data.cache;
