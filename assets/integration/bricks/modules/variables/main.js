@@ -8,7 +8,7 @@
  */
 
 import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwind-v4';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
 import { logger } from '@/integration/common/logger';
 import { customAlphabet } from 'nanoid';
 

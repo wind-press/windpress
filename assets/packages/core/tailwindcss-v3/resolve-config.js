@@ -1,5 +1,5 @@
 import twResolveConfig from 'tailwindcss/src/public/resolve-config.js';
-import { importLocalModule } from '@/packages/core/tailwind-v4/module';
+import { importLocalModule } from '@/packages/core/tailwindcss-v4/module';
 
 export async function resolveConfig(configStr) {
     configStr = prepareConfig(configStr);

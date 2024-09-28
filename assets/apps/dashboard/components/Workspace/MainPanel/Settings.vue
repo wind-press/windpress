@@ -199,10 +199,10 @@ channel.addEventListener('message', (e) => {
                             <div class="flex max-w:400 w:full">
                                 <fieldset :aria-label="wp_i18n.__('Choose the Tailwind CSS version', 'windpress')" class="font:14 w:full">
                                     <div class="flex align-items:center justify-content:space-between leading:1.5">
-                                        <div class="font:medium  text-gray-900">{{ wp_i18n.__('Tailwind CSS version', 'windpress') }}</div>
+                                        <div class="font:15">{{ wp_i18n.__('Tailwind CSS version', 'windpress') }}</div>
                                         <a href="https://github.com/tailwindlabs/tailwindcss/releases" target="_blank" class="">{{ wp_i18n.__('See release notes', 'windpress') }}</a>
                                     </div>
-                                    <div class="mt:8 grid grid-cols:2 gap:12 {flex;cursor:pointer;align-items:center;justify-content:center;r:4;px:12;py:12;font:semibold;flex-grow:1;bg:gray-10/.7}>label {bg:gray-10/.1}>label@dark {outline:1|solid|gray-20}>label:hover {bg:sky-70;fg:white}>label:has(:checked) {bg:sky-70;fg:white}>label.active@dark">
+                                    <div class="mt:8 grid grid-cols:2 gap:12 {flex;cursor:pointer;align-items:center;justify-content:center;r:4;px:12;py:12;font:semibold;flex-grow:1;bg:gray-10/.7}>label {bg:gray-10/.1}>label@dark {outline:1|solid|gray-20}>label:hover {bg:sky-70;fg:white}>label:has(:checked) {bg:sky-70;fg:white}>label:has(:checked)@dark">
                                         <label>
                                             <input type="radio" name="tailwindcss_version" value="3" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
                                             <span>{{ tw3_version }}</span>

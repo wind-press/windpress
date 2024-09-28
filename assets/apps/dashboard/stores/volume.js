@@ -79,11 +79,19 @@ export const useVolumeStore = defineStore('volume', () => {
             .then(response => response.data)
             .then((res) => {
                 const entries = res.entries;
+
+                const tailwindConfigJsIndex = entries.findIndex((entry) => entry.relative_path === 'tailwind.config.js');
+                if (tailwindConfigJsIndex !== -1) {
+                    const tailwindConfigJs = entries.splice(tailwindConfigJsIndex, 1);
+                    entries.unshift(...tailwindConfigJs);
+                }
+
                 const mainCssIndex = entries.findIndex((entry) => entry.relative_path === 'main.css');
                 if (mainCssIndex !== -1) {
                     const mainCss = entries.splice(mainCssIndex, 1);
                     entries.unshift(...mainCss);
                 }
+
                 data.entries = entries;
 
                 updateInitValues();

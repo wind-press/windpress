@@ -1,5 +1,5 @@
 <script setup>
-import { build, optimize } from '@/packages/core/tailwind-v3';
+import { build, optimize } from '@/packages/core/tailwindcss-v3';
 
 (async () => {
 
