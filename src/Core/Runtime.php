@@ -33,12 +33,16 @@ class Runtime
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Singletons should not be cloneable.
      */
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * Singletons should not be restorable from strings.
@@ -97,9 +101,9 @@ class Runtime
         $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
 
         if ($is_cache_enabled && $this->is_cache_exists() && ! $is_exclude_admin) {
-            add_action('wp_head', fn() => $this->enqueue_css_cache(), 1_000_001);
+            add_action('wp_head', fn () => $this->enqueue_css_cache(), 1_000_001);
         } else {
-            add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
+            add_action('wp_head', fn () => $this->enqueue_play_cdn(), 1_000_001);
         }
 
         if (
@@ -107,7 +111,7 @@ class Runtime
             && current_user_can('manage_options')
             && ! apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
         ) {
-            add_action('wp_head', fn() => $this->enqueue_front_panel(), 1_000_001);
+            add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
         }
     }
 
@@ -144,7 +148,7 @@ class Runtime
 
     public function enqueue_play_cdn($display = true)
     {
-        $volumeEntries = array_reduce(Volume::get_entries(), fn($carry, $entry) => $carry + [
+        $volumeEntries = array_reduce(Volume::get_entries(), fn ($carry, $entry) => $carry + [
             '/' . $entry['relative_path'] => $entry['content'],
         ], []);
 

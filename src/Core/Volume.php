@@ -79,7 +79,7 @@ class Volume
 
         if ($tailwindcss_version === 3) {
             $stubs_tailwind_config_js = file_get_contents(sprintf('%s/stubs/tailwindcss-v%d/tailwind.config.js', dirname(WIND_PRESS::FILE), $tailwindcss_version));
-            
+
             // check if 'tailwind.config.js' already exists and content is not empty, else use the stubs
             $tailwind_config_js_key = array_search('tailwind.config.js', array_column($entries, 'name'), true);
 

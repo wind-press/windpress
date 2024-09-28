@@ -7,7 +7,7 @@
  * Convert HTML string to Bricks element
  */
 
-import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
+import { brxGlobalProp } from '@/integration/bricks/constant.js';
 import { logger } from '@/integration/common/logger.js';
 import { parse } from './dom2elements.js';
 

@@ -25,7 +25,7 @@ export const useVolumeStore = defineStore('volume', () => {
 
     function cleanPath(path) {
         // remove ? [ ] \ = < > : ; , ' " & $ # * ( ) | ~ ` ! { } % + ’ « » ” “ \0
-        path = path.replace(/[?[\]\\=<>:;,\'"&$#*()|~`!{}%+’«»”“\0]+/g, '');
+        path = path.replace(/[?[\]\\=<>:;,'"&$#*()|~`!{}%+’«»”“\0]+/g, '');
         // %20, + into -
         path = path.replace(/%20|\+/g, '-');
         // multi . into .
@@ -35,7 +35,7 @@ export const useVolumeStore = defineStore('volume', () => {
         // \r, \n, \t, space, - into -
         path = path.replace(/[\r\n\t -]+/g, '-');
         // remove leading and trailing ., -, _, /, and space
-        path = path.replace(/^[._\/ -]+|[._\/ -]+$/g, '');
+        path = path.replace(/^[._/ -]+|[._/ -]+$/g, '');
 
         return path;
     }
