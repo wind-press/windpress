@@ -163,6 +163,11 @@ class Runtime
 
     public function enqueue_play_cdn_v3()
     {
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/autocomplete.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
+            'in-footer' => true,
+        ]);
+
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,

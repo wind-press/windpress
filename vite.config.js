@@ -31,6 +31,7 @@ export default defineConfig({
 
                 // Tailwind v3
                 'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.js',
+                'packages/core/tailwindcss-v3/play/autocomplete': 'assets/packages/core/tailwindcss-v3/play/autocomplete.js',
 
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',

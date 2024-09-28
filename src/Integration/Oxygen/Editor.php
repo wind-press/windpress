@@ -75,7 +75,7 @@ class Editor
                         return autocompleteItems;
                     }
 
-                    const windpress_suggestions = iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', text).map((s) => {
+                    const windpress_suggestions = await iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', text).map((s) => {
                         return {
                             value: s.value,
                             color: s.color,
