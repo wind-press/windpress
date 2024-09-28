@@ -148,7 +148,7 @@ let tippyInstance = tippy(document.createElement('div'), {
 });
 
 function hoverPreviewProvider() {
-    if (windpress?.loaded?.module?.classnameToCss !== true) {
+    if (window.windpress?.loaded?.module?.classnameToCss !== true) {
         return;
     }
 
@@ -162,7 +162,7 @@ function hoverPreviewProvider() {
 
     async function showTippy(markWordElement) {
         const classname = markWordElement.textContent;
-        const generatedCssCode = await windpress.module.classnameToCss.generate(classname);
+        const generatedCssCode = await window.windpress.module.classnameToCss.generate(classname);
         if (generatedCssCode === null || generatedCssCode.trim() === '') {
             return null;
         };

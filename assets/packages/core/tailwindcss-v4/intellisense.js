@@ -97,7 +97,7 @@ export async function sortClasses(args = {}, classList) {
 }
 
 function addPixelEquivalentsToValue(value, rootFontSize) {
-    if (!value.includes('rem')) {
+    if (!value?.includes('rem')) {
         return value;
     }
 

@@ -25,7 +25,7 @@ export const useVolumeStore = defineStore('volume', () => {
 
     function cleanPath(path) {
         // remove ? [ ] \ = < > : ; , ' " & $ # * ( ) | ~ ` ! { } % + ’ « » ” “ \0
-        path = path.replace(/[?[\]\\=<>:;,\'"&$#*()|~`!{}%+’«»”“\0]+/g, '');
+        path = path.replace(/[?[\]\\=<>:;,'"&$#*()|~`!{}%+’«»”“\0]+/g, '');
         // %20, + into -
         path = path.replace(/%20|\+/g, '-');
         // multi . into .
@@ -35,7 +35,7 @@ export const useVolumeStore = defineStore('volume', () => {
         // \r, \n, \t, space, - into -
         path = path.replace(/[\r\n\t -]+/g, '-');
         // remove leading and trailing ., -, _, /, and space
-        path = path.replace(/^[._\/ -]+|[._\/ -]+$/g, '');
+        path = path.replace(/^[._/ -]+|[._/ -]+$/g, '');
 
         return path;
     }
@@ -79,11 +79,19 @@ export const useVolumeStore = defineStore('volume', () => {
             .then(response => response.data)
             .then((res) => {
                 const entries = res.entries;
+
+                const tailwindConfigJsIndex = entries.findIndex((entry) => entry.relative_path === 'tailwind.config.js');
+                if (tailwindConfigJsIndex !== -1) {
+                    const tailwindConfigJs = entries.splice(tailwindConfigJsIndex, 1);
+                    entries.unshift(...tailwindConfigJs);
+                }
+
                 const mainCssIndex = entries.findIndex((entry) => entry.relative_path === 'main.css');
                 if (mainCssIndex !== -1) {
                     const mainCss = entries.splice(mainCssIndex, 1);
                     entries.unshift(...mainCss);
                 }
+
                 data.entries = entries;
 
                 updateInitValues();

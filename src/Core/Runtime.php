@@ -21,8 +21,6 @@ use WindPress\WindPress\Utils\Config;
 
 /**
  * @since 3.0.0
- *
- * TODO: This class is not yet implemented, it's just temporary for Universal Editor testing purpose.
  */
 class Runtime
 {
@@ -54,6 +52,16 @@ class Runtime
     public function __wakeup()
     {
         throw new Exception('Cannot unserialize a singleton.');
+    }
+
+    /**
+     * Get the Tailwind CSS version.
+     *
+     * @return int
+     */
+    public static function tailwindcss_version()
+    {
+        return (int) apply_filters('f!windpress/core/runtime:tailwindcss_version', Config::get('general.tailwindcss.version', 4));
     }
 
     /**
@@ -148,22 +156,46 @@ class Runtime
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/autocomplete.js', [
+        $tailwindcss_version = static::tailwindcss_version();
+
+        if ($tailwindcss_version === 3) {
+            $this->enqueue_play_cdn_v3();
+        } elseif ($tailwindcss_version === 4) {
+            $this->enqueue_play_cdn_v4();
+        }
+    }
+
+    public function enqueue_play_cdn_v3()
+    {
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/autocomplete.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/sort.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/observer.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':observer',
+            'in-footer' => true,
+        ]);
+    }
+
+    public function enqueue_play_cdn_v4()
+    {
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/autocomplete.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
+            'in-footer' => true,
+        ]);
+
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/sort.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':sort',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/classname-to-css.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/classname-to-css.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
             'in-footer' => true,
         ]);
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwind/play/observer.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
         ]);
@@ -183,6 +215,7 @@ class Runtime
 
         wp_localize_script($handle, 'windpress', [
             '_version' => WIND_PRESS::VERSION,
+            '_tailwind_version' => static::tailwindcss_version(),
             '_via_wp_org' => ! Common::is_updater_library_available(),
             '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
             'rest_api' => [

@@ -120,7 +120,7 @@ observe({
         subtree: true,
         childList: true,
     },
-    callback(eee) {
+    callback(_) {
         if (isObserverRunning) {
             return;
         }

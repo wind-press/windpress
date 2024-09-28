@@ -1,6 +1,7 @@
+import Fuse from 'fuse.js';
+import { set } from 'lodash-es';
 import { loadDesignSystem } from '../design-system';
 import { getClassList } from '../intellisense';
-import { set } from 'lodash-es';
 import { decodeVFSContainer } from '../bundle';
 
 let classLists = [];
@@ -120,10 +121,15 @@ function searchClassList(query) {
         filteredClassList = tempFilteredClassList;
     }
 
-    return filteredClassList.map((classList) => {
+    const fuse = new Fuse(filteredClassList, {
+        keys: ['selector'],
+        threshold: 0.4,
+    });
+
+    return fuse.search(q).map(({ item }) => {
         return {
-            value: [prefix, (importantModifier ? '!' : '') + classList.selector].filter(Boolean).join(':'),
-            color: getColor(classList.declarations)
+            value: [prefix, (importantModifier ? '!' : '') + item.selector].filter(Boolean).join(':'),
+            color: getColor(item.declarations)
         }
     });
 }

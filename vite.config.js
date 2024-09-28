@@ -23,11 +23,15 @@ export default defineConfig({
             input: {
                 dashboard: 'assets/apps/dashboard/main.js',
 
-                // Tailwind
-                'packages/core/tailwind/play/observer': 'assets/packages/core/tailwind/play/observer.js',
-                'packages/core/tailwind/play/autocomplete': 'assets/packages/core/tailwind/play/autocomplete.js',
-                'packages/core/tailwind/play/sort': 'assets/packages/core/tailwind/play/sort.js',
-                'packages/core/tailwind/play/classname-to-css': 'assets/packages/core/tailwind/play/classname-to-css.js',
+                // Tailwind v4
+                'packages/core/tailwindcss-v4/play/observer': 'assets/packages/core/tailwindcss-v4/play/observer.js',
+                'packages/core/tailwindcss-v4/play/autocomplete': 'assets/packages/core/tailwindcss-v4/play/autocomplete.js',
+                'packages/core/tailwindcss-v4/play/sort': 'assets/packages/core/tailwindcss-v4/play/sort.js',
+                'packages/core/tailwindcss-v4/play/classname-to-css': 'assets/packages/core/tailwindcss-v4/play/classname-to-css.js',
+
+                // Tailwind v3
+                'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.js',
+                'packages/core/tailwindcss-v3/play/autocomplete': 'assets/packages/core/tailwindcss-v3/play/autocomplete.js',
 
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',

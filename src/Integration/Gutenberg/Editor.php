@@ -68,7 +68,7 @@ class Editor
                         return autocompleteItems;
                     }
 
-                    const windpress_suggestions = window.wp.hooks.applyFilters('windpress.module.autocomplete', text);
+                    const windpress_suggestions = await window.wp.hooks.applyFilters('windpress.module.autocomplete', text);
 
                     return [...windpress_suggestions, ...autocompleteItems];
                 });

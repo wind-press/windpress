@@ -13,6 +13,7 @@ await init(lightningcssWasmFile);
  * @param {Array<string>} opts.candidates
  * @param {string} opts.entrypoint
  * @param {Record<string, string>} opts.volume
+ * @returns {Promise<string>}
  */
 export async function build({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts } = {}) {
     opts = { candidates, entrypoint, volume, ...opts };  

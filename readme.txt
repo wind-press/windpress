@@ -13,11 +13,13 @@ Integrate Tailwind CSS into WordPress seamlessly, in just seconds. Works well wi
 
 == Description ==
 
-### WindPress: the only Tailwind CSS v4 integration plugin for WordPress.
+### WindPress: the only Tailwind CSS v3 and v4 integration plugin for WordPress.
 
-WindPress is a platform agnostic Tailwind CSS v4 integration plugin for WordPress that allows you to use the full power of Tailwind CSS v4 within the WordPress ecosystem.
+WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integration plugin for WordPress that allows you to use the full power of Tailwind CSS within the WordPress ecosystem.
 
-**[Tailwind CSS](https://tailwindcss.com/) version**: 4.0.0-alpha.25 next
+**Tailwind CSS version**:
+- 3.4.13
+- 4.0.0-alpha.25 next
 
 ### Features
 
@@ -38,7 +40,7 @@ And some specific integrations also include the following features:
 
 ### Seamless Integration
 
-It's easy to build design with Tailwind CSS v4 thanks to the seamless integration with the most popular visual/page builders:
+It's easy to build design with Tailwind CSS thanks to the seamless integration with the most popular visual/page builders:
 
 * [Gutenberg](https://wordpress.org/gutenberg) / Block Editor
 * [GreenShift](https://greenshiftwp.com/)
@@ -88,6 +90,13 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= unreleased =
+* **New**: Tailwind CSS v3 support has been added
+* **New**: Upgraded to Tailwind CSS v3 (3.4.13)
+* **Change**: Disable the preflight styles by default on the new installation
+* **Change**: The CSS and JavaScript files are now deletable by emptying the content
+* **Change**: The `main.css` and `tailwind.config.js` are now resettable by emptying the content
 
 = 3.1.17 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.25 next)
