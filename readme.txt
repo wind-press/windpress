@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.1.17
+Stable tag: 3.2.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -91,12 +91,12 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.2.0 =
 * **New**: Tailwind CSS v3 support has been added
 * **New**: Upgraded to Tailwind CSS v3 (3.4.13)
 * **Change**: Disable the preflight styles by default on the new installation
 * **Change**: The CSS and JavaScript files are now deletable by emptying the content
-* **Change**: The `main.css` and `tailwind.config.js` are now resettable by emptying the content
+* **Change**: The `main.css` and `tailwind.config.js` files are now resettable by emptying the content
 
 = 3.1.17 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.25 next)
