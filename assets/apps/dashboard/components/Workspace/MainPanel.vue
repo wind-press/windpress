@@ -56,12 +56,14 @@ const codeEditorTitle = computed(() => {
             </div>
             <div class="tab-head__space flex-grow:1 br:hidden!"></div>
         </div>
-        <div :class="{'overflow:auto!': ui.virtualState('main-panel.tab.active', 'code-editor').value !== 'code-editor'}" class="tab-body h:full bg:editor-background">
+        <div :class="{ 'overflow:auto!': ui.virtualState('main-panel.tab.active', 'code-editor').value !== 'code-editor' }" class="tab-body h:full bg:editor-background">
             <div class="content-panel h:full">
                 <!-- content -->
                 <div class="h:full">
                     <KeepAlive>
-                        <component :is="panelComponents[ui.virtualState('main-panel.tab.active', 'code-editor').value]" />
+                        <Suspense>
+                            <component :is="panelComponents[ui.virtualState('main-panel.tab.active', 'code-editor').value]" />
+                        </Suspense>
                     </KeepAlive>
                 </div>
             </div>

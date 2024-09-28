@@ -4,10 +4,16 @@ import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { getVariableList } from '@/packages/core/tailwindcss-v4';
 import { useVolumeStore } from '@/dashboard/stores/volume';
+import { useSettingsStore } from '@/dashboard/stores/settings';
 
 const notifier = useNotifier();
 const ui = useUIStore();
 const volumeStore = useVolumeStore();
+const settingsStore = useSettingsStore();
+
+if (Object.keys(settingsStore.options).length === 0) {
+    await settingsStore.doPull();
+}
 
 const MONACO_EDITOR_OPTIONS = {
     automaticLayout: true,
@@ -75,8 +81,8 @@ const editorReadOnly = computed(() => {
 });
 
 onBeforeMount(() => {
-    // set the monaco editor content
     (async () => {
+        // set the monaco editor content
         if (volumeStore.data.entries.length === 0) {
             await volumeStore.doPull();
         }
@@ -162,21 +168,25 @@ function handleEditorMount(editor, monaco) {
         async provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position);
 
-            const variables = (await getVariableList({ volume: volumeStore.getKVEntries(), })).map(entry => {
-                return {
-                    kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
-                    label: entry.key,
-                    insertText: entry.key,
-                    detail: entry.value,
-                    range: {
-                        startLineNumber: position.lineNumber,
-                        startColumn: wordInfo.startColumn,
-                        endLineNumber: position.lineNumber,
-                        endColumn: wordInfo.endColumn
-                    },
-                    sortText: naturalExpand(entry.index)
-                }
-            });
+            let variables = [];
+
+            if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
+                variables = (await getVariableList({ volume: volumeStore.getKVEntries(), })).map(entry => {
+                    return {
+                        kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
+                        label: entry.key,
+                        insertText: entry.key,
+                        detail: entry.value,
+                        range: {
+                            startLineNumber: position.lineNumber,
+                            startColumn: wordInfo.startColumn,
+                            endLineNumber: position.lineNumber,
+                            endColumn: wordInfo.endColumn
+                        },
+                        sortText: naturalExpand(entry.index)
+                    }
+                });
+            }
 
             return {
                 suggestions: variables

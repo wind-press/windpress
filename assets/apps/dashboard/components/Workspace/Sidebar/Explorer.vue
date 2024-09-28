@@ -1,9 +1,9 @@
 <script setup>
 import { onBeforeMount, onMounted } from 'vue';
 import { __ } from '@wordpress/i18n';
-import { useVolumeStore } from '@/dashboard/stores/volume.js';
+import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useNotifier } from '@/dashboard/library/notifier';
-import { useUIStore } from '@/dashboard/stores/ui.js';
+import { useUIStore } from '@/dashboard/stores/ui';
 import { useSettingsStore } from '@/dashboard/stores/settings';
 
 const ui = useUIStore();
@@ -45,12 +45,9 @@ function switchToEntry(entry) {
 }
 
 onBeforeMount(() => {
-    console.log('settingsStore', settingsStore.options);
-
-    if (!Object.keys(settingsStore.options).length) {
+    if (Object.keys(settingsStore.options).length === 0) {
         settingsStore.doPull();
     }
-
 });
 
 onMounted(() => {
