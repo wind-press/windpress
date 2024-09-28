@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "oxlint ./assets",
+    "format": "oxlint --fix ./assets"
   },
   "devDependencies": {
     "@kucrut/vite-for-wp": "^0.9.3",
@@ -16,6 +18,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "lightningcss": "^1.27.0",
     "memfs": "^4.12.0",
+    "oxlint": "^0.9.9",
     "rollup-plugin-external-globals": "^0.10.0",
     "sass": "^1.79.3",
     "vite": "^5.4.8",

@@ -29,6 +29,9 @@ export default defineConfig({
                 'packages/core/tailwindcss-v4/play/sort': 'assets/packages/core/tailwindcss-v4/play/sort.js',
                 'packages/core/tailwindcss-v4/play/classname-to-css': 'assets/packages/core/tailwindcss-v4/play/classname-to-css.js',
 
+                // Tailwind v3
+                'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.js',
+
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',
                 'integration/breakdance': 'assets/integration/breakdance/main.js',
