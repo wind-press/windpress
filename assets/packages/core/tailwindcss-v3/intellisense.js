@@ -118,7 +118,7 @@ export function stateFromConfig(resolvedConfig, version = '3.0.0') {
 
     state.classList = jitContext
         .getClassList()
-        .filter((className) => className !== '*')
+        // .filter((className) => className !== '*')
         .map((className) => [className, { color: getColor(state, className) }]);
 
     return state;

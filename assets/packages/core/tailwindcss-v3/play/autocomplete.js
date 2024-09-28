@@ -2,61 +2,141 @@ import { set } from 'lodash-es';
 import Fuse from 'fuse.js';
 import { doComplete } from 'https://esm.sh/tailwindcss-language-service';
 import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
-import { getTextDocument, splitClassWithSeparator, stateFromConfig } from '../intellisense';
+import { getTextDocument, stateFromConfig } from '../intellisense';
 import { resolveConfig } from '../resolve-config';
+
+let classLists = [];
+
+const channel = new BroadcastChannel('windpress');
 
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
-async function searchClassList(query) {
+if (vfsContainer) {
+    initListener();
+
+    const vfsObserver = new MutationObserver(async () => {
+        await preloadItems();
+    });
+
+    vfsObserver.observe(vfsContainer, {
+        characterData: true,
+        subtree: true
+    });
+}
+
+async function preloadItems() {
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     const resolvedConfig = await resolveConfig(volume['/tailwind.config.js']);
 
-    return await getSuggestionList(query, resolvedConfig);
-}
+    const textDocument = getTextDocument(`<div class=""></div>`);
 
-async function getSuggestionList(className, resolvedConfig) {
-    const textDocument = getTextDocument(`<span class='${className}'></span>`);
-
-    // TODO: move to global and cache, update on config change
     const state = stateFromConfig(resolvedConfig);
 
-    let [classCandidate, ...variants] = splitClassWithSeparator(
-        className,
-        resolvedConfig.separator
-    ).reverse();
-
-    if (classCandidate.startsWith("!")) {
-        classCandidate = classCandidate.slice(1);
-    }
-
-    const position = {
-        character: 13 + className.length,
-        line: 0,
-    };
+    const position = { character: 12, line: 0, };
 
     const results = (
         await doComplete(state, textDocument, position)
     ).items.map((item) => {
         return {
             value: item.label,
-            color: typeof item.documentation === "string" ? item.documentation : null,
-            isVariant: item.data._type === "variant",
-            variants: item.data?.variants ?? variants.reverse(),
-            important: item.data?.important ?? false,
+            color: typeof item.documentation === 'string' ? item.documentation : null,
+            isVariant: item.data._type === 'variant',
         };
     });
 
-    if (classCandidate.length === 0) {
-        return results;
+    classLists = results;
+
+    channel.postMessage({
+        source: 'windpress/autocomplete',
+        target: 'any',
+        task: `windpress.code-editor.saved.done`
+    });
+}
+
+// Ensure the items generated once (on load)
+await preloadItems();
+
+export function initListener() {
+    channel.addEventListener('message', async (e) => {
+        const data = e.data;
+        const source = 'windpress/dashboard';
+        const target = 'windpress/observer';
+        const task = 'windpress.code-editor.saved';
+
+        if (data.source === source && data.target === target && data.task === task) {
+            await preloadItems();
+        }
+    });
+}
+
+async function searchClassList(query) {
+    // if the query is empty, return all classList
+    if (query === '') {
+        return classLists;
     }
 
-    const fuse = new Fuse(results, {
+    // split query by `:` and search for each subquery
+    let segment = query.split(':');
+    let prefix = segment.slice(0, -1).join(':');
+    let q = segment.pop();
+
+    // if `!` exists as the first character on the query, cut it and mark as important
+    let importantModifier = '';
+    if (q.startsWith('!')) {
+        q = q.slice(1);
+        importantModifier = '!';
+    }
+
+    // check if opacity modifier is used, for example `bg-red-500/20`. the opacity modifier is a number between 0 and 100
+    let opacityModifier = false;
+    if (q.includes('/')) {
+        let [_q, opacity] = q.split('/');
+        // if the opacity modifier is not a number between 0 and 100, revert back the split
+        if (opacity === '') {
+            q = _q;
+            opacityModifier = opacity;
+        } else if (isNaN(opacity) || opacity < 0 || opacity > 100) {
+            q = [_q, opacity].join('/');
+        } else {
+            q = _q;
+            opacityModifier = parseInt(opacity);
+        }
+    }
+
+    let filteredClassList = classLists.filter((classList) => classList.value.includes(q));
+
+    // if opacityModifier is not false, populate the filteredClassList with the opacityModifier (1 to 100)
+    if (opacityModifier !== false) {
+        let tempFilteredClassList = [];
+
+        const loopIncrement = opacityModifier === '' ? 5 : 1;
+        const loopStart = opacityModifier === '' || opacityModifier > 9 ? 0 : Math.floor((opacityModifier * 10 + 1) / 10) * 10;
+        const loopEnd = opacityModifier === '' || opacityModifier > 9 ? 100 : Math.ceil((opacityModifier * 10 + 1) / 10) * 10;
+
+        filteredClassList.forEach((classList) => {
+            for (let i = loopStart; i <= loopEnd; i += loopIncrement) {
+                tempFilteredClassList.push({
+                    ...classList,
+                    value: classList.value + '/' + i
+                });
+            }
+        });
+
+        filteredClassList = tempFilteredClassList;
+    }
+
+    const fuse = new Fuse(filteredClassList, {
         keys: ['value'],
         threshold: 0.4,
     });
 
-    return fuse.search(classCandidate).map(({ item }) => item);
+    return fuse.search(q).map(({ item }) => {
+        return {
+            value: [prefix, (importantModifier ? '!' : '') + item.value].filter(Boolean).join(':'),
+            color: item.color
+        }
+    });
 }
 
 // check if the wp-hooks is available
