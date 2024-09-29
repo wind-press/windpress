@@ -38,8 +38,6 @@ export function prepareConfig(configStr) {
         .join('\n');
 
     return /*js*/ `
-        import { parse as parsePackage } from 'https://esm.sh/parse-package-name';
-
         class RequireError extends Error {
             constructor(message, line) {
                 super(message);
@@ -47,6 +45,8 @@ export function prepareConfig(configStr) {
                 this.line = line;
             }
         }
+
+        let parsePackage = null;
 
         let importShim;
         try {
@@ -71,6 +71,10 @@ export function prepareConfig(configStr) {
             }
             let result
             try {
+                if (!parsePackage) {
+                    parsePackage = (await importShim('https://esm.sh/parse-package-name')).parse;
+                }
+
                 const _m = parsePackage(m);
                 const href = 'https://esm.sh/' + _m.name + '@' + _m.version + _m.path;
                 result = await importShim(href);

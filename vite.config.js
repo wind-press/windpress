@@ -8,6 +8,7 @@ import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import path from 'path';
 import svgr from 'vite-plugin-svgr';
+import httpsImports from 'vite-plugin-https-imports';
 
 export default defineConfig({
     plugins: [
@@ -58,6 +59,7 @@ export default defineConfig({
         react({
             jsxRuntime: 'classic',
         }),
+        httpsImports.default({}),
     ],
     build: {
         target: 'modules',
