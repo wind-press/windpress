@@ -96,7 +96,7 @@ export async function sortClasses(args = {}, classList) {
     return defaultSort(design.getClassOrder(classList));
 }
 
-function addPixelEquivalentsToValue(value, rootFontSize) {
+export function addPixelEquivalentsToValue(value, rootFontSize) {
     if (!value?.includes('rem')) {
         return value;
     }
@@ -105,24 +105,22 @@ function addPixelEquivalentsToValue(value, rootFontSize) {
 
     parseValue(value).walk((node) => {
         if (node.type !== 'word') {
-            return true
+            return true;
         }
 
-
-        let unit = parseValue.unit(node.value)
-        if (!unit || unit.unit !== 'rem') {
-            return false
+        let unit = parseValue.unit(node.value);
+        if (!unit || (unit.unit !== 'rem' && unit.unit !== 'rem;')) {
+            return false;
         }
 
-
-        let commentStr = ` /* ${parseFloat(unit.number) * rootFontSize}px */`
+        let commentStr = ` /* ${parseFloat(unit.number) * rootFontSize}px */`;
 
         commentPool.push({
             content: commentStr,
             sourceEndIndex: node.sourceEndIndex
-        })
+        });
 
-        return false
+        return false;
     });
 
     let offset = 0;

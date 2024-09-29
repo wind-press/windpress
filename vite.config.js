@@ -33,6 +33,7 @@ export default defineConfig({
                 'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.js',
                 'packages/core/tailwindcss-v3/play/autocomplete': 'assets/packages/core/tailwindcss-v3/play/autocomplete.js',
                 'packages/core/tailwindcss-v3/play/sort': 'assets/packages/core/tailwindcss-v3/play/sort.js',
+                'packages/core/tailwindcss-v3/play/classname-to-css': 'assets/packages/core/tailwindcss-v3/play/classname-to-css.js',
 
                 // Integrations
                 'integration/bricks': 'assets/integration/bricks/main.js',

@@ -177,6 +177,11 @@ class Runtime
             'in-footer' => true,
         ]);
 
+        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/classname-to-css.js', [
+            'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
+            'in-footer' => true,
+        ]);
+
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
