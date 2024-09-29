@@ -1,4 +1,6 @@
 <script setup>
+import prettyMilliseconds from 'pretty-ms';
+
 import Logo from '~/windpress.svg';
 import { useUIStore } from './stores/ui';
 import { buildCache } from './components/compiler.js';
@@ -21,11 +23,15 @@ channel.addEventListener('message', async (e) => {
     const task = 'windpress.generate-cache';
 
     if (data.target === target && data.task === task) {
+        let timeStart = performance.now();
+        let timeEnd = timeStart;
+
         busyStore.add('settings.performance.cached_css.generate');
 
         const promise = buildCache(data.payload || {});
 
         promise.finally(() => {
+            timeEnd = performance.now();
             busyStore.remove('settings.performance.cached_css.generate');
             channel.postMessage({
                 source: 'windpress/dashboard',
@@ -37,7 +43,7 @@ channel.addEventListener('message', async (e) => {
         notifier.async(
             promise,
             resp => {
-                notifier.success('Cache generated and stored');
+                notifier.success(`Cache generated in <b>${prettyMilliseconds(timeEnd - timeStart)}</b>`);
             },
             err => {
                 notifier.alert('Failed to generate cache');

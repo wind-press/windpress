@@ -7,6 +7,8 @@ import { decodeVFSContainer } from '../bundle';
  */
 let styleContainer;
 
+let lastCandidateSet = new Set();
+
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
 if (vfsContainer) {
@@ -75,6 +77,25 @@ async function applyStyles() {
             styleContainer = document.createElement('style');
             document.head.append(styleContainer);
         }
+
+        // compare the new candidates with the last set
+        if (lastCandidateSet.size === candidates.size) {
+            let isDifferent = false;
+
+            for (let candidate of candidates) {
+                if (!lastCandidateSet.has(candidate)) {
+                    isDifferent = true;
+                    break;
+                }
+            }
+
+            if (!isDifferent) {
+                return;
+            }
+        }
+
+        // update the last set
+        lastCandidateSet = candidates;
 
         styleContainer.textContent = await build({
             candidates: Array.from(candidates),

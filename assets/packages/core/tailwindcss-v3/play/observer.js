@@ -1,11 +1,16 @@
 import { encodeBase64 } from '@std/encoding/base64';
 import { build } from '../build';
 import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
+import { resolveConfig } from '../resolve-config';
 
 /**
  * @type {HTMLStyleElement}
  */
 let styleContainer;
+
+let resolvedConfig = null;
+
+let lastCandidateSet = new Set();
 
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
 
@@ -13,13 +18,21 @@ if (vfsContainer) {
     initListener();
 
     const vfsObserver = new MutationObserver(async () => {
-        await applyStyles();
+        await refreshStyles();
     });
 
     vfsObserver.observe(vfsContainer, {
         characterData: true,
         subtree: true
     });
+}
+
+async function refreshStyles() {
+    const volume = decodeVFSContainer(vfsContainer.textContent);
+
+    resolvedConfig = await resolveConfig(volume['/tailwind.config.js']);
+
+    await applyStyles();
 }
 
 const domObserver = new MutationObserver(async (mutations) => {
@@ -76,19 +89,41 @@ async function applyStyles() {
             document.head.append(styleContainer);
         }
 
+        // compare the new candidates with the last set
+        if (lastCandidateSet.size === candidates.size) {
+            let isDifferent = false;
+
+            for (let candidate of candidates) {
+                if (!lastCandidateSet.has(candidate)) {
+                    isDifferent = true;
+                    break;
+                }
+            }
+
+            if (!isDifferent) {
+                return;
+            }
+        }
+
+        // update the last set
+        lastCandidateSet = candidates;
+
         styleContainer.textContent = await build({
             entrypoint: {
                 css: '/main.css',
                 config: '/tailwind.config.js',
             },
             contents: Array.from(candidates),
-            volume: decodeVFSContainer(vfsContainer.textContent)
+            volume: decodeVFSContainer(vfsContainer.textContent),
+            options: {
+                resolvedConfig,
+            }
         });
     }
 }
 
-// Ensure the styles are applied once (on load)
-await applyStyles();
+// Ensure the styles are refreshed once (on load)
+await refreshStyles();
 
 export function initListener() {
     const channel = new BroadcastChannel('windpress');
@@ -102,7 +137,7 @@ export function initListener() {
         if (data.source === source && data.target === target && data.task === task) {
             vfsContainer.textContent = encodeBase64(JSON.stringify(data.payload.volume));
 
-            await applyStyles();
+            await refreshStyles();
         }
     })
 }
