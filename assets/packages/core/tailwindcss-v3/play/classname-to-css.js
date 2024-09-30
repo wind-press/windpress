@@ -1,8 +1,8 @@
 import postcss from 'postcss';
 import { set } from 'lodash-es';
-import evaluateTailwindFunctions from 'https://esm.sh/tailwindcss/src/lib/evaluateTailwindFunctions';
-import { createContext } from 'https://esm.sh/tailwindcss/src/lib/setupContextUtils';
-import { generateRules as twGenerateRules } from 'https://esm.sh/tailwindcss/src/lib/generateRules';
+import evaluateTailwindFunctions from 'https://esm.sh/tailwindcss@3/src/lib/evaluateTailwindFunctions';
+import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils';
+import { generateRules as twGenerateRules } from 'https://esm.sh/tailwindcss@3/src/lib/generateRules';
 import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
 import { addPixelEquivalentsToValue } from '@/packages/core/tailwindcss-v4/intellisense';
 import { resolveConfig } from '../resolve-config';

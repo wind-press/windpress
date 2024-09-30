@@ -4,7 +4,7 @@ import expandApplyAtRules from 'tailwindcss/src/lib/expandApplyAtRules.js';
 import { generateRules } from 'tailwindcss/src/lib/generateRules.js';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { splitAtTopLevelOnly } from 'tailwindcss/src/util/splitAtTopLevelOnly.js';
-import { createContext } from 'https://esm.sh/tailwindcss/src/lib/setupContextUtils.js';
+import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils.js';
 import { getColor } from 'https://esm.sh/tailwindcss-language-service';
 
 const DEFAULT_URI = '';
