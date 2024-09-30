@@ -21,13 +21,13 @@ jobs:
     timeout-minutes: 30
 
     steps:
-        # sometime, when 2 or more consecutive PRs merged, the checkout wind-press/windpress is overlapped
-        # and reverting other commit change
-        # this should not happen on create a tag, so wait first
-        - name: "Wait before checkout wind-press/windpress on create a tag"
-          if: "startsWith(github.ref, 'refs/tags/')"
-          run: sleep 20
-            
+        # # sometime, when 2 or more consecutive PRs merged, the checkout wind-press/windpress is overlapped
+        # # and reverting other commit change
+        # # this should not happen on create a tag, so wait first
+        # - name: "Wait before checkout wind-press/windpress on create a tag"
+        #   if: "startsWith(github.ref, 'refs/tags/')"
+        #   run: sleep 20
+
         - uses: actions/checkout@v4
           with:
             fetch-depth: 0
@@ -35,11 +35,11 @@ jobs:
         # Use pnpm to install dependencies and build the assets.
         - uses: actions/setup-node@v4
           with:
-            node-version: 20
+            node-version: 22
 
-        - uses: pnpm/action-setup@v3
+        - uses: pnpm/action-setup@v4
           with:
-            version: 8
+            version: 9
 
         - name: Get pnpm store directory
           shell: bash
@@ -91,7 +91,7 @@ jobs:
         - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
 
         # clone remote repository, so we can push it
-        - uses: "actions/checkout@v4"
+        - uses: actions/checkout@v4
           with:
             repository: wind-press/windpress-deployed
             ref: main
