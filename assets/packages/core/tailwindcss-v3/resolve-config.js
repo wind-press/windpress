@@ -10,80 +10,42 @@ export async function resolveConfig(configStr) {
 }
 
 export function prepareConfig(configStr) {
-    let config = configStr
+    return configStr
+        // replace the module.exports = with export default
+        .replace(/module.exports\s*=\s*/, 'export default ')
         // catch multi-line import statements and replace them with single line
-        .replace(/import\s+({[^}]+})\s+from\s+['"](.+)['"]/g, (_m, $1, $2) => {
+        .replace(/import\s+({[^}]+})\s+from\s+['"](.+)['"]/g, (_, $1, $2) => {
             return `import ${$1.replace(/\n/g, '')} from '${$2}'`;
         })
         // do the rest
         .split('\n')
-        .map((line, i) =>
-            line.replace(
-                /\bimport\s+(.+)\s+from\s+['"](.+)['"]/g,
-                (_m, variable, url) => {
-                    return `const ${variable.indexOf('{') === -1
-                        ? `{default: ${variable}}`
-                        : variable.replace(/\s+as\s+/, ': ')
-                        } = await import('${url}')`;
-                }
-            )
-        )
-        .map((line, i) =>
-            line.replace(
-                /\brequire\(([^)]*)\)/g,
-                (_m, id) =>
-                    `(await require(${id.trim() === '' ? 'undefined' : id}, ${i + 1}))`
-            )
-        )
+        .map((line) => {
+            return line
+                // replace import statements with dynamic imports
+                .replace(
+                    /\bimport\s+(.+)\s+from\s+['"](.+)['"]/g,
+                    (_, variable, m) => {
+                        // if the module is not a URL or a relative path, use esm.sh
+                        if (!m.startsWith('http') && !m.startsWith('./')) {
+                            m = `https://esm.sh/${m}`;
+                        }
+
+                        return `const ${variable.indexOf('{') === -1 ? `{default: ${variable}}` : variable.replace(/\s+as\s+/, ': ')} = await import('${m}')`;
+                    }
+                )
+
+                // alias require to import
+                .replace(
+                    /\brequire\(['"]([^'"]*)['"]\)/g,
+                    (_, m) => {
+                        // if the module is not a URL or a relative path, use esm.sh
+                        if (!m.startsWith('http') && !m.startsWith('./')) {
+                            m = `https://esm.sh/${m}`;
+                        }
+
+                        return `(await import('${m}')).default`;
+                    }
+                )
+        })
         .join('\n');
-
-    return /*js*/ `
-        class RequireError extends Error {
-            constructor(message, line) {
-                super(message);
-                this.name = 'RequireError';
-                this.line = line;
-            }
-        }
-
-        let parsePackage = null;
-
-        let importShim;
-        try {
-            await (0, eval)('import("")');
-        } catch (error) {
-            if (error instanceof TypeError) {
-                importShim = (0, eval)('u=>import(u)');
-            } else {
-                var s = document.createElement('script');
-                s.src = 'https://esm.sh/shimport/index.js?raw';
-                document.head.appendChild(s);
-                importShim = __shimport__.load;
-            }
-        }
-
-        const require = async (m, line) => {
-            if (typeof m !== 'string') {
-                throw new RequireError('The "id" argument must be of type string. Received ' + typeof m, line);
-            }
-            if (m === '') {
-                throw new RequireError("The argument 'id' must be a non-empty string. Received ''", line);
-            }
-            let result
-            try {
-                if (!parsePackage) {
-                    parsePackage = (await importShim('https://esm.sh/parse-package-name')).parse;
-                }
-
-                const _m = parsePackage(m);
-                const href = 'https://esm.sh/' + _m.name + '@' + _m.version + _m.path;
-                result = await importShim(href);
-            } catch (error) {
-                throw new RequireError("Cannot find module '" + m + "'", line);
-            }
-            return result.default || result;
-        }
-
-        ${config}
-    `;
 }
