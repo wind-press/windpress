@@ -65,9 +65,7 @@
 
 > [!NOTE]
 >
-> You are looking at the WordPress plugin for integrating `Tailwind CSS v4`.
->
-> The support for `Tailwind CSS v3` is now available at https://siul.yabe.land.
+> You are looking at the WordPress plugin for integrating Tailwind CSS `v3` and `v4`.
 
 
 ## Intro
@@ -76,10 +74,10 @@ Use Tailwind CSS within the block editor, page builders, plugins, and themes —
 
 ### Features
 
-- ✅&nbsp; **Easy to use**: Simplified and intuitive settings to get you up and running quickly.
-- 🥰&nbsp; **Customizable Configuration**: Comes with a default Tailwind CSS configuration, which can be customized to fit your needs.
-- ⚡️&nbsp; **Lightweight and blazingly fast**: Built on top of WordPress REST API. It has a small footprint and won't slow down your site.
-- 📦&nbsp; **Compile on the browser. No server is required**: Generate the final CSS file in the browser without server-side tools. None of your data is transferred over the network.
+- ✅ **Easy to use**: Simplified and intuitive settings to get you up and running quickly.
+- 🥰 **Customizable Configuration**: Comes with a default Tailwind CSS configuration, which can be customized to fit your needs.
+- ⚡️ **Lightweight and blazingly fast**: Built on top of WordPress REST API. It has a small footprint and won't slow down your site.
+- 📦 **Compile on the browser. No server is required**: Generate the final CSS file in the browser without server-side tools. None of your data is transferred over the network.
 
 ### Integrations
 
@@ -141,14 +139,15 @@ Seamless integration with the most popular visual/page builders:
 
 5. Activate the plugin.
 
+## Community
 
-## Star History
+- 💬 Join the community on [Facebook Group](https://www.facebook.com/groups/1142662969627943).
 
-<a href="https://star-history.com/#wind-press/windpress&Date"> <picture> <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date&theme=dark" /> <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> </picture> </a>
+## Backers
 
-## Sponsors
+Thank you to all our backers! 🥰🫰🫶
 
-If you like this project, please consider supporting us by becoming a sponsor.
+If you like this project, please consider supporting us by becoming a backer. [[Become a backer](https://opencollective.com/windpress#backer)]
 
 <a aria-label="GitHub Sponsors" href="https://github.com/sponsors/suabahasa">
     <picture>
@@ -162,6 +161,10 @@ If you like this project, please consider supporting us by becoming a sponsor.
     </picture>
 </a>
 
-## Community
+## Sponsors
 
-Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943)
+Support this project by becoming a sponsor. Your logo will show up here and on the [WindPress website](https://windpress.org) with a link to your website. [[Become a sponsor](https://ko-fi.com/post/WindPress-Bronze-Sponsor-U7U8143WIP)]
+
+## Star History
+
+<a href="https://star-history.com/#wind-press/windpress&Date"> <picture> <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date&theme=dark" /> <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> </picture> </a>

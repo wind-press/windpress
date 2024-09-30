@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -36,6 +36,8 @@ And some specific integrations also include the following features:
 * **Autocompletion**: As you type, Tailwind CSS class names will be suggested automatically.
 * **Variable Picker**: Easily select Tailwind CSS themes' colors, fonts, and other variables from a panel.
 * **HTML to native elements**: Convert Tailwind CSS HTML to native elements in the editor.
+* **Sort the classes**: Sort the Tailwind CSS classes on the input field.
+* **Hover Preview the classes**: Hover over the classes to see the complete outputted CSS and the preview of the design canvas.
 * **Ubiquitous Panel**: A floating panel that allows you to quickly access the WindPress settings from anywhere on the page.
 
 ### Seamless Integration
@@ -74,14 +76,33 @@ Visit [our website](https://wind.press) for more information.
 
 Affiliate Disclosure: This readme.txt may contain affiliate links. If you decide to make a purchase through these links, we may earn a commission at no extra cost to you.
 
+== Screenshots ==
+
+1. The WindPress settings page to choose the Tailwind CSS version or generate the cached CSS file.
+2. The `tailwind.config.js` file editor, which let adding the Tailwind CSS plugins.
+3. The `main.css` file editor, which let adding the custom CSS.
+4. The Tailwind CSS class name suggestions feature on the Gutenberg editor.
+5. Sort the Tailwind CSS classes on the input field.
+6. Hover over the Tailwind CSS class name to see the complete outputted CSS and the preview of the design canvas.
+7. The front-end page with the Tailwind CSS classes applied, as was added from the Gutenberg editor.
+
 == Frequently Asked Questions ==
 
-= How to contribute to WindPress? =
+= Which version of Tailwind CSS is supported by WindPress? =
 
-The source code is available on [GitHub](https://github.com/wind-press/windpress).
+WindPress supports both Tailwind CSS versions 3 and 4 and will receive regular updates to support the latest version.
 
-Please feel free to contribute, report issues, or make suggestions.
-Star the repository if you like it.
+= Is WindPress support the Tailwind CSS plugins? =
+
+Yes, WindPress supports Tailwind CSS plugins. You can add the plugins in the `tailwind.config.js` file editor. The Tailwind CSS plugins will be loaded from the `esm.sh` CDN.
+
+= Do I need an internet connection to use WindPress? =
+
+No, by default, you do not need an internet connection to use WindPress. However, an internet connection is required to load the Tailwind CSS plugins from the CDN.
+
+= What themes is WindPress compatible with? =
+
+WindPress is compatible with any WordPress theme. A small adjustment may be needed for the compiler scanner to detect the used classes in the theme.
 
 == Changelog ==
 
@@ -90,6 +111,10 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= 3.2.1 =
+* **New**: Porting the Tailwind CSS v4 specific integration features to the Tailwind CSS v3: Autocompletion, Sort, and Class name to CSS
+* **Improve**: The Play Observer regenerates the CSS only if new classes are added to the DOM
 
 = 3.2.0 =
 * **New**: Tailwind CSS v3 support has been added
