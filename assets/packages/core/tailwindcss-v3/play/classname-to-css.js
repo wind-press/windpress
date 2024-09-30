@@ -4,7 +4,7 @@ import evaluateTailwindFunctions from 'https://esm.sh/tailwindcss@3/src/lib/eval
 import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils';
 import { generateRules as twGenerateRules } from 'https://esm.sh/tailwindcss@3/src/lib/generateRules';
 import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
-import { addPixelEquivalentsToValue } from '@/packages/core/tailwindcss-v4/intellisense';
+import { addPixelEquivalentsToValue, bigSign } from '@/packages/core/tailwindcss-v4/intellisense';
 import { resolveConfig } from '../resolve-config';
 
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');

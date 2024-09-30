@@ -24,7 +24,7 @@ class Editor
 {
     public function __construct()
     {
-        add_action('lc_editor_before_body_closing', fn () => $this->register_livecanvas_autocomplete());
+        add_action('lc_editor_before_body_closing', fn () => $this->register_livecanvas_autocomplete(), 1_000_001);
     }
 
     public function register_livecanvas_autocomplete()
@@ -62,11 +62,11 @@ class Editor
                     }
 
                     async function searchQuery(query) {
-                        const suggestions = iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', query).map((s) => {
+                        const suggestions = (await iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', query)).map((s) => {
                             return {
                                 // color: s.color,
                                 value: s.value,
-                                meta: 'TW 4',
+                                meta: 'TW',
                                 caption: s.value,
                                 score: 1000, // Custom score for sorting (optional)
                             };
@@ -95,30 +95,5 @@ class Editor
                 });
             </script>
         HTML;
-
-        $this->recursive_wp_scripts_render($handle);
-    }
-
-    public function recursive_wp_scripts_render($handle)
-    {
-        $wp_scripts = wp_scripts()->registered[$handle];
-
-        if (isset($wp_scripts->deps)) {
-            foreach ($wp_scripts->deps as $dep) {
-                $this->recursive_wp_scripts_render($dep);
-            }
-        }
-
-        if (isset($wp_scripts->extra['data'])) {
-            echo sprintf('<script type="text/javascript" id="%s-js-extra">%s</script>', $wp_scripts->handle, $wp_scripts->extra['data']);
-        }
-
-        echo sprintf('<script type="module" id="%s-js" src="%s"></script>', $wp_scripts->handle, $wp_scripts->src);
-
-        if (isset($wp_scripts->extra['after'])) {
-            foreach ($wp_scripts->extra['after'] as $after) {
-                echo sprintf('<script type="text/javascript" id="%s-js-after">%s</script>', $wp_scripts->handle, $after);
-            }
-        }
     }
 }

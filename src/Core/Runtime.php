@@ -185,6 +185,7 @@ class Runtime
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
+            'dependencies' => ['wp-i18n', 'wp-hooks'],
         ]);
     }
 
@@ -208,6 +209,7 @@ class Runtime
         AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
+            'dependencies' => ['wp-i18n', 'wp-hooks'],
         ]);
     }
 

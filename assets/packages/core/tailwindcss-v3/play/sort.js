@@ -2,13 +2,10 @@ import { set } from 'lodash-es';
 import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils';
 import { generateRules } from 'https://esm.sh/tailwindcss@3/src/lib/generateRules';
 import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
+import { bigSign } from '@/packages/core/tailwindcss-v4/intellisense';
 import { resolveConfig } from '../resolve-config';
 
 const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
-
-function bigSign(bigIntValue) {
-    return (bigIntValue > 0n) - (bigIntValue < 0n);
-}
 
 function prefixCandidate(context, selector) {
     const prefix = context.tailwindConfig.prefix;

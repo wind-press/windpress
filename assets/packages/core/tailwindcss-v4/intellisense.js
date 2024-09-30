@@ -46,7 +46,7 @@ function defaultSort(arrayOfTuples) {
         .map(([className]) => className);
 }
 
-function bigSign(value) {
+export function bigSign(value) {
     if (value > 0n) {
         return 1;
     } else if (value === 0n) {
