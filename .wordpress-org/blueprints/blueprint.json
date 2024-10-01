@@ -1,7 +1,7 @@
 {
     "landingPage": "/wp-admin/plugins.php",
     "preferredVersions": {
-        "php": "8.0",
+        "php": "8.2",
         "wp": "latest"
     },
     "phpExtensionBundles": [

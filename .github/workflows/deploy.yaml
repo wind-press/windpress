@@ -55,7 +55,6 @@ jobs:
               ${{ runner.os }}-pnpm-store-
 
         # Font Awesome Pro. https://fontawesome.com/docs/web/setup/packages
-        - run: npm config set "@fortawesome:registry" https://npm.fontawesome.com/
         - run: npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
 
         # install dependencies and build the assets
