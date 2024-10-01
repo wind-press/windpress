@@ -43,16 +43,6 @@ class Tailwind extends AbstractApi implements ApiInterface
                 'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
-
-        // register_rest_route(
-        //     self::API_NAMESPACE,
-        //     $this->get_prefix() . '/store',
-        //     [
-        //         'methods' => WP_REST_Server::CREATABLE,
-        //         'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
-        //         'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
-        //     ]
-        // );
     }
 
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
@@ -67,19 +57,4 @@ class Tailwind extends AbstractApi implements ApiInterface
             'tailwind' => $tailwind_data,
         ]);
     }
-
-    // public function store(WP_REST_Request $wprestRequest): WP_REST_Response
-    // {
-    //     $payload = $wprestRequest->get_json_params();
-
-    //     $main_css = $payload['tailwind']['main_css'];
-
-    //     $main_css_path = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR . 'main.css';
-
-    //     Common::save_file($main_css, $main_css_path);
-
-    //     return new WP_REST_Response([
-    //         'message' => 'data stored successfully',
-    //     ]);
-    // }
 }

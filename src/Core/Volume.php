@@ -41,7 +41,7 @@ class Volume
             ->followLinks()
             ->name(['*.css', '*.js']);
 
-        do_action('f!windpress/core/volume:get_entries.finder', $finder);
+        do_action('a!windpress/core/volume:get_entries.finder', $finder);
 
         foreach ($finder as $file) {
             if (! is_readable($file->getPathname())) {
@@ -128,10 +128,10 @@ class Volume
                         continue;
                     }
 
-                    do_action('f!windpress/core/volume:save_entries.entry', $entry);
+                    do_action('a!windpress/core/volume:save_entries.entry', $entry);
 
                     // use specific handler instead for efficient handling
-                    do_action('f!windpress/core/volume:save_entries.entry.' . $entry['handler'], $entry);
+                    do_action('a!windpress/core/volume:save_entries.entry.' . $entry['handler'], $entry);
                 }
 
                 continue;

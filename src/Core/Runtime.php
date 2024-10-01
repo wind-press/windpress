@@ -55,16 +55,6 @@ class Runtime
     }
 
     /**
-     * Get the Tailwind CSS version.
-     *
-     * @return int
-     */
-    public static function tailwindcss_version()
-    {
-        return (int) apply_filters('f!windpress/core/runtime:tailwindcss_version', Config::get('general.tailwindcss.version', 4));
-    }
-
-    /**
      * This is the static method that controls the access to the singleton
      * instance. On the first run, it creates a singleton object and places it
      * into the static property. On subsequent runs, it returns the client existing
@@ -77,6 +67,16 @@ class Runtime
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Get the Tailwind CSS version.
+     *
+     * @return int
+     */
+    public static function tailwindcss_version()
+    {
+        return (int) apply_filters('f!windpress/core/runtime:tailwindcss_version', Config::get('general.tailwindcss.version', 4));
     }
 
     public function init()
@@ -126,6 +126,8 @@ class Runtime
             return;
         }
 
+        do_action('a!windpress/core/runtime:enqueue_css_cache.before');
+
         $handle = WIND_PRESS::WP_OPTION . '-cached';
 
         if (Config::get('performance.cache.inline_load', false)) {
@@ -144,6 +146,8 @@ class Runtime
             wp_register_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
             wp_print_styles($handle);
         }
+
+        do_action('a!windpress/core/runtime:enqueue_css_cache.after', $handle);
     }
 
     public function enqueue_play_cdn($display = true)
@@ -158,11 +162,15 @@ class Runtime
 
         $tailwindcss_version = static::tailwindcss_version();
 
+        do_action('a!windpress/core/runtime:enqueue_play_cdn.before', $tailwindcss_version);
+
         if ($tailwindcss_version === 3) {
             $this->enqueue_play_cdn_v3();
         } elseif ($tailwindcss_version === 4) {
             $this->enqueue_play_cdn_v4();
         }
+
+        do_action('a!windpress/core/runtime:enqueue_play_cdn.after', $tailwindcss_version);
     }
 
     public function enqueue_play_cdn_v3()

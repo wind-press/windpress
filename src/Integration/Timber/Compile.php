@@ -43,7 +43,7 @@ class Compile
 
         $finder->files()->name('*.twig');
 
-        do_action('f!windpress/integration/timber/compile:get_contents.finder', $finder);
+        do_action('a!windpress/integration/timber/compile:get_contents.finder', $finder);
 
         foreach ($finder as $file) {
             $template_file = $file->getPathname();

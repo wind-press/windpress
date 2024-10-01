@@ -54,6 +54,8 @@ class Cache
             throw $throwable;
         }
 
+        do_action('a!windpress/core/cache:save_cache.after', $payload);
+
         UtilsCache::flush_cache_plugin();
     }
 

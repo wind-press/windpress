@@ -79,7 +79,7 @@ class Options extends AbstractApi implements ApiInterface
 
         update_option(WIND_PRESS::WP_OPTION . '_options', wp_json_encode($options, JSON_THROW_ON_ERROR));
 
-        do_action('f!windpress/api/admin/settings/options:store.after', $options);
+        do_action('a!windpress/api/admin/settings/options:store.after', $options);
 
         return new WP_REST_Response([
             'message' => 'Settings updated',
