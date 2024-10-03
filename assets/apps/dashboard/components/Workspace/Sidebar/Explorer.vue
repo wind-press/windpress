@@ -93,9 +93,12 @@ onMounted(() => {
                         <font-awesome-icon :icon="['fab', 'css3-alt']" class="fg:#264de4 " />
                     </template>
                 </div>
-                <span>
+                <div>
                     {{ entry.relative_path }}
-                </span>
+                    <span v-if="entry.relative_path === 'main.css'" class="fg:gray-50 fg:gray-30@dark">
+                        [v{{ Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) }}]
+                    </span>
+                </div>
             </div>
         </div>
     </div>
