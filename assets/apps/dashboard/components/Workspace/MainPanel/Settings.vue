@@ -215,6 +215,7 @@ channel.addEventListener('message', (e) => {
                                     </div>
                                 </fieldset>
                             </div>
+                            <p class="my:0"> {{ wp_i18n.__('Note: You must update the `main.css` file accordingly.', 'windpress') }} </p>
                         </div>
                         <div class="flex flex:column gap:10">
                             <span class="font:15">{{ wp_i18n.__('Ubiquitous WindPress panel', 'windpress') }}</span>
