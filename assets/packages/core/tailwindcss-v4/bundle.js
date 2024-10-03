@@ -40,7 +40,7 @@ export async function bundle(opts) {
                         return new URL(id).toString()
                     } else {
                         // Volume: resolve relative path as absolute path
-                        if (id.startsWith('./')) {
+                        if (id.startsWith('.')) {
                             id = path.resolve(path.dirname(basedir), id);
 
                             /*
