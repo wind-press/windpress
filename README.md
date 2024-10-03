@@ -163,7 +163,7 @@ If you like this project, please consider supporting us by becoming a backer. [[
 
 ## Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here and on the [WindPress website](https://windpress.org) with a link to your website. [[Become a sponsor](https://ko-fi.com/post/WindPress-Bronze-Sponsor-U7U8143WIP)]
+Support this project by becoming a sponsor. Your logo will show up here and on the [WindPress website](https://wind.press) with a link to your website. [[Become a sponsor](https://ko-fi.com/post/WindPress-Bronze-Sponsor-U7U8143WIP)]
 
 ## Star History
 
