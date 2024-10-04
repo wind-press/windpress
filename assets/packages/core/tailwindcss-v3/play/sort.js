@@ -47,7 +47,7 @@ async function classSorter(classes) {
 
     const unknownClassNames = [];
 
-    const resolvedConfig = await resolveConfig(volume['/tailwind.config.js']);
+    const resolvedConfig = await resolveConfig(volume['/tailwind.config.js'], volume);
 
     const context = createContext(resolvedConfig);
 

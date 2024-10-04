@@ -25,7 +25,7 @@ function addNewEntry() {
     }
 
     // only alphabet, numbers, dash, underscore, forward slash, and dot are allowed.
-    if (!/^[a-zA-Z0-9_.-\/]+$/.test(filePath)) {
+    if (!/^[a-zA-Z0-9_.\-\/]+$/.test(filePath)) {
         notifier.alert(__('Only alphanumeric, dash, underscore, forward slash, and dot are allowed', 'windpress'));
         return;
     }
@@ -35,7 +35,11 @@ function addNewEntry() {
         return;
     }
 
-    volumeStore.addNewEntry(filePath);
+    try {
+        volumeStore.addNewEntry(filePath);
+    } catch (error) {
+        notifier.alert(error.message);
+    }
 }
 
 function switchToEntry(entry) {

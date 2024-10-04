@@ -50,19 +50,32 @@ export async function importLocalModule(modulePath, base, resourceHint, volume =
     return module;
 }
 
-function recursiveInlineImportModule(moduleContent, currentPath, volume = {}) {
-    let _moduleContent = moduleContent.replace(/import\s+['"](.+?)['"];/g, (match, importPath) => {
-        let _importPath = importPath;
+export function recursiveInlineImportModule(moduleContent, currentPath, volume = {}) {
+    let _moduleContent = moduleContent;
 
+    // Regex to capture both static and dynamic imports
+    const regex = /import\s*(?:[^'"]*\s*from\s*)?['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
+
+    let matchPositions = [];
+    let match;
+    let shift = 0; // Track the shift in string length due to replacements
+
+    while ((match = regex.exec(_moduleContent)) !== null) {
+        const [fullMatch, staticImport, dynamicImport] = match;
+        const importPath = staticImport || dynamicImport; // Get the captured import path
         // if the importPath is valid url, skip
-        if (isValidUrl(_importPath)) {
-            return match;
+        if (isValidUrl(importPath)) {
+            continue;
+        }
+
+        if (!importPath.startsWith('.') && !importPath.startsWith('/')) {  // Check if it starts with `.` or `/`
+            continue; // Leave non-relative imports unchanged
         }
 
         // resolve the path and check if the file is in the volume
         let _path = path.resolve(
             path.dirname(currentPath),
-            _importPath
+            importPath
         );
 
         // volume are key-value pairs (relative_path: content).
@@ -72,9 +85,62 @@ function recursiveInlineImportModule(moduleContent, currentPath, volume = {}) {
             throw new Error(`${currentPath}: The module file "${_path}" does not exist in the volume.`);
         }
 
+        // Recursively inline the imports
         _importModuleContent = recursiveInlineImportModule(_importModuleContent, _path, volume);
-        return `import /* @vite-ignore */ 'data:text/javascript;base64,${encodeBase64(_importModuleContent)}';`;
+
+        matchPositions.push({
+            start: match.index + fullMatch.indexOf(importPath),
+            end: match.index + fullMatch.indexOf(importPath) + importPath.length,
+            replacement: `data:text/javascript;base64,${encodeBase64(_importModuleContent)}`
+        });
+    }
+
+    matchPositions.forEach(({ start, end, replacement }) => {
+        // Slice the original string and replace the section
+        _moduleContent = _moduleContent.slice(0, start + shift) + replacement + _moduleContent.slice(end + shift);
+        // Adjust the shift due to the difference in length between the old and new strings
+        shift += replacement.length - (end - start);
     });
 
     return _moduleContent;
+}
+
+export function prepareModuleContent(moduleContent) {
+    return moduleContent
+        // replace the module.exports = with export default
+        .replace(/module.exports\s*=\s*/, 'export default ')
+        // catch multi-line import statements and replace them with single line
+        .replace(/import\s+({[^}]+})\s+from\s+['"](.+)['"]/g, (_, $1, $2) => {
+            return `import ${$1.replace(/\n/g, '')} from '${$2}'`;
+        })
+        // do the rest
+        .split('\n')
+        .map((line) => {
+            return line
+                // replace import statements with dynamic imports
+                .replace(
+                    /\bimport\s+(.+)\s+from\s+['"](.+)['"]/g,
+                    (_, variable, m) => {
+                        if (!m.startsWith('http') && !m.startsWith('.') && !m.startsWith('/')) {
+                            m = `https://esm.sh/${m}`;
+                        }
+
+                        return `const ${variable.indexOf('{') === -1 ? `{default: ${variable}}` : variable.replace(/\s+as\s+/, ': ')} = await import('${m}')`;
+                    }
+                )
+
+                // alias require to import
+                .replace(
+                    /\brequire\(['"]([^'"]*)['"]\)/g,
+                    (_, m) => {
+                        // if the module is not a URL or a relative path, use esm.sh
+                        if (!m.startsWith('http') && !m.startsWith('.') && !m.startsWith('/')) {
+                            m = `https://esm.sh/${m}`;
+                        }
+
+                        return `(await import('${m}')).default`;
+                    }
+                )
+        })
+        .join('\n');
 }

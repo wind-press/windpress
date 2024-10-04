@@ -16,7 +16,7 @@ async function classnameToCss(input) {
 
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
-    const resolvedConfig = await resolveConfig(volume['/tailwind.config.js']);
+    const resolvedConfig = await resolveConfig(volume['/tailwind.config.js'], volume);
 
     const context = createContext(resolvedConfig);
 

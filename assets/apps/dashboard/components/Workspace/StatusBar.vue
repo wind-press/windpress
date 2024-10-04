@@ -3,9 +3,11 @@ import { __ } from '@wordpress/i18n';
 import { computed } from 'vue';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useNotificationStore } from '@/dashboard/stores/notification';
+import { useSettingsStore } from '@/dashboard/stores/settings';
 
 const log = useLogStore();
 const notification = useNotificationStore();
+const settingsStore = useSettingsStore();
 const channel = new BroadcastChannel('windpress');
 
 const latestLogMessage = computed(() => {
@@ -18,7 +20,8 @@ function rebuildCache() {
         target: 'windpress/dashboard',
         task: 'windpress.generate-cache',
         payload: {
-            force_pull: true
+            force_pull: true,
+            tailwindcss_version: Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value)
         }
     });
 }

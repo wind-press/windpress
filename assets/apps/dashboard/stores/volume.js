@@ -4,6 +4,7 @@ import { useApi } from '@/dashboard/library/api.js';
 import { useBusyStore } from './busy.js';
 import { useNotifier } from '@/dashboard/library/notifier.js';
 import { cloneDeep, isEqual } from 'lodash-es';
+import { __ } from '@wordpress/i18n';
 
 export const useVolumeStore = defineStore('volume', () => {
     const busyStore = useBusyStore();
@@ -44,6 +45,13 @@ export const useVolumeStore = defineStore('volume', () => {
         // split the file path and directory path and remove any unwanted characters
         let filePathParts = filePath.split('/').map((pathPart) => cleanPath(pathPart)).join('/');
         filePathParts = cleanPath(filePathParts);
+
+        // check if the file path is existing
+        const existingEntryIndex = data.entries.findIndex((entry) => entry.relative_path === filePathParts);
+
+        if (existingEntryIndex !== -1) {
+            throw new Error(__(`A file named "${filePathParts}" already exists`, 'windpress'));
+        }
 
         data.entries.push({
             name: filePathParts.split('/').pop(),

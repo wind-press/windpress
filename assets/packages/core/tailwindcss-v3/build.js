@@ -16,7 +16,6 @@ await init(lightningcssWasmFile);
  */
 export async function build({ contents = [], entrypoint = {}, volume = {}, ...opts } = {}) {
     opts = { contents, entrypoint, volume, ...opts };
-
     let result = await compile(opts);
 
     return `/*! tailwindcss v${tw3_version} | MIT License | https://tailwindcss.com */\n${result}`;
