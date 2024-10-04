@@ -116,7 +116,7 @@ export function prepareModuleContent(moduleContent, currentPath, volume = {}) {
         matchPositions.push({
             start: match.index + fullMatch.indexOf(importPath),
             end: match.index + fullMatch.indexOf(importPath) + importPath.length,
-            replacement: (new URL(`.${_path}`, windpress.assets.data.url)).href
+            replacement: (new URL(importPath, windpress.assets.data.url)).href
         });
     }
 
