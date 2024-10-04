@@ -27,7 +27,7 @@ if (vfsContainer) {
 async function preloadItems() {
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
-    const resolvedConfig = await resolveConfig(volume['/tailwind.config.js'], volume);
+    const resolvedConfig = await resolveConfig(volume);
 
     const textDocument = getTextDocument(`<div class=""></div>`);
 

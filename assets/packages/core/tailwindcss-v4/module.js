@@ -28,85 +28,20 @@ export async function importCdnModule(path, base, resourceHint) {
 }
 
 export async function importLocalModule(modulePath, base, resourceHint, volume = {}) {
-    // relative path as absolute path
-    if (modulePath.startsWith('./')) {
-        modulePath = path.resolve(
-            '/',
-            modulePath
-        );
-    }
-
     // volume are key-value pairs (relative_path: content).
-    const moduleContent = volume[modulePath];
+    let _moduleContent = volume[path.resolve('/', modulePath)];
 
-    if (!moduleContent) {
-        throw new Error(`The ${resourceHint} file "${modulePath}" does not exist in the volume.`);
+    if (!_moduleContent) {
+        throw new Error(`The ${resourceHint} file "${path.resolve('/', modulePath)}" does not exist in the volume.`);
     }
 
-    let _moduleContent = recursiveInlineImportModule(moduleContent, modulePath, volume);
+    _moduleContent = prepareModuleContent(_moduleContent, modulePath, volume);
 
-    let module = await import(/* @vite-ignore */ `data:text/javascript;base64,${encodeBase64(_moduleContent)}`).then((m) => m.default ?? m);
-
-    return module;
+    return await import(/* @vite-ignore */ `data:text/javascript;base64,${encodeBase64(_moduleContent)}`).then((m) => m.default ?? m);
 }
 
-export function recursiveInlineImportModule(moduleContent, currentPath, volume = {}) {
-    let _moduleContent = moduleContent;
-
-    // Regex to capture both static and dynamic imports
-    const regex = /import\s*(?:[^'"]*\s*from\s*)?['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
-
-    let matchPositions = [];
-    let match;
-    let shift = 0; // Track the shift in string length due to replacements
-
-    while ((match = regex.exec(_moduleContent)) !== null) {
-        const [fullMatch, staticImport, dynamicImport] = match;
-        const importPath = staticImport || dynamicImport; // Get the captured import path
-        // if the importPath is valid url, skip
-        if (isValidUrl(importPath)) {
-            continue;
-        }
-
-        if (!importPath.startsWith('.') && !importPath.startsWith('/')) {  // Check if it starts with `.` or `/`
-            continue; // Leave non-relative imports unchanged
-        }
-
-        // resolve the path and check if the file is in the volume
-        let _path = path.resolve(
-            path.dirname(currentPath),
-            importPath
-        );
-
-        // volume are key-value pairs (relative_path: content).
-        let _importModuleContent = volume[_path];
-
-        if (!_importModuleContent) {
-            throw new Error(`${currentPath}: The module file "${_path}" does not exist in the volume.`);
-        }
-
-        // Recursively inline the imports
-        _importModuleContent = recursiveInlineImportModule(_importModuleContent, _path, volume);
-
-        matchPositions.push({
-            start: match.index + fullMatch.indexOf(importPath),
-            end: match.index + fullMatch.indexOf(importPath) + importPath.length,
-            replacement: `data:text/javascript;base64,${encodeBase64(_importModuleContent)}`
-        });
-    }
-
-    matchPositions.forEach(({ start, end, replacement }) => {
-        // Slice the original string and replace the section
-        _moduleContent = _moduleContent.slice(0, start + shift) + replacement + _moduleContent.slice(end + shift);
-        // Adjust the shift due to the difference in length between the old and new strings
-        shift += replacement.length - (end - start);
-    });
-
-    return _moduleContent;
-}
-
-export function prepareModuleContent(moduleContent) {
-    return moduleContent
+export function prepareModuleContent(moduleContent, currentPath, volume = {}) {
+    let _moduleContent = moduleContent
         // replace the module.exports = with export default
         .replace(/module.exports\s*=\s*/, 'export default ')
         // catch multi-line import statements and replace them with single line
@@ -143,4 +78,54 @@ export function prepareModuleContent(moduleContent) {
                 )
         })
         .join('\n');
+
+    // Update all relative imports to absolute URLs
+
+    // Regex to capture both static and dynamic imports
+    const regex = /import\s*(?:[^'"]*\s*from\s*)?['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
+
+    let matchPositions = [];
+    let match;
+    let shift = 0; // Track the shift in string length due to replacements
+
+    while ((match = regex.exec(_moduleContent)) !== null) {
+        const [fullMatch, staticImport, dynamicImport] = match;
+        const importPath = staticImport || dynamicImport; // Get the captured import path
+        // if the importPath is valid url, skip
+        if (isValidUrl(importPath)) {
+            continue;
+        }
+
+        if (!importPath.startsWith('.') && !importPath.startsWith('/')) {  // Check if it starts with `.` or `/`
+            continue; // Leave non-relative imports unchanged
+        }
+
+        // resolve the path and check if the file is in the volume
+        let _path = path.resolve(
+            path.dirname(currentPath),
+            importPath
+        );
+
+        // volume are key-value pairs (relative_path: content).
+        let _importModuleContent = volume[_path];
+
+        if (!_importModuleContent) {
+            throw new Error(`${currentPath}: The module file "${_path}" does not exist in the volume.`);
+        }
+
+        matchPositions.push({
+            start: match.index + fullMatch.indexOf(importPath),
+            end: match.index + fullMatch.indexOf(importPath) + importPath.length,
+            replacement: (new URL(`.${_path}`, windpress.assets.data.url)).href
+        });
+    }
+
+    matchPositions.forEach(({ start, end, replacement }) => {
+        // Slice the original string and replace the section
+        _moduleContent = _moduleContent.slice(0, start + shift) + replacement + _moduleContent.slice(end + shift);
+        // Adjust the shift due to the difference in length between the old and new strings
+        shift += replacement.length - (end - start);
+    });
+
+    return _moduleContent;
 }

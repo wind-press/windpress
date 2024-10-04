@@ -26,7 +26,7 @@ class Volume
     {
         $entries = [];
 
-        $data_dir = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR;
+        $data_dir = static::data_dir_path();
 
         if (! file_exists($data_dir)) {
             wp_mkdir_p($data_dir);
@@ -108,7 +108,7 @@ class Volume
             return;
         }
 
-        $data_dir = wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR;
+        $data_dir = static::data_dir_path();
 
         foreach ($entries as $entry) {
             // if doesn't have any of the following keys, skip: name, relative_path, content, handler
@@ -180,5 +180,15 @@ class Volume
     {
         // allow dir
         return array_diff($special_chars, ['/']);
+    }
+
+    public static function data_dir_url(): string
+    {
+        return wp_upload_dir()['baseurl'] . WIND_PRESS::DATA_DIR;
+    }
+
+    public static function data_dir_path(): string
+    {
+        return wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR;
     }
 }

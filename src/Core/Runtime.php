@@ -246,6 +246,9 @@ class Runtime
             ],
             'assets' => [
                 'url' => AssetVite::asset_base_url(),
+                'data' => [
+                    'url' => Volume::data_dir_url(),
+                ]
             ],
             'site_meta' => [
                 'name' => get_bloginfo('name'),

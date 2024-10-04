@@ -30,7 +30,7 @@ if (vfsContainer) {
 async function refreshStyles() {
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
-    resolvedConfig = await resolveConfig(volume['/tailwind.config.js'], volume);
+    resolvedConfig = await resolveConfig(volume);
 
     await applyStyles();
 }

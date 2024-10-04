@@ -4,7 +4,7 @@ import tailwindcssPostcssPlugin from './postcss-plugins/tailwindcss/index';
 import { resolveConfig } from './resolve-config';
 
 export async function compile(opts) {
-    const config = opts.options?.resolvedConfig || await resolveConfig(opts.volume[opts.entrypoint.config], opts.volume);
+    const config = opts.options?.resolvedConfig || await resolveConfig(opts.volume);
 
     const contents = opts.contents.map((content) => (typeof content === 'string' ? { content } : content));
 
