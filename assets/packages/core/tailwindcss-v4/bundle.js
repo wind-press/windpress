@@ -66,7 +66,6 @@ export async function bundle(opts) {
                             return _path;
                         }
 
-                        // CDN
                         /*
                          * Resolve default import if no extension is specified
                          * */
@@ -75,6 +74,12 @@ export async function bundle(opts) {
                         }
 
                         _path = path.join(basedir, id);
+
+                        if (volume[_path]) {
+                            return _path;
+                        }
+
+                        // CDN
 
                         // fetch and store in volume
                         await fetch(`https://esm.sh${_path}`)
