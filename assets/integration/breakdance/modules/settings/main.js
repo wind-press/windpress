@@ -3,6 +3,7 @@ import { createVirtualRef } from '@/dashboard/composables/virtual.js';
 import { logger } from '@/integration/common/logger';
 import { watch } from 'vue';
 import Logo from '~/windpress.svg?raw';
+import { bdeIframe } from '@/integration/breakdance/constant.js';
 
 const breakdanceToolbarSelector = '.topbar-section.undo-redo-top-bar-section';
 
@@ -26,6 +27,7 @@ breakdanceToolbar.parentNode.insertBefore(settingButtonHtml, breakdanceToolbar.p
 
 // select the settings button
 const settingsButton = document.querySelector('#windpressbreakdance-settings-button');
+const windpressIframe = bdeIframe?.contentDocument.querySelector('#windpress-iframe');
 
 function toggleMinimize() {
     const currentVal = getVirtualRef('window.minimized', false).value;
@@ -36,8 +38,10 @@ function toggleMinimize() {
 function toggleButtonClass(currentVal) {
     if (!currentVal === true) {
         settingsButton.classList.remove('breakdance-toolbar-icon-button-active');
+        windpressIframe.style.display = 'none';
     } else {
         settingsButton.classList.add('breakdance-toolbar-icon-button-active');
+        windpressIframe.style.display = 'block';
     }
 }
 

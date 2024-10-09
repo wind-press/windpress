@@ -100,17 +100,15 @@ class Runtime
         $is_exclude_admin = Config::get('performance.cache.exclude_admin', false) && current_user_can('manage_options');
         $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
 
+        add_action('wp_head', fn () => $this->print_windpress_metadata(), 1_000_001);
+
         if ($is_cache_enabled && $this->is_cache_exists() && ! $is_exclude_admin) {
             add_action('wp_head', fn () => $this->enqueue_css_cache(), 1_000_001);
         } else {
             add_action('wp_head', fn () => $this->enqueue_play_cdn(), 1_000_001);
         }
 
-        if (
-            Config::get('general.ubiquitous-panel.enabled', true)
-            && current_user_can('manage_options')
-            && ! apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false)
-        ) {
+        if ($this->is_ubiquitous_panel()) {
             add_action('wp_head', fn () => $this->enqueue_front_panel(), 1_000_001);
         }
     }
@@ -233,31 +231,74 @@ class Runtime
 
         wp_set_script_translations($handle, 'windpress');
 
-        wp_localize_script($handle, 'windpress', [
+        // do enqueue scripts manually as it already runned before
+        wp_enqueue_scripts();
+    }
+
+    public function is_ubiquitous_panel()
+    {
+        return Config::get('general.ubiquitous-panel.enabled', true)
+            && current_user_can('manage_options')
+            && ! apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false);
+    }
+
+    public function print_windpress_metadata()
+    {
+        $metadata = $this->assets_metadata();
+
+        /**
+         * @see \WP_Scripts::localize()
+         */
+        foreach ($metadata as $key => $value) {
+            if (! is_scalar($value)) {
+                continue;
+            }
+
+            $metadata[$key] = html_entity_decode((string) $value, ENT_QUOTES, 'UTF-8');
+        }
+
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo sprintf('<script id="windpress:metadata">var windpress = %s;</script>', wp_json_encode($metadata));
+    }
+
+    public function assets_metadata()
+    {
+        $metadata = [
             '_version' => WIND_PRESS::VERSION,
             '_tailwind_version' => static::tailwindcss_version(),
             '_via_wp_org' => ! Common::is_updater_library_available(),
-            '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
-            'rest_api' => [
+            'is_ubiquitous' => $this->is_ubiquitous_panel(),
+            'assets' => [
+                'url' => AssetVite::asset_base_url(),
+            ],
+            'user_data' => [
+                'data_dir' => [
+                    // 'path' => Volume::data_dir_path(),
+                    'url' => Volume::data_dir_url(),
+                ],
+                'cache_dir' => [
+                    // 'path' => Cache::cache_dir_path(),
+                    // 'url' => Cache::cache_dir_url(),
+                ],
+            ],
+        ];
+
+        if (current_user_can('manage_options')) {
+            $metadata['_wpnonce'] = wp_create_nonce(WIND_PRESS::WP_OPTION);
+
+            $metadata['rest_api'] = [
                 'nonce' => wp_create_nonce('wp_rest'),
                 'root' => esc_url_raw(rest_url()),
                 'namespace' => WIND_PRESS::REST_NAMESPACE,
                 'url' => esc_url_raw(rest_url(WIND_PRESS::REST_NAMESPACE)),
-            ],
-            'assets' => [
-                'url' => AssetVite::asset_base_url(),
-                'data' => [
-                    'url' => Volume::data_dir_url(),
-                ]
-            ],
-            'site_meta' => [
+            ];
+
+            $metadata['site_meta'] = [
                 'name' => get_bloginfo('name'),
                 'site_url' => get_site_url(),
-            ],
-            'is_universal' => true,
-        ]);
+            ];
+        }
 
-        // do enqueue scripts manually as it already runned before
-        wp_enqueue_scripts();
+        return $metadata;
     }
 }

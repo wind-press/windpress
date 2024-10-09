@@ -74,7 +74,7 @@ const askForReviewClick = (action) => {
 <template>
     <div :class="{ 'hide-universal': ui.virtualState('window.minimized', false).value }" class="windpress-container my:40 px:40 font:13 h:calc(100vh-80px-var(--wp-admin--admin-bar--height))">
         <!-- Ask for reviews -->
-        <div v-if="!windpress.is_universal && isAskForReview" class="notice windpress-notice notice-info my:10">
+        <div v-if="!windpress.is_ubiquitous && isAskForReview" class="notice windpress-notice notice-info my:10">
             <p v-html="wp_i18n.sprintf(
                 wp_i18n.__('%sWindPress%s will always try to make you smile. If you smile, please consider giving us a %s rating. It would mean a lot to us!', 'windpress'),
                 '<strong>',
@@ -95,10 +95,10 @@ const askForReviewClick = (action) => {
                 </button>
             </p>
         </div>
-        <WordpressNotice v-if="!windpress.is_universal" />
+        <WordpressNotice v-if="!windpress.is_ubiquitous" />
         <WorkspacePage />
     </div>
-    <div v-if="windpress.is_universal" :class="{ hidden: ui.virtualState('window.minimized', false).value === false }" class="windpress-badge fixed bottom:0 right:0">
+    <div v-if="windpress.is_ubiquitous" :class="{ hidden: ui.virtualState('window.minimized', false).value === false }" class="windpress-badge fixed bottom:0 right:0">
         <div @click="ui.virtualState('window.minimized', false).value = !ui.virtualState('window.minimized', false).value" class="cursor:pointer:hover fg:black">
             <inline-svg :src="Logo" class="inline-svg fill:current font:28" />
         </div>

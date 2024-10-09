@@ -16,7 +16,6 @@ logger('Loading...');
     logger('Loading modules...');
 
     // TODO: dynamic import the features based on the enabled modules
-    await import('./modules/settings/main.js');
     await import('./modules/plain-classses/main.js');
     // await import('./modules/html2breakdance/main.js');
     await import('./modules/generate-cache/main.js');
@@ -24,6 +23,10 @@ logger('Loading...');
     // tailwindcss-v4
     if (Number(bdeIframe.contentWindow.windpress?._tailwind_version) === 4) {
         await import('./modules/variable-picker/main.js');
+    }
+
+    if (bdeIframe.contentWindow.windpress?.is_ubiquitous) {
+        await import('./modules/settings/main.js');
     }
 
     logger('Modules loaded!');

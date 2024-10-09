@@ -192,7 +192,7 @@ watch([activeElementId, visibleElementPanel], (newVal, oldVal) => {
     if (newVal[0] && newVal[1]) {
         nextTick(() => {
             const panelElementClassesEl = document.querySelector('.breakdance-element-properties-panel .vscroll-scroll .vscroll-scroll');
-            if (panelElementClassesEl.querySelector('.windpressbreakdance-plc-input') === null) {
+            if (panelElementClassesEl && panelElementClassesEl.querySelector('.windpressbreakdance-plc-input') === null) {
                 panelElementClassesEl.insertBefore(textInputContainer, panelElementClassesEl.firstChild);
             }
         });
@@ -214,7 +214,7 @@ hit = new HighlightInTextarea(textInput, {
 });
 
 async function classDownstream() {
-    textInput.value = bdeV.$store.getters['ui/activeElement'].data.properties?.settings?.advanced?.classes?.join(' ') || '';
+    textInput.value = bdeV.$store.getters['ui/activeElement'].data?.properties?.settings?.advanced?.classes?.join(' ') || '';
 }
 
 // Stupid way to check if the path is exist

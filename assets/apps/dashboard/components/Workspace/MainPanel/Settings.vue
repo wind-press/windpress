@@ -198,7 +198,7 @@ channel.addEventListener('message', (e) => {
                     <div class="flex flex:column gap:30 p:20">
                         <div class="flex flex:column gap:10">
                             <div class="flex max-w:400 w:full">
-                                <fieldset :aria-label="wp_i18n.__('Choose the Tailwind CSS version', 'windpress')" class="font:14 w:full">
+                                <fieldset :aria-label="wp_i18n.__('Choose the Tailwind CSS version', 'windpress')" class="font:14 w:full b:0 p:0 m:0">
                                     <div class="flex align-items:center justify-content:space-between leading:1.5">
                                         <div class="font:15">{{ wp_i18n.__('Tailwind CSS version', 'windpress') }}</div>
                                         <a href="https://github.com/tailwindlabs/tailwindcss/releases" target="_blank" class="">{{ wp_i18n.__('See release notes', 'windpress') }}</a>

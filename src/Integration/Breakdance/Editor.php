@@ -15,6 +15,7 @@ namespace WindPress\WindPress\Integration\Breakdance;
 
 use WIND_PRESS;
 use WindPress\WindPress\Admin\AdminPage;
+use WindPress\WindPress\Core\Runtime;
 use WindPress\WindPress\Utils\AssetVite;
 
 /**
@@ -36,12 +37,16 @@ class Editor
             return;
         }
 
+        // Manually enqueue the assets since Breakdance doesn't wp_head
+        add_filter('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', static fn ($is_prevent_load) => true);
+        Runtime::get_instance()->append_header();
+        wp_head();
+
         $handle = WIND_PRESS::WP_OPTION . ':integration-breakdance-editor';
 
         AssetVite::get_instance()->enqueue_asset('assets/integration/breakdance/main.js', [
             'handle' => $handle,
             'in_footer' => true,
-            'dependencies' => ['wp-hooks'],
         ]);
 
         wp_localize_script($handle, 'windpressbreakdance', [
@@ -76,29 +81,16 @@ class Editor
             });
         JS, 'after');
 
-        $this->recursive_wp_scripts_render($handle);
-    }
+        $wp_scripts = wp_scripts();
 
-    public function recursive_wp_scripts_render($handle)
-    {
-        $wp_scripts = wp_scripts()->registered[$handle];
+        $queue = $wp_scripts->queue;
 
-        if (isset($wp_scripts->deps)) {
-            foreach ($wp_scripts->deps as $dep) {
-                $this->recursive_wp_scripts_render($dep);
+        foreach ($queue as $handle) {
+            if (strpos($handle, WIND_PRESS::WP_OPTION . ':') !== 0) {
+                continue;
             }
-        }
 
-        if (isset($wp_scripts->extra['data'])) {
-            echo sprintf('<script type="text/javascript" id="%s-js-extra">%s</script>', $wp_scripts->handle, $wp_scripts->extra['data']);
-        }
-
-        echo sprintf('<script type="module" id="%s-js" src="%s"></script>', $wp_scripts->handle, $wp_scripts->src);
-
-        if (isset($wp_scripts->extra['after'])) {
-            foreach ($wp_scripts->extra['after'] as $after) {
-                echo sprintf('<script type="text/javascript" id="%s-js-after">%s</script>', $wp_scripts->handle, $after);
-            }
+            $wp_scripts->do_items($handle);
         }
     }
 }
