@@ -220,7 +220,7 @@ channel.addEventListener('message', (e) => {
                         <div class="flex flex:column gap:10">
                             <span class="font:15">{{ wp_i18n.__('Ubiquitous WindPress panel', 'windpress') }}</span>
                             <div class="flex align-items:center gap:4">
-                                <input type="checkbox" id="enable_front_ubiquitous_panel" v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', true).value" class="checkbox mt:0">
+                                <input type="checkbox" id="enable_front_ubiquitous_panel" v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', false).value" class="checkbox mt:0">
                                 <label for="enable_front_ubiquitous_panel" class="font:medium">{{ wp_i18n.__('Enable WindPress panel on the front page', 'windpress') }}</label>
                             </div>
                             <p class="my:0"> {{ wp_i18n.__('Access the WindPress panel right from the front page and made adjustment as it is on the wp-admin page.', 'windpress') }} </p>

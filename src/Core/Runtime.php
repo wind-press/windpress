@@ -237,7 +237,7 @@ class Runtime
 
     public function is_ubiquitous_panel()
     {
-        return Config::get('general.ubiquitous-panel.enabled', true)
+        return Config::get('general.ubiquitous-panel.enabled', false)
             && current_user_can('manage_options')
             && ! apply_filters('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', false);
     }
