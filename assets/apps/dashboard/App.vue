@@ -72,7 +72,7 @@ const askForReviewClick = (action) => {
 </script>
 
 <template>
-    <div :class="{ 'hide-universal': ui.virtualState('window.minimized', false).value }" class="windpress-container my:40 px:40 font:13 h:calc(100vh-80px-var(--wp-admin--admin-bar--height))">
+    <div :class="{ 'hide-ubiquitous': ui.virtualState('window.minimized', false).value }" class="windpress-container font:13 my:40 px:40 h:calc(100vh-80px-var(--wp-admin--admin-bar--height))">
         <!-- Ask for reviews -->
         <div v-if="!windpress.is_ubiquitous && isAskForReview" class="notice windpress-notice notice-info my:10">
             <p v-html="wp_i18n.sprintf(

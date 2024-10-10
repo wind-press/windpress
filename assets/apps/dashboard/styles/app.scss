@@ -29,7 +29,7 @@
 }
 
 #windpress-app {
-    &.universal {
+    &.ubiquitous {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
         font-size: 13px;
         line-height: 1.4em;
@@ -37,12 +37,13 @@
         >.windpress-container {
             z-index: calc(infinity-1000);
             position: fixed;
-            top: var(--wp-admin--admin-bar--height, 0);
-            left: 0;
-            right: 0;
-            bottom: 0;
 
-            &.hide-universal {
+            margin: 0;
+            padding: 0;
+            height: calc(100% - 2px);
+            width: calc(100% - 2px);
+
+            &.hide-ubiquitous {
                 display: none;
             }
 
@@ -214,11 +215,8 @@
     border: 0;
 
     &.expanded {
-        bottom: 0;
-        right: 0;
-        width: 100vw;
-        height: calc(100vh - var(--wp-admin--admin-bar--height, 0%));
-        top: var(--wp-admin--admin-bar--height, 0);
+        height: calc(100vh - 100px - var(--wp-admin--admin-bar--height, 0%));
+        width: calc(100vw - 100px);
     }
 }
 

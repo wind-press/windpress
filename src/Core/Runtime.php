@@ -162,66 +162,78 @@ class Runtime
 
         do_action('a!windpress/core/runtime:enqueue_play_cdn.before', $tailwindcss_version);
 
-        $load_modules = current_user_can('manage_options');
+        $can_load_modules = current_user_can('manage_options');
 
         if ($tailwindcss_version === 3) {
-            $this->enqueue_play_cdn_v3($load_modules);
+            $this->enqueue_play_cdn_v3($can_load_modules);
         } elseif ($tailwindcss_version === 4) {
-            $this->enqueue_play_cdn_v4($load_modules);
+            $this->enqueue_play_cdn_v4($can_load_modules);
         }
+
+        wp_enqueue_script(WIND_PRESS::WP_OPTION . ':observer');
 
         do_action('a!windpress/core/runtime:enqueue_play_cdn.after', $tailwindcss_version);
     }
 
-    public function enqueue_play_cdn_v3($load_modules)
+    public function enqueue_play_cdn_v3($can_load_modules)
     {
-        if ($load_modules) {
-            AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/autocomplete.js', [
+        // Register the modules
+        $loaded_modules = [];
+        if ($can_load_modules) {
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/autocomplete.js', [
                 'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
                 'in-footer' => true,
             ]);
+            $loaded_modules[] = WIND_PRESS::WP_OPTION . ':autocomplete';
 
-            AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/sort.js', [
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/sort.js', [
                 'handle' => WIND_PRESS::WP_OPTION . ':sort',
                 'in-footer' => true,
             ]);
+            $loaded_modules[] = WIND_PRESS::WP_OPTION . ':sort';
 
-            AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/classname-to-css.js', [
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/classname-to-css.js', [
                 'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
                 'in-footer' => true,
             ]);
+            $loaded_modules[] = WIND_PRESS::WP_OPTION . ':classname-to-css';
         }
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v3/play/observer.js', [
+        AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
-            'dependencies' => ['wp-i18n', 'wp-hooks'],
+            'dependencies' => ['wp-i18n', 'wp-hooks', ...$loaded_modules],
         ]);
     }
 
-    public function enqueue_play_cdn_v4($load_modules)
+    public function enqueue_play_cdn_v4($can_load_modules)
     {
-        if ($load_modules) {
-            AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/autocomplete.js', [
+        // Register the modules
+        $loaded_modules = [];
+        if ($can_load_modules) {
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v4/play/autocomplete.js', [
                 'handle' => WIND_PRESS::WP_OPTION . ':autocomplete',
                 'in-footer' => true,
             ]);
+            $loaded_modules[] = WIND_PRESS::WP_OPTION . ':autocomplete';
 
-            AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/sort.js', [
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v4/play/sort.js', [
                 'handle' => WIND_PRESS::WP_OPTION . ':sort',
                 'in-footer' => true,
             ]);
+            $loaded_modules[] = WIND_PRESS::WP_OPTION . ':sort';
 
-            AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/classname-to-css.js', [
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v4/play/classname-to-css.js', [
                 'handle' => WIND_PRESS::WP_OPTION . ':classname-to-css',
                 'in-footer' => true,
             ]);
+            $loaded_modules[] = WIND_PRESS::WP_OPTION . ':classname-to-css';
         }
 
-        AssetVite::get_instance()->enqueue_asset('assets/packages/core/tailwindcss-v4/play/observer.js', [
+        AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v4/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
-            'dependencies' => ['wp-i18n', 'wp-hooks'],
+            'dependencies' => ['wp-i18n', 'wp-hooks', ...$loaded_modules],
         ]);
     }
 
@@ -251,6 +263,8 @@ class Runtime
     public function print_windpress_metadata()
     {
         $metadata = $this->assets_metadata();
+
+        $metadata = apply_filters('f!windpress/core/runtime:print_windpress_metadata', $metadata);
 
         /**
          * @see \WP_Scripts::localize()

@@ -87,8 +87,9 @@ if (!document.getElementById('windpress-app')) {
     // add the windpress-app div to the iframe
     const windpressApp = document.createElement('div');
     windpressApp.id = 'windpress-app';
-    windpressApp.classList.add('universal');
+    windpressApp.classList.add('ubiquitous');
     doc.body.appendChild(windpressApp);
+    doc.body.style.margin = '0';
 
     // set the iframe srcdoc
     iframe.srcdoc = doc.documentElement.outerHTML;
@@ -98,15 +99,23 @@ if (!document.getElementById('windpress-app')) {
 
     const ui = useUIStore();
 
+    function clickOutside() {
+        ui.virtualState('window.minimized', false).value = true;
+    }
+
     if (ui.virtualState('window.minimized', false).value === false) {
         iframe.classList.add('expanded');
+
+        document.addEventListener('click', clickOutside);
     }
 
     watch(() => ui.virtualState('window.minimized', false).value, (state) => {
         if (!state) {
             iframe.classList.add('expanded');
+            document.addEventListener('click', clickOutside);
         } else {
             iframe.classList.remove('expanded');
+            document.removeEventListener('click', clickOutside);
         }
     });
 } else {

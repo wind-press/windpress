@@ -56,6 +56,9 @@ class AdminPage
 
     private function init_hooks()
     {
+        add_filter('f!windpress/core/runtime:print_windpress_metadata', fn ($metadata) => array_merge($metadata, [
+            'is_ubiquitous' => false,
+        ]), 1_000_001);
         add_action('admin_enqueue_scripts', fn () => Runtime::get_instance()->print_windpress_metadata(), 1_000_001);
         add_action('admin_enqueue_scripts', fn () => $this->enqueue_scripts(), 1_000_001);
     }

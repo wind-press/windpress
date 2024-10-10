@@ -112,6 +112,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Improve**: Ensure only the necessary Play Observer modules are loaded on the front-end
+* **Improve**: Ubiquitous panel is now automatically hidden when clicking outside the panel
+
 = 3.2.4 =
 * **Fix**: Breakdance integration doesn't work on the editor due to fail to load the required JavaScript files
 
