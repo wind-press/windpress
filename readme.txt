@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.2.4
+Stable tag: 3.2.5
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -112,9 +112,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
-* **Improve**: Ensure only the necessary Play Observer modules are loaded on the front-end
-* **Improve**: Ubiquitous panel is now automatically hidden when clicking outside the panel
+= 3.2.5 =
+* **Improve**: Reduce the number of Play modules loaded on the front-end page for non-admin users
+* **Improve**: Ubiquitous panel is now automatically hidden when outside the panel is clicked
 
 = 3.2.4 =
 * **Fix**: Breakdance integration doesn't work on the editor due to fail to load the required JavaScript files
