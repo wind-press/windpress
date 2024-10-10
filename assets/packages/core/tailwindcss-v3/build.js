@@ -1,10 +1,7 @@
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
 import init, { transform, browserslistToTargets } from 'lightningcss-wasm';
-import browserslist from 'browserslist';
 import { compile } from './compile';
 import { version as tw3_version } from 'tailwindcss/package.json';
-
-await init(lightningcssWasmFile);
 
 /**
  * Build the CSS
@@ -28,6 +25,10 @@ export async function build({ contents = [], entrypoint = {}, volume = {}, ...op
  * @param {boolean} minify Default is `false`. Whether to minify the CSS.
  */
 export async function optimize(css, minify = false) {
+    await init(lightningcssWasmFile);
+
+    const { default: browserslist } = await import('browserslist');
+
     const result = transform({
         filename: 'main.css',
         code: new TextEncoder().encode(css),

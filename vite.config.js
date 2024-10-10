@@ -67,7 +67,7 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks: {
-                    'monaco-editor': ['monaco-editor'],
+                    // 'monaco-editor': ['monaco-editor'],
                 },
                 chunkFileNames: (chunkInfo) => {
                     // add .min to the vendor module to exclude it from the `wp i18n make-pot` command.

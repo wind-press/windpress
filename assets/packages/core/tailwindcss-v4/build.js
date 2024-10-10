@@ -4,8 +4,6 @@ import { loadModule } from './module.js';
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
 import init, { Features, transform } from 'lightningcss-wasm';
 
-await init(lightningcssWasmFile);
-
 /**
  * Build the CSS
  *
@@ -35,6 +33,8 @@ export async function build({ candidates = [], entrypoint = '/main.css', volume 
  * @param {boolean} minify Default is `false`. Whether to minify the CSS.
  */
 export async function optimize(css, minify = false) {
+    await init(lightningcssWasmFile);
+
     const result = transform({
         filename: 'main.css',
         code: new TextEncoder().encode(css),
