@@ -114,7 +114,7 @@ Pro version 1.**1**.4
 
 = 3.2.5 =
 * **Improve**: Reduce the number of Play modules loaded on the front-end page for non-admin users
-* **Improve**: Ubiquitous panel is now automatically hidden when outside the panel is clicked
+* **Improve**: The Ubiquitous panel is now automatically hidden when outside of the panel is clicked
 
 = 3.2.4 =
 * **Fix**: Breakdance integration doesn't work on the editor due to fail to load the required JavaScript files

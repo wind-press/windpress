@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42d60d2c4feead33dee18f68afb19c3a",
+    "content-hash": "222cd8defd26176964896a716aad0685",
     "packages": [
         {
             "name": "hidehalo/nanoid-php",
@@ -274,51 +274,6 @@
                 "source": "https://github.com/orgrosua/edd-sl-plugin-updater/tree/master"
             },
             "time": "2024-04-30T15:47:58+00:00"
-        },
-        {
-            "name": "rosua/leak",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orgrosua/leak.git",
-                "reference": "9c51100104576803a9ee90e90876a1144a926006"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orgrosua/leak/zipball/9c51100104576803a9ee90e90876a1144a926006",
-                "reference": "9c51100104576803a9ee90e90876a1144a926006",
-                "shasum": ""
-            },
-            "require-dev": {
-                "rector/rector": "^0.14.5",
-                "symplify/easy-coding-standard": "^11.1"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/functions.php"
-                ],
-                "psr-4": {
-                    "Rosua\\Leak\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rosua",
-                    "email": "id@rosua.org"
-                }
-            ],
-            "description": "a ReflectionClass wrapper to leak an encapsulated class",
-            "support": {
-                "issues": "https://github.com/orgrosua/leak/issues",
-                "source": "https://github.com/orgrosua/leak/tree/master"
-            },
-            "time": "2022-12-23T03:11:22+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -1435,8 +1390,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "rosua/edd-sl-plugin-updater": 20,
-        "rosua/leak": 20
+        "rosua/edd-sl-plugin-updater": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
