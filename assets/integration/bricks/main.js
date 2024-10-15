@@ -7,6 +7,10 @@ logger('Loading...');
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 
+    while (document.getElementById('bricks-preloader')) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
     while (!document.getElementById('bricks-builder-iframe')?.contentDocument.querySelector('.brx-body')?.__vue_app__) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }

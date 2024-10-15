@@ -50,17 +50,30 @@ export const useVolumeStore = defineStore('volume', () => {
         const existingEntryIndex = data.entries.findIndex((entry) => entry.relative_path === filePathParts);
 
         if (existingEntryIndex !== -1) {
-            throw new Error(__(`A file named "${filePathParts}" already exists`, 'windpress'));
+            // if not hidden, throw
+            if (data.entries[existingEntryIndex].hidden === false) {
+                throw new Error(__(`A file named "${filePathParts}" already exists`, 'windpress'));
+            }
+
+            // if hidden, unhide it, and set the content
+            data.entries[existingEntryIndex].hidden = false;
+            data.entries[existingEntryIndex].content = `/* file: ${filePathParts} */\n\n`;
+        } else {
+            data.entries.push({
+                name: filePathParts.split('/').pop(),
+                content: `/* file: ${filePathParts} */\n\n`,
+                relative_path: `${filePathParts}`,
+                handler: 'internal',
+            });
         }
 
-        data.entries.push({
-            name: filePathParts.split('/').pop(),
-            content: `/* file: ${filePathParts} */\n\n`,
-            relative_path: `${filePathParts}`,
-            handler: 'internal',
-        });
-
         activeViewEntryRelativePath.value = `${filePathParts}`;
+    }
+
+    function softDeleteEntry(entry) {
+        const entryIndex = data.entries.findIndex((e) => e.relative_path === entry.relative_path);
+        data.entries[entryIndex].content = null;
+        data.entries[entryIndex].hidden = true;
     }
 
     function getKVEntries() {
@@ -177,5 +190,6 @@ export const useVolumeStore = defineStore('volume', () => {
         doPull,
         doPush,
         hasChanged,
+        softDeleteEntry,
     };
 });

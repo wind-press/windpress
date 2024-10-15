@@ -2,6 +2,7 @@
 import Logo from '~/windpress.svg';
 import { useColorMode } from '@vueuse/core';
 import { useUIStore } from '@/dashboard/stores/ui';
+import { getInstanceId } from '@/dashboard/library/instance-id';
 
 const ui = useUIStore();
 
@@ -23,8 +24,9 @@ function toggleMinimize() {
 
 const channel = new BroadcastChannel('windpress');
 
-function doSave() {
+async function doSave() {
     channel.postMessage({
+        instanceId: getInstanceId(),
         source: 'windpress/dashboard',
         target: 'windpress/dashboard',
         task: 'windpress.save',
@@ -47,8 +49,8 @@ function doSave() {
         <div class="flex align-items:center flex:row gap:6">
             <div class="flex align-items:center flex:row gap:2">
                 <button @click="theme = theme === 'dark' ? 'light' : 'dark'" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! min-w:36 my:auto width:auto font:16 align-items:center" v-ripple>
-                    <font-awesome-icon v-if="theme === 'light'" :icon="['fas', 'sun-bright']" class="fill:current!" />
-                    <font-awesome-icon v-else-if="theme === 'dark'" :icon="['fas', 'moon-stars']" class="fill:current!" />
+                    <i-line-md-moon-filled-to-sunny-filled-transition v-if="theme === 'light'" class="fill:current!" />
+                    <i-line-md-sunny-filled-loop-to-moon-filled-transition v-else-if="theme === 'dark'" class="fill:current!" />
                 </button>
             </div>
             <button @click="doSave" class="button button-secondary b:transparent! fg:sky-80! fg:sky-40!@dark b:sky-80!:hover bg:transparent!" v-ripple>

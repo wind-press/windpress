@@ -30,7 +30,7 @@ function addNewEntry() {
         return;
     }
 
-    if (volumeStore.data.entries.find(entry => entry.relative_path === `${filePath}`)) {
+    if (volumeStore.data.entries.find(entry => entry.relative_path === `${filePath}` && entry.hidden !== true)) {
         notifier.alert(__(`A file named "${filePath}" already exists`, 'windpress'));
         return;
     }
@@ -45,7 +45,15 @@ function addNewEntry() {
 function switchToEntry(entry) {
     volumeStore.activeViewEntryRelativePath = entry.relative_path;
 
-    ui.virtualState('main-panel.tab.active', 'code-editor').value = 'code-editor'
+    ui.virtualState('main-panel.tab.active', 'code-editor').value = 'code-editor';
+}
+
+function softDeleteEntry(entry) {
+    if (confirm(__('Are you sure you want to delete this file?', 'windpress'))) {
+        volumeStore.softDeleteEntry(entry);
+    }
+
+    
 }
 
 onBeforeMount(() => {
@@ -76,7 +84,7 @@ onMounted(() => {
 
     <div class="folders-content ">
         <div class="folders-items flex flex:col {w:30}>.folders-item_.item-icon {w:full;font:1rem;max-w:20}_.item-icon_svg">
-            <div v-for="entry in volumeStore.data.entries" @click="switchToEntry(entry)" :class="volumeStore.activeViewEntryRelativePath === entry.relative_path ? 'bg:gray-20/.4 bg:gray-20/.2@dark' : ''" class="folders-item folders-file px:14 py:6 cursor:pointer flex">
+            <div v-for="entry in volumeStore.data.entries.filter(entry => entry.hidden !== true)" @click="switchToEntry(entry)" :class="volumeStore.activeViewEntryRelativePath === entry.relative_path ? 'bg:gray-20/.4 bg:gray-20/.2@dark' : ''" class="folders-item folders-file px:14 py:6 cursor:pointer flex">
                 <div class="item-icon">
                     <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && entry.relative_path === 'tailwind.config.js')">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 54 33" class="h:1em mr:2 vertical-align:-0.125em">
@@ -97,11 +105,24 @@ onMounted(() => {
                         <font-awesome-icon :icon="['fab', 'css3-alt']" class="fg:#264de4 " />
                     </template>
                 </div>
-                <div>
+                <div class="flex-grow:1">
                     {{ entry.relative_path }}
                     <span v-if="entry.relative_path === 'main.css'" class="fg:gray-50 fg:gray-30@dark">
                         [v{{ Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) }}]
                     </span>
+                </div>
+                <div class="float:right">
+                    <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && entry.relative_path === 'tailwind.config.js')">
+                        <!-- reset -->
+                        <button @click="resetEntry(entry)" :title="wp_i18n.__('Reset', 'windpress')" class="button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! line-height:normal min-h:initial! align-items:center" v-ripple>
+                            <i-bx-reset class="m:0 fg:red-50" />
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button @click.stop="softDeleteEntry(entry)" :title="wp_i18n.__('Delete', 'windpress')" class="button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! line-height:normal min-h:initial! align-items:center" v-ripple>
+                            <i-octicon-trash-16 class="m:0 fg:red-50" />
+                        </button>
+                    </template>
                 </div>
             </div>
         </div>

@@ -9,6 +9,9 @@ import topLevelAwait from 'vite-plugin-top-level-await';
 import path from 'path';
 import svgr from 'vite-plugin-svgr';
 import httpsImports from 'vite-plugin-https-imports';
+import Icons from 'unplugin-icons/vite';
+import IconsResolver from 'unplugin-icons/resolver';
+import Components from 'unplugin-vue-components/vite';
 
 export default defineConfig({
     plugins: [
@@ -51,6 +54,12 @@ export default defineConfig({
         }),
         vue(),
         wp_scripts(),
+        Components({
+            resolvers: [
+                IconsResolver(),
+            ],
+        }),
+        Icons({ autoInstall: true, scale: 1 }),
         svgr({
             svgrOptions: {
                 dimensions: false,

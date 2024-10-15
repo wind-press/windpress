@@ -7,7 +7,8 @@
  * Convert HTML string to Bricks element
  */
 
-import { brxGlobalProp } from '@/integration/bricks/constant.js';
+import { brxGlobalProp, settingsState } from '@/integration/bricks/constant.js';
+import { watch } from 'vue';
 import { logger } from '@/integration/common/logger.js';
 import { parse } from './dom2elements.js';
 
@@ -105,6 +106,10 @@ async function htmlPasteHandler() {
  * Mac: Cmd + Shift + V
  */
 document.addEventListener('keydown', (event) => {
+    if (!settingsState('module.html2bricks.copy-paste', true).value) {
+        return;
+    }
+
     if (event.target.id === 'bricks-toolbar' || event.target.id === 'bricks-panel') {
         return;
     }
@@ -124,8 +129,6 @@ pasteMenu.classList.add('sep');
 pasteMenu.innerHTML = '<span class="label">Paste HTML</span><span class="shortcut">CTRL + SHIFT + V</span>';
 pasteMenu.addEventListener('click', htmlPasteHandler);
 
-pasteItemContextMenu.classList.remove('sep');
-pasteItemContextMenu.insertAdjacentElement('afterend', pasteMenu);
 
 // add "Paste HTML" button on the Structure panel header
 const pasteItemStructureHeader = document.querySelector('#bricks-panel-header>ul.actions>li[data-balloon="Paste (All)"]');
@@ -137,8 +140,32 @@ pasteHTMLStructureHeader.innerHTML = /*html*/`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-html5" fill="none" stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 4l-2 14.5l-6 2l-6 -2l-2 -14.5z" /><path d="M15.5 8h-7l.5 4h6l-.5 3.5l-2.5 .75l-2.5 -.75l-.1 -.5" /></svg>
     </span>
 `;
+
 pasteHTMLStructureHeader.addEventListener('click', htmlPasteHandler);
 
-pasteItemStructureHeader.insertAdjacentElement('afterend', pasteHTMLStructureHeader);
+const addControl = () => {
+    pasteItemContextMenu.classList.remove('sep');
+    pasteItemContextMenu.insertAdjacentElement('afterend', pasteMenu);
+    pasteItemStructureHeader.insertAdjacentElement('afterend', pasteHTMLStructureHeader);
+};
+
+const removeControl = () => {
+    pasteItemContextMenu.classList.add('sep');
+    pasteMenu.remove();
+    pasteHTMLStructureHeader.remove();
+};
+
+// initial
+if (settingsState('module.html2bricks.copy-paste', true).value) {
+    addControl();
+}
+
+watch(() => settingsState('module.html2bricks.copy-paste', true).value, (value) => {
+    if (value) {
+        addControl();
+    } else {
+        removeControl();
+    }
+});
 
 logger('Module loaded!', { module: 'html2bricks' });

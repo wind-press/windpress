@@ -2,6 +2,7 @@
 import { shallowRef, onBeforeMount, computed } from 'vue';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useNotifier } from '@/dashboard/library/notifier';
+import { getInstanceId } from '@/dashboard/library/instance-id';
 import { getVariableList } from '@/packages/core/tailwindcss-v4';
 import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useSettingsStore } from '@/dashboard/stores/settings';
@@ -47,6 +48,13 @@ function doSave() {
                 payload: {
                     volume: volumeStore.getKVEntries()
                 }
+            });
+
+            channel.postMessage({
+                source: 'windpress/dashboard',
+                target: 'windpress/dashboard',
+                task: 'windpress.code-editor.saved',
+                instanceId: getInstanceId(),
             });
         });
 }
@@ -212,8 +220,29 @@ channel.addEventListener('message', (e) => {
     const target = 'windpress/dashboard';
     const task = 'windpress.save';
 
-    if (data.source === source && data.target === target && data.task === task) {
+    if (
+        data.source === source
+        && data.instanceId === getInstanceId()
+        && data.target === target
+        && data.task === task
+    ) {
         doSave();
+    }
+});
+
+channel.addEventListener('message', (e) => {
+    const data = e.data;
+    const source = 'windpress/dashboard';
+    const target = 'windpress/dashboard';
+    const task = 'windpress.code-editor.saved';
+
+    if (
+        data.source === source
+        && data.instanceId !== getInstanceId()
+        && data.target === target
+        && data.task === task
+    ) {
+        volumeStore.doPull();
     }
 });
 </script>

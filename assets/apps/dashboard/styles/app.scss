@@ -35,7 +35,7 @@
         line-height: 1.4em;
 
         >.windpress-container {
-            z-index: calc(infinity-1000);
+            z-index: calc(infinity);
             position: fixed;
 
             margin: 0;
@@ -155,7 +155,7 @@
                 }
             }
         }
-        
+
     }
 
     input[type=color],
@@ -220,30 +220,35 @@
     }
 }
 
-.awn-toast-icon {
-    >div {
-        width: 44px;
+#awn-toast-container {
+    z-index: calc(infinity) !important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 
-        >svg {
-            font-size: 44px;
+    .awn-toast-icon {
+        >div {
+            width: 44px;
+
+            >svg {
+                font-size: 44px;
+            }
+        }
+
+        .icon-async {
+            animation: spin 2s linear infinite;
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
         }
     }
 
-    .icon-async {
-        animation: spin 2s linear infinite;
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+    .awn-toast-label {
+        margin-bottom: 6px;
     }
-}
-
-.awn-toast-label {
-    margin-bottom: 6px;
 }

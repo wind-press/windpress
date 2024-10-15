@@ -8,6 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
+import { settingsState } from '@/integration/bricks/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -16,6 +17,10 @@ const channel = new BroadcastChannel('windpress');
     function XMLHttpRequest() {
 
         const xhr = new __xhr();
+
+        if (!settingsState('module.generate-cache.on-save', true).value) {
+            return xhr;
+        }
 
         const open = xhr.open;
 

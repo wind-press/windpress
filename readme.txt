@@ -115,6 +115,7 @@ Pro version 1.**1**.4
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v3 (3.4.14)
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.27 next)
+* **New**: [Bricks] added settings to enable or disable WindPress' features. Right-click the WindPress icon on the Editor's top bar to access the settings.
 
 = 3.2.5 =
 * **Improve**: Reduce the number of Play modules loaded on the front-end page for non-admin users

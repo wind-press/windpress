@@ -38,10 +38,12 @@ function toggleMinimize() {
 function toggleButtonClass(currentVal) {
     if (!currentVal === true) {
         settingsButton.classList.remove('breakdance-toolbar-icon-button-active');
-        windpressIframe.style.display = 'none';
     } else {
         settingsButton.classList.add('breakdance-toolbar-icon-button-active');
-        windpressIframe.style.display = 'block';
+    }
+
+    if (windpressIframe) {
+        windpressIframe.style.display = currentVal ? 'block' : 'none';
     }
 }
 

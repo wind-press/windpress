@@ -49,6 +49,7 @@ import {
     faBoxArchive as faBoxArchiveRegular,
     faMasksTheater as faMasksTheaterRegular,
     faArrowUpRightFromSquare as faArrowUpRightFromSquareRegular,
+    faTrash as faTrashRegular,
 } from '@fortawesome/pro-regular-svg-icons';
 
 import {
@@ -64,8 +65,6 @@ import {
 /* add icons to the library */
 library.add(
     /** fas */
-    faSunBright,
-    faMoonStars,
     faChevronRight,
     faCircleNotch,
     faBook,
@@ -106,6 +105,7 @@ library.add(
     faTextSizeRegular,
     faBoxArchiveRegular,
     faMasksTheaterRegular,
+    faTrashRegular,
 
     /** fal */
 

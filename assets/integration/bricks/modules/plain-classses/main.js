@@ -20,7 +20,7 @@ import Tribute from 'tributejs';
 import { createHighlighterCore, loadWasm } from 'shiki/core';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
-import { brxGlobalProp, brxIframeGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
+import { brxGlobalProp, brxIframeGlobalProp, brxIframe, settingsState } from '@/integration/bricks/constant.js';
 
 import { debounce } from 'lodash-es';
 
@@ -85,6 +85,11 @@ const tribute = new Tribute({
     noMatchTemplate: '',
 
     values: async function (text, cb) {
+        if (!settingsState('module.plain-classes.autocomplete', true).value) {
+            cb([]);
+            return;
+        }
+
         const filters = await wp.hooks.applyFilters('windpressbricks-autocomplete-items-query', autocompleteItems, text);
         cb(filters);
     },
@@ -212,7 +217,7 @@ watch([activeElementId, visibleElementPanel], (newVal, oldVal) => {
     if (newVal[0] && newVal[1]) {
         nextTick(() => {
             const panelElementClassesEl = document.querySelector('#bricks-panel-element-classes');
-            if (panelElementClassesEl.querySelector('.windpressbricks-plc-input') === null) {
+            if (settingsState('module.plain-classes.input-field', true).value && panelElementClassesEl.querySelector('.windpressbricks-plc-input') === null) {
                 panelElementClassesEl.appendChild(containerAction);
 
                 panelElementClassesEl.appendChild(textInput);
@@ -298,6 +303,10 @@ function hoverPreviewProvider() {
     const currentMarkWordElement = ref(null);
 
     const debouncedMousemoveHandler = debounce(function (event) {
+        if (!settingsState('module.plain-classes.hover-preview-classes', true).value) {
+            return;
+        }
+
         const x = event.clientX;
         const y = event.clientY;
 

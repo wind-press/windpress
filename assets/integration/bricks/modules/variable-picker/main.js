@@ -43,7 +43,6 @@ app
 
 app.mount('#windpressbricks-variable-app');
 
-
 function onInputClick(e) {
     if (!e.shiftKey || !e.target) {
         return;
