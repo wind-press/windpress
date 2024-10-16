@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.2.5
+Stable tag: 3.2.6
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -112,7 +112,7 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.2.6 =
 * **New**: Upgraded to Tailwind CSS v3 (3.4.14)
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.27 next)
 * **New**: [Bricks] added settings to enable or disable WindPress' features. Right-click the WindPress icon on the Editor's top bar to access the settings.
