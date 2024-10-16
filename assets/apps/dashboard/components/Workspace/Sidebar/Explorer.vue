@@ -52,8 +52,12 @@ function softDeleteEntry(entry) {
     if (confirm(__('Are you sure you want to delete this file?', 'windpress'))) {
         volumeStore.softDeleteEntry(entry);
     }
+}
 
-
+function resetEntry(entry) {
+    if (confirm(__('Are you sure you want to reset this file?', 'windpress'))) {
+        volumeStore.resetEntry(entry);
+    }
 }
 
 onBeforeMount(() => {

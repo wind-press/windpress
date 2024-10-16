@@ -72,8 +72,18 @@ export const useVolumeStore = defineStore('volume', () => {
 
     function softDeleteEntry(entry) {
         const entryIndex = data.entries.findIndex((e) => e.relative_path === entry.relative_path);
-        data.entries[entryIndex].content = null;
+        data.entries[entryIndex].content = '';
         data.entries[entryIndex].hidden = true;
+    }
+
+    function resetEntry(entry) {
+        const entryIndex = data.entries.findIndex((e) => e.relative_path === entry.relative_path);
+        data.entries[entryIndex].content = '';
+
+        // push and pull the data to update the init values
+        doPush().then(() => {
+            doPull();
+        });
     }
 
     function getKVEntries() {
@@ -191,5 +201,6 @@ export const useVolumeStore = defineStore('volume', () => {
         doPush,
         hasChanged,
         softDeleteEntry,
+        resetEntry,
     };
 });
