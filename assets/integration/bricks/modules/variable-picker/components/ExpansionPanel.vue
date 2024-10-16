@@ -43,7 +43,7 @@ defineExpose({
                 <slot name="header"></slot>
             </div>
             <div>
-                <font-awesome-icon :icon="['fas', 'chevron-right']" :class="{ 'rotate(-90)': expand[name] }" class="~duration:300 font:18" />
+                <i-fa6-solid-chevron-right :class="{ 'rotate(-90)': expand[name] }" class="iconify ~duration:300 font:18" />
             </div>
         </div>
         <Transition>

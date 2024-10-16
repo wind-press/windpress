@@ -73,7 +73,7 @@ onMounted(() => {
                 WindPress
             </div>
             <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="uniPanelIconButton r:0 bg:$(primary-3):hover py:10 px:12">
-                <font-awesome-icon :icon="['fas', 'xmark']" class="fg:$(base-2) font:16" />
+                <i-fa6-solid-xmark class="iconify fg:$(base-2) font:16" />
             </button>
         </div>
     </div>

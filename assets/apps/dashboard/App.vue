@@ -83,11 +83,11 @@ const askForReviewClick = (action) => {
             )"></p>
             <p>
                 <button @click="askForReviewClick('done')" class="button button-primary">
-                    <font-awesome-icon :icon="['fas', 'face-smile-hearts']" />
+                    <i-line-md-emoji-smile-filled class="iconify mr:2" />
                     {{ wp_i18n.__('OK, you deserve it!', 'windpress') }}
                 </button>
                 <button @click="askForReviewClick('later')" class="button button-secondary float:right ml:8">
-                    <font-awesome-icon :icon="['fas', 'hourglass-clock']" />
+                    <i-fluent-send-clock-24-filled class="iconify mr:2" />
                     {{ wp_i18n.__('Maybe later', 'windpress') }}
                 </button>
                 <button @click="askForReviewClick('never')" class="button button-link button-link-delete float:right">

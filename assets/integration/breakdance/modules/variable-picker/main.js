@@ -2,7 +2,6 @@ import './style.scss';
 
 import { createApp, ref, watch } from 'vue';
 import './master.css.js';
-import { FontAwesomeIcon } from './font-awesome.js';
 import { logger } from '@/integration/common/logger.js';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
@@ -36,7 +35,6 @@ app
     ;
 
 app
-    .component('font-awesome-icon', FontAwesomeIcon)
     .component('inline-svg', InlineSvg)
     ;
 

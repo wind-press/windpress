@@ -54,9 +54,6 @@ jobs:
             restore-keys: |
               ${{ runner.os }}-pnpm-store-
 
-        # Font Awesome Pro. https://fontawesome.com/docs/web/setup/packages
-        - run: npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
-
         # install dependencies and build the assets
         - run: pnpm install
         - run: pnpm build

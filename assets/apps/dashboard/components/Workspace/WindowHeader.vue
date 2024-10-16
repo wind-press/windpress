@@ -49,8 +49,8 @@ async function doSave() {
         <div class="flex align-items:center flex:row gap:6">
             <div class="flex align-items:center flex:row gap:2">
                 <button @click="theme = theme === 'dark' ? 'light' : 'dark'" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! min-w:36 my:auto width:auto font:16 align-items:center" v-ripple>
-                    <i-line-md-moon-filled-to-sunny-filled-transition v-if="theme === 'light'" class="fill:current!" />
-                    <i-line-md-sunny-filled-loop-to-moon-filled-transition v-else-if="theme === 'dark'" class="fill:current!" />
+                    <i-line-md-moon-filled-to-sunny-filled-transition v-if="theme === 'light'" class="iconify fill:current!" />
+                    <i-line-md-sunny-filled-loop-to-moon-filled-transition v-else-if="theme === 'dark'" class="iconify fill:current!" />
                 </button>
             </div>
             <button @click="doSave" class="button button-secondary b:transparent! fg:sky-80! fg:sky-40!@dark b:sky-80!:hover bg:transparent!" v-ripple>

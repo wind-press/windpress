@@ -32,7 +32,7 @@ function rebuildCache() {
         <div class="flex flex:row gap:2 w:full">
             <div class="flex flex-grow:1">
                 <div @click="rebuildCache" v-tooltip="{ placement: 'top', content: wp_i18n.__('Rebuild Cache', 'windpress') }" class="flex flex:row bg:statusBarItem-remoteBackground fg:statusBarItem-remoteForeground px:12 py:6 align-items:center cursor:pointer" v-ripple>
-                    <font-awesome-icon :icon="['fas', 'broom']" />
+                    <i-octicon-cache-24 class="iconify" />
                 </div>
             </div>
             <div class="flex flex:row px:12 py:6 gap:12 rel">
@@ -45,7 +45,7 @@ function rebuildCache() {
                 </div>
 
                 <div v-tooltip="{ placement: 'top', content: `${notification.notices.length} Notifications` }" class="status-bar__notification flex flex:row align-items:center cursor:pointer">
-                    <i-line-md-bell-alert-loop class="fill:current" />
+                    <i-line-md-bell-alert-loop class="iconify fill:current" />
                 </div>
             </div>
         </div>

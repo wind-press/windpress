@@ -6,7 +6,6 @@ import { createApp, watch } from 'vue';
 import { createPinia } from 'pinia';
 import FloatingVue from 'floating-vue';
 import InlineSvg from 'vue-inline-svg';
-import { FontAwesomeIcon } from './font-awesome.js';
 
 import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor';
 
@@ -44,7 +43,6 @@ app
     ;
 
 app
-    .component('font-awesome-icon', FontAwesomeIcon)
     .component('inline-svg', InlineSvg)
     ;
 

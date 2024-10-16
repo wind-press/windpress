@@ -13,7 +13,9 @@
     "format": "oxlint --fix ./assets"
   },
   "devDependencies": {
+    "@iconify-json/arcticons": "^1.2.4",
     "@iconify-json/bx": "^1.2.1",
+    "@iconify-json/devicon": "^1.2.4",
     "@iconify-json/fa6-brands": "^1.2.1",
     "@iconify-json/fa6-solid": "^1.2.1",
     "@iconify-json/fluent": "^1.2.4",
@@ -23,6 +25,7 @@
     "@iconify-json/mage": "^1.2.1",
     "@iconify-json/mdi": "^1.2.1",
     "@iconify-json/octicon": "^1.2.1",
+    "@iconify-json/skill-icons": "^1.2.0",
     "@iconify-json/tabler": "^1.2.5",
     "@kucrut/vite-for-wp": "^0.9.3",
     "@types/lodash": "^4.17.10",
@@ -45,15 +48,6 @@
     "vite-plugin-wasm": "^3.3.0"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-brands-svg-icons": "^6.6.0",
-    "@fortawesome/free-regular-svg-icons": "^6.6.0",
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
-    "@fortawesome/pro-light-svg-icons": "^6.6.0",
-    "@fortawesome/pro-regular-svg-icons": "^6.6.0",
-    "@fortawesome/pro-solid-svg-icons": "^6.6.0",
-    "@fortawesome/pro-thin-svg-icons": "^6.6.0",
-    "@fortawesome/vue-fontawesome": "^3.0.8",
     "@guolao/vue-monaco-editor": "^1.5.4",
     "@headlessui/vue": "^1.7.23",
     "@master/css": "2.0.0-rc.45",

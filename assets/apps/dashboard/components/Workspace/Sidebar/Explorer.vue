@@ -53,7 +53,7 @@ function softDeleteEntry(entry) {
         volumeStore.softDeleteEntry(entry);
     }
 
-    
+
 }
 
 onBeforeMount(() => {
@@ -77,7 +77,7 @@ onMounted(() => {
         </div>
         <div class="justify-self:end">
             <button @click="addNewEntry" :title="wp_i18n.__('Add New File', 'windpress')" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! my:auto width:auto h:auto min-h:initial! align-items:center" v-ripple>
-                <font-awesome-icon :icon="['fas', 'plus']" class="m:4" />
+                <i-fa6-solid-plus class="iconify m:4" />
             </button>
         </div>
     </div>
@@ -87,22 +87,13 @@ onMounted(() => {
             <div v-for="entry in volumeStore.data.entries.filter(entry => entry.hidden !== true)" @click="switchToEntry(entry)" :class="volumeStore.activeViewEntryRelativePath === entry.relative_path ? 'bg:gray-20/.4 bg:gray-20/.2@dark' : ''" class="folders-item folders-file px:14 py:6 cursor:pointer flex">
                 <div class="item-icon">
                     <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && entry.relative_path === 'tailwind.config.js')">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 54 33" class="h:1em mr:2 vertical-align:-0.125em">
-                            <g clip-path="url(#prefix__clip0)">
-                                <path fill="#38bdf8" fill-rule="evenodd" d="M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.514 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z" clip-rule="evenodd" />
-                            </g>
-                            <defs>
-                                <clipPath id="prefix__clip0">
-                                    <path fill="#fff" d="M0 0h54v32.4H0z" />
-                                </clipPath>
-                            </defs>
-                        </svg>
+                        <i-devicon-tailwindcss class="iconify" />
                     </template>
                     <template v-else-if="entry.relative_path.endsWith('.js')">
-                        <font-awesome-icon :icon="['fab', 'js-square']" class="fg:#f0db4f" />
+                        <i-fa6-brands-square-js class="iconify fg:#f0db4f" />
                     </template>
                     <template v-else-if="entry.relative_path.endsWith('.css')">
-                        <font-awesome-icon :icon="['fab', 'css3-alt']" class="fg:#264de4 " />
+                        <i-fluent-document-css-24-filled class="iconify fg:#264de4" />
                     </template>
                 </div>
                 <div class="flex-grow:1">
@@ -115,12 +106,12 @@ onMounted(() => {
                     <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && entry.relative_path === 'tailwind.config.js')">
                         <!-- reset -->
                         <button @click="resetEntry(entry)" :title="wp_i18n.__('Reset', 'windpress')" class="button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! line-height:normal min-h:initial! align-items:center" v-ripple>
-                            <i-bx-reset class="m:0 fg:red-50" />
+                            <i-bx-reset class="iconify m:0 fg:red-50" />
                         </button>
                     </template>
                     <template v-else>
                         <button @click.stop="softDeleteEntry(entry)" :title="wp_i18n.__('Delete', 'windpress')" class="button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! line-height:normal min-h:initial! align-items:center" v-ripple>
-                            <i-octicon-trash-16 class="m:0 fg:red-50" />
+                            <i-octicon-trash-16 class="iconify m:0 fg:red-50" />
                         </button>
                     </template>
                 </div>

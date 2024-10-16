@@ -149,7 +149,7 @@ channel.addEventListener('message', (e) => {
                             <div class="flex gap:6">
                                 <input v-model="licenseKey" type="password" id="license_key" :disabled="licenseStore.isActivated" class="max-w:400 w:full">
                                 <button @click="doLicenseChange" type="button" :disabled="!licenseKey || busyStore.isBusy" class="button button-secondary inline-flex align-items:center gap:8">
-                                    <font-awesome-icon v-if="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate')" :icon="['fas', 'circle-notch']" class="@rotate|1s|infinite|linear" />
+                                    <i-fa6-solid-circle-notch v-if="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate')" class="iconify @rotate|1s|infinite|linear" />
                                     <template v-if="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate')">
                                         {{ licenseStore.isActivated ? wp_i18n.__('Deactivating', 'windpress') : wp_i18n.__('Activating', 'windpress') }}
                                     </template>
@@ -176,7 +176,7 @@ channel.addEventListener('message', (e) => {
                                 </span>
                                 <a href="https://wind.press/#pricing" target="_blank" rel="noopener noreferrer" class="ml:6 text-decoration:none bg:crimson-10 fg:crimson-80 px:6 py:3 r:4 b:1|solid|crimson-90/.2 user-select:none">
                                     {{ wp_i18n.__('Upgrade to Pro', 'windpress') }}
-                                    <font-awesome-icon :icon="['fas', 'arrow-up-right-from-square']" class="ml:2 translateY(-0)" />
+                                    <i-line-md-external-link class="iconify" />
                                 </a>
                             </div>
                         </div>
@@ -261,7 +261,7 @@ channel.addEventListener('message', (e) => {
                                 <template v-if="css_cache.last_generated">
                                     {{ new dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
                                     <a :href="`${css_cache.file_url}?ver=${css_cache.last_generated}`" target="_blank">
-                                        <font-awesome-icon :icon="['far', 'arrow-up-right-from-square']" />
+                                        <i-line-md-external-link class="iconify" />
                                     </a>
                                 </template>
                                 <template v-if="css_cache.file_size">
@@ -270,7 +270,7 @@ channel.addEventListener('message', (e) => {
                             </p>
                             <div>
                                 <button @click="doGenerateCache" :disabled="busyStore.isBusy" type="button" class="button button-secondary inline-flex align-items:center gap:8">
-                                    <font-awesome-icon v-if="busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate')" :icon="['fas', 'circle-notch']" class="@rotate|1s|infinite|linear" />
+                                    <i-fa6-solid-circle-notch v-if="busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate')" class="iconify @rotate|1s|infinite|linear" />
                                     {{ busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate') ? wp_i18n.__('Generating...', 'windpress') : wp_i18n.__('Generate', 'windpress') }}
                                 </button>
                             </div>
@@ -296,10 +296,10 @@ channel.addEventListener('message', (e) => {
                                 <Switch :aria-disabled="busyStore.isBusy" :checked="settingsStore.virtualOptions(`integration.${provider.id}.enabled`, true).value" @click="switchProviderStatus(provider.id)" @keyup="e => handleEnableKeyup(e, provider.id)" :class="[settingsStore.virtualOptions(`integration.${provider.id}.enabled`, true).value ? 'bg:sky-70' : 'bg:gray-15 opacity:.5']" class="inline-flex rel rounded b:2 b:transparent box-shadow:rgb(255,255,255)|0|0|0|2,rgb(14,165,233)|0|0|0|4,rgba(0,0,0,0)|0|0|0|0:focus cursor:pointer flex-shrink:0 h:24 outline:2|solid|transparent:focus p:0 transition-duration:200 transition-property:color,background-color,border-color,text-decoration-color,fill,stroke transition-timing-function:cubic-bezier(0.4,0,0.2,1) w:44">
                                     <span :class="[settingsStore.virtualOptions(`integration.${provider.id}.enabled`, true).value ? 'translateX(20)' : 'translateX(0)']" class="inline-block rel rounded bg:white box-shadow:rgb(255,255,255)|0|0|0|0,rgba(59,130,246,0.5)|0|0|0|0,rgba(0,0,0,0.1)|0|1|3|0,rgba(0,0,0,0.1)|0|1|2|-1 font:12 h:20 pointer-events:none transition-duration:200 transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter transition-timing-function:cubic-bezier(0.4,0,0.2,1) w:20">
                                         <span aria-hidden="true" :class="[settingsStore.virtualOptions(`integration.${provider.id}.enabled`, true).value ? 'opacity:0 transition-duration:100 transition-timing-function:ease-out' : 'opacity:1 transition-duration:200 transition-timing-function:ease-in']" class="abs flex align-items:center h:full inset:0 justify-content:center w:full">
-                                            <font-awesome-icon :icon="['fas', 'xmark']" class="fg:gray-40" />
+                                            <i-fa6-solid-xmark class="iconify fg:gray-40" />
                                         </span>
                                         <span aria-hidden="true" :class="[settingsStore.virtualOptions(`integration.${provider.id}.enabled`, true).value ? 'opacity:1 transition-duration:200 transition-timing-function:ease-in' : 'opacity:0 transition-duration:100 transition-timing-function:ease-out']" class="abs flex align-items:center h:full inset:0 justify-content:center w:full">
-                                            <font-awesome-icon :icon="['fas', 'check']" class="fg:sky-70" />
+                                            <i-fa6-solid-check class="iconify fg:sky-70" />
                                         </span>
                                     </span>
                                 </Switch>

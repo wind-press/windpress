@@ -18,7 +18,7 @@
             </p>
             <p>
                 <a href="https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post" target="_blank" class="button button-primary">
-                    <font-awesome-icon :icon="['fas', 'star-shooting']" />
+                    <i-tabler-message-star class="iconify mr:2" />
                     I will leave a review
                 </a>
             </p>

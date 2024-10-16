@@ -39,15 +39,15 @@ function doSwitch(name) {
                         <div>
                             <div role="group" class="flex flex:column font:14 min-w:120 p:4 w:auto">
                                 <a href="https://wind.press/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=pro-version" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
-                                    <i-fa6-solid-book />
+                                    <i-fa6-solid-book class="iconify" />
                                     {{ wp_i18n.__('Documentation', 'windpress') }}
                                 </a>
                                 <a href="https://rosua.org/support-portal" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
-                                    <i-healthicons-contact-support />
+                                    <i-healthicons-contact-support class="iconify"/>
                                     {{ wp_i18n.__('Support', 'windpress') }}
                                 </a>
                                 <a href="https://www.facebook.com/groups/1142662969627943" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
-                                    <i-fa6-brands-facebook  />
+                                    <i-fa6-brands-facebook class="iconify" />
                                     {{ wp_i18n.__('Community', 'windpress') }}
                                 </a>
                             </div>
