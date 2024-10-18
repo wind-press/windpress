@@ -5,6 +5,9 @@ import { useBusyStore } from './busy.js';
 import { useNotifier } from '@/dashboard/library/notifier.js';
 import { isEqual } from 'lodash-es';
 
+/**
+ * TODO: Re-work for the Wizard component.
+ */
 export const useTailwindStore = defineStore('tailwind', () => {
     const busyStore = useBusyStore();
     const api = useApi();
