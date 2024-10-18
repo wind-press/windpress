@@ -1,6 +1,6 @@
 import './styles/app.scss';
 import './master.css.js';
-import './monaco-editor.js';
+import('./monaco-editor.js'); // Vite: Using dynamic import() to code-split the application
 
 import { createApp, watch } from 'vue';
 import { createPinia } from 'pinia';
