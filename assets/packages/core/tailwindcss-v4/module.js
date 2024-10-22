@@ -7,7 +7,7 @@ export async function loadModule(modulePath, base, resourceHint, volume = {}) {
 
     if (modulePath.startsWith('./')) {
         module = await importLocalModule(modulePath, base, resourceHint, volume);
-    } else {
+    } else if (resourceHint === 'plugin') {
         if (!modulePath.startsWith('http')) {
             modulePath = `https://esm.sh/${modulePath}`;
         }
