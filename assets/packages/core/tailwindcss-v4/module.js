@@ -5,10 +5,18 @@ import { isValidUrl } from './bundle';
 export async function loadModule(modulePath, base, resourceHint, volume = {}) {
     let module;
 
-    if (modulePath.startsWith('http')) {
-        module = await importCdnModule(modulePath, base, resourceHint);
-    } else if (modulePath.startsWith('./')) {
+    if (modulePath.startsWith('./')) {
         module = await importLocalModule(modulePath, base, resourceHint, volume);
+    } else {
+        if (!modulePath.startsWith('http')) {
+            modulePath = `https://esm.sh/${modulePath}`;
+        }
+
+        try {
+            module = await importCdnModule(modulePath, base, resourceHint);
+        } catch (error) {
+            throw new Error(`The ${resourceHint} file "${modulePath}" could not be loaded. ${error.message}`);
+        }
     }
 
     if (!module) {
