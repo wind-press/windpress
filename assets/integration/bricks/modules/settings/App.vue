@@ -16,8 +16,8 @@ watch(isOpen, (value) => {
 </script>
 
 <template>
-    <div ref="containerEl" v-show="isOpen" id="windpressbricks-settings-app-container" class="flex flex:column w:full h:full">
-        <ul>
+    <div ref="containerEl" v-show="isOpen" id="windpressbricks-settings-app-container" class="flex flex:column">
+        <ul class="w:full">
             <li class="disabled" style="color: var(--bricks-text-dark);">
                 Module: Plain Classes
             </li>
