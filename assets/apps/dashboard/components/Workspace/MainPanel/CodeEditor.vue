@@ -157,6 +157,28 @@ function handleEditorMount(editor, monaco) {
                                         }
                                     ],
                                 },
+                                {
+                                    name: '@tailwind',
+                                    status: 'standard',
+                                    description: 'Use the `@tailwind` directive to insert Tailwind\'s `base`, `components`, `utilities` and `variants` styles into your CSS.',
+                                    references: [
+                                        {
+                                            name: 'Docs: Functions & Directives',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#tailwind',
+                                        },
+                                    ],
+                                },
+                                {
+                                    name: '@apply',
+                                    status: 'standard',
+                                    description: 'Use `@apply` to inline any existing utility classes into your own custom CSS.',
+                                    references: [
+                                        {
+                                            name: 'Docs: Functions & Directives',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#apply',
+                                        },
+                                    ],
+                                },
                             ],
                         }
                     }
