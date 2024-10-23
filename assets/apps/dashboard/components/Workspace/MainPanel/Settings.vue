@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, onUnmounted } from 'vue';
 import { __ } from '@wordpress/i18n';
 import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
@@ -128,6 +128,10 @@ channel.addEventListener('message', (e) => {
     if (data.source === source && data.target === target && data.task === task) {
         pullCacheInfo();
     }
+});
+
+onUnmounted(() => {
+    channel.close();
 });
 </script>
 

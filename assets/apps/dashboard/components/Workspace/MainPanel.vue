@@ -51,11 +51,11 @@ const codeEditorTitle = computed(() => {
             <div class="content-panel h:full">
                 <!-- content -->
                 <div class="h:full">
-                    <KeepAlive>
+                    <!-- <KeepAlive> -->
                         <Suspense>
                             <component :is="panelComponents[ui.virtualState('main-panel.tab.active', 'code-editor').value]" />
                         </Suspense>
-                    </KeepAlive>
+                    <!-- </KeepAlive> -->
                 </div>
             </div>
             <div class="dock-panel">

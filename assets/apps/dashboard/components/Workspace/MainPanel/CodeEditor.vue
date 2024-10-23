@@ -1,5 +1,5 @@
 <script setup>
-import { shallowRef, onBeforeMount, computed } from 'vue';
+import { shallowRef, onBeforeMount, computed, onUnmounted } from 'vue';
 import { useUIStore } from '@/dashboard/stores/ui.js';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { getInstanceId } from '@/dashboard/library/instance-id';
@@ -244,6 +244,10 @@ channel.addEventListener('message', (e) => {
     ) {
         volumeStore.doPull();
     }
+});
+
+onUnmounted(() => {
+    channel.close();
 });
 </script>
 
