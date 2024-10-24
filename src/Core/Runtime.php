@@ -202,7 +202,7 @@ class Runtime
         AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
-            'dependencies' => ['wp-i18n', 'wp-hooks', ...$loaded_modules],
+            'dependencies' => array_merge(['wp-i18n', 'wp-hooks'], is_array($loaded_modules) ? $loaded_modules : iterator_to_array($loaded_modules)),
         ]);
     }
 
@@ -233,7 +233,7 @@ class Runtime
         AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v4/play/observer.js', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
-            'dependencies' => ['wp-i18n', 'wp-hooks', ...$loaded_modules],
+            'dependencies' => array_merge(['wp-i18n', 'wp-hooks'], is_array($loaded_modules) ? $loaded_modules : iterator_to_array($loaded_modules)),
         ]);
     }
 
