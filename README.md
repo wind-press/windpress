@@ -164,6 +164,10 @@ If you like this project, please consider supporting us by becoming a backer. [[
 
 Support this project by becoming a sponsor. Your logo will show up here and on the [WindPress website](https://wind.press) with a link to your website. [[Become a sponsor](https://ko-fi.com/post/WindPress-Bronze-Sponsor-U7U8143WIP)]
 
+## Repo Activity
+
+![Repo Activity](https://repobeats.axiom.co/api/embed/0769f849ed16dfa78931203ea4e2a6291fd8be04.svg "Repobeats analytics image")
+
 ## Star History
 
 <a href="https://star-history.com/#wind-press/windpress&Date"> <picture> <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date&theme=dark" /> <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> </picture> </a>
