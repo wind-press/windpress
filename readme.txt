@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.2.10
+Stable tag: 3.2.11
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -111,6 +111,11 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= 3.2.11 =
+* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.33 next)
+* **Improve**: [Breakdance, Bricks, Builderius, Oxygen] Variable Picker feature is now updated to the latest Tailwind CSS v4 variable names
+* **Fix**: [Bricks] The Variable Picker panel is not showing correctly on the Bricks editor
 
 = 3.2.10 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.32 next)
