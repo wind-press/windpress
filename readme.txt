@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.6
-Stable tag: 3.2.11
+Stable tag: 3.2.12
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -19,7 +19,7 @@ WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integr
 
 **Tailwind CSS version**:
 - 3.4.14
-- 4.0.0-alpha.32 next
+- 4.0.0-alpha.33 next
 
 ### Features
 
@@ -112,10 +112,11 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= 3.2.11 =
+= 3.2.12 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.33 next)
 * **Improve**: [Breakdance, Bricks, Builderius, Oxygen] Variable Picker feature is now updated to the latest Tailwind CSS v4 variable names
 * **Fix**: [Bricks] The Variable Picker panel is not showing correctly on the Bricks editor
+* **Change**: Tailwind CSS v3 stubs are updated for the upcoming Wizard feature
 
 = 3.2.10 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.32 next)
