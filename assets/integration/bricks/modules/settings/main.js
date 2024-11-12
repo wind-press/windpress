@@ -1,7 +1,6 @@
 import './style.scss';
 
 import { ref, createApp, watch } from 'vue';
-import './master.css.js';
 import { createVirtualRef } from '@/dashboard/composables/virtual.js';
 import { logger } from '@/integration/common/logger';
 import Logo from '~/windpress.svg?raw';
@@ -66,6 +65,7 @@ const mousePosition = ref({ x: null, y: null });
 
 const settingsApp = document.createElement('windpressbricks-settings-app');
 settingsApp.id = 'windpressbricks-settings-app';
+settingsApp.classList.add('master-css');
 document.querySelector('div.brx-body.main').appendChild(settingsApp);
 
 // add right click event listener to the settings button

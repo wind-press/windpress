@@ -64,13 +64,13 @@ async function constructVariableList() {
         letter_spacing: [],
     };
 
-    // 1. find where the key prefixed with '--font-size-' and without suffixed '--line-height'
-    // 2. find where the key prefixed with '--line-height-' or suffixed '--line-height'
-    // 3. find where the key prefixed with '--letter-spacing-'
+    // 1. find where the key prefixed with '--text-' and without suffixed '--leading'
+    // 2. find where the key prefixed with '--leading-' or suffixed '--leading'
+    // 3. find where the key prefixed with '--tracking-'
     variableLists
-        .filter((variable) => variable.key.startsWith('--font-size-') && !variable.key.endsWith('--line-height'))
+        .filter((variable) => variable.key.startsWith('--text-') && !variable.key.endsWith('--line-height'))
         .forEach((typo) => {
-            const key = typo.key.slice(12);
+            const key = typo.key.slice(7);
             typography.font_size.push({
                 key: typo.key,
                 label: key,
@@ -79,12 +79,12 @@ async function constructVariableList() {
         });
 
     variableLists
-        .filter((variable) => variable.key.startsWith('--line-height-') || variable.key.endsWith('--line-height'))
+        .filter((variable) => variable.key.startsWith('--leading-') || variable.key.endsWith('--leading'))
         .forEach((typo) => {
-            // const key = typo.key.startsWith('--line-height-') ? typo.key.slice(14) : typo.key.slice(-13);
+            // const key = typo.key.startsWith('--leading-') ? typo.key.slice(10) : typo.key.slice(-9);
 
-            // if (typo.key.startsWith('--line-height-')) {
-            const key = typo.key.startsWith('--line-height-') ? typo.key.slice(14) : typo.key.slice(2, -13);
+            // if (typo.key.startsWith('--leading-')) {
+            const key = typo.key.startsWith('--leading-') ? typo.key.slice(10) : typo.key.slice(2, -9);
 
 
             typography.line_height.push({
@@ -108,9 +108,9 @@ async function constructVariableList() {
     });
 
     variableLists
-        .filter((variable) => variable.key.startsWith('--letter-spacing-'))
+        .filter((variable) => variable.key.startsWith('--tracking-'))
         .forEach((typo) => {
-            const key = typo.key.slice(17);
+            const key = typo.key.slice(11);
             typography.letter_spacing.push({
                 key: typo.key,
                 label: key,
@@ -125,31 +125,31 @@ async function constructVariableList() {
      */
 
     const sizing = {
-        spacing: [],
-        width: [],
+        // spacing: [],
+        container: [],
         breakpoint: [],
     };
 
     // 1. find where the key prefixed with '--spacing-'
-    // 2. find where the key prefixed with '--width-'
+    // 2. find where the key prefixed with '--container-'
     // 3. find where the key prefixed with '--breakpoint-'
 
-    variableLists
-        .filter((variable) => variable.key.startsWith('--spacing-'))
-        .forEach((size) => {
-            const key = size.key.slice(10);
-            sizing.spacing.push({
-                key: size.key,
-                label: key,
-                value: size.value,
-            });
-        });
+    // variableLists
+    //     .filter((variable) => variable.key.startsWith('--spacing-'))
+    //     .forEach((size) => {
+    //         const key = size.key.slice(10);
+    //         sizing.spacing.push({
+    //             key: size.key,
+    //             label: key,
+    //             value: size.value,
+    //         });
+    //     });
 
     variableLists
-        .filter((variable) => variable.key.startsWith('--width-'))
+        .filter((variable) => variable.key.startsWith('--container-'))
         .forEach((size) => {
-            const key = size.key.slice(8);
-            sizing.width.push({
+            const key = size.key.slice(12);
+            sizing.container.push({
                 key: size.key,
                 label: key,
                 value: size.value,

@@ -1,4 +1,5 @@
 import { logger } from '@/integration/common/logger.js';
+import './master.css.js';
 
 logger('Loading...');
 

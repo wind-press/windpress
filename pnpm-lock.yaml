@@ -30,7 +30,7 @@ importers:
         version: '@jsr/std__encoding@1.0.5'
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
-        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7da9272d0fd5feb6f9df3ecd98221967c6f1de32
+        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/437579d3f010a98ae4b824a7d5694486119fbdcd
       '@vueuse/core':
         specifier: ^11.2.0
         version: 11.2.0(vue@3.5.12(typescript@5.6.2))
@@ -107,14 +107,14 @@ importers:
         specifier: ^2.2.6
         version: 2.2.6(typescript@5.6.2)(vue@3.5.12(typescript@5.6.2))
       postcss:
-        specifier: ^8.4.48
-        version: 8.4.48
+        specifier: ^8.4.49
+        version: 8.4.49
       postcss-import:
         specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.48)
+        version: 16.1.0(postcss@8.4.49)
       postcss-nested:
         specifier: ^7.0.2
-        version: 7.0.2(postcss@8.4.48)
+        version: 7.0.2(postcss@8.4.49)
       postcss-selector-parser:
         specifier: ^7.0.0
         version: 7.0.0
@@ -168,8 +168,8 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1
       '@iconify-json/devicon':
-        specifier: ^1.2.4
-        version: 1.2.4
+        specifier: ^1.2.5
+        version: 1.2.5
       '@iconify-json/fa6-brands':
         specifier: ^1.2.1
         version: 1.2.1
@@ -183,8 +183,8 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1
       '@iconify-json/iconoir':
-        specifier: ^1.2.3
-        version: 1.2.3
+        specifier: ^1.2.4
+        version: 1.2.4
       '@iconify-json/line-md':
         specifier: ^1.2.2
         version: 1.2.2
@@ -613,8 +613,8 @@ packages:
   '@iconify-json/bx@1.2.1':
     resolution: {integrity: sha512-FQCpVnEqCRZmyzpJ5Ba31ff8b2lDLhjRuV8ZC0Cw4HsV/IgXoyW9CGH4vI0P7UGeTXHIj3iSDNwIpOoCpPqXVg==}
 
-  '@iconify-json/devicon@1.2.4':
-    resolution: {integrity: sha512-DrYBFGycCW2wAloxxHEDIFuqv9lUYIn6FVbSx/l7ZqhO9rDtD8jLECS+mfn/BTRBs4/uH8wzB0sYPHXulP8aLQ==}
+  '@iconify-json/devicon@1.2.5':
+    resolution: {integrity: sha512-yDx5UDO/W6ySfc68q5i+RaGenXYcEgawdgVx4CZEV6tVdbT6LwrFwRF/hvds26bu4HhR3bQeB0czGUeahw/TEQ==}
 
   '@iconify-json/fa6-brands@1.2.1':
     resolution: {integrity: sha512-b/o9bDLZCP8qJV2dydewH+OWrpqmX94b7jHYnqzKaVpbuRRQX/qA9AROsy7rqHYup8fN2fCElQHvm6OYFmjkEA==}
@@ -628,8 +628,8 @@ packages:
   '@iconify-json/healthicons@1.2.1':
     resolution: {integrity: sha512-xYCZUo1HFcLK49rHxcCjBxg77nvei8yhYOJ+a8/yyXvrnZ3sjSvjp2fcVqGlpLHiXuVJUCIUG6G8CNYB5WmMFQ==}
 
-  '@iconify-json/iconoir@1.2.3':
-    resolution: {integrity: sha512-CIPFznjl417Y5zBPqZP4+lhHwdTr7aDenzUOL/z92ufuMoX7SOZbZ8dK9/wNaLwCr+2w+MrxfVKc7zjUj9K0Dg==}
+  '@iconify-json/iconoir@1.2.4':
+    resolution: {integrity: sha512-PILwyd8to0DFnMdT0s1RogIT+PRbh0THfvFxi94zobIRpsx/It/slFJHH6bslzXZLPRMSBebNwjqwQt5FvWlSQ==}
 
   '@iconify-json/line-md@1.2.2':
     resolution: {integrity: sha512-UCYTTO5aARoVbOOPCaomOoXDC8maSolIV8KVDmK9VuzfjpqkMg/vJo/nWaoQPIf310SZjdvAqHvIwsbzr6J+sw==}
@@ -1336,8 +1336,8 @@ packages:
   '@swc/types@0.1.15':
     resolution: {integrity: sha512-XKaZ+dzDIQ9Ot9o89oJQ/aluI17+VvUnIpYJTcZtvv1iYX6MzHh3Ik2CSR7MdPKpPwfZXHBeCingb2b4PoDVdw==}
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7da9272d0fd5feb6f9df3ecd98221967c6f1de32':
-    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7da9272d0fd5feb6f9df3ecd98221967c6f1de32}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/437579d3f010a98ae4b824a7d5694486119fbdcd':
+    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/437579d3f010a98ae4b824a7d5694486119fbdcd}
     version: 1.0.0
 
   '@tannin/compile@1.1.0':
@@ -2137,8 +2137,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.5.55:
-    resolution: {integrity: sha512-6maZ2ASDOTBtjt9FhqYPRnbvKU5tjG0IN9SztUOWYw2AzNDNpKJYLJmlK0/En4Hs/aiWnB+JZ+gW19PIGszgKg==}
+  electron-to-chromium@1.5.56:
+    resolution: {integrity: sha512-7lXb9dAvimCFdvUMTyucD4mnIndt/xhRKFAlky0CyFogdnNmdPQNoHI23msF/2V4mpTxMzgMdjK4+YRlFlRQZw==}
 
   elliptic@6.6.0:
     resolution: {integrity: sha512-dpwoQcLc/2WLQvJvLRHKZ+f9FgOdjnq11rurqwekGQygGPsYSK29OMMD2WalatiqQ+XGFDglTNixpPfI+lpaAA==}
@@ -3068,8 +3068,8 @@ packages:
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
-  postcss@8.4.48:
-    resolution: {integrity: sha512-GCRK8F6+Dl7xYniR5a4FYbpBzU8XnZVeowqsQFYdcXuSbChgiks7qybSkbvnaeqv0G0B+dd9/jJgH8kkLDQeEA==}
+  postcss@8.4.49:
+    resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
     engines: {node: ^10 || ^12 || >=14}
 
   pretty-bytes@6.1.1:
@@ -4166,7 +4166,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/devicon@1.2.4':
+  '@iconify-json/devicon@1.2.5':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -4186,7 +4186,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/iconoir@1.2.3':
+  '@iconify-json/iconoir@1.2.4':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -4797,7 +4797,7 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7da9272d0fd5feb6f9df3ecd98221967c6f1de32': {}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/437579d3f010a98ae4b824a7d5694486119fbdcd': {}
 
   '@tannin/compile@1.1.0':
     dependencies:
@@ -4939,7 +4939,7 @@ snapshots:
       '@vue/shared': 3.5.12
       estree-walker: 2.0.2
       magic-string: 0.30.12
-      postcss: 8.4.48
+      postcss: 8.4.49
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.5.12':
@@ -5070,9 +5070,9 @@ snapshots:
       fast-deep-equal: 3.1.3
       memize: 2.1.0
       parsel-js: 1.1.2
-      postcss: 8.4.48
-      postcss-prefix-selector: 1.16.1(postcss@8.4.48)
-      postcss-urlrebase: 1.4.0(postcss@8.4.48)
+      postcss: 8.4.49
+      postcss-prefix-selector: 1.16.1(postcss@8.4.49)
+      postcss-urlrebase: 1.4.0(postcss@8.4.49)
       react: 18.3.1
       react-autosize-textarea: 7.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-dom: 18.3.1(react@18.3.1)
@@ -5577,7 +5577,7 @@ snapshots:
   browserslist@4.24.2:
     dependencies:
       caniuse-lite: 1.0.30001680
-      electron-to-chromium: 1.5.55
+      electron-to-chromium: 1.5.56
       node-releases: 2.0.18
       update-browserslist-db: 1.1.1(browserslist@4.24.2)
 
@@ -5888,7 +5888,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.5.55: {}
+  electron-to-chromium@1.5.56: {}
 
   elliptic@6.6.0:
     dependencies:
@@ -6773,45 +6773,45 @@ snapshots:
 
   possible-typed-array-names@1.0.0: {}
 
-  postcss-import@15.1.0(postcss@8.4.48):
+  postcss-import@15.1.0(postcss@8.4.49):
     dependencies:
-      postcss: 8.4.48
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  postcss-import@16.1.0(postcss@8.4.48):
+  postcss-import@16.1.0(postcss@8.4.49):
     dependencies:
-      postcss: 8.4.48
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  postcss-js@4.0.1(postcss@8.4.48):
+  postcss-js@4.0.1(postcss@8.4.49):
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.48
+      postcss: 8.4.49
 
-  postcss-load-config@4.0.2(postcss@8.4.48):
+  postcss-load-config@4.0.2(postcss@8.4.49):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.6.0
     optionalDependencies:
-      postcss: 8.4.48
+      postcss: 8.4.49
 
-  postcss-nested@6.2.0(postcss@8.4.48):
+  postcss-nested@6.2.0(postcss@8.4.49):
     dependencies:
-      postcss: 8.4.48
+      postcss: 8.4.49
       postcss-selector-parser: 6.1.2
 
-  postcss-nested@7.0.2(postcss@8.4.48):
+  postcss-nested@7.0.2(postcss@8.4.49):
     dependencies:
-      postcss: 8.4.48
+      postcss: 8.4.49
       postcss-selector-parser: 7.0.0
 
-  postcss-prefix-selector@1.16.1(postcss@8.4.48):
+  postcss-prefix-selector@1.16.1(postcss@8.4.49):
     dependencies:
-      postcss: 8.4.48
+      postcss: 8.4.49
 
   postcss-selector-parser@6.1.2:
     dependencies:
@@ -6823,14 +6823,14 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss-urlrebase@1.4.0(postcss@8.4.48):
+  postcss-urlrebase@1.4.0(postcss@8.4.49):
     dependencies:
-      postcss: 8.4.48
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
 
   postcss-value-parser@4.2.0: {}
 
-  postcss@8.4.48:
+  postcss@8.4.49:
     dependencies:
       nanoid: 3.3.7
       picocolors: 1.1.1
@@ -7282,11 +7282,11 @@ snapshots:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.1.1
-      postcss: 8.4.48
-      postcss-import: 15.1.0(postcss@8.4.48)
-      postcss-js: 4.0.1(postcss@8.4.48)
-      postcss-load-config: 4.0.2(postcss@8.4.48)
-      postcss-nested: 6.2.0(postcss@8.4.48)
+      postcss: 8.4.49
+      postcss-import: 15.1.0(postcss@8.4.49)
+      postcss-js: 4.0.1(postcss@8.4.49)
+      postcss-load-config: 4.0.2(postcss@8.4.49)
+      postcss-nested: 6.2.0(postcss@8.4.49)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.8
       sucrase: 3.35.0
@@ -7538,7 +7538,7 @@ snapshots:
   vite@5.4.11(@types/node@22.9.0)(less@4.2.0)(lightningcss@1.28.1)(sass@1.80.6)(stylus@0.63.0)(terser@5.34.1):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.48
+      postcss: 8.4.49
       rollup: 4.25.0
     optionalDependencies:
       '@types/node': 22.9.0
