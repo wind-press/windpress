@@ -73,33 +73,33 @@ export default defineConfig({
     build: {
         target: 'modules',
         sourcemap: false,
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    'monaco-editor': ['monaco-editor'],
-                },
-                chunkFileNames: (chunkInfo) => {
-                    // add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
-                    // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
-                    return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? '[name]-[hash].js' : '[name]-[hash].min.js';
-                },
-            },
-            plugins: [
-                {
-                    name: 'rename-workers',
-                    generateBundle(_, bundle) {
-                        // if the fila name is in the format of `*.worker-*.js` and doesn't have '.min.js`, rename it to `*.worker-*.min.js`
-                        // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
-                        const workerFiles = Object.keys(bundle).filter(file => file.includes('.worker-') && !file.includes('.min.js'));
-                        workerFiles.forEach((file) => {
-                            const newFileName = file.replace('.js', '.min.js');
-                            bundle[newFileName] = { ...bundle[file], fileName: newFileName };
-                            delete bundle[file];
-                        });
-                    }
-                }
-            ],
-        },
+        // rollupOptions: {
+        //     output: {
+        //         manualChunks: {
+        //             'monaco-editor': ['monaco-editor'],
+        //         },
+        //         chunkFileNames: (chunkInfo) => {
+        //             // add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
+        //             // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
+        //             return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? '[name]-[hash].js' : '[name]-[hash].min.js';
+        //         },
+        //     },
+        //     plugins: [
+        //         {
+        //             name: 'rename-workers',
+        //             generateBundle(_, bundle) {
+        //                 // if the fila name is in the format of `*.worker-*.js` and doesn't have '.min.js`, rename it to `*.worker-*.min.js`
+        //                 // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
+        //                 const workerFiles = Object.keys(bundle).filter(file => file.includes('.worker-') && !file.includes('.min.js'));
+        //                 workerFiles.forEach((file) => {
+        //                     const newFileName = file.replace('.js', '.min.js');
+        //                     bundle[newFileName] = { ...bundle[file], fileName: newFileName };
+        //                     delete bundle[file];
+        //                 });
+        //             }
+        //         }
+        //     ],
+        // },
     },
     css: {
         preprocessorOptions: {
