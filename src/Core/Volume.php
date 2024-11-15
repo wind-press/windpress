@@ -79,6 +79,7 @@ class Volume
 
         if ($tailwindcss_version === 3) {
             $stubs_tailwind_config_js = file_get_contents(sprintf('%s/stubs/tailwindcss-v%d/tailwind.config.js', dirname(WIND_PRESS::FILE), $tailwindcss_version));
+            $stubs_wizard_js = file_get_contents(sprintf('%s/stubs/tailwindcss-v%d/wizard.js', dirname(WIND_PRESS::FILE), $tailwindcss_version));
 
             // check if 'tailwind.config.js' already exists and content is not empty, else use the stubs
             $tailwind_config_js_key = array_search('tailwind.config.js', array_column($entries, 'name'), true);
@@ -93,6 +94,21 @@ class Volume
                 ];
             } elseif (empty($entries[$tailwind_config_js_key]['content'])) {
                 $entries[$tailwind_config_js_key]['content'] = $stubs_tailwind_config_js;
+            }
+
+            // check if 'wizard.js' already exists and content is not empty, else use the stubs
+            $wizard_js_key = array_search('wizard.js', array_column($entries, 'name'), true);
+
+            if ($wizard_js_key === false) {
+                $entries[] = [
+                    'name' => 'wizard.js',
+                    'relative_path' => 'wizard.js',
+                    'content' => $stubs_wizard_js,
+                    'handler' => 'internal',
+                    'signature' => wp_create_nonce(sprintf('%s:%s', WIND_PRESS::WP_OPTION, 'wizard.js')),
+                ];
+            } elseif (empty($entries[$wizard_js_key]['content'])) {
+                $entries[$wizard_js_key]['content'] = $stubs_wizard_js;
             }
         }
 

@@ -117,6 +117,7 @@ Pro version 1.**1**.4
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.34 next)
 * **Improve**: Test compatibility with WordPress 6.7
 * **Change**: The LiveCanvas integration is now available on the Free version
+* **Change**: Tailwind CSS v3 stubs/default content are updated for the upcoming Wizard feature
 
 = 3.2.13 =
 * **Fix**: Settings page doesn't loaded

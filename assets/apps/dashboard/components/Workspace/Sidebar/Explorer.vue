@@ -90,7 +90,7 @@ onMounted(() => {
         <div class="folders-items flex flex:col {w:30}>.folders-item_.item-icon {w:full;font:1rem;max-w:20}_.item-icon_svg">
             <div v-for="entry in volumeStore.data.entries.filter(entry => entry.hidden !== true)" @click="switchToEntry(entry)" :class="volumeStore.activeViewEntryRelativePath === entry.relative_path ? 'bg:gray-20/.4 bg:gray-20/.2@dark' : ''" class="folders-item folders-file px:14 py:6 cursor:pointer flex">
                 <div class="item-icon">
-                    <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && entry.relative_path === 'tailwind.config.js')">
+                    <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry.relative_path === 'tailwind.config.js' || entry.relative_path === 'wizard.js'))">
                         <i-devicon-tailwindcss class="iconify" />
                     </template>
                     <template v-else-if="entry.relative_path.endsWith('.js')">
@@ -107,7 +107,7 @@ onMounted(() => {
                     </span>
                 </div>
                 <div class="float:right">
-                    <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && entry.relative_path === 'tailwind.config.js')">
+                    <template v-if="entry.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry.relative_path === 'tailwind.config.js' || entry.relative_path === 'wizard.js'))">
                         <!-- reset -->
                         <button @click="resetEntry(entry)" :title="wp_i18n.__('Reset', 'windpress')" class="button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! line-height:normal min-h:initial! align-items:center" v-ripple>
                             <i-bx-reset class="iconify m:0 fg:red-50" />
