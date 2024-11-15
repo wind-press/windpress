@@ -37,6 +37,7 @@ class Editor
 
     public function admin_head()
     {
+        Runtime::get_instance()->print_windpress_metadata();
         Runtime::get_instance()->enqueue_play_cdn();
 
         if (strpos($_SERVER['REQUEST_URI'], 'site-editor.php') !== false) {
