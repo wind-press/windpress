@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.2.13
+Stable tag: 3.2.14
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -116,7 +116,8 @@ Pro version 1.**1**.4
 * **New**: Upgraded to Tailwind CSS v3 (3.4.15)
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.34 next)
 * **Improve**: Test compatibility with WordPress 6.7
-* **Change**: The LiveCanvas integration is now available on the Free version
+* **Fix**: [Gutenberg] Missing the WindPress data on the block editor
+* **Change**: The [LiveCanvas](https://livecanvas.com/?ref=4008) integration is now available on the Free version
 * **Change**: Tailwind CSS v3 stubs/default content are updated for the upcoming Wizard feature
 
 = 3.2.13 =
