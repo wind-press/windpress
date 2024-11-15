@@ -1,7 +1,5 @@
 export default {
-    // presets: [
-    //     require('./wizard.js')
-    // ],
+    // presets: [require('./wizard.js')],
     theme: {
         extend: {},
     },
