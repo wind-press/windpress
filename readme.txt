@@ -3,7 +3,7 @@ Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 6.7
 Stable tag: 3.2.13
 Requires PHP: 7.4
 License: GPLv3
@@ -18,8 +18,8 @@ Integrate Tailwind CSS into WordPress seamlessly, in just seconds. Works well wi
 WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integration plugin for WordPress that allows you to use the full power of Tailwind CSS within the WordPress ecosystem.
 
 **Tailwind CSS version**:
-- 3.4.14
-- 4.0.0-alpha.33 next
+- 3.4.15
+- 4.0.0-alpha.34 next
 
 ### Features
 
@@ -111,6 +111,11 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= unreleased =
+* **New**: Upgraded to Tailwind CSS v3 (3.4.15)
+* **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.34 next)
+* **Improve**: Test compatibility with WordPress 6.7
 
 = 3.2.13 =
 * **Fix**: Settings page doesn't loaded
