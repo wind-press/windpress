@@ -86,11 +86,11 @@ Seamless integration with the most popular visual/page builders:
 * [Gutenberg](https://wordpress.org/gutenberg) / Block Editor
 * [GreenShift](https://greenshiftwp.com/)
 * [Kadence WP](https://kadencewp.com)
+* [LiveCanvas](https://livecanvas.com/)
 * [Timber](https://upstatement.com/timber/)
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
-* [LiveCanvas](https://livecanvas.com/) — **Pro**
 * [Oxygen](https://oxygenbuilder.com/) — **Pro**
 
 #### Planned / In Progress

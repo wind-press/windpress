@@ -47,11 +47,11 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Gutenberg](https://wordpress.org/gutenberg) / Block Editor
 * [GreenShift](https://greenshiftwp.com/)
 * [Kadence WP](https://kadencewp.com)
+* [LiveCanvas](https://livecanvas.com/?ref=4008)
 * [Timber](https://upstatement.com/timber/)
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
-* [LiveCanvas](https://livecanvas.com/?ref=4008) — **Pro**
 * [Oxygen](https://oxygenbuilder.com/) — **Pro**
 
 Planned / In Progress
@@ -116,6 +116,7 @@ Pro version 1.**1**.4
 * **New**: Upgraded to Tailwind CSS v3 (3.4.15)
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-alpha.34 next)
 * **Improve**: Test compatibility with WordPress 6.7
+* **Change**: The LiveCanvas integration is now available on the Free version
 
 = 3.2.13 =
 * **Fix**: Settings page doesn't loaded

@@ -156,10 +156,10 @@ jobs:
         # - GreenShift
         # - Kadence
         # - Timber
+        # - LiveCanvas
         # - Builderius (Planned)
-        # - LiveCanvas (Planned)
         # else, remove the premium version
-        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,LiveCanvas,Oxygen}
+        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,Oxygen}
         - run: rm -rf assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen} 
 
         - run: ls -la
