@@ -49,7 +49,10 @@ export async function optimize(css, minify = false) {
         include: Features.Nesting,
         exclude: Features.LogicalProperties,
         targets: {
-            safari: (16 << 16) | (4 << 8)
+            safari: (16 << 16) | (4 << 8),
+            ios_saf: (16 << 16) | (4 << 8),
+            firefox: 128 << 16,
+            chrome: 120 << 16,
         },
         errorRecovery: true
     });
