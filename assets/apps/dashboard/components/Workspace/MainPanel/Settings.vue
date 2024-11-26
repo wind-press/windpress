@@ -178,7 +178,7 @@ onUnmounted(() => {
                                     '</a>'
                                 )">
                                 </span>
-                                <a href="https://wind.press/#pricing" target="_blank" rel="noopener noreferrer" class="ml:6 text-decoration:none bg:crimson-10 fg:crimson-80 px:6 py:3 r:4 b:1|solid|crimson-90/.2 user-select:none">
+                                <a href="https://wind.press/pricing" target="_blank" rel="noopener noreferrer" class="ml:6 text-decoration:none bg:crimson-10 fg:crimson-80 px:6 py:3 r:4 b:1|solid|crimson-90/.2 user-select:none">
                                     {{ wp_i18n.__('Upgrade to Pro', 'windpress') }}
                                     <i-line-md-external-link class="iconify" />
                                 </a>
