@@ -1,4 +1,5 @@
 import { encodeBase64 } from '@std/encoding/base64';
+import { unescape } from "@std/html/entities";
 import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
@@ -80,7 +81,7 @@ export async function buildCache(opts) {
             content = stringifyYaml(JSON.parse(content));
         }
 
-        return content;
+        return unescape(content);
     });
 
     logStore.add({ message: 'Building cache...', type: 'info' });
