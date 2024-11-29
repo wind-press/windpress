@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.2.17
+Stable tag: 3.2.18
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -19,7 +19,7 @@ WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integr
 
 **Tailwind CSS version**:
 - 3.4.15
-- 4.0.0-beta.2 next
+- 4.0.0-beta.4 next
 
 ### Features
 
@@ -52,6 +52,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
+* [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
 * [Oxygen](https://oxygenbuilder.com/) — **Pro**
 
 Planned / In Progress
@@ -111,6 +112,10 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= 3.2.18 =
+* **New**: Upgraded to Tailwind CSS v4 (4.0.0-beta.4 next)
+* **New**: [Meta Box Views](https://metabox.io/plugins/mb-views/) integration **[Pro]**
 
 = 3.2.17 =
 * **New**: The new website and documentation is now live at [wind.press](https://wind.press)

@@ -91,6 +91,7 @@ Seamless integration with the most popular visual/page builders:
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
+* [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
 * [Oxygen](https://oxygenbuilder.com/) — **Pro**
 
 #### Planned / In Progress
