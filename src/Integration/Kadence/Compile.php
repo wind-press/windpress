@@ -23,7 +23,7 @@ class Compile
     public function __invoke()
     {
         if (! defined('KADENCE_VERSION') && ! defined('KADENCE_BLOCKS_VERSION')) {
-            return;
+            return [];
         }
 
         add_filter('f!windpress/integration/gutenberg/compile:get_contents.post_types', fn (array $post_types): array => $this->get_post_types($post_types));

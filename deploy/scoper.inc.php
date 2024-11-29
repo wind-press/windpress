@@ -169,6 +169,8 @@ return [
             'bricks_is_builder_iframe',
 
             'oxygen_safe_convert_old_shortcodes_to_json',
+
+            'mb_views_load', // Meta Box Views
         ]
     ),
     'exclude-constants' => array_merge(
