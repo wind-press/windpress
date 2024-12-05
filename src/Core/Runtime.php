@@ -148,7 +148,7 @@ class Runtime
         do_action('a!windpress/core/runtime:enqueue_css_cache.after', $handle);
     }
 
-    public function enqueue_play_cdn($display = true)
+    public function getVFSHtml()
     {
         $volumeEntries = array_reduce(Volume::get_entries(), fn ($carry, $entry) => $carry + [
             '/' . $entry['relative_path'] => $entry['content'],
@@ -156,7 +156,14 @@ class Runtime
 
         // Script content are base64 encoded to prevent it from being executed by the browser.
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        echo sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
+        return sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
+    }
+
+    public function enqueue_play_cdn($display = true)
+    {
+        // Script content are base64 encoded to prevent it from being executed by the browser.
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $this->getVFSHtml();
 
         $tailwindcss_version = static::tailwindcss_version();
 

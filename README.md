@@ -88,6 +88,7 @@ Seamless integration with the most popular visual/page builders:
 * [Kadence WP](https://kadencewp.com)
 * [LiveCanvas](https://livecanvas.com/)
 * [Timber](https://upstatement.com/timber/)
+* [Blockstudio](https://blockstudio.dev/?ref=7) — **Pro**
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**

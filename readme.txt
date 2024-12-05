@@ -49,6 +49,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Kadence WP](https://kadencewp.com)
 * [LiveCanvas](https://livecanvas.com/?ref=4008)
 * [Timber](https://upstatement.com/timber/)
+* [Blockstudio](https://blockstudio.dev/?ref=7) — **Pro**
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
@@ -114,6 +115,7 @@ Free version 1.**0**.4
 Pro version 1.**1**.4
 
 = unreleased =
+* **New**: [Blockstudio](https://blockstudio.dev/?ref=7) integration **[Pro]**
 * **New**: Upgraded to Tailwind CSS v3 (3.4.16)
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-beta.5 next)
 
