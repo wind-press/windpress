@@ -17,7 +17,7 @@ const focusedInput = inject('focusedInput');
 const recentColorPickerTarget = inject('recentColorPickerTarget');
 
 async function constructVariableList() {
-    const vfsContainer = brxIframe.contentWindow.document.querySelector('script[type="text/tailwindcss"]');
+    const vfsContainer = brxIframe.contentWindow.document.querySelector('script#windpress\\:vfs[type="text/plain"]');
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables

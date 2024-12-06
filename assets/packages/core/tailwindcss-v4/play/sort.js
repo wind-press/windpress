@@ -3,7 +3,7 @@ import { set } from 'lodash-es';
 import { sortClasses } from '../intellisense';
 import { decodeVFSContainer } from '../bundle';
 
-const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
+const vfsContainer = document.querySelector('script#windpress\\:vfs[type="text/plain"]');
 
 async function classSorter(input) {
     let classes = input

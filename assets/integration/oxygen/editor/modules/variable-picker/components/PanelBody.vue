@@ -21,7 +21,7 @@ const tempInputValue = inject('tempInputValue');
 const variableApp = inject('variableApp');
 
 async function constructVariableList() {
-    const vfsContainer = oxyIframe.contentWindow.document.querySelector('script[type="text/tailwindcss"]');
+    const vfsContainer = oxyIframe.contentWindow.document.querySelector('script#windpress\\:vfs[type="text/plain"]');
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables

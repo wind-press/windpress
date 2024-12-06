@@ -156,7 +156,7 @@ class Runtime
 
         // Script content are base64 encoded to prevent it from being executed by the browser.
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        return sprintf('<script id="windpress:vfs" type="text/tailwindcss">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
+        return sprintf('<script id="windpress:vfs" type="text/plain">%s</script>', base64_encode(wp_json_encode($volumeEntries)));
     }
 
     public function enqueue_play_cdn($display = true)

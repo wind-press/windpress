@@ -21,7 +21,7 @@ async function registerPallete() {
     // drop color palette with the name of windpress
     brxGlobalProp.$_state.colorPalette = brxGlobalProp.$_state.colorPalette.filter(palette => palette.name !== 'windpress');
 
-    const vfsContainer = brxIframe.contentWindow.document.querySelector('script[type="text/tailwindcss"]');
+    const vfsContainer = brxIframe.contentWindow.document.querySelector('script#windpress\\:vfs[type="text/plain"]');
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     const variableLists = await getVariableList({ volume });

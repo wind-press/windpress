@@ -9,7 +9,7 @@ let styleContainer;
 
 let lastCandidateSet = new Set();
 
-const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
+const vfsContainer = document.querySelector('script#windpress\\:vfs[type="text/plain"]');
 
 if (vfsContainer) {
     initListener();

@@ -5,7 +5,7 @@ import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
 import { bigSign } from '@/packages/core/tailwindcss-v4/intellisense';
 import { resolveConfig } from '../resolve-config';
 
-const vfsContainer = document.querySelector('script[type="text/tailwindcss"]');
+const vfsContainer = document.querySelector('script#windpress\\:vfs[type="text/plain"]');
 
 function prefixCandidate(context, selector) {
     const prefix = context.tailwindConfig.prefix;
