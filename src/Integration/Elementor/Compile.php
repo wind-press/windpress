@@ -25,16 +25,19 @@ class Compile
         '_elementor_data',
     ];
 
-    public function __invoke(): array
+    /**
+     * @param array $metadata
+     */
+    public function __invoke($metadata): array
     {
         if (! defined('ELEMENTOR_VERSION')) {
             return [];
         }
 
-        return $this->get_contents();
+        return $this->get_contents($metadata);
     }
 
-    public function get_contents(): array
+    public function get_contents($metadata): array
     {
         $contents = [];
 
@@ -42,8 +45,11 @@ class Compile
 
         $post_types = apply_filters('f!windpress/integration/elementor/compile:get_contents.post_types', $post_types);
 
+        $next_batch = $metadata['next_batch'] !== false ? $metadata['next_batch'] : 1;
+
         $wpQuery = new WP_Query([
-            'posts_per_page' => -1,
+            'posts_per_page' => apply_filters('f!windpress/integration/elementor/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 10)),
+            'paged' => $next_batch,
             'fields' => 'ids',
             'post_type' => $post_types,
             'post_status' => get_post_stati(),

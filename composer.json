@@ -35,7 +35,7 @@
     },
     "require": {
         "php": ">=7.4",
-        "hidehalo/nanoid-php": "^1.1",
+        "hidehalo/nanoid-php": "^2.0",
         "masterminds/html5": "^2.9",
         "rosua/edd-sl-plugin-updater": "@dev",
         "symfony/finder": "^5.4",

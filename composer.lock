@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "222cd8defd26176964896a716aad0685",
+    "content-hash": "524147ec6a5660032782ee197d9e3136",
     "packages": [
         {
             "name": "hidehalo/nanoid-php",
-            "version": "1.1.13",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hidehalo/nanoid-php.git",
-                "reference": "3fc7c949f4e655939cc30e7110d658af3dbb0e30"
+                "reference": "3aa4f874d36e2368a57b2ad4c9ca1abe13514e66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hidehalo/nanoid-php/zipball/3fc7c949f4e655939cc30e7110d658af3dbb0e30",
-                "reference": "3fc7c949f4e655939cc30e7110d658af3dbb0e30",
+                "url": "https://api.github.com/repos/hidehalo/nanoid-php/zipball/3aa4f874d36e2368a57b2ad4c9ca1abe13514e66",
+                "reference": "3aa4f874d36e2368a57b2ad4c9ca1abe13514e66",
                 "shasum": ""
             },
             "require": {
                 "paragonie/random_compat": ">=2.0",
-                "php": "~5.6|~7.0|~8.0"
+                "php": "~7.1|~8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": ">=5.6",
@@ -59,9 +59,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hidehalo/nanoid-php/issues",
-                "source": "https://github.com/hidehalo/nanoid-php/tree/1.1.13"
+                "source": "https://github.com/hidehalo/nanoid-php/tree/2.0"
             },
-            "time": "2022-08-04T12:07:12+00:00"
+            "time": "2024-11-04T03:00:05+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -1327,16 +1327,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "12.3.6",
+            "version": "12.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/easy-coding-standard/easy-coding-standard.git",
-                "reference": "c0f378782d06dfd21c66c3024e9d28f4e737645e"
+                "reference": "54d26710fc05c733cbd788a23a709e7815ab0a67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/c0f378782d06dfd21c66c3024e9d28f4e737645e",
-                "reference": "c0f378782d06dfd21c66c3024e9d28f4e737645e",
+                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/54d26710fc05c733cbd788a23a709e7815ab0a67",
+                "reference": "54d26710fc05c733cbd788a23a709e7815ab0a67",
                 "shasum": ""
             },
             "require": {
@@ -1372,7 +1372,7 @@
             ],
             "support": {
                 "issues": "https://github.com/easy-coding-standard/easy-coding-standard/issues",
-                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/12.3.6"
+                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/12.4.0"
             },
             "funding": [
                 {
@@ -1384,7 +1384,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-06T08:27:28+00:00"
+            "time": "2024-12-03T12:53:56+00:00"
         }
     ],
     "aliases": [],

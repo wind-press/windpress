@@ -13,27 +13,81 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Integration\GreenShift;
 
+use WP_Query;
+
 /**
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Compile
 {
-    public function __invoke()
+    /**
+     * @param array $metadata
+     */
+    public function __invoke($metadata): array
     {
         if (! defined('GREENSHIFT_DIR_PATH')) {
-            return;
+            return [];
         }
 
-        add_filter('f!windpress/integration/gutenberg/compile:get_contents.post_types', fn (array $post_types): array => $this->get_post_types($post_types));
+        return $this->get_contents($metadata);
     }
-
-    /**
-     * @param array $post_types
-     */
-    public function get_post_types($post_types): array
+    public function get_contents($metadata): array
     {
-        $post_types[] = 'wp_block';
+        $contents = [];
+        $post_types = apply_filters('f!windpress/integration/greenshift/compile:get_contents.post_types', [
+            'wp_block',
+        ]);
 
-        return $post_types;
+        $next_batch = $metadata['next_batch'] !== false ? $metadata['next_batch'] : 1;
+
+        $wpQuery = new WP_Query([
+            'posts_per_page' => apply_filters('f!windpress/integration/greenshift/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 10)),
+            'post_type' => $post_types,
+            'paged' => $next_batch,
+        ]);
+
+        foreach ($wpQuery->posts as $post) {
+            if (trim($post->post_content) === '' || trim($post->post_content) === '0') {
+                continue;
+            }
+
+            $post_content = $post->post_content;
+
+            if (apply_filters('f!windpress/integration/greenshift/compile:get_contents.render', true, $post)) {
+                $fn_renders = apply_filters('f!windpress/integration/greenshift/compile:get_contents.render_fn', [
+                    'do_blocks',
+                    'wptexturize',
+                    'convert_smilies',
+                    'shortcode_unautop',
+                    'wp_filter_content_tags',
+                    'do_shortcode',
+                ], $post);
+
+                foreach ($fn_renders as $fn_render) {
+                    try {
+                        $post_content = $fn_render($post_content);
+                    } catch (\Throwable $th) {
+                        if (WP_DEBUG) {
+                            error_log($th->getMessage());
+                        }
+                    }
+                }
+            }
+
+            $post_content = apply_filters('f!windpress/integration/greenshift/compile:get_contents.post_content', $post_content, $post);
+
+            $contents[] = [
+                'id' => $post->ID,
+                'title' => sprintf('#%s: %s', $post->ID, $post->post_title),
+                'content' => $post_content,
+            ];
+        }
+
+        return [
+            'metadata' => [
+                'next_batch' => $wpQuery->max_num_pages > $next_batch ? $next_batch + 1 : false,
+            ],
+            'contents' => $contents,
+        ];
     }
 }

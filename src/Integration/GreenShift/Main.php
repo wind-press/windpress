@@ -25,10 +25,6 @@ class Main implements IntegrationInterface
     public function __construct()
     {
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
-
-        if ($this->is_enabled()) {
-            (new Compile())();
-        }
     }
 
     public function get_name(): string
@@ -53,7 +49,7 @@ class Main implements IntegrationInterface
             'id' => $this->get_name(),
             'name' => __('GreenShift', 'windpress'),
             'description' => __('The GreenShift integration. It requires the Gutenberg/Block Editor integration enabled.', 'windpress'),
-            'callback' => fn () => [],
+            'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
             'meta' => [
                 'experimental' => true,

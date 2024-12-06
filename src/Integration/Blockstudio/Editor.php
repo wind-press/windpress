@@ -30,15 +30,11 @@ class Editor
         /**
          * @see https://blockstudio.dev/documentation/hooks/php/#editor-markup
          */
-        add_filter('blockstudio/settings/editor/markup', function ($value) {
-            return $value . Runtime::get_instance()->getVFSHtml();
-        });
+        add_filter('blockstudio/settings/editor/markup', fn ($value) => $value . Runtime::get_instance()->getVFSHtml());
 
         /**
          * @see https://blockstudio.dev/documentation/hooks/php/#editor-assets
          */
-        add_filter('blockstudio/settings/editor/assets', function () {
-            return ['windpress:observer'];
-        });
+        add_filter('blockstudio/settings/editor/assets', fn () => ['windpress:observer']);
     }
 }
