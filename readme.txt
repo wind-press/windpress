@@ -114,6 +114,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Fix**: [Gutenberg, Breakdance, Bricks, Oxygen] The hover preview feature is too late to disappear when the mouse is moved away from the class name
+* **Change**: Decouple the Gutenberg-based integrations' scanner
+
 = 3.2.19 =
 * **New**: [Blockstudio](https://blockstudio.dev/?ref=7) integration **[Pro]**
 * **New**: Upgraded to Tailwind CSS v3 (3.4.16)

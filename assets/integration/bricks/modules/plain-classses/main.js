@@ -267,7 +267,7 @@ let tippyInstance = tippy(document.createElement('div'), {
     plugins: [followCursor],
     allowHTML: true,
     arrow: false,
-    duration: [500, null],
+    duration: [500, 0],
     followCursor: true,
     trigger: 'manual',
 });
@@ -325,6 +325,7 @@ function hoverPreviewProvider() {
     hitContainerEl.addEventListener('mousemove', debouncedMousemoveHandler);
 
     hitContainerEl.addEventListener('mouseleave', function (event) {
+        debouncedMousemoveHandler.cancel();
         currentMarkWordElement.value = null;
     });
 

@@ -170,6 +170,4 @@ Support this project by becoming a sponsor. Your logo will show up here and on t
 
 ![Repo Activity](https://repobeats.axiom.co/api/embed/0769f849ed16dfa78931203ea4e2a6291fd8be04.svg "Repobeats analytics image")
 
-## Star History
-
 <a href="https://star-history.com/#wind-press/windpress&Date"> <picture> <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date&theme=dark" /> <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=wind-press/windpress&type=Date" /> </picture> </a>
