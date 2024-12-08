@@ -1,3 +1,4 @@
+import './style.scss';
 import { logger } from '@/integration/common/logger.js';
 
 logger('Loading...');
