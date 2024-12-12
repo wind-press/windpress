@@ -115,11 +115,12 @@ Free version 1.**0**.4
 Pro version 1.**1**.4
 
 = unreleased =
-* **Fix**: [Gutenberg] The CSS class field autofocusing issue on the block editor 
+* **Fix**: [Gutenberg] The CSS class field autofocusing issue on the block editor
+* **Fix**: [Gutenberg, Breakdance, Bricks, Builderius, LiveCanvas, Oxygen] The generate cache on save feature doesn't use the selected Tailwind CSS version 
 
 = 3.2.21 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-beta.6 next)
-* **Fix**: [Breakdance] Editor style is mixed with admin-bar style (margin-top).
+* **Fix**: [Breakdance] Editor style is mixed with admin-bar style (margin-top)
 
 = 3.2.20 =
 * **Fix**: [Gutenberg, Breakdance, Bricks, Oxygen] The hover preview feature is too late to disappear when the mouse is moved away from the class name

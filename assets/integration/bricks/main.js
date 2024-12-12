@@ -27,7 +27,7 @@ logger('Loading...');
     await import('./modules/generate-cache/main.js');
 
     // tailwindcss-v4
-    if (Number(brxIframe.contentWindow.windpress?._tailwind_version) === 4) {
+    if (Number(brxIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
         await import('./modules/color-palette/main.js');
         await import('./modules/variables/main.js');
         await import('./modules/variable-picker/main.js');

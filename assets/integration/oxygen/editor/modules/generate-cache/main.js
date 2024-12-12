@@ -8,7 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { iframeScope } from "@/integration/oxygen/editor/constant.js"; 
+import { iframeScope, oxyIframe } from "@/integration/oxygen/editor/constant.js"; 
 
 const channel = new BroadcastChannel('windpress');
 
@@ -22,7 +22,8 @@ iframeScope.allSaved = function () {
         target: 'windpress/dashboard',
         task: 'windpress.generate-cache',
         payload: {
-            force_pull: true
+            force_pull: true,
+            tailwindcss_version: Number(oxyIframe.contentWindow.windpress?._tailwindcss_version)
         }
     });
 };

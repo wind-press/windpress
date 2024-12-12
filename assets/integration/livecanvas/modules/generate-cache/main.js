@@ -8,6 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
+import { previewIframe } from '@/integration/livecanvas/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -31,7 +32,8 @@ const channel = new BroadcastChannel('windpress');
                                 target: 'windpress/dashboard',
                                 task: 'windpress.generate-cache',
                                 payload: {
-                                    force_pull: true
+                                    force_pull: true,
+                                    tailwindcss_version: Number(previewIframe.contentWindow.windpress?._tailwindcss_version)
                                 }
                             });
                         }

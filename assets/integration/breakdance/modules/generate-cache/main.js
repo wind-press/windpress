@@ -8,6 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
+import { bdeIframe } from '@/integration/breakdance/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -24,7 +25,8 @@ const channel = new BroadcastChannel('windpress');
                     target: 'windpress/dashboard',
                     task: 'windpress.generate-cache',
                     payload: {
-                        force_pull: true
+                        force_pull: true,
+                        tailwindcss_version: Number(bdeIframe.contentWindow.windpress?._tailwindcss_version)
                     }
                 });
             }

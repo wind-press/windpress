@@ -8,7 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { settingsState } from '@/integration/bricks/constant.js';
+import { settingsState, brxIframe } from '@/integration/bricks/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -38,7 +38,8 @@ const channel = new BroadcastChannel('windpress');
                                     target: 'windpress/dashboard',
                                     task: 'windpress.generate-cache',
                                     payload: {
-                                        force_pull: true
+                                        force_pull: true,
+                                        tailwindcss_version: Number(brxIframe.contentWindow.windpress?._tailwindcss_version)
                                     }
                                 });
                             }

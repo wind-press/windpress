@@ -18,7 +18,7 @@ logger('Loading...');
     await import('./modules/generate-cache/main.js');
 
     // tailwindcss-v4
-    if (Number(uniIframe.contentWindow.windpress?._tailwind_version) === 4) {
+    if (Number(uniIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
         await import('./modules/monaco/main.js');
         await import('./modules/variable-picker/main.js');
     }
