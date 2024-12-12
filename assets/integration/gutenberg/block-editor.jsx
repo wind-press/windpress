@@ -292,8 +292,6 @@ watch(textInputRef, (newVal, oldVal) => {
                 ],
             });
 
-            textInputRef.value.focus();
-
             hoverPreviewProvider();
 
             textInputRef.value.addEventListener('highlights-updated', function (e) {

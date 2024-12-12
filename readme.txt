@@ -114,6 +114,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Fix**: [Gutenberg] The CSS class field autofocusing issue on the block editor 
+
 = 3.2.21 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-beta.6 next)
 * **Fix**: [Breakdance] Editor style is mixed with admin-bar style (margin-top).
