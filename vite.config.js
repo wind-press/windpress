@@ -71,7 +71,7 @@ export default defineConfig({
         httpsImports.default({}),
     ],
     build: {
-        target: 'modules',
+        // target: 'modules',
         sourcemap: false,
         // rollupOptions: {
         //     output: {
@@ -118,4 +118,7 @@ export default defineConfig({
             '@/packages': path.resolve(__dirname, './assets/packages'),
         },
     },
+    server: {
+        cors: true,
+    }
 });

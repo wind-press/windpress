@@ -1,0 +1,22 @@
+diff --git a/dist/commonjs/loader.js b/dist/commonjs/loader.js
+index b1c04c72d38ac738a4ec111b500809e5f7023e63..9c59413dcd1f3696feea26c56205083237dfa5d2 100644
+--- a/dist/commonjs/loader.js
++++ b/dist/commonjs/loader.js
+@@ -30,7 +30,16 @@ function loader(matcher, options) {
+                 return data;
+             }
+             catch (error) {
+-                loading.fail(chalk.hex('C70039')('failed to download ') + chalk.hex('FF6969')(id));
++                try {
++                    const { data } = yield axios_1.default.get(id.replace('/node/', '/'));
++                    loading.succeed(chalk.dim('downloaded ') + chalk.hex('1450A3')(id));
++                    return data;
++                }
++                catch (error) {
++                    loading.fail(chalk.hex('C70039')('failed to download ') + chalk.hex('FF6969')(id));
++                    throw error;
++                }
++
+                 throw error;
+             }
+         }
