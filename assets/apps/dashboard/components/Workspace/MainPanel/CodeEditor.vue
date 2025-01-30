@@ -111,49 +111,33 @@ function handleEditorMount(editor, monaco) {
                                 {
                                     name: '@theme',
                                     status: 'standard',
-                                    description: 'The special `@theme` directive tells Tailwind to make new utilities and variants available based on those variables',
+                                    description: 'Theme variables are special CSS variables defined using the `@theme` directive that influence which utility classes exist in your project.',
                                     references: [
                                         {
-                                            name: 'Blog: Open-sourcing our progress on Tailwind CSS v4.0',
-                                            url: 'https://tailwindcss.com/blog/tailwindcss-v4-alpha#:~:text=the%20special%20%40theme%20directive%20tells%20tailwind%20to%20make%20new%20utilities%20and%20variants%20available%20based%20on%20those%20variables'
+                                            name: 'Docs: Theme variables',
+                                            url: 'https://tailwindcss.com/docs/theme'
                                         }
                                     ],
                                 },
                                 {
                                     name: '@plugin',
                                     status: 'standard',
-                                    description: 'The special `@plugin` directive tells Tailwind to load a plugin',
+                                    description: 'Use the `@plugin` directive to load a legacy JavaScript-based plugin.',
                                     references: [
                                         {
-                                            name: 'Twitter',
-                                            url: 'https://x.com/adamwathan/status/1830716239381176647',
+                                            name: 'Docs: Functions & Directives',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#plugin-directive',
                                         },
-                                        {
-                                            name: 'GitHub PR: Support plugin options in CSS tailwindlabs/tailwindcss#14264',
-                                            url: 'https://github.com/tailwindlabs/tailwindcss/pull/14264'
-                                        },
-                                        {
-                                            name: 'GitHub PR: Support loading plugins in CSS tailwindlabs/tailwindcss-intellisense#1044',
-                                            url: 'https://github.com/tailwindlabs/tailwindcss-intellisense/pull/1044'
-                                        }
                                     ],
                                 },
                                 {
                                     name: '@config',
                                     status: 'standard',
-                                    description: 'The special `@config` directive tells Tailwind to load a config',
+                                    description: 'Use the `@config` directive to load a legacy JavaScript-based configuration file.',
                                     references: [
                                         {
-                                            name: 'Twitter',
-                                            url: 'https://x.com/adamwathan/status/1830716239381176647',
-                                        },
-                                        {
-                                            name: 'GitHub PR: Support loading config files via @config tailwindlabs/tailwindcss#14239',
-                                            url: 'https://github.com/tailwindlabs/tailwindcss/pull/14239'
-                                        },
-                                        {
-                                            name: 'GitHub PR: Support loading plugins in CSS tailwindlabs/tailwindcss-intellisense#1044',
-                                            url: 'https://github.com/tailwindlabs/tailwindcss-intellisense/pull/1044'
+                                            name: 'Docs: Functions & Directives',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#config-directive',
                                         }
                                     ],
                                 },
@@ -164,7 +148,7 @@ function handleEditorMount(editor, monaco) {
                                     references: [
                                         {
                                             name: 'Docs: Functions & Directives',
-                                            url: 'https://tailwindcss.com/docs/functions-and-directives#tailwind',
+                                            url: 'https://v3.tailwindcss.com/docs/functions-and-directives#tailwind',
                                         },
                                     ],
                                 },
@@ -175,7 +159,40 @@ function handleEditorMount(editor, monaco) {
                                     references: [
                                         {
                                             name: 'Docs: Functions & Directives',
-                                            url: 'https://tailwindcss.com/docs/functions-and-directives#apply',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#apply-directive',
+                                        },
+                                    ],
+                                },
+                                {
+                                    name: '@utility',
+                                    status: 'standard',
+                                    description: 'Use the `@utility` directive to add custom utilities to your project that work with variants like `hover`, `focus` and `lg``.',
+                                    references: [
+                                        {
+                                            name: 'Docs: Functions & Directives',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#utility-directive',
+                                        },
+                                    ],
+                                },
+                                {
+                                    name: '@custom-variant',
+                                    status: 'standard',
+                                    description: 'Use the `@custom-variant` directive to add a custom variant in your project.',
+                                    references: [
+                                        {
+                                            name: 'Docs: Functions & Directives',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#custom-variant-directive',
+                                        },
+                                    ],
+                                },
+                                {
+                                    name: '@variant',
+                                    status: 'standard',
+                                    description: 'Use the `@variant` directive to apply a Tailwind variant to styles in your CSS.',
+                                    references: [
+                                        {
+                                            name: 'Docs: Functions & Directives',
+                                            url: 'https://tailwindcss.com/docs/functions-and-directives#variant-directive',
                                         },
                                     ],
                                 },
