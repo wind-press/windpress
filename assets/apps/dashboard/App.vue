@@ -54,17 +54,17 @@ channel.addEventListener('message', async (e) => {
     }
 });
 
-const askForReview = localStorage.getItem('windpress-ask-for-review') ?? -1;
+const askForReview = localStorage.getItem(`windpress-ask-for-review-${window.windpress._version}`) ?? -1;
 const isAskForReview = ref(askForReview === -1 || (askForReview !== 'done' && askForReview !== 'never' && new Date() > new Date(askForReview)));
 const askForReviewClick = (action) => {
-    localStorage.setItem('windpress-ask-for-review', action);
+    localStorage.setItem(`windpress-ask-for-review-${window.windpress._version}`, action);
 
     if (action === 'done') {
         window.open('https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post', '_blank');
     } else if (action === 'later') {
         const date = new Date();
         date.setDate(date.getDate() + 7);
-        localStorage.setItem('windpress-ask-for-review', date);
+        localStorage.setItem(`windpress-ask-for-review-${window.windpress._version}`, date);
     }
 
     isAskForReview.value = false;
