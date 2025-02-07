@@ -68,7 +68,17 @@ export default defineConfig({
         react({
             jsxRuntime: 'classic',
         }),
-        httpsImports.default({}),
+        httpsImports.default({}, function resolver(matcher) {
+            return (id, importer) => {
+                if (matcher(id)) {
+                    return id;
+                }
+                else if (matcher(importer) && !id.includes('vite-plugin-node-polyfills')) {
+                    return new URL(id, importer).toString();
+                }
+                return undefined;
+            };
+        }),
     ],
     build: {
         // target: 'modules',
