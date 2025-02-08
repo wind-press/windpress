@@ -6,6 +6,9 @@ import { useNotifier } from '@/dashboard/library/notifier';
 import { useUIStore } from '@/dashboard/stores/ui';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useSettingsStore } from '@/dashboard/stores/settings';
+import lzString from 'lz-string';
+import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 
 const ui = useUIStore();
 const volumeStore = useVolumeStore();
@@ -74,6 +77,74 @@ function resetEntry(entry) {
     }
 }
 
+function doExport() {
+    const data = {
+        entries: volumeStore.data.entries,
+        _windpress: true,
+        _version: windpress._version,
+        _wp_version: windpress._wp_version,
+        _timestamp: new Date().getTime(),
+        _uid: nanoid(),
+        _type: 'sfs',
+    };
+
+    const compressed = lzString.compressToUint8Array(JSON.stringify(data));
+
+    const blob = new Blob([compressed], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sfs-${new dayjs().format('YYYYMMDDHHmmss')}.windpress`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    logStore.add({
+        type: 'info',
+        message: __('SFS data exported', 'windpress'),
+    });
+}
+
+function doImport(event) {
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!file.name.endsWith('.windpress')) {
+        notifier.alert(__('Invalid file format', 'windpress'));
+        return;
+    }
+
+    if(!confirm(__('This will overwrite all existing files. Are you sure you want to continue?', 'windpress'))) {
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        try {
+            const data = JSON.parse(lzString.decompressFromUint8Array(new Uint8Array(e.target.result)));
+
+            if (!data._windpress || data._type !== 'sfs') {
+                throw new Error(__('File is not a valid WindPress file', 'windpress'));
+            }
+
+            volumeStore.data.entries = data.entries;
+            logStore.add({
+                type: 'success',
+                message: __('SFS data imported', 'windpress'),
+            });
+
+            notifier.success(__('SFS data imported. Remember to save the changes.', 'windpress'));
+        } catch (error) {
+            notifier.alert(error.message);
+        }
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
 onBeforeMount(() => {
     if (Object.keys(settingsStore.options).length === 0) {
         settingsStore.doPull();
@@ -91,12 +162,21 @@ onMounted(() => {
 <template>
     <div class="explorer-header px:20 py:10 uppercase font:12 flex">
         <div class="flex-grow:1 align-content:center">
-            {{ wp_i18n.__('Explorer: WordPress', 'windpress') }}
+            {{ wp_i18n.__('Explorer', 'windpress') }}
         </div>
-        <div class="justify-self:end">
+        <div class="flex justify-self:end">
             <button @click="addNewEntry" :title="wp_i18n.__('Add New File', 'windpress')" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! my:auto width:auto h:auto min-h:initial! align-items:center" v-ripple>
                 <i-fa6-solid-plus class="iconify m:4" />
             </button>
+
+            <button @click="doExport" :title="wp_i18n.__('Export', 'windpress')" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! my:auto width:auto h:auto min-h:initial! align-items:center" v-ripple>
+                <i-fa6-solid-download class="iconify m:4" />
+            </button>
+
+            <label for="import" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! my:auto width:auto h:auto min-h:initial! align-items:center" v-ripple>
+                <i-fa6-solid-upload class="iconify m:4" />
+            </label>
+            <input id="import" type="file" @change="doImport" style="display:none"  accept=".windpress" />
         </div>
     </div>
 

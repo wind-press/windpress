@@ -103,6 +103,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      lz-string:
+        specifier: https://pkg.pr.new/wind-press/lz-string@2c61edc
+        version: https://pkg.pr.new/wind-press/lz-string@2c61edc
       monaco-editor:
         specifier: ^0.52.2
         version: 0.52.2
@@ -2762,6 +2765,11 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  lz-string@https://pkg.pr.new/wind-press/lz-string@2c61edc:
+    resolution: {tarball: https://pkg.pr.new/wind-press/lz-string@2c61edc}
+    version: 2.0.0-rc.3
+    hasBin: true
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -6649,6 +6657,8 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lz-string@https://pkg.pr.new/wind-press/lz-string@2c61edc: {}
 
   magic-string@0.30.17:
     dependencies:
