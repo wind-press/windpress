@@ -7,6 +7,7 @@ import { Switch } from '@headlessui/vue';
 import { useLicenseStore } from '@/dashboard/stores/license';
 import { useBusyStore } from '@/dashboard/stores/busy';
 import { useSettingsStore } from '@/dashboard/stores/settings';
+import { useLogStore } from '@/dashboard/stores/log';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { useApi } from '@/dashboard/library/api';
 import { version as tw4_version } from '@tailwindcss/root/packages/tailwindcss/package.json';
@@ -15,6 +16,7 @@ import { version as tw3_version } from 'tailwindcss/package.json';
 const notifier = useNotifier();
 const licenseStore = useLicenseStore();
 const settingsStore = useSettingsStore();
+const logStore = useLogStore();
 const busyStore = useBusyStore();
 const api = useApi();
 const channel = new BroadcastChannel('windpress');
@@ -56,6 +58,12 @@ function handleEnableKeyup(e, providerId) {
 
 function switchProviderStatus(providerId) {
     settingsStore.virtualOptions(`integration.${providerId}.enabled`, true).value = !settingsStore.virtualOptions(`integration.${providerId}.enabled`, true).value;
+    logStore.add({
+        type: 'info',
+        message: settingsStore.virtualOptions(`integration.${providerId}.enabled`, true).value
+            ? sprintf(__('%s integration enabled', 'windpress'), providerId)
+            : sprintf(__('%s integration disabled', 'windpress'), providerId),
+    });
     doSave();
 }
 
@@ -64,7 +72,13 @@ function doSave() {
 
     notifier.async(
         promise,
-        resp => notifier.success(resp.message),
+        resp => {
+            notifier.success(resp.message);
+            logStore.add({
+                type: 'success',
+                message: __('Settings saved', 'windpress'),
+            });
+        },
         err => notifier.alert(err.message),
         __('Saving settings...', 'windpress')
     );

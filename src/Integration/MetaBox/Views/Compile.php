@@ -78,6 +78,7 @@ class Compile
         return [
             'metadata' => [
                 'next_batch' => $wpQuery->max_num_pages > $next_batch ? $next_batch + 1 : false,
+                'total_batches' => $wpQuery->max_num_pages,
             ],
             'contents' => $contents,
         ];

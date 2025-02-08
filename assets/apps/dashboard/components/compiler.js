@@ -13,6 +13,8 @@ export async function buildCache(opts) {
     const volumeStore = useVolumeStore();
     const logStore = useLogStore();
 
+    logStore.add({ message: 'Starting cache build...', type: 'info' });
+
     const options = Object.assign({
         force_pull: false,
         store: true,
@@ -22,6 +24,7 @@ export async function buildCache(opts) {
     let providers = [];
 
     if (options.force_pull === true || volumeStore.data.entries.length === 0) {
+        logStore.add({ message: 'Getting the latest Simple File System data...', type: 'info' });
         await volumeStore.doPull();
     }
 
@@ -42,9 +45,12 @@ export async function buildCache(opts) {
     // Helper function to handle batch processing for a single provider
     async function fetchProviderContents(provider) {
         let batch = false;
-        let batch_count = 0;
 
         do {
+            let logId = logStore.add({
+                message: `Scanning provider: ${provider.name}... (${batch !== false ? batch : 'initial'})`, type: 'info'
+            });
+
             const scan = await api
                 .post('admin/settings/cache/providers/scan', {
                     provider_id: provider.id,
@@ -56,12 +62,9 @@ export async function buildCache(opts) {
 
             batch = scan.metadata?.next_batch || false;
 
-            if (batch !== false) {
-                logStore.add({ message: `Scanning provider: ${provider.name}... (${batch_count})`, type: 'info' });
-                batch_count++;
-            } else {
-                logStore.add({ message: `Scanning provider: ${provider.name}...`, type: 'info' });
-            }
+            let currentLog = logStore.logs.find((log) => log.id === logId);
+
+            currentLog.message += ' - done';
         } while (batch !== false);
 
         return Promise.resolve();

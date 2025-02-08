@@ -1,13 +1,15 @@
 <script setup>
 import { onBeforeMount, onMounted } from 'vue';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { useUIStore } from '@/dashboard/stores/ui';
+import { useLogStore } from '@/dashboard/stores/log';
 import { useSettingsStore } from '@/dashboard/stores/settings';
 
 const ui = useUIStore();
 const volumeStore = useVolumeStore();
+const logStore = useLogStore();
 const notifier = useNotifier();
 const settingsStore = useSettingsStore();
 
@@ -37,6 +39,10 @@ function addNewEntry() {
 
     try {
         volumeStore.addNewEntry(filePath);
+        logStore.add({
+            type: 'success',
+            message: sprintf(__('File %s created', 'windpress'), filePath),
+        });
     } catch (error) {
         notifier.alert(error.message);
     }
@@ -51,12 +57,20 @@ function switchToEntry(entry) {
 function softDeleteEntry(entry) {
     if (confirm(__('Are you sure you want to delete this file?', 'windpress'))) {
         volumeStore.softDeleteEntry(entry);
+        logStore.add({
+            type: 'warning',
+            message: sprintf(__('File %s deleted', 'windpress'), entry.relative_path),
+        });
     }
 }
 
 function resetEntry(entry) {
     if (confirm(__('Are you sure you want to reset this file?', 'windpress'))) {
         volumeStore.resetEntry(entry);
+        logStore.add({
+            type: 'warning',
+            message: sprintf(__('File %s reseted', 'windpress'), entry.relative_path),
+        });
     }
 }
 

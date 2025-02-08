@@ -171,6 +171,7 @@ class Cache extends AbstractApi implements ApiInterface
                     'memory' => sprintf('%.2F MiB', $stopwatchEvent->getMemory() / 1024 / 1024),
                 ],
                 'next_batch' => $result['metadata']['next_batch'] ?? false,
+                'total_batches' => $result['metadata']['total_batches'] ?? false,
             ],
             'contents' => $result['contents'],
             'status' => 'OK',

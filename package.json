@@ -57,7 +57,7 @@
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
     "@vueuse/core": "^12.5.0",
     "@vueuse/integrations": "^12.5.0",
-    "@windpress/oxide-parser-wasm": "^1.0.21",
+    "@windpress/oxide-parser-wasm": "^1.0.22",
     "@wordpress/block-editor": "^14.12.0",
     "@wordpress/blocks": "^14.6.0",
     "@wordpress/components": "^29.3.0",

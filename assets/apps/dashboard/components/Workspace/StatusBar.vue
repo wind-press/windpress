@@ -1,5 +1,6 @@
 <script setup>
 import { __ } from '@wordpress/i18n';
+import dayjs from 'dayjs';
 import { computed } from 'vue';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useNotificationStore } from '@/dashboard/stores/notification';
@@ -36,13 +37,33 @@ function rebuildCache() {
                 </div>
             </div>
             <div class="flex flex:row px:12 py:6 gap:12 rel">
-                <div class="status-bar__log rel flex align-items:center leading:normal fg:statusBar-foreground/.7 overflow:hidden">
-                    <Transition mode="out-in" name="slide-up">
-                        <span :key="latestLogMessage" class="leading:normal">
-                            {{ latestLogMessage }}
-                        </span>
-                    </Transition>
-                </div>
+                <VDropdown placement="top-end" class="sidebar-nav-item help" :autoHide="false" v-tooltip="{ placement: 'top', content: wp_i18n.__('Log', 'windpress') }">
+                    <div class="status-bar__log rel flex align-items:center leading:normal fg:statusBar-foreground/.7 overflow:hidden">
+                        <Transition mode="out-in" name="slide-up">
+                            <span :key="latestLogMessage" class="leading:normal user-select:none cursor:pointer">
+                                {{ latestLogMessage }}
+                            </span>
+                        </Transition>
+                    </div>
+
+                    <template #popper>
+                        <div>
+                            <div v-if="log.logs.length > 0" role="group" class="flex flex:column bg:editor-background font:14 text:foreground min-w:120 p:4 w:auto max-w:900 max-h:300 overflow:auto">
+                                <div v-for="history in log.logs" :key="history.id" class="font:mono">
+                                    <span :title="history.id" class="text:foreground/.5">[{{ new dayjs(history.timestamp).format('HH:mm:ss.SSS') }}]</span>
+                                    <span>
+                                        <span v-if="history.type === 'error'" class="text:red">[ERROR]</span>
+                                        <span v-else-if="history.type === 'warning'" class="text:yellow">[WARNING]</span>
+                                        <span v-else-if="history.type === 'info'" class="text:blue">[INFO]</span>
+                                        <span v-else-if="history.type === 'success'" class="text:green">[SUCCESS]</span>
+                                        <span v-else-if="history.type === 'debug'" class="text:gray">[DEBUG]</span>
+                                    </span>
+                                    {{ history.message }}
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </VDropdown>
 
                 <div v-tooltip="{ placement: 'top', content: `${notification.notices.length} Notifications` }" class="status-bar__notification flex flex:row align-items:center cursor:pointer">
                     <i-line-md-bell-alert-loop class="iconify fill:current" />
