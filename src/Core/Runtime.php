@@ -293,6 +293,7 @@ class Runtime
         $metadata = [
             '_version' => WIND_PRESS::VERSION,
             '_tailwindcss_version' => static::tailwindcss_version(),
+            '_wp_version' => get_bloginfo('version'),
             '_via_wp_org' => ! Common::is_updater_library_available(),
             'is_ubiquitous' => $this->is_ubiquitous_panel(),
             'assets' => [
