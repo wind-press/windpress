@@ -122,7 +122,7 @@ function doImport(event) {
     }
 
     const reader = new FileReader();
-    reader.onload = function (e) {
+    reader.addEventListener('load', function (e) {
         try {
             const data = JSON.parse(lzString.decompressFromUint8Array(new Uint8Array(e.target.result)));
 
@@ -130,7 +130,19 @@ function doImport(event) {
                 throw new Error(__('File is not a valid WindPress file', 'windpress'));
             }
 
-            volumeStore.data.entries = data.entries;
+            // Volume require to check the signature of existing files,
+            // so remove the `signature` property where the `handler` property is "internal"
+            const entries = data.entries.map(entry => {
+                if (entry.signature && entry.handler === 'internal') {
+                    const { signature, ...rest } = entry;
+                    return rest;
+                }
+
+                return entry;
+            });
+
+            volumeStore.data.entries = entries;
+
             logStore.add({
                 type: 'success',
                 message: __('SFS data imported', 'windpress'),
@@ -140,7 +152,7 @@ function doImport(event) {
         } catch (error) {
             notifier.alert(error.message);
         }
-    };
+    });
 
     reader.readAsArrayBuffer(file);
 }
