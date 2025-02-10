@@ -4,12 +4,12 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.2.27
+Stable tag: 3.2.28
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Integrate Tailwind CSS into WordPress seamlessly, in just seconds. Works well with the block editor, page builders, plugins, themes, and custom code.
+Integrate Tailwind CSS 3 or 4 into WordPress seamlessly, in just seconds. Works well with the block editor, page builders, plugins, themes, and custom code.
 
 == Description ==
 
@@ -19,12 +19,13 @@ WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integr
 
 **Tailwind CSS version**:
 - 3.4.17
-- 4.0.4
+- 4.0.5
 
 ### Features
 
 WindPress is packed full of features designed to streamline your workflow. Some of our favorites are:
 
+* **Dual Tailwind CSS version**: Tailwind CSS `3.x` and `4.x` ready.
 * **Plug and play**: Start using Tailwind CSS in WordPress in seconds — no setup is required.
 * **Customizable Configuration**: The plugin comes with a default Tailwind CSS configuration, but you can easily customize it to fit your needs.
 * **Easy to use**: Simplified and intuitive settings to get you up and running quickly.
@@ -39,6 +40,8 @@ And some specific integrations also include the following features:
 * **Sort the classes**: Sort the Tailwind CSS classes on the input field.
 * **Hover Preview the classes**: Hover over the classes to see the complete outputted CSS and the preview of the design canvas.
 * **Ubiquitous Panel**: A floating panel that allows you to quickly access the WindPress settings from anywhere on the page.
+
+Visit [our website](https://wind.press) for more information.
 
 ### Seamless Integration
 
@@ -65,7 +68,11 @@ Planned / In Progress
 
 Note: The core feature will remain available on all versions, but some integrations may be added or removed from the free version in the future.
 
-Visit [our website](https://wind.press) for more information.
+### Bring Your Own Integration
+
+WindPress is designed to be easily extensible, so you can build your integrations with Tailwind CSS. The plugin provides a simple API for adding integrations. 
+Check out our detailed [guide](https://wind.press/docs/integrations/custom-theme) to get started.
+
 
 = Love WindPress? =
 - Give a [5-star review](https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post)
@@ -113,6 +120,9 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= 3.2.28 =
+* **New**: Upgraded to Tailwind CSS v4 (4.0.5 latest)
 
 = 3.2.27 =
 * **New**: Simple File System data are now exportable and importable from the WindPress dashboard page
