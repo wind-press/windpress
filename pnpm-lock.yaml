@@ -36,7 +36,7 @@ importers:
         version: '@jsr/std__html@1.0.3'
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
-        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/ad001199f6e3ce64472de1b3d5f5a424c9d065c8
+        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/aaf66b014f8456e640903d8ef9fa68196a8177a5
       '@vueuse/core':
         specifier: ^12.5.0
         version: 12.5.0(typescript@5.6.2)
@@ -177,8 +177,8 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       '@iconify-json/devicon':
-        specifier: ^1.2.13
-        version: 1.2.13
+        specifier: ^1.2.14
+        version: 1.2.14
       '@iconify-json/fa6-brands':
         specifier: ^1.2.5
         version: 1.2.5
@@ -640,8 +640,8 @@ packages:
   '@iconify-json/bx@1.2.2':
     resolution: {integrity: sha512-hZVx6LMEkYckScdRdUuQWcmv8Lm2au6Cnf799TLoR6YgiAfFvaJ4M5ElwcnExvCu8ntsS7jW89r0W5LwBAfZXQ==}
 
-  '@iconify-json/devicon@1.2.13':
-    resolution: {integrity: sha512-EPwXcB25EF8iMyYUnu1NM/HBz7x9VpfTPH0gyWPU9Co+fjVpTz1M93ePdOPvQ+XSgNSTi7tkLlQio0BEe2pFag==}
+  '@iconify-json/devicon@1.2.14':
+    resolution: {integrity: sha512-W0h9c9yIKr+MNEYBmPn7a5pQFDTOgjrxOjWDk2wgc+VGRmmYOrAWwK5rOPtT5FkWmBzfGkiJiXyHe/Xi23AjeQ==}
 
   '@iconify-json/fa6-brands@1.2.5':
     resolution: {integrity: sha512-U/iFfziz6jSN9zArOJZYTtoj2tQyh6MxPdI8M84DQ2kEulPaj8j+h9bqvjmzszNHmD7v+kmmKd/MLkMKk+3Zuw==}
@@ -1395,8 +1395,8 @@ packages:
   '@swc/types@0.1.17':
     resolution: {integrity: sha512-V5gRru+aD8YVyCOMAjMpWR1Ui577DD5KSJsHP8RAxopAH22jFz6GZd/qxqjO6MJHQhcsjvjOFXyDhyLQUnMveQ==}
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/ad001199f6e3ce64472de1b3d5f5a424c9d065c8':
-    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/ad001199f6e3ce64472de1b3d5f5a424c9d065c8}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/aaf66b014f8456e640903d8ef9fa68196a8177a5':
+    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/aaf66b014f8456e640903d8ef9fa68196a8177a5}
     version: 1.0.0
 
   '@tannin/compile@1.1.0':
@@ -4330,7 +4330,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/devicon@1.2.13':
+  '@iconify-json/devicon@1.2.14':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -4984,7 +4984,7 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/ad001199f6e3ce64472de1b3d5f5a424c9d065c8': {}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/aaf66b014f8456e640903d8ef9fa68196a8177a5': {}
 
   '@tannin/compile@1.1.0':
     dependencies:
