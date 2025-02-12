@@ -78,6 +78,7 @@
     "lightningcss-wasm": "^1.29.1",
     "lodash-es": "^4.17.21",
     "lz-string": "https://pkg.pr.new/wind-press/lz-string@2c61edc",
+    "minimatch": "^10.0.1",
     "monaco-editor": "^0.52.2",
     "nanoid": "^5.0.9",
     "pinia": "^2.3.1",

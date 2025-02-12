@@ -9,7 +9,7 @@ Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Integrate Tailwind CSS 3 or 4 into WordPress seamlessly, in just seconds. Works well with the block editor, page builders, plugins, themes, and custom code.
+Integrate Tailwind CSS 3 or 4 into WordPress easily, in seconds. Works well with the block editor, page builders, plugins, themes, and custom code.
 
 == Description ==
 
@@ -120,6 +120,9 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= unreleased =
+* **New**: The `@source` directive is now supported but differs from the official Tailwind CSS version. Please refer to our documentation for details.
 
 = 3.2.28 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.5 latest)

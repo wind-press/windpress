@@ -4,7 +4,7 @@ import { useVolumeStore } from '@/dashboard/stores/volume';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
-import { build as buildV4, find_tw_candidates, optimize as optimizeV4 } from '@/packages/core/tailwindcss-v4';
+import { compile as buildV4, find_tw_candidates, optimize as optimizeV4, loadSource } from '@/packages/core/tailwindcss-v4';
 import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwindcss-v3';
 
 const api = useApi();
@@ -75,7 +75,6 @@ export async function buildCache(opts) {
 
     await Promise.all(promises);
 
-    logStore.add({ message: 'Scanning complete', type: 'success' });
 
     const contents = content_pool.map((c) => {
         let content = atob(c.content);
@@ -86,8 +85,6 @@ export async function buildCache(opts) {
 
         return unescape(content);
     });
-
-    logStore.add({ message: 'Building cache...', type: 'info' });
 
     let normal = null;
     let minified = null;
@@ -101,18 +98,27 @@ export async function buildCache(opts) {
             candidates_pool.push(...candidates);
         });
 
-        // convert to set to remove duplicates, then back to array
-        const candidates = Array.from(new Set(candidates_pool));
-
-        const result = await buildV4({
-            candidates: candidates,
+        const compiled = await buildV4({
+            // candidates: candidates,
             entrypoint: '/main.css',
             volume: volumeStore.getKVEntries(),
         });
 
+        // convert to set to remove duplicates, then back to array
+        let candidates = [...new Set([...candidates_pool, ...await loadSource(compiled.globs)])];
+
+        logStore.add({ message: 'Scanning complete', type: 'success' });
+
+        logStore.add({ message: 'Building cache...', type: 'info' });
+
+        const result = compiled.build(candidates);
+
         normal = (await optimizeV4(result)).css;
         minified = (await optimizeV4(result, true)).css;
     } else if (options.tailwindcss_version === 3) {
+        logStore.add({ message: 'Scanning complete', type: 'success' });
+        logStore.add({ message: 'Building cache...', type: 'info' });
+
         const result = await buildV3({
             entrypoint: {
                 css: '/main.css',

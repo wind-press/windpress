@@ -1,4 +1,4 @@
-import { compile } from '@tailwindcss/root/packages/tailwindcss/src';
+import { compile as twCompile } from '@tailwindcss/root/packages/tailwindcss/src';
 import { bundle } from './bundle.js';
 import { loadModule } from './module.js';
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
@@ -14,6 +14,11 @@ import init, { Features, transform } from 'lightningcss-wasm';
  * @returns {Promise<string>}
  */
 export async function build({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts } = {}) {
+    let compiled = await compile({ candidates, entrypoint, volume, ...opts });
+    return compiled.build(candidates);
+}
+
+export async function compile({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts } = {}) {
     opts = { candidates, entrypoint, volume, ...opts };  
 
     const bundleResult = await bundle({
@@ -21,9 +26,9 @@ export async function build({ candidates = [], entrypoint = '/main.css', volume 
         volume: opts.volume
     });
 
-    return (await compile(bundleResult.css, {
+    return await twCompile(bundleResult.css, {
         loadModule: async (modulePath, base, resourceHint) => loadModule(modulePath, base, resourceHint, opts.volume)
-    })).build(opts.candidates);
+    });
 }
 
 /**
