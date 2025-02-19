@@ -3,7 +3,15 @@ import { minimatch } from 'minimatch';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useApi } from '@/dashboard/library/api';
 
-const api = useApi();
+// temporary fix for the issue with the rest_api data not being available in some page builders' editor
+let api;
+function getApi() {
+    if (!api) {
+        api = useApi();
+    }
+
+    return api;
+}
 
 export async function loadSource(globs) {
     const logStore = useLogStore();
@@ -90,7 +98,7 @@ async function httpFileProvider(glob) {
 async function wpContentProvider(glob) {
     let sourcePath = glob.pattern.slice(String('wp-content:').length);
 
-    const scan = await api
+    const scan = await getApi()
         .post('admin/local-file-provider/scan', {
             path: sourcePath,
         })
