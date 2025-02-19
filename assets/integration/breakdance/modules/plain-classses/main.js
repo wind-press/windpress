@@ -18,7 +18,8 @@ import autosize from 'autosize';
 import Tribute from 'tributejs';
 import { debounce, set } from 'lodash-es';
 
-import { createHighlighterCore, loadWasm } from 'shiki/core';
+import { createHighlighterCore } from 'shiki/core';
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
 import { bdeV, bdeIframe, bdeIframeCanvas, bdeIframeV } from '@/integration/breakdance/constant.js';
@@ -26,7 +27,6 @@ import { bdeV, bdeIframe, bdeIframeCanvas, bdeIframeV } from '@/integration/brea
 let shikiHighlighter = null;
 
 (async () => {
-    await loadWasm(import('shiki/wasm'));
     shikiHighlighter = await createHighlighterCore({
         themes: [
             import('shiki/themes/dark-plus.mjs'),
@@ -35,6 +35,7 @@ let shikiHighlighter = null;
         langs: [
             import('shiki/langs/css.mjs'),
         ],
+        engine: createOnigurumaEngine(import('shiki/wasm')),
     });
 })();
 

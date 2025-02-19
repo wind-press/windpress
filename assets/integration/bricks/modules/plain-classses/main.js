@@ -17,7 +17,8 @@ import { nextTick, ref, watch } from 'vue';
 import autosize from 'autosize';
 import Tribute from 'tributejs';
 
-import { createHighlighterCore, loadWasm } from 'shiki/core';
+import { createHighlighterCore } from 'shiki/core';
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
 import { brxGlobalProp, brxIframeGlobalProp, brxIframe, settingsState } from '@/integration/bricks/constant.js';
@@ -27,7 +28,6 @@ import { debounce } from 'lodash-es';
 let shikiHighlighter = null;
 
 (async () => {
-    await loadWasm(import('shiki/wasm'));
     shikiHighlighter = await createHighlighterCore({
         themes: [
             import('shiki/themes/dark-plus.mjs'),
@@ -36,6 +36,7 @@ let shikiHighlighter = null;
         langs: [
             import('shiki/langs/css.mjs'),
         ],
+        engine: createOnigurumaEngine(import('shiki/wasm')),
     });
 })();
 

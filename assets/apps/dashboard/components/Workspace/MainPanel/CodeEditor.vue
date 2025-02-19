@@ -128,6 +128,10 @@ function handleEditorMount(editor, monaco) {
                                             name: 'Docs: Functions & Directives',
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#plugin-directive',
                                         },
+                                        {
+                                            name: 'Docs: Tailwind CSS plugins',
+                                            url: 'https://wind.press/docs/configuration/file-main-css#tailwind-css-plugins',
+                                        },
                                     ],
                                 },
                                 {
@@ -138,6 +142,10 @@ function handleEditorMount(editor, monaco) {
                                         {
                                             name: 'Docs: Functions & Directives',
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#config-directive',
+                                        },
+                                        {
+                                            name: 'Docs: Tailwind CSS configuration',
+                                            url: 'https://wind.press/docs/configuration/file-main-css#tailwind-css-configuration',
                                         }
                                     ],
                                 },
@@ -193,6 +201,17 @@ function handleEditorMount(editor, monaco) {
                                         {
                                             name: 'Docs: Functions & Directives',
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#variant-directive',
+                                        },
+                                    ],
+                                },
+                                {
+                                    name: '@source',
+                                    status: 'standard',
+                                    description: 'Use the `@source` directive to scan additional source files.',
+                                    references: [
+                                        {
+                                            name: 'Docs: Scanning additional Sources',
+                                            url: 'https://wind.press/docs/configuration/file-main-css#scanning-additional-sources',
                                         },
                                     ],
                                 },

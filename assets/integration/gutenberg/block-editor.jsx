@@ -2,7 +2,9 @@ import WindPressIconOriginal from '~/windpress.svg?react';
 import './block-editor.scss';
 
 import tippy, { followCursor } from 'tippy.js';
-import { createHighlighterCore, loadWasm } from 'shiki/core';
+import { createHighlighterCore } from 'shiki/core';
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
+
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, PanelRow, ButtonGroup, TextareaControl, Button } from '@wordpress/components';
@@ -24,7 +26,6 @@ const WindPressIcon = (props) => {
 };
 
 (async () => {
-    await loadWasm(import('shiki/wasm'));
     shikiHighlighter = await createHighlighterCore({
         themes: [
             import('shiki/themes/dark-plus.mjs'),
@@ -33,6 +34,7 @@ const WindPressIcon = (props) => {
         langs: [
             import('shiki/langs/css.mjs'),
         ],
+        engine: createOnigurumaEngine(import('shiki/wasm')),
     });
 })();
 
