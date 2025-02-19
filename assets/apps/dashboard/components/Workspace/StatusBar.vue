@@ -1,7 +1,7 @@
 <script setup>
 import { __ } from '@wordpress/i18n';
 import dayjs from 'dayjs';
-import { computed } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useNotificationStore } from '@/dashboard/stores/notification';
 import { useSettingsStore } from '@/dashboard/stores/settings';
@@ -26,6 +26,21 @@ function rebuildCache() {
         }
     });
 }
+
+// Scroll to the bottom of the log history panel when new logs are added
+const logHistoryPanel = ref(null);
+watch(log.logs, () => {
+    if (logHistoryPanel.value) {
+        let isScrolledToBottom = logHistoryPanel.value.scrollHeight - logHistoryPanel.value.clientHeight <= logHistoryPanel.value.scrollTop + 1;
+        // need to wait for the next tick to ensure the log history panel is rendered
+        nextTick(() => {
+            if (isScrolledToBottom) {
+                logHistoryPanel.value.scrollTop = logHistoryPanel.value.scrollHeight - logHistoryPanel.value.clientHeight;
+            }
+        });
+
+    }
+});
 </script>
 
 <template>
@@ -48,7 +63,7 @@ function rebuildCache() {
 
                     <template #popper>
                         <div>
-                            <div v-if="log.logs.length > 0" role="group" class="flex flex:column bg:editor-background font:14 text:foreground min-w:120 p:4 w:auto max-w:900 max-h:300 overflow:auto">
+                            <div ref="logHistoryPanel" v-if="log.logs.length > 0" role="group" class="flex flex:column bg:editor-background font:14 text:foreground min-w:120 p:4 w:auto max-w:900 max-h:300 overflow:auto">
                                 <div v-for="history in log.logs" :key="history.id" class="font:mono">
                                     <span :title="history.id" class="text:foreground/.5">[{{ new dayjs(history.timestamp).format('HH:mm:ss.SSS') }}]</span>
                                     <span>
