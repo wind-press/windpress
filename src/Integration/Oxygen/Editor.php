@@ -48,14 +48,6 @@ class Editor
         ]);
 
         wp_localize_script($handle, 'windpressoxygen', [
-            '_version' => WIND_PRESS::VERSION,
-            '_wpnonce' => wp_create_nonce(WIND_PRESS::WP_OPTION),
-            'rest_api' => [
-                'nonce' => wp_create_nonce('wp_rest'),
-                'root' => esc_url_raw(rest_url()),
-                'namespace' => WIND_PRESS::REST_NAMESPACE,
-                'url' => esc_url_raw(rest_url(WIND_PRESS::REST_NAMESPACE)),
-            ],
             'assets' => [
                 'url' => AssetVite::asset_base_url(),
             ],
