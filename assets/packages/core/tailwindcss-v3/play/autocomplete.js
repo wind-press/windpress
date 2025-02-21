@@ -1,7 +1,7 @@
 import { set } from 'lodash-es';
 import Fuse from 'fuse.js';
 import { doComplete } from 'https://esm.sh/tailwindcss-language-service';
-import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
+import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
 import { getTextDocument, stateFromConfig } from '../intellisense';
 import { resolveConfig } from '../resolve-config';
 

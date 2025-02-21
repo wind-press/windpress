@@ -1,17 +1,13 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/root/packages/tailwindcss/src';
 import { loadModule } from './module';
-import { bundle } from './bundle';
+import { loadStylesheet } from './stylesheet';
 
 export async function loadDesignSystem({ entrypoint = '/main.css', volume = {}, ...opts } = {}) {
     opts = { entrypoint, volume, ...opts };  
 
-    const bundleResult = await bundle({
-        entrypoint: opts.entrypoint,
-        volume: opts.volume
-    });
-
-    return __unstable__loadDesignSystem(bundleResult.css, {
+    return __unstable__loadDesignSystem(opts.volume[opts.entrypoint], {
         ...opts,
-        loadModule: async (modulePath, base, resourceHint) => loadModule(modulePath, base, resourceHint, opts.volume)
+        loadModule: async (modulePath, base, resourceHint) => loadModule(modulePath, base, resourceHint, opts.volume),
+        loadStylesheet: async (id, base) => loadStylesheet(id, base, opts.volume)
     });
 }

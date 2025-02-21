@@ -1,8 +1,8 @@
-import { compile as twCompile } from '@tailwindcss/root/packages/tailwindcss/src';
-import { bundle } from './bundle.js';
+import { compile as _compile } from '@tailwindcss/root/packages/tailwindcss/src';
 import { loadModule } from './module.js';
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
 import init, { Features, transform } from 'lightningcss-wasm';
+import { loadStylesheet } from './stylesheet.js';
 
 /**
  * Build the CSS
@@ -19,15 +19,11 @@ export async function build({ candidates = [], entrypoint = '/main.css', volume 
 }
 
 export async function compile({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts } = {}) {
-    opts = { candidates, entrypoint, volume, ...opts };  
+    opts = { candidates, entrypoint, volume, ...opts };
 
-    const bundleResult = await bundle({
-        entrypoint: opts.entrypoint,
-        volume: opts.volume
-    });
-
-    return await twCompile(bundleResult.css, {
-        loadModule: async (modulePath, base, resourceHint) => loadModule(modulePath, base, resourceHint, opts.volume)
+    return await _compile(opts.volume[opts.entrypoint], {
+        loadModule: async (modulePath, base, resourceHint) => loadModule(modulePath, base, resourceHint, opts.volume),
+        loadStylesheet: async (id, base) => loadStylesheet(id, base, opts.volume)
     });
 }
 
@@ -46,20 +42,20 @@ export async function optimize(css, minify = false) {
         minify,
         sourceMap: false,
         drafts: {
-            customMedia: true
+            customMedia: true,
         },
         nonStandard: {
-            deepSelectorCombinator: true
+            deepSelectorCombinator: true,
         },
         include: Features.Nesting,
-        exclude: Features.LogicalProperties,
+        exclude: Features.LogicalProperties | Features.DirSelector | Features.LightDark,
         targets: {
             safari: (16 << 16) | (4 << 8),
             ios_saf: (16 << 16) | (4 << 8),
             firefox: 128 << 16,
-            chrome: 120 << 16,
+            chrome: 111 << 16,
         },
-        errorRecovery: true
+        errorRecovery: true,
     });
 
     return {

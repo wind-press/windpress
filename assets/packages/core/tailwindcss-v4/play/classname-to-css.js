@@ -1,7 +1,7 @@
 import { loadDesignSystem } from '../design-system';
 import { set } from 'lodash-es';
 import { candidatesToCss } from '../intellisense';
-import { decodeVFSContainer } from '../bundle';
+import { decodeVFSContainer } from '../vfs';
 
 const vfsContainer = document.querySelector('script#windpress\\:vfs[type="text/plain"]');
 

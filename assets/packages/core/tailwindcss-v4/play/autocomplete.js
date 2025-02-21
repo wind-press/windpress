@@ -2,7 +2,7 @@ import Fuse from 'fuse.js';
 import { set } from 'lodash-es';
 import { loadDesignSystem } from '../design-system';
 import { getClassList } from '../intellisense';
-import { decodeVFSContainer } from '../bundle';
+import { decodeVFSContainer } from '../vfs';
 
 let classLists = [];
 let variableLists = [];

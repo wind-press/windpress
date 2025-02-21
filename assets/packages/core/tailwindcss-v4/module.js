@@ -1,6 +1,6 @@
 import path from 'path';
 import { encodeBase64 } from '@std/encoding/base64';
-import { isValidUrl } from './bundle';
+import { isValidUrl } from './utils';
 
 export async function loadModule(modulePath, base, resourceHint, volume = {}) {
     let module;

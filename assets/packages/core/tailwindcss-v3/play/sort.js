@@ -1,7 +1,7 @@
 import { set } from 'lodash-es';
 import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils';
 import { generateRules } from 'https://esm.sh/tailwindcss@3/src/lib/generateRules';
-import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
+import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
 import { bigSign } from '@/packages/core/tailwindcss-v4/intellisense';
 import { resolveConfig } from '../resolve-config';
 

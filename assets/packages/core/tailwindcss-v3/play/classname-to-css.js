@@ -3,7 +3,7 @@ import { set } from 'lodash-es';
 import evaluateTailwindFunctions from 'https://esm.sh/tailwindcss@3/src/lib/evaluateTailwindFunctions';
 import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils';
 import { generateRules as twGenerateRules } from 'https://esm.sh/tailwindcss@3/src/lib/generateRules';
-import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
+import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
 import { addPixelEquivalentsToValue, bigSign } from '@/packages/core/tailwindcss-v4/intellisense';
 import { resolveConfig } from '../resolve-config';
 

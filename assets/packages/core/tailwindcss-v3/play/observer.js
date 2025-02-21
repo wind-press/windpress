@@ -1,6 +1,6 @@
 import { encodeBase64 } from '@std/encoding/base64';
 import { build } from '../build';
-import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4/bundle';
+import { decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
 import { resolveConfig } from '../resolve-config';
 
 /**
