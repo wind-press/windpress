@@ -5,8 +5,8 @@ import { isValidUrl } from './utils';
 export async function loadModule(modulePath, base, resourceHint, volume = {}) {
     let module;
 
-    if (modulePath.startsWith('./')) {
-        module = await importLocalModule(modulePath, base, resourceHint, volume);
+    if (modulePath.startsWith('.') || modulePath.startsWith('/')) {
+        return importLocalModule(modulePath, base, resourceHint, volume);
     } else if (resourceHint === 'plugin') {
         if (!modulePath.startsWith('http')) {
             modulePath = `https://esm.sh/${modulePath}`;
@@ -36,16 +36,18 @@ export async function importCdnModule(path, base, resourceHint) {
 }
 
 export async function importLocalModule(modulePath, base, resourceHint, volume = {}) {
-    // volume are key-value pairs (relative_path: content).
-    let _moduleContent = volume[path.resolve('/', modulePath)];
+    let _path = path.resolve(base, modulePath);
 
-    if (!_moduleContent) {
+    if (!volume[_path]) {
         throw new Error(`The ${resourceHint} file "${path.resolve('/', modulePath)}" does not exist in the volume.`);
     }
 
-    _moduleContent = prepareModuleContent(_moduleContent, modulePath, volume);
+    let _moduleContent = prepareModuleContent(volume[_path], modulePath, volume);
 
-    return await import(/* @vite-ignore */ `data:text/javascript;base64,${encodeBase64(_moduleContent)}`).then((m) => m.default ?? m);
+    return {
+        module: await import(/* @vite-ignore */ `data:text/javascript;base64,${encodeBase64(_moduleContent)}`).then((m) => m.default ?? m),
+        base: path.dirname(modulePath),
+    }
 }
 
 export function prepareModuleContent(moduleContent, currentPath, volume = {}) {

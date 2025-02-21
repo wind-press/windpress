@@ -16,7 +16,7 @@ async function httpsProvider(url) {
     return await fetch(url).then((res) => res.text());
 }
 
-export async function loadStylesheet(id, basedir, volume = {}) {
+export async function loadStylesheet(id, base, volume = {}) {
     volume = {
         ...volume,
         ...twVolume
@@ -31,7 +31,7 @@ export async function loadStylesheet(id, basedir, volume = {}) {
     } else {
         // Volume: resolve relative path as absolute path
         if (id.startsWith('.')) {
-            id = path.resolve(path.dirname(basedir), id);
+            id = path.resolve(path.dirname(base), id);
 
             /*
              * Resolve default import if no extension is specified
@@ -50,7 +50,7 @@ export async function loadStylesheet(id, basedir, volume = {}) {
         }
 
         // check if the file is in the volume
-        let _path = path.resolve(basedir, id);
+        let _path = path.resolve(base, id);
 
         if (volume[_path]) {
             return {
@@ -66,7 +66,7 @@ export async function loadStylesheet(id, basedir, volume = {}) {
             id = id.concat('/index.css')
         }
 
-        _path = path.join(basedir, id);
+        _path = path.join(base, id);
 
         if (volume[_path]) {
             return {
