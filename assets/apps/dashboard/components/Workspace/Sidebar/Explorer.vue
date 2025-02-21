@@ -117,7 +117,7 @@ function doImport(event) {
         return;
     }
 
-    if(!confirm(__('This will overwrite all existing files. Are you sure you want to continue?', 'windpress'))) {
+    if (!confirm(__('This will overwrite all existing files. Are you sure you want to continue?', 'windpress'))) {
         return;
     }
 
@@ -188,7 +188,7 @@ onMounted(() => {
             <label for="import" class="flex button button-secondary b:0! bg:transparent! bg:button-secondaryHoverBackground!:hover fg:foreground! my:auto width:auto h:auto min-h:initial! align-items:center" v-ripple>
                 <i-fa6-solid-upload class="iconify m:4" />
             </label>
-            <input id="import" type="file" @change="doImport" style="display:none"  accept=".windpress" />
+            <input id="import" type="file" @change="doImport" style="display:none" accept=".windpress" />
         </div>
     </div>
 
@@ -206,7 +206,7 @@ onMounted(() => {
                         <i-fluent-document-css-24-filled class="iconify fg:#264de4" />
                     </template>
                 </div>
-                <div class="flex-grow:1">
+                <div class="flex-grow:1 overflow:hidden white-space:nowrap text-overflow:ellipsis" :title="entry.relative_path">
                     {{ entry.relative_path }}
                     <span v-if="entry.relative_path === 'main.css'" class="fg:gray-50 fg:gray-30@dark">
                         [v{{ Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) }}]

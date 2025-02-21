@@ -33,7 +33,7 @@ importers:
         version: '@jsr/std__html@1.0.3'
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
-        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/1d56525fa0a2d6ffe6debc586ddf4acfa5077057
+        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/62d3e74694b356e855bc7f3c99d1066a67f5717f
       '@vueuse/core':
         specifier: ^12.7.0
         version: 12.7.0(typescript@5.6.2)
@@ -1388,8 +1388,8 @@ packages:
   '@swc/types@0.1.17':
     resolution: {integrity: sha512-V5gRru+aD8YVyCOMAjMpWR1Ui577DD5KSJsHP8RAxopAH22jFz6GZd/qxqjO6MJHQhcsjvjOFXyDhyLQUnMveQ==}
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/1d56525fa0a2d6ffe6debc586ddf4acfa5077057':
-    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/1d56525fa0a2d6ffe6debc586ddf4acfa5077057}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/62d3e74694b356e855bc7f3c99d1066a67f5717f':
+    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/62d3e74694b356e855bc7f3c99d1066a67f5717f}
     version: 1.0.0
 
   '@tannin/compile@1.1.0':
@@ -5020,7 +5020,7 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/1d56525fa0a2d6ffe6debc586ddf4acfa5077057': {}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/62d3e74694b356e855bc7f3c99d1066a67f5717f': {}
 
   '@tannin/compile@1.1.0':
     dependencies:

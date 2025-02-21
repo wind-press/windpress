@@ -121,6 +121,11 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **New**: Upgraded to Tailwind CSS v4 (4.0.8 latest)
+* **Improve**: Better performance on the generating cache process 
+* **Change**: Generating the CSS cache will remove unused CSS variables. To always keep it, add them within the `@theme static { }` block in the `main.css` file. Alternatively, you can replace the `@import 'tailwindcss/theme.css' layer(theme);` code to `@import "tailwindcss/theme.css" layer(theme) theme(static);` on your `main.css` file.
+
 = 3.2.31 =
 * **Fix**: Simple File System imported data are not loaded correctly
 
@@ -130,7 +135,7 @@ Pro version 1.**1**.4
 
 = 3.2.29 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.6 latest)
-* **New**: The `@source` directive is now supported but differs from the official Tailwind CSS version. Please refer to our documentation for details.
+* **New**: The `@source` directive is now supported but differs from the official Tailwind CSS version. Please refer to [our documentation](https://wind.press/docs/configuration/file-main-css#scanning-additional-sources) for details.
 
 = 3.2.28 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.5 latest)
@@ -140,7 +145,6 @@ Pro version 1.**1**.4
 
 = 3.2.26 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.4 latest)
-* **Change**: Now, generating the CSS cache will only output used CSS variables. To safelist or always include specific CSS variables, add them within the `@theme static { }` block in the `main.css` file.
 
 = 3.2.25 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.3 latest)
