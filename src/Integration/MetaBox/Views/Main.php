@@ -49,6 +49,7 @@ class Main implements IntegrationInterface
             'name' => __('Meta Box Views', 'windpress'),
             'description' => __('Meta Box Views integration', 'windpress'),
             'callback' => Compile::class,
+            'enabled' => $this->is_enabled(),
         ];
 
         return $providers;

@@ -58,6 +58,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
 * [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
 * [Oxygen](https://oxygenbuilder.com/) — **Pro**
+* [WPCodeBox 2](https://wpcodebox.com/) — **Pro**
 
 Planned / In Progress
 
@@ -123,6 +124,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.8 latest)
+* **New**: [WPCodeBox 2](https://wpcodebox.com/) integration **[Pro]**
 * **Improve**: Better performance on the generating cache process 
 * **Change**: Generating the CSS cache will remove unused CSS variables. To always keep it, add them within the `@theme static { }` block in the `main.css` file. Alternatively, you can replace the `@import 'tailwindcss/theme.css' layer(theme);` code to `@import "tailwindcss/theme.css" layer(theme) theme(static);` on your `main.css` file.
 

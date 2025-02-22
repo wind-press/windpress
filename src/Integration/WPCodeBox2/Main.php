@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WindPress\WindPress\Integration\Timber;
+namespace WindPress\WindPress\Integration\WPCodeBox2;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
 use WindPress\WindPress\Utils\Config;
@@ -28,13 +28,13 @@ class Main implements IntegrationInterface
 
     public function get_name(): string
     {
-        return 'timber';
+        return 'wpcodebox2';
     }
 
     public function is_enabled(): bool
     {
         return (bool) apply_filters(
-            'f!windpress/integration/timber:enabled',
+            'f!windpress/integration/wpcodebox2:enabled',
             Config::get(sprintf(
                 'integration.%s.enabled',
                 $this->get_name()
@@ -46,8 +46,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => __('Timber', 'windpress'),
-            'description' => __('Timber integration', 'windpress'),
+            'name' => __('WPCodeBox 2', 'windpress'),
+            'description' => __('WPCodeBox 2 integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
         ];

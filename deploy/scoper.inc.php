@@ -213,6 +213,8 @@ return [
             '__BREAKDANCE_VERSION', // Breakdance
 
             'ELEMENTOR_VERSION', // Elementor
+
+            'WPCODEBOX2_VERSION', // WPCodeBox2
         ]
     ),
 

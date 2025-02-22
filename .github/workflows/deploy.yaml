@@ -57,7 +57,7 @@ jobs:
         - run: pnpm build
 
         # clean up the dev files
-        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc
+        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc jsconfig.json
         - run: rm -rf ecs.php rector.php
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping

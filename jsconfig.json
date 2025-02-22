@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "~/*": [
+                "./*"
+            ],
+            "@/dashboard/*": [
+                "./assets/apps/dashboard/*"
+            ],
+            "@/integration/*": [
+                "./assets/integration/*"
+            ],
+            "@/common/*": [
+                "./assets/common/*"
+            ],
+            "@/packages/*": [
+                "./assets/packages/*"
+            ]
+        }
+    }
+}

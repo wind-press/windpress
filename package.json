@@ -29,7 +29,7 @@
     "@iconify-json/tabler": "^1.2.16",
     "@kucrut/vite-for-wp": "^0.10.0",
     "@types/lodash": "^4.17.15",
-    "@types/node": "^22.13.4",
+    "@types/node": "^22.13.5",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-vue": "^5.2.1",
     "lightningcss": "^1.29.1",
