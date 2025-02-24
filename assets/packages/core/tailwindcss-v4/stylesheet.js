@@ -16,7 +16,9 @@ async function httpsProvider(url) {
     return await fetch(url).then((res) => res.text());
 }
 
-export async function loadStylesheet(id, base, volume = {}) {
+export async function loadStylesheet(id, base = '/', volume = {}) {
+    base = base || '/';
+
     volume = {
         ...volume,
         ...twVolume
@@ -63,12 +65,17 @@ export async function loadStylesheet(id, base, volume = {}) {
 
         /*
          * Resolve default import if no extension is specified
-         * */
-        if (!id.endsWith('.css')) {
-            id = id.concat('/index.css')
+         */
+
+        // consider it's a path of URL
+        let _url = new URL(id, 'https://esm.sh');
+        _path = _url.pathname;
+
+        if (!_path.endsWith('.css')) {
+            _path = _path.concat('/index.css')
         }
 
-        _path = path.join(base, id);
+        _path = path.join(base, _path);
 
         if (volume[_path]) {
             return {
@@ -79,9 +86,12 @@ export async function loadStylesheet(id, base, volume = {}) {
 
         // CDN
 
+        // join the _path with the search params if any
+        _path = _path.concat(_url.search);
+
         // fetch and store in volume
-        await fetch(`https://esm.sh/${_path}`)
-            .then((response) => {
+        await fetch(`https://esm.sh${_path}`)
+            .then(async (response) => {
                 if (!response.ok) {
                     throw new Error(
                         _id.startsWith('.')
@@ -90,7 +100,7 @@ export async function loadStylesheet(id, base, volume = {}) {
                     );
                 }
 
-                let data = response.text();
+                let data = await response.text();
 
                 data = data
                     // resolve the `@config '|"` imports paths to absolute paths with cdn
