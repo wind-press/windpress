@@ -1,7 +1,7 @@
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
 import init, { transform, browserslistToTargets } from 'lightningcss-wasm';
 import { compile } from './compile';
-import { version as tw3_version } from 'tailwindcss/package.json';
+import { version as tw3_version } from 'tailwindcss3/package.json';
 
 /**
  * Build the CSS

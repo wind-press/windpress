@@ -1,8 +1,10 @@
 import path from 'path';
-import twTheme from '@tailwindcss/root/packages/tailwindcss/theme.css?inline';
-import twPreflight from '@tailwindcss/root/packages/tailwindcss/preflight.css?inline';
-import twUtilities from '@tailwindcss/root/packages/tailwindcss/utilities.css?inline';
-import twIndex from '@tailwindcss/root/packages/tailwindcss/index.css?inline';
+
+import twPreflight from 'tailwindcss/preflight.css?inline';
+import twUtilities from 'tailwindcss/utilities.css?inline';
+import twIndex from 'tailwindcss/index.css?inline';
+import twTheme from 'tailwindcss/theme.css?inline';
+
 import { isValidUrl } from './utils';
 
 const twVolume = {

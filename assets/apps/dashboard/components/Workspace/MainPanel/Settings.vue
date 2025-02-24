@@ -10,8 +10,8 @@ import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useLogStore } from '@/dashboard/stores/log';
 import { useNotifier } from '@/dashboard/library/notifier';
 import { useApi } from '@/dashboard/library/api';
-import { version as tw4_version } from '@tailwindcss/root/packages/tailwindcss/package.json';
-import { version as tw3_version } from 'tailwindcss/package.json';
+import { version as tw4_version } from 'tailwindcss/package.json';
+import { version as tw3_version } from 'tailwindcss3/package.json';
 
 const notifier = useNotifier();
 const licenseStore = useLicenseStore();

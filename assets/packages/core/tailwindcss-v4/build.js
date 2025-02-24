@@ -1,4 +1,4 @@
-import { compile as _compile } from '@tailwindcss/root/packages/tailwindcss/src';
+import { compile as _compile } from 'tailwindcss';
 import { loadModule } from './module.js';
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
 import init, { Features, transform } from 'lightningcss-wasm';

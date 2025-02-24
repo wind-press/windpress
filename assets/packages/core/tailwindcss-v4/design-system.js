@@ -1,4 +1,4 @@
-import { __unstable__loadDesignSystem } from '@tailwindcss/root/packages/tailwindcss/src';
+import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { loadModule } from './module';
 import { loadStylesheet } from './stylesheet';
 

@@ -36,7 +36,7 @@ export async function importCdnModule(path, base, resourceHint) {
 }
 
 export async function importLocalModule(modulePath, base, resourceHint, volume = {}) {
-    let _path = path.resolve(base, modulePath);
+    let _path = path.resolve(base ?? '/', modulePath);
 
     if (!volume[_path]) {
         throw new Error(`The ${resourceHint} file "${path.resolve('/', modulePath)}" does not exist in the volume.`);
