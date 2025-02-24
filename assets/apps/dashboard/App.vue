@@ -46,7 +46,7 @@ channel.addEventListener('message', async (e) => {
                 notifier.success(`Cache generated in <b>${prettyMilliseconds(timeEnd - timeStart)}</b>`);
             },
             err => {
-                notifier.alert('Failed to generate cache');
+                notifier.alert(`Failed to generate cache. Check the Browser's Console for more information.`);
                 console.error('err', err);
             },
             'Generating cache...',

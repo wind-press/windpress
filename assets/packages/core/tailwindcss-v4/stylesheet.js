@@ -22,6 +22,8 @@ export async function loadStylesheet(id, base, volume = {}) {
         ...twVolume
     };
 
+    let _id = id;
+
     if (isValidUrl(id)) {
         return {
             base: path.dirname(id),
@@ -79,8 +81,17 @@ export async function loadStylesheet(id, base, volume = {}) {
 
         // fetch and store in volume
         await fetch(`https://esm.sh/${_path}`)
-            .then((response) => response.text())
-            .then((data) => {
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(
+                        _id.startsWith('.')
+                            ? `Cannot find stylesheet '${_id}' on the Simple File System`
+                            : `Cannot find stylesheet '${_id}' on the CDN`
+                    );
+                }
+
+                let data = response.text();
+
                 data = data
                     // resolve the `@config '|"` imports paths to absolute paths with cdn
                     .replace(/@config\s+['|"](.*)['|"]/g, (match, p1) => {
