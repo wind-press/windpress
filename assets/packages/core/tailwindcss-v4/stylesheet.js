@@ -78,7 +78,7 @@ export async function loadStylesheet(id, base, volume = {}) {
         // CDN
 
         // fetch and store in volume
-        await fetch(`https://esm.sh${_path}`)
+        await fetch(`https://esm.sh/${_path}`)
             .then((response) => response.text())
             .then((data) => {
                 data = data

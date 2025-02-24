@@ -110,8 +110,8 @@ importers:
         specifier: ^0.52.2
         version: 0.52.2
       nanoid:
-        specifier: ^5.1.0
-        version: 5.1.0
+        specifier: ^5.1.2
+        version: 5.1.2
       pinia:
         specifier: ^3.0.1
         version: 3.0.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
@@ -214,7 +214,7 @@ importers:
         version: 1.2.16
       '@kucrut/vite-for-wp':
         specifier: ^0.10.0
-        version: 0.10.0(rollup-plugin-external-globals@0.13.0(rollup@4.34.8))(vite-plugin-external@6.0.0)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
+        version: 0.10.0(rollup-plugin-external-globals@0.13.0(rollup@4.34.8))(vite-plugin-external@6.0.1)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
       '@types/lodash':
         specifier: ^4.17.15
         version: 4.17.15
@@ -252,8 +252,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@22.13.5)(jiti@1.21.7)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0)
       vite-plugin-external:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^6.0.1
+        version: 6.0.1
       vite-plugin-https-imports:
         specifier: https://pkg.pr.new/wind-press/vite-plugin-https-imports@28e1201
         version: https://pkg.pr.new/wind-press/vite-plugin-https-imports@28e1201
@@ -2408,8 +2408,8 @@ packages:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
 
-  get-intrinsic@1.2.7:
-    resolution: {integrity: sha512-VW6Pxhsrk0KAOqs3WEd0klDiF/+V7gQOpAvY1jVU/LHmaD/kQO4523aiJuikX/QAKYiW6x8Jh+RJej1almdtCA==}
+  get-intrinsic@1.3.0:
+    resolution: {integrity: sha512-9fSjSaos/fRIVIp+xSJlE6lfwhES7LNtKaCBIamHsjr2na1BiABJPo0mOjjz8GJDURarmCPGqaiVg5mfjb98CQ==}
     engines: {node: '>= 0.4'}
 
   get-nonce@1.0.1:
@@ -2916,8 +2916,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@5.1.0:
-    resolution: {integrity: sha512-zDAl/llz8Ue/EblwSYwdxGBYfj46IM1dhjVi8dyp9LQffoIGxJEAHj2oeZ4uNcgycSRcQ83CnfcZqEJzVDLcDw==}
+  nanoid@5.1.2:
+    resolution: {integrity: sha512-b+CiXQCNMUGe0Ri64S9SXFcP9hogjAJ2Rd6GdVxhPLRm7mhGaM7VgOvCAJ1ZshfHbqVDI3uqTI5C8/GaKuLI7g==}
     engines: {node: ^18 || >=20}
     hasBin: true
 
@@ -3260,8 +3260,8 @@ packages:
   randomfill@1.0.4:
     resolution: {integrity: sha512-87lcbR8+MhcWcUiQ+9e+Rwx8MyR2P7qnt15ynUlbm3TU/fjbgz4GsvfSUDTemtCCtVCqb4ZcEFlyPNTh9bBTLw==}
 
-  re-resizable@6.10.3:
-    resolution: {integrity: sha512-zvWb7X3RJMA4cuSrqoxgs3KR+D+pEXnGrD2FAD6BMYAULnZsSF4b7AOVyG6pC3VVNVOtlagGDCDmZSwWLjjBBw==}
+  re-resizable@6.11.0:
+    resolution: {integrity: sha512-XwaQX5Yk+JEvyGwX1nlLWaZUDr+8gz+Joys5lF4i+7Jy33wShJ0VYQUoFceiSKqUnjVEEz+zf3YkCTyT04R3AA==}
     peerDependencies:
       react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -3846,8 +3846,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vite-plugin-external@6.0.0:
-    resolution: {integrity: sha512-wE2Li+FJ24zmGC8x7jz/Ow2REN+bTnF3WI2xqYx5RipCeV9yJuMzvrignnPPEDgc2WAJtHsqDZm3FCC4Dmcryg==}
+  vite-plugin-external@6.0.1:
+    resolution: {integrity: sha512-6CxUTn7FJgK6rErNTjfD2eLoWm0UjfkvrOpl5viWV0j9oGk9rXkLHOFu3ZMXJpDY6M1uOIHx4btmvEAY7d8xfA==}
     engines: {node: '>=14.18.0', vite: '>=3.1.0'}
 
   vite-plugin-https-imports@https://pkg.pr.new/wind-press/vite-plugin-https-imports@28e1201:
@@ -4484,12 +4484,12 @@ snapshots:
 
   '@jsr/std__html@1.0.3': {}
 
-  '@kucrut/vite-for-wp@0.10.0(rollup-plugin-external-globals@0.13.0(rollup@4.34.8))(vite-plugin-external@6.0.0)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))':
+  '@kucrut/vite-for-wp@0.10.0(rollup-plugin-external-globals@0.13.0(rollup@4.34.8))(vite-plugin-external@6.0.1)(vite@6.1.1(@types/node@22.13.5)(jiti@1.21.7)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))':
     dependencies:
       vite: 6.1.1(@types/node@22.13.5)(jiti@1.21.7)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0)
     optionalDependencies:
       rollup-plugin-external-globals: 0.13.0(rollup@4.34.8)
-      vite-plugin-external: 6.0.0
+      vite-plugin-external: 6.0.1
 
   '@master/colors@2.1.0': {}
 
@@ -5423,7 +5423,7 @@ snapshots:
       is-plain-object: 5.0.0
       memize: 2.1.0
       path-to-regexp: 6.3.0
-      re-resizable: 6.10.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      re-resizable: 6.11.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       react-colorful: 5.6.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-dom: 19.0.0(react@19.0.0)
@@ -5876,13 +5876,13 @@ snapshots:
     dependencies:
       call-bind-apply-helpers: 1.0.2
       es-define-property: 1.0.1
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       set-function-length: 1.2.2
 
   call-bound@1.0.3:
     dependencies:
       call-bind-apply-helpers: 1.0.2
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
 
   callsites@3.1.0: {}
 
@@ -6224,7 +6224,7 @@ snapshots:
   es-set-tostringtag@2.1.0:
     dependencies:
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       has-tostringtag: 1.0.2
       hasown: 2.0.2
 
@@ -6360,7 +6360,7 @@ snapshots:
 
   get-caller-file@2.0.5: {}
 
-  get-intrinsic@1.2.7:
+  get-intrinsic@1.3.0:
     dependencies:
       call-bind-apply-helpers: 1.0.2
       es-define-property: 1.0.1
@@ -6866,7 +6866,7 @@ snapshots:
 
   nanoid@3.3.8: {}
 
-  nanoid@5.1.0: {}
+  nanoid@5.1.2: {}
 
   needle@3.3.1:
     dependencies:
@@ -7230,7 +7230,7 @@ snapshots:
       randombytes: 2.1.0
       safe-buffer: 5.2.1
 
-  re-resizable@6.10.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  re-resizable@6.11.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
@@ -7470,7 +7470,7 @@ snapshots:
       define-data-property: 1.1.4
       es-errors: 1.3.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       gopd: 1.2.0
       has-property-descriptors: 1.0.2
 
@@ -7511,14 +7511,14 @@ snapshots:
     dependencies:
       call-bound: 1.0.3
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       object-inspect: 1.13.4
 
   side-channel-weakmap@1.0.2:
     dependencies:
       call-bound: 1.0.3
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       object-inspect: 1.13.4
       side-channel-map: 1.0.1
 
@@ -7884,7 +7884,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-plugin-external@6.0.0:
+  vite-plugin-external@6.0.1:
     dependencies:
       '@types/fs-extra': 11.0.4
       '@types/node': 14.18.63
