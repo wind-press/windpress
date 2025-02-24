@@ -28,12 +28,18 @@ importers:
       '@nuxt/ui':
         specifier: 3.0.0-alpha.13
         version: 3.0.0-alpha.13(@babel/parser@7.26.9)(axios@1.7.9)(embla-carousel@8.5.2)(encoding@0.1.13)(radix-vue@1.9.16(vue@3.5.13(typescript@5.6.2)))(typescript@5.6.2)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.2))
+      '@nuxt/ui-pro':
+        specifier: 3.0.0-alpha.13
+        version: 3.0.0-alpha.13(@babel/parser@7.26.9)(axios@1.7.9)(embla-carousel@8.5.2)(encoding@0.1.13)(radix-vue@1.9.16(vue@3.5.13(typescript@5.6.2)))(typescript@5.6.2)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.2))
       '@std/encoding':
         specifier: npm:@jsr/std__encoding@^1.0.7
         version: '@jsr/std__encoding@1.0.7'
       '@std/html':
         specifier: npm:@jsr/std__html@^1.0.3
         version: '@jsr/std__html@1.0.3'
+      '@tailwindcss/postcss':
+        specifier: ^4.0.8
+        version: 4.0.8
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
         version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/604be562e3186338907fb290966400ce86dadf50
@@ -175,6 +181,9 @@ importers:
       vue-inline-svg:
         specifier: ^4.0.0
         version: 4.0.0(vue@3.5.13(typescript@5.6.2))
+      vue-router:
+        specifier: ^4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.2))
       yaml:
         specifier: ^2.7.0
         version: 2.7.0
@@ -824,6 +833,11 @@ packages:
   '@nuxt/schema@3.15.4':
     resolution: {integrity: sha512-pAYZb/3ocSC/db1EFd5y+otmgHqUkvfxfhd9EknDB5DygnJuOIQNuGJ7LMJM6S2c0DYgBIHOdEelLxKHOjwbgQ==}
     engines: {node: ^14.18.0 || >=16.10.0}
+
+  '@nuxt/ui-pro@3.0.0-alpha.13':
+    resolution: {integrity: sha512-Z+IM39hCFX4npb7TKgBxT09UDWx9WiKZKc4rwSl3R0fFLEs8vnRVpnq17cMj6bhQMhhmBP4ZUYGAaPLFzR3V4Q==}
+    peerDependencies:
+      typescript: ^5.6.3
 
   '@nuxt/ui@3.0.0-alpha.13':
     resolution: {integrity: sha512-RjCR5P1jdgsmVPgaIsaZaTT20r+EN3Qt3cQlu5yiE/9VhrF5YZWfxcNKIGdDqgRObRKgpV0GlaxYVZiDu9wAmQ==}
@@ -1640,6 +1654,9 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
+  '@types/parse-path@7.0.3':
+    resolution: {integrity: sha512-LriObC2+KYZD3FzCrgWGv/qufdUy4eXrxcLgQMfYXgPbLIecKIsVBaQgUPmxSSLcjmYbDTQbMgr6qr6l/eb7Bg==}
+
   '@types/prop-types@15.7.14':
     resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
 
@@ -1706,6 +1723,9 @@ packages:
 
   '@vue/compiler-ssr@3.5.13':
     resolution: {integrity: sha512-wMH6vrYHxQl/IybKJagqbquvxpWCuVYpoUJfCqFZwa/JY1GdATAQ+TgVtgrwwMZ0D07QhA99rs/EAAWfvG6KpA==}
+
+  '@vue/devtools-api@6.6.4':
+    resolution: {integrity: sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==}
 
   '@vue/devtools-api@7.7.2':
     resolution: {integrity: sha512-1syn558KhyN+chO5SjlZIwJ8bV/bQ1nOVTG66t2RbG66ZGekyiYNmRO7X9BJCXQqPsFHlnksqvPhce2qpzxFnA==}
@@ -2770,6 +2790,16 @@ packages:
     resolution: {integrity: sha512-r1ekGw/Bgpi3HLV3h1MRBIlSAdHoIMklpaQ3OQLFcRw9PwAj2rqigvIbg+dBUI51OxVI2jsEtDywDBjSiuf7Ug==}
     hasBin: true
 
+  git-config-path@2.0.0:
+    resolution: {integrity: sha512-qc8h1KIQbJpp+241id3GuAtkdyJ+IK+LIVtkiFTRKRrmddDzs3SI9CvP1QYmWBFvm1I/PWRwj//of8bgAc0ltA==}
+    engines: {node: '>=4'}
+
+  git-up@8.0.1:
+    resolution: {integrity: sha512-2XFu1uNZMSjkyetaF+8rqn6P0XqpMq/C+2ycjI6YwrIKcszZ5/WR4UubxjN0lILOKqLkLaHDaCr2B6fP1cke6g==}
+
+  git-url-parse@16.0.1:
+    resolution: {integrity: sha512-mcD36GrhAzX5JVOsIO52qNpgRyFzYWRbU1VSRFCvJt1IJvqfvH427wWw/CFqkWvjVPtdG5VTx4MKUeC5GeFPDQ==}
+
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -2912,6 +2942,9 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
+  ini@1.3.8:
+    resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
+
   iron-webcrypto@1.2.1:
     resolution: {integrity: sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==}
 
@@ -2983,6 +3016,9 @@ packages:
   is-regex@1.2.1:
     resolution: {integrity: sha512-MjYsKHO5O7mCsmRGxWcLWheFqN9DJ/2TmngvjKXihe6efViPqc274+Fx/4fYj/r03+ESvBdTXK0V6tA3rgez1g==}
     engines: {node: '>= 0.4'}
+
+  is-ssh@1.4.1:
+    resolution: {integrity: sha512-JNeu1wQsHjyHgn9NcWTaXq6zWSR6hqE0++zhfZlkFBbScNkyvxCdeV8sRkSBaeLKxmbpR21brail63ACNxJ0Tg==}
 
   is-stream@3.0.0:
     resolution: {integrity: sha512-LnQR4bZ9IADDRSkvpqMGvt/tEJWclzklNgSw48V5EAaAeDd6qGvN8ei6k5p0tvxSR171VmGyHuTiAOfxAbr8kA==}
@@ -3520,6 +3556,10 @@ packages:
     resolution: {integrity: sha512-CTM5kuWR3sx9IFamcl5ErfPl6ea/N8IYwiJ+vpeB2g+1iknv7zBl5uPwbMbRVznRVbrNY6lGuDoE5b30grmbqg==}
     engines: {node: '>= 0.10'}
 
+  parse-git-config@3.0.0:
+    resolution: {integrity: sha512-wXoQGL1D+2COYWCD35/xbiKma1Z15xvZL8cI25wvxzled58V51SJM04Urt/uznS900iQor7QO04SgdfT/XlbuA==}
+    engines: {node: '>=8'}
+
   parse-json@5.2.0:
     resolution: {integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==}
     engines: {node: '>=8'}
@@ -3531,6 +3571,13 @@ packages:
   parse-node-version@1.0.1:
     resolution: {integrity: sha512-3YHlOa/JgH6Mnpr05jP9eDG254US9ek25LyIxZlDItp2iJtwyaXQb57lBYLdT3MowkUFYEV2XXNAYIPlESvJlA==}
     engines: {node: '>= 0.10'}
+
+  parse-path@7.0.1:
+    resolution: {integrity: sha512-6ReLMptznuuOEzLoGEa+I1oWRSj2Zna5jLWC+l6zlfAI4dbbSaIES29ThzuPkbhNahT65dWzfoZEO6cfJw2Ksg==}
+
+  parse-url@9.2.0:
+    resolution: {integrity: sha512-bCgsFI+GeGWPAvAiUv63ZorMeif3/U0zaXABGJbOWt5OH2KCaPHF6S+0ok4aqM9RuIPGyZdx9tR9l13PsW4AYQ==}
+    engines: {node: '>=14.13.0'}
 
   parsel-js@1.2.1:
     resolution: {integrity: sha512-omFBig09mUh/NjBGba4DxVFAsqCY4C/6UYIaJuDOxJw2GlpgUJdPlNF301971gCP3Gt727+F+NZIXN483VAKIg==}
@@ -3725,6 +3772,9 @@ packages:
 
   property-information@7.0.0:
     resolution: {integrity: sha512-7D/qOz/+Y4X/rzSB6jKxKUsQnphO046ei8qxG59mtM3RG3DHgTK81HrxrmoDVINJb8NKT5ZsRbwHvQ6B68Iyhg==}
+
+  protocols@2.0.2:
+    resolution: {integrity: sha512-hHVTzba3wboROl0/aWRRG9dMytgH6ow//STBZh43l/wQgmMhYhOFi0EHWAPtoCz9IAUymsyP0TSBHkhgMEGNnQ==}
 
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
@@ -4612,6 +4662,9 @@ packages:
   vscode-languageserver-textdocument@1.0.12:
     resolution: {integrity: sha512-cxWNPesCnQCcMPeenjKKsOCKQZ/L6Tv19DTRIGuLWe32lyzWhihGVJ/rcckZXJxfdKCFvRLS3fpBIsV/ZGX4zA==}
 
+  vue-component-type-helpers@2.2.4:
+    resolution: {integrity: sha512-F66p0XLbAu92BRz6kakHyAcaUSF7HWpWX/THCqL0TxySSj7z/nok5UUMohfNkkCm1pZtawsdzoJ4p1cjNqCx0Q==}
+
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
     engines: {node: '>=12'}
@@ -4632,6 +4685,11 @@ packages:
     resolution: {integrity: sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg==}
     peerDependencies:
       vue: ^3.0.0
+
+  vue-router@4.5.0:
+    resolution: {integrity: sha512-HDuk+PuH5monfNuY+ct49mNmkCRK4xJAV9Ts4z9UFc4rzdDnxQLyCMGGc8pKhZhHTVzfanpNwB/lwqevcBwI4w==}
+    peerDependencies:
+      vue: ^3.2.0
 
   vue@3.5.13:
     resolution: {integrity: sha512-wmeiSMxkZCSc+PM2w2VRsOYAZC8GdipNFRTsLSfodVqI9mbejKeXEGr8SckuLnrQPGe3oJN5c3K0vpoU9q/wCQ==}
@@ -5392,6 +5450,60 @@ snapshots:
       defu: 6.1.4
       pathe: 2.0.3
       std-env: 3.8.0
+
+  '@nuxt/ui-pro@3.0.0-alpha.13(@babel/parser@7.26.9)(axios@1.7.9)(embla-carousel@8.5.2)(encoding@0.1.13)(radix-vue@1.9.16(vue@3.5.13(typescript@5.6.2)))(typescript@5.6.2)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.2))':
+    dependencies:
+      '@nuxt/kit': 3.15.4
+      '@nuxt/schema': 3.15.4
+      '@nuxt/ui': 3.0.0-alpha.13(@babel/parser@7.26.9)(axios@1.7.9)(embla-carousel@8.5.2)(encoding@0.1.13)(radix-vue@1.9.16(vue@3.5.13(typescript@5.6.2)))(typescript@5.6.2)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.2))
+      '@vueuse/core': 12.7.0(typescript@5.6.2)
+      consola: 3.4.0
+      defu: 6.1.4
+      git-url-parse: 16.0.1
+      ofetch: 1.4.1
+      parse-git-config: 3.0.0
+      pkg-types: 1.3.1
+      scule: 1.3.0
+      typescript: 5.6.2
+      vue-component-type-helpers: 2.2.4
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@babel/parser'
+      - '@capacitor/preferences'
+      - '@deno/kv'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@upstash/redis'
+      - '@vercel/blob'
+      - '@vercel/kv'
+      - '@vue/composition-api'
+      - async-validator
+      - aws4fetch
+      - axios
+      - change-case
+      - db0
+      - drauu
+      - embla-carousel
+      - encoding
+      - focus-trap
+      - idb-keyval
+      - ioredis
+      - jwt-decode
+      - magicast
+      - nprogress
+      - qrcode
+      - radix-vue
+      - sortablejs
+      - supports-color
+      - universal-cookie
+      - uploadthing
+      - vite
+      - vue
 
   '@nuxt/ui@3.0.0-alpha.13(@babel/parser@7.26.9)(axios@1.7.9)(embla-carousel@8.5.2)(encoding@0.1.13)(radix-vue@1.9.16(vue@3.5.13(typescript@5.6.2)))(typescript@5.6.2)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.2))':
     dependencies:
@@ -6155,6 +6267,8 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
+  '@types/parse-path@7.0.3': {}
+
   '@types/prop-types@15.7.14': {}
 
   '@types/react-dom@18.3.5(@types/react@18.3.18)':
@@ -6247,6 +6361,8 @@ snapshots:
     dependencies:
       '@vue/compiler-dom': 3.5.13
       '@vue/shared': 3.5.13
+
+  '@vue/devtools-api@6.6.4': {}
 
   '@vue/devtools-api@7.7.2':
     dependencies:
@@ -7664,6 +7780,17 @@ snapshots:
       pathe: 2.0.3
       tar: 6.2.1
 
+  git-config-path@2.0.0: {}
+
+  git-up@8.0.1:
+    dependencies:
+      is-ssh: 1.4.1
+      parse-url: 9.2.0
+
+  git-url-parse@16.0.1:
+    dependencies:
+      git-up: 8.0.1
+
   glob-parent@5.1.2:
     dependencies:
       is-glob: 4.0.3
@@ -7829,6 +7956,8 @@ snapshots:
 
   inherits@2.0.4: {}
 
+  ini@1.3.8: {}
+
   iron-webcrypto@1.2.1: {}
 
   is-arguments@1.2.0:
@@ -7890,6 +8019,10 @@ snapshots:
       gopd: 1.2.0
       has-tostringtag: 1.0.2
       hasown: 2.0.2
+
+  is-ssh@1.4.1:
+    dependencies:
+      protocols: 2.0.2
 
   is-stream@3.0.0: {}
 
@@ -8432,6 +8565,11 @@ snapshots:
       pbkdf2: 3.1.2
       safe-buffer: 5.2.1
 
+  parse-git-config@3.0.0:
+    dependencies:
+      git-config-path: 2.0.0
+      ini: 1.3.8
+
   parse-json@5.2.0:
     dependencies:
       '@babel/code-frame': 7.26.2
@@ -8443,6 +8581,15 @@ snapshots:
 
   parse-node-version@1.0.1:
     optional: true
+
+  parse-path@7.0.1:
+    dependencies:
+      protocols: 2.0.2
+
+  parse-url@9.2.0:
+    dependencies:
+      '@types/parse-path': 7.0.3
+      parse-path: 7.0.1
 
   parsel-js@1.2.1: {}
 
@@ -8608,6 +8755,8 @@ snapshots:
       react-is: 16.13.1
 
   property-information@7.0.0: {}
+
+  protocols@2.0.2: {}
 
   proxy-from-env@1.1.0: {}
 
@@ -9559,6 +9708,8 @@ snapshots:
 
   vscode-languageserver-textdocument@1.0.12: {}
 
+  vue-component-type-helpers@2.2.4: {}
+
   vue-demi@0.14.10(vue@3.5.13(typescript@5.6.2)):
     dependencies:
       vue: 3.5.13(typescript@5.6.2)
@@ -9569,6 +9720,11 @@ snapshots:
 
   vue-resize@2.0.0-alpha.1(vue@3.5.13(typescript@5.6.2)):
     dependencies:
+      vue: 3.5.13(typescript@5.6.2)
+
+  vue-router@4.5.0(vue@3.5.13(typescript@5.6.2)):
+    dependencies:
+      '@vue/devtools-api': 6.6.4
       vue: 3.5.13(typescript@5.6.2)
 
   vue@3.5.13(typescript@5.6.2):

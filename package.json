@@ -53,8 +53,10 @@
     "@master/css": "2.0.0-rc.45",
     "@master/css-runtime": "2.0.0-rc.45",
     "@nuxt/ui": "3.0.0-alpha.13",
+    "@nuxt/ui-pro": "3.0.0-alpha.13",
     "@std/encoding": "npm:@jsr/std__encoding@^1.0.7",
     "@std/html": "npm:@jsr/std__html@^1.0.3",
+    "@tailwindcss/postcss": "^4.0.8",
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
     "@tailwindcss/vite": "4.0.8",
     "@vueuse/core": "^12.7.0",
@@ -102,6 +104,7 @@
     "vscode-languageserver-textdocument": "^1.0.12",
     "vue": "^3.5.13",
     "vue-inline-svg": "^4.0.0",
+    "vue-router": "^4.5.0",
     "yaml": "^2.7.0"
   },
   "pnpm": {

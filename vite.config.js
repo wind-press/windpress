@@ -10,9 +10,8 @@ import path from 'path';
 import svgr from 'vite-plugin-svgr';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
-import Components from 'unplugin-vue-components/vite';
 import httpsImports from 'vite-plugin-https-imports';
-import viteUi from '@nuxt/ui/vite';
+import viteUiPro from '@nuxt/ui-pro/vite';
 
 export default defineConfig({
     plugins: [
@@ -26,8 +25,8 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                dashboard: 'assets/apps2/dashboard/main.js',
-                dashboard2: 'assets/dashboard/main.js',
+                dashboard2: 'assets/apps2/dashboard/main.js',
+                dashboard: 'assets/dashboard/main.js',
 
                 // Tailwind v4
                 'packages/core/tailwindcss-v4/play/observer': 'assets/packages/core/tailwindcss-v4/play/observer.js',
@@ -56,8 +55,8 @@ export default defineConfig({
         }),
         vue(),
         wp_scripts(),
-        viteUi({
-            prefix: 'Nuxt',
+        viteUiPro({
+            // license: process.env.NUXT_UI_PRO_LICENSE,
             components: {
                 resolvers: [
                     IconsResolver(),

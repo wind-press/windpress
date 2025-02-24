@@ -8,6 +8,9 @@
             "@/dashboard2/*": [
                 "./assets/apps2/dashboard/*"
             ],
+            "@/dashboard/*": [
+                "./assets/dashboard/*"
+            ],
             "@/integration/*": [
                 "./assets/integration/*"
             ],

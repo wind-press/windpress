@@ -45,6 +45,16 @@ class AdminPage
         );
 
         add_action('load-' . $hook, fn () => $this->init_hooks());
+
+        $submenu = add_submenu_page(
+            WIND_PRESS::WP_OPTION,
+            __('WindPress Old', 'windpress'),
+            __('WindPress Old', 'windpress'),
+            'manage_options',
+            WIND_PRESS::WP_OPTION . '-dashboard2',
+            fn () => $this->render()
+        );
+        add_action('load-' . $submenu, fn () => $this->init_hooks2());
     }
 
     private function render()
@@ -64,6 +74,32 @@ class AdminPage
     }
 
     private function enqueue_scripts()
+    {
+        do_action('a!windpress/admin/admin_page:enqueue_scripts.before');
+
+        $handle = WIND_PRESS::WP_OPTION . ':admin';
+
+        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.js', [
+            'handle' => $handle,
+            'in_footer' => true,
+            'dependencies' => ['wp-i18n', 'wp-hooks'],
+        ]);
+
+        wp_set_script_translations($handle, 'windpress');
+
+        do_action('a!windpress/admin/admin_page:enqueue_scripts.after');
+    }
+
+    private function init_hooks2()
+    {
+        add_filter('f!windpress/core/runtime:print_windpress_metadata', fn ($metadata) => array_merge($metadata, [
+            'is_ubiquitous' => false,
+        ]), 1_000_001);
+        add_action('admin_enqueue_scripts', fn () => Runtime::get_instance()->print_windpress_metadata(), 1_000_001);
+        add_action('admin_enqueue_scripts', fn () => $this->enqueue_scripts2(), 1_000_001);
+    }
+
+    private function enqueue_scripts2()
     {
         do_action('a!windpress/admin/admin_page:enqueue_scripts.before');
 
