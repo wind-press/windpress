@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
-import { useUIStore } from '@/dashboard/stores/ui.js';
-import { useVolumeStore } from '@/dashboard/stores/volume.js';
+import { useUIStore } from '@/dashboard2/stores/ui.js';
+import { useVolumeStore } from '@/dashboard2/stores/volume.js';
 
 import CodeEditor from './MainPanel/CodeEditor.vue';
 import Settings from './MainPanel/Settings.vue';

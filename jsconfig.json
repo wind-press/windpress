@@ -5,7 +5,7 @@
             "~/*": [
                 "./*"
             ],
-            "@/dashboard/*": [
+            "@/dashboard2/*": [
                 "./assets/apps2/dashboard/*"
             ],
             "@/integration/*": [

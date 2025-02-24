@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { createVirtualRef } from '@/dashboard/composables/virtual.js';
+import { createVirtualRef } from '@/dashboard2/composables/virtual.js';
 
 export const useUIStore = defineStore('ui', () => {
     const { state, getVirtualRef } = createVirtualRef({}, { 

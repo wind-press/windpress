@@ -1,11 +1,11 @@
 <script setup>
 import { shallowRef, onBeforeMount, computed, onUnmounted } from 'vue';
-import { useUIStore } from '@/dashboard/stores/ui.js';
-import { useNotifier } from '@/dashboard/library/notifier';
-import { getInstanceId } from '@/dashboard/library/instance-id';
+import { useUIStore } from '@/dashboard2/stores/ui.js';
+import { useNotifier } from '@/dashboard2/library/notifier';
+import { getInstanceId } from '@/dashboard2/library/instance-id';
 import { getVariableList } from '@/packages/core/tailwindcss-v4';
-import { useVolumeStore } from '@/dashboard/stores/volume';
-import { useSettingsStore } from '@/dashboard/stores/settings';
+import { useVolumeStore } from '@/dashboard2/stores/volume';
+import { useSettingsStore } from '@/dashboard2/stores/settings';
 
 const notifier = useNotifier();
 const ui = useUIStore();

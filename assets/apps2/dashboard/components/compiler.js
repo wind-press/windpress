@@ -1,8 +1,8 @@
 import { encodeBase64 } from '@std/encoding/base64';
 import { unescape } from "@std/html/entities";
-import { useVolumeStore } from '@/dashboard/stores/volume';
-import { useLogStore } from '@/dashboard/stores/log';
-import { useApi } from '@/dashboard/library/api';
+import { useVolumeStore } from '@/dashboard2/stores/volume';
+import { useLogStore } from '@/dashboard2/stores/log';
+import { useApi } from '@/dashboard2/library/api';
 import { stringify as stringifyYaml } from 'yaml';
 import { compile as buildV4, find_tw_candidates, optimize as optimizeV4, loadSource } from '@/packages/core/tailwindcss-v4';
 import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwindcss-v3';

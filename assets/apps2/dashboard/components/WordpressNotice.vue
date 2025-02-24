@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia';
-import { useNoticeStore } from '@/dashboard/stores/notice';
+import { useNoticeStore } from '@/dashboard2/stores/notice';
 
 const store = useNoticeStore();
 const { notices } = storeToRefs(store);

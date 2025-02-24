@@ -1,11 +1,11 @@
 <script setup>
 import { onBeforeMount, onMounted } from 'vue';
 import { __, sprintf } from '@wordpress/i18n';
-import { useVolumeStore } from '@/dashboard/stores/volume';
-import { useNotifier } from '@/dashboard/library/notifier';
-import { useUIStore } from '@/dashboard/stores/ui';
-import { useLogStore } from '@/dashboard/stores/log';
-import { useSettingsStore } from '@/dashboard/stores/settings';
+import { useVolumeStore } from '@/dashboard2/stores/volume';
+import { useNotifier } from '@/dashboard2/library/notifier';
+import { useUIStore } from '@/dashboard2/stores/ui';
+import { useLogStore } from '@/dashboard2/stores/log';
+import { useSettingsStore } from '@/dashboard2/stores/settings';
 import lzString from 'lz-string';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';

@@ -1,6 +1,6 @@
 import './style.scss';
 
-import { createVirtualRef } from '@/dashboard/composables/virtual.js';
+import { createVirtualRef } from '@/dashboard2/composables/virtual.js';
 import { logger } from '@/integration/common/logger';
 import Logo from '~/windpress.svg?raw';
 

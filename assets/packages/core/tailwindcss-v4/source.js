@@ -1,7 +1,7 @@
 import { find_tw_candidates } from '@windpress/oxide-parser-wasm';
 import { minimatch } from 'minimatch';
-import { useLogStore } from '@/dashboard/stores/log';
-import { useApi } from '@/dashboard/library/api';
+import { useLogStore } from '@/dashboard2/stores/log';
+import { useApi } from '@/dashboard2/library/api';
 
 // temporary fix for the issue with the rest_api data not being available in some page builders' editor
 let api;

@@ -1,7 +1,7 @@
 import './style.scss';
 
 import { ref, createApp, watch } from 'vue';
-import { createVirtualRef } from '@/dashboard/composables/virtual.js';
+import { createVirtualRef } from '@/dashboard2/composables/virtual.js';
 import { logger } from '@/integration/common/logger';
 import Logo from '~/windpress.svg?raw';
 import App from './App.vue';

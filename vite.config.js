@@ -127,7 +127,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '~': path.resolve(__dirname), // root directory
-            '@/dashboard': path.resolve(__dirname, './assets/apps2/dashboard'),
+            '@/dashboard2': path.resolve(__dirname, './assets/apps2/dashboard'),
             '@/integration': path.resolve(__dirname, './assets/integration'),
             '@/common': path.resolve(__dirname, './assets/common'),
             '@/packages': path.resolve(__dirname, './assets/packages'),

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
-import { useApi } from '@/dashboard/library/api.js';
+import { useApi } from '@/dashboard2/library/api.js';
 import { useBusyStore } from './busy.js';
-import { useNotifier } from '@/dashboard/library/notifier.js';
+import { useNotifier } from '@/dashboard2/library/notifier.js';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { __ } from '@wordpress/i18n';
 

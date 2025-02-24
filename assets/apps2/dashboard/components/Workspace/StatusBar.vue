@@ -2,9 +2,9 @@
 import { __ } from '@wordpress/i18n';
 import dayjs from 'dayjs';
 import { computed, nextTick, ref, watch } from 'vue';
-import { useLogStore } from '@/dashboard/stores/log';
-import { useNotificationStore } from '@/dashboard/stores/notification';
-import { useSettingsStore } from '@/dashboard/stores/settings';
+import { useLogStore } from '@/dashboard2/stores/log';
+import { useNotificationStore } from '@/dashboard2/stores/notification';
+import { useSettingsStore } from '@/dashboard2/stores/settings';
 
 const log = useLogStore();
 const notification = useNotificationStore();

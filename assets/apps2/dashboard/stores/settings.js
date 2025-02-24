@@ -3,7 +3,7 @@ import { useApi } from '../library/api.js';
 import { useBusyStore } from './busy.js';
 import { useNotifier } from '../library/notifier.js';
 import { cloneDeep } from 'lodash-es';
-import { createVirtualRef } from '@/dashboard/composables/virtual.js';
+import { createVirtualRef } from '@/dashboard2/composables/virtual.js';
 
 export const useSettingsStore = defineStore('settings', () => {
     const busyStore = useBusyStore();

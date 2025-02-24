@@ -4,12 +4,12 @@ import { __ } from '@wordpress/i18n';
 import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
 import { Switch } from '@headlessui/vue';
-import { useLicenseStore } from '@/dashboard/stores/license';
-import { useBusyStore } from '@/dashboard/stores/busy';
-import { useSettingsStore } from '@/dashboard/stores/settings';
-import { useLogStore } from '@/dashboard/stores/log';
-import { useNotifier } from '@/dashboard/library/notifier';
-import { useApi } from '@/dashboard/library/api';
+import { useLicenseStore } from '@/dashboard2/stores/license';
+import { useBusyStore } from '@/dashboard2/stores/busy';
+import { useSettingsStore } from '@/dashboard2/stores/settings';
+import { useLogStore } from '@/dashboard2/stores/log';
+import { useNotifier } from '@/dashboard2/library/notifier';
+import { useApi } from '@/dashboard2/library/api';
 import { version as tw4_version } from 'tailwindcss/package.json';
 import { version as tw3_version } from 'tailwindcss3/package.json';
 
