@@ -12,6 +12,7 @@ import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import Components from 'unplugin-vue-components/vite';
 import httpsImports from 'vite-plugin-https-imports';
+import viteUi from '@nuxt/ui/vite';
 
 export default defineConfig({
     plugins: [
@@ -25,7 +26,8 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                dashboard: 'assets/apps/dashboard/main.js',
+                dashboard: 'assets/apps2/dashboard/main.js',
+                dashboard2: 'assets/dashboard/main.js',
 
                 // Tailwind v4
                 'packages/core/tailwindcss-v4/play/observer': 'assets/packages/core/tailwindcss-v4/play/observer.js',
@@ -54,10 +56,13 @@ export default defineConfig({
         }),
         vue(),
         wp_scripts(),
-        Components({
-            resolvers: [
-                IconsResolver(),
-            ],
+        viteUi({
+            prefix: 'Nuxt',
+            components: {
+                resolvers: [
+                    IconsResolver(),
+                ],
+            }
         }),
         Icons({ autoInstall: true, scale: 1 }),
         svgr({
@@ -122,7 +127,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '~': path.resolve(__dirname), // root directory
-            '@/dashboard': path.resolve(__dirname, './assets/apps/dashboard'),
+            '@/dashboard': path.resolve(__dirname, './assets/apps2/dashboard'),
             '@/integration': path.resolve(__dirname, './assets/integration'),
             '@/common': path.resolve(__dirname, './assets/common'),
             '@/packages': path.resolve(__dirname, './assets/packages'),

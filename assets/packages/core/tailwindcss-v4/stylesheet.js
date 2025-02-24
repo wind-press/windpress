@@ -1,9 +1,9 @@
 import path from 'path';
 
-import twPreflight from 'tailwindcss/preflight.css?inline';
-import twUtilities from 'tailwindcss/utilities.css?inline';
-import twIndex from 'tailwindcss/index.css?inline';
-import twTheme from 'tailwindcss/theme.css?inline';
+import twPreflight from 'tailwindcss/preflight.css?raw';
+import twUtilities from 'tailwindcss/utilities.css?raw';
+import twIndex from 'tailwindcss/index.css?raw';
+import twTheme from 'tailwindcss/theme.css?raw';
 
 import { isValidUrl } from './utils';
 

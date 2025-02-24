@@ -37,6 +37,9 @@ importers:
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
         version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/604be562e3186338907fb290966400ce86dadf50
+      '@tailwindcss/vite':
+        specifier: 4.0.8
+        version: 4.0.8(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.1)(sass@1.85.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
       '@vueuse/core':
         specifier: ^12.7.0
         version: 12.7.0(typescript@5.6.2)

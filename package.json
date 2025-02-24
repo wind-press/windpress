@@ -56,6 +56,7 @@
     "@std/encoding": "npm:@jsr/std__encoding@^1.0.7",
     "@std/html": "npm:@jsr/std__html@^1.0.3",
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
+    "@tailwindcss/vite": "4.0.8",
     "@vueuse/core": "^12.7.0",
     "@vueuse/integrations": "^12.7.0",
     "@windpress/oxide-parser-wasm": "^1.0.22",
