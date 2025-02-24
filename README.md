@@ -94,6 +94,7 @@ Seamless integration with the most popular visual/page builders:
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
 * [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
 * [Oxygen](https://oxygenbuilder.com/) — **Pro**
+* [WPCodeBox 2](https://wpcodebox.com/) — **Pro**
 
 #### Planned / In Progress
 
