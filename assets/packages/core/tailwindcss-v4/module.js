@@ -35,7 +35,9 @@ export async function importCdnModule(path, base, resourceHint) {
     return module;
 }
 
-export async function importLocalModule(modulePath, base, resourceHint, volume = {}) {
+export async function importLocalModule(modulePath, base = '/', resourceHint, volume = {}) {
+    base = base ?? '/';
+    
     let _path = path.resolve(base, modulePath);
 
     if (!volume[_path]) {
