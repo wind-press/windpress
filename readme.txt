@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.2.34
+Stable tag: 3.2.35
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -19,7 +19,7 @@ WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integr
 
 **Tailwind CSS version**:
 - 3.4.17
-- 4.0.8
+- 4.0.9
 
 ### Features
 
@@ -122,6 +122,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= 3.2.35 =
+* **New**: Upgraded to Tailwind CSS v4 (4.0.9 latest)
+* **Change**: [TW4] Importing additional CSS files with the `@import` directive are now with the following format: `@import "fetch:https://example.com/path/to/the/file.css";`
+
 = 3.2.34 =
 * **Fix**: Generating cache process issue on module resolution in the `main.css` file
 
@@ -132,7 +136,7 @@ Pro version 1.**1**.4
 * **New**: Upgraded to Tailwind CSS v4 (4.0.8 latest)
 * **New**: [WPCodeBox 2](https://wpcodebox.com/) integration **[Pro]**
 * **Improve**: Better performance on the generating cache process 
-* **Change**: Generating the CSS cache will remove unused CSS variables. To always keep it, add them within the `@theme static { }` block in the `main.css` file. Alternatively, you can replace the `@import 'tailwindcss/theme.css' layer(theme);` code to `@import "tailwindcss/theme.css" layer(theme) theme(static);` on your `main.css` file.
+* **Change**: [TW4] Generating the CSS cache will remove unused CSS variables. To always keep it, add them within the `@theme static { }` block in the `main.css` file. Alternatively, you can replace the `@import 'tailwindcss/theme.css' layer(theme);` code to `@import "tailwindcss/theme.css" layer(theme) theme(static);` on your `main.css` file.
 
 = 3.2.31 =
 * **Fix**: Simple File System imported data are not loaded correctly
@@ -143,7 +147,7 @@ Pro version 1.**1**.4
 
 = 3.2.29 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.6 latest)
-* **New**: The `@source` directive is now supported but differs from the official Tailwind CSS version. Please refer to [our documentation](https://wind.press/docs/configuration/file-main-css#scanning-additional-sources) for details.
+* **New**: [TW4] The `@source` directive is now supported but differs from the official Tailwind CSS version. Please refer to [our documentation](https://wind.press/docs/configuration/file-main-css#scanning-additional-sources) for details.
 
 = 3.2.28 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.5 latest)

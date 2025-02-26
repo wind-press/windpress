@@ -1,9 +1,9 @@
-import { __unstable__loadDesignSystem } from '@tailwindcss/root/packages/tailwindcss/src';
+import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { loadModule } from './module';
 import { loadStylesheet } from './stylesheet';
 
 export async function loadDesignSystem({ entrypoint = '/main.css', volume = {}, ...opts } = {}) {
-    opts = { entrypoint, volume, ...opts };  
+    opts = { entrypoint, volume, ...opts };
 
     return __unstable__loadDesignSystem(opts.volume[opts.entrypoint], {
         ...opts,

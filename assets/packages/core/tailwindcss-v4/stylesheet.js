@@ -1,8 +1,8 @@
 import path from 'path';
-import twTheme from '@tailwindcss/root/packages/tailwindcss/theme.css?inline';
-import twPreflight from '@tailwindcss/root/packages/tailwindcss/preflight.css?inline';
-import twUtilities from '@tailwindcss/root/packages/tailwindcss/utilities.css?inline';
-import twIndex from '@tailwindcss/root/packages/tailwindcss/index.css?inline';
+import twTheme from 'tailwindcss/theme.css?raw';
+import twPreflight from 'tailwindcss/preflight.css?raw';
+import twUtilities from 'tailwindcss/utilities.css?raw';
+import twIndex from 'tailwindcss/index.css?raw';
 import { isValidUrl } from './utils';
 
 const twVolume = {
@@ -26,12 +26,11 @@ export async function loadStylesheet(id, base = '/', volume = {}) {
 
     let _id = id;
 
-    if (isValidUrl(id)) {
+    if (id.startsWith('fetch:') && isValidUrl(id.substring(6))) {
         return {
             base: path.dirname(id),
-            content: await httpsProvider(new URL(id).toString())
+            content: await httpsProvider(new URL(id.substring(6)).toString())
         }
-
     } else {
         // Volume: resolve relative path as absolute path
         if (id.startsWith('.')) {
