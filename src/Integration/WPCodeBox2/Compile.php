@@ -40,7 +40,7 @@ class Compile
 
         // get the total for pagination and next_batch
         $sql = $wpdb->prepare(
-            "SELECT COUNT(*) FROM %i WHERE enabled = %d",
+            'SELECT COUNT(*) FROM %i WHERE enabled = %d',
             $table_name,
             1 // enabled
         );
@@ -48,7 +48,7 @@ class Compile
         $total = $wpdb->get_var($sql);
 
         $sql = $wpdb->prepare(
-            "SELECT * FROM %i WHERE enabled = %d LIMIT %d OFFSET %d",
+            'SELECT * FROM %i WHERE enabled = %d LIMIT %d OFFSET %d',
             $table_name,
             1, // enabled
             $per_page,
