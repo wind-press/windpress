@@ -5,18 +5,9 @@
             "~/*": [
                 "./*"
             ],
-            "@/dashboard/*": [
-                "./assets/apps/dashboard/*"
+            "@/*": [
+                "./assets/*"
             ],
-            "@/integration/*": [
-                "./assets/integration/*"
-            ],
-            "@/common/*": [
-                "./assets/common/*"
-            ],
-            "@/packages/*": [
-                "./assets/packages/*"
-            ]
         }
     }
 }
