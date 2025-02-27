@@ -1,9 +1,9 @@
 import postcss from 'postcss';
 import postcssSelectorParser from 'postcss-selector-parser';
-import expandApplyAtRules from 'tailwindcss3/src/lib/expandApplyAtRules.js';
-import { generateRules } from 'tailwindcss3/src/lib/generateRules.js';
+import expandApplyAtRules from 'tailwindcss-v3/src/lib/expandApplyAtRules.js';
+import { generateRules } from 'tailwindcss-v3/src/lib/generateRules.js';
 import { TextDocument } from 'vscode-languageserver-textdocument';
-import { splitAtTopLevelOnly } from 'tailwindcss3/src/util/splitAtTopLevelOnly.js';
+import { splitAtTopLevelOnly } from 'tailwindcss-v3/src/util/splitAtTopLevelOnly.js';
 import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils.js';
 import { getColor } from 'https://esm.sh/tailwindcss-language-service';
 

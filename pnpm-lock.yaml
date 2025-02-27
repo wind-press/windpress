@@ -118,7 +118,7 @@ importers:
       tailwindcss:
         specifier: ^4.0.9
         version: 4.0.9
-      tailwindcss3:
+      tailwindcss-v3:
         specifier: npm:tailwindcss@^3.4.17
         version: tailwindcss@3.4.17
       tippy.js:

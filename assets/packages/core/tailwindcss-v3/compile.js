@@ -1,5 +1,5 @@
 import postcss from 'postcss';
-import tailwindcssNesting from 'tailwindcss3/src/postcss-plugins/nesting';
+import tailwindcssNesting from 'tailwindcss-v3/src/postcss-plugins/nesting';
 import tailwindcssPostcssPlugin from './postcss-plugins/tailwindcss/index';
 import { resolveConfig } from './resolve-config';
 
