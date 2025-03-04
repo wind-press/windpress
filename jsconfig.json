@@ -9,5 +9,6 @@
                 "./assets/*"
             ],
         }
-    }
+    },
+    "include": ["assets/**/*.js", "assets/**/*.vue", "auto-imports.d.ts", "components.d.ts"]
 }

@@ -1,0 +1,5 @@
+php_version = "7.4"
+[source]
+root = "/Users/siagian/workspace/wordpress"
+paths = ["wp-content/plugins/windpress/src", "wp-content/plugins/windpress/windpress.php", "wp-content/plugins/windpress/constant.php"]
+includes = ["wp-content/plugins/windpress/vendor", "wp-admin", "wp-includes", "index.php", "wp-activate.php", "wp-blog-header.php", "wp-comments-post.php", "wp-config-sample.php", "wp-cron.php", "wp-links-opml.php", "wp-load.php", "wp-login.php", "wp-mail.php", "wp-settings.php", "wp-signup.php", "wp-trackback.php", "xmlrpc.php"]

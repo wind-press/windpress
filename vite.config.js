@@ -10,8 +10,8 @@ import path from 'path';
 import svgr from 'vite-plugin-svgr';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
-import Components from 'unplugin-vue-components/vite';
 import httpsImports from 'vite-plugin-https-imports';
+import viteUiPro from '@nuxt/ui-pro/vite';
 
 export default defineConfig({
     plugins: [
@@ -54,10 +54,13 @@ export default defineConfig({
         }),
         vue(),
         wp_scripts(),
-        Components({
-            resolvers: [
-                IconsResolver(),
-            ],
+        viteUiPro({
+            // license: process.env.NUXT_UI_PRO_LICENSE,
+            components: {
+                resolvers: [
+                    IconsResolver(),
+                ],
+            }
         }),
         Icons({ autoInstall: true, scale: 1 }),
         svgr({
