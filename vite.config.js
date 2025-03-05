@@ -25,7 +25,7 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                // dashboard: 'assets/apps/dashboard/main.js',
+                // dashboard: 'assets/dashboard/main.js',
 
                 // Tailwind v4
                 'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.js',
@@ -65,17 +65,17 @@ export default defineConfig({
         react({
             jsxRuntime: 'classic',
         }),
-        httpsImports.default({}, function resolver(matcher) {
-            return (id, importer) => {
-                if (matcher(id)) {
-                    return id;
-                }
-                else if (matcher(importer) && !id.includes('vite-plugin-node-polyfills')) {
-                    return new URL(id, importer).toString();
-                }
-                return undefined;
-            };
-        }),
+        // httpsImports.default({}, function resolver(matcher) {
+        //     return (id, importer) => {
+        //         if (matcher(id)) {
+        //             return id;
+        //         }
+        //         else if (matcher(importer) && !id.includes('vite-plugin-node-polyfills')) {
+        //             return new URL(id, importer).toString();
+        //         }
+        //         return undefined;
+        //     };
+        // }),
     ],
     build: {
         // target: 'modules',
