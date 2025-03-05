@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WindPress\WindPress\Integration\Oxygen;
+namespace WindPress\WindPress\Integration\OxygenClassic;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
 use WindPress\WindPress\Utils\Config;
@@ -35,13 +35,13 @@ class Main implements IntegrationInterface
 
     public function get_name(): string
     {
-        return 'oxygen';
+        return 'oxygen-classic';
     }
 
     public function is_enabled(): bool
     {
         return (bool) apply_filters(
-            'f!windpress/integration/oxygen:enabled',
+            'f!windpress/integration/oxygen-classic:enabled',
             Config::get(sprintf(
                 'integration.%s.enabled',
                 $this->get_name()
@@ -53,8 +53,8 @@ class Main implements IntegrationInterface
     {
         $providers[] = [
             'id' => $this->get_name(),
-            'name' => __('Oxygen Builder', 'windpress'),
-            'description' => __('Oxygen Builder integration', 'windpress'),
+            'name' => __('Oxygen Classic Builder', 'windpress'),
+            'description' => __('Oxygen Classic Builder integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
         ];

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WindPress\WindPress\Integration\Oxygen;
+namespace WindPress\WindPress\Integration\OxygenClassic;
 
 use DOMXPath;
 use Masterminds\HTML5;

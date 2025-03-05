@@ -39,7 +39,6 @@ const channel = new BroadcastChannel('windpress');
                                     task: 'windpress.generate-cache',
                                     payload: {
                                         force_pull: true,
-                                        tailwindcss_version: Number(brxIframe.contentWindow.windpress?._tailwindcss_version)
                                     }
                                 });
                             }

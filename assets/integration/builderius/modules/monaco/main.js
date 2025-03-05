@@ -9,7 +9,7 @@
 
 import { logger } from '@/integration/common/logger';
 import { uniIframe } from '@/integration/builderius/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss';
 
 function naturalExpand(value, total = null) {
     const length = typeof total === 'number' ? total.toString().length : 8

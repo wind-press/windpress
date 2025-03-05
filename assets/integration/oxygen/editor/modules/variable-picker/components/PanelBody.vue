@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
 import { oxyIframe } from '@/integration/oxygen/editor/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
+import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss';
 import ExpansionPanel from './ExpansionPanel.vue';
 import { set } from 'lodash-es';
 import CommonVariableItems from './CommonVariableItems.vue';

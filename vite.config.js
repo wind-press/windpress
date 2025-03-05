@@ -25,30 +25,24 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                dashboard: 'assets/apps/dashboard/main.js',
+                // dashboard: 'assets/apps/dashboard/main.js',
 
                 // Tailwind v4
-                'packages/core/tailwindcss-v4/play/observer': 'assets/packages/core/tailwindcss-v4/play/observer.js',
-                'packages/core/tailwindcss-v4/play/autocomplete': 'assets/packages/core/tailwindcss-v4/play/autocomplete.js',
-                'packages/core/tailwindcss-v4/play/sort': 'assets/packages/core/tailwindcss-v4/play/sort.js',
-                'packages/core/tailwindcss-v4/play/classname-to-css': 'assets/packages/core/tailwindcss-v4/play/classname-to-css.js',
+                'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.js',
+                'packages/core/tailwindcss/play/autocomplete': 'assets/packages/core/tailwindcss/play/autocomplete.js',
+                'packages/core/tailwindcss/play/sort': 'assets/packages/core/tailwindcss/play/sort.js',
+                'packages/core/tailwindcss/play/classname-to-css': 'assets/packages/core/tailwindcss/play/classname-to-css.js',
 
-                // Tailwind v3
-                'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.js',
-                'packages/core/tailwindcss-v3/play/autocomplete': 'assets/packages/core/tailwindcss-v3/play/autocomplete.js',
-                'packages/core/tailwindcss-v3/play/sort': 'assets/packages/core/tailwindcss-v3/play/sort.js',
-                'packages/core/tailwindcss-v3/play/classname-to-css': 'assets/packages/core/tailwindcss-v3/play/classname-to-css.js',
-
-                // Integrations
-                'integration/bricks': 'assets/integration/bricks/main.js',
-                'integration/breakdance': 'assets/integration/breakdance/main.js',
-                'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
-                'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
-                'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
-                'integration/gutenberg/site-editor': 'assets/integration/gutenberg/site-editor.js',
-                'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
-                'integration/livecanvas': 'assets/integration/livecanvas/main.js',
-                'integration/builderius': 'assets/integration/builderius/main.js',
+                // // Integrations
+                // 'integration/bricks': 'assets/integration/bricks/main.js',
+                // 'integration/breakdance': 'assets/integration/breakdance/main.js',
+                // 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
+                // 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
+                // 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
+                // 'integration/gutenberg/site-editor': 'assets/integration/gutenberg/site-editor.js',
+                // 'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
+                // 'integration/livecanvas': 'assets/integration/livecanvas/main.js',
+                // 'integration/builderius': 'assets/integration/builderius/main.js',
             },
             outDir: 'build',
         }),

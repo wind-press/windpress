@@ -16,10 +16,7 @@ logger('Loading...');
     await import('./modules/plain-classses/main.js');
     await import('./modules/generate-cache/main.js');
 
-    // tailwindcss-v4
-    if (Number(oxyIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
-        await import('./modules/variable-picker/main.js');
-    }
+    await import('./modules/variable-picker/main.js');
 
     logger('Modules loaded!');
 })();

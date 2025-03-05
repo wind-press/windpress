@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WindPress\WindPress\Integration\Oxygen;
+namespace WindPress\WindPress\Integration\OxygenClassic;
 
 use WIND_PRESS;
 use WindPress\WindPress\Admin\AdminPage;
@@ -30,9 +30,9 @@ class Editor
 
     public function iframe_assets()
     {
-        $handle = WIND_PRESS::WP_OPTION . ':integration-oxygen-iframe';
+        $handle = WIND_PRESS::WP_OPTION . ':integration-oxygen-classic-iframe';
 
-        AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen/iframe/main.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen-classic/iframe/main.js', [
             'handle' => $handle,
             'in_footer' => true,
         ]);
@@ -40,9 +40,9 @@ class Editor
 
     public function editor_assets()
     {
-        $handle = WIND_PRESS::WP_OPTION . ':integration-oxygen-editor';
+        $handle = WIND_PRESS::WP_OPTION . ':integration-oxygen-classic-editor';
 
-        AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen/editor/main.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen-classic/editor/main.js', [
             'handle' => $handle,
             'in_footer' => true,
         ]);

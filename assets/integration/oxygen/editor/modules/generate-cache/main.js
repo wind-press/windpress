@@ -23,7 +23,6 @@ iframeScope.allSaved = function () {
         task: 'windpress.generate-cache',
         payload: {
             force_pull: true,
-            tailwindcss_version: Number(oxyIframe.contentWindow.windpress?._tailwindcss_version)
         }
     });
 };
