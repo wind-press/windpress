@@ -1,0 +1,33 @@
+.wp-admin.toplevel_page_windpress {
+    #wpcontent {
+        padding-left: 0 !important;
+
+        #wpbody {
+            background-color: var(--ui-bg);
+            color: var(--ui-text);
+            color-scheme: light;
+
+            #wpbody-content {
+                padding-bottom: 0;
+
+                /* hide the notice nag if it doesn't have .windpress-notice */
+                .notice:not(.windpress-notice) {
+                    display: none;
+                }
+
+                #windpress-app {
+                    isolation: isolate;
+                }
+            }
+        }
+    }
+
+    #wpfooter {
+        display: none;
+    }
+
+    /* Hide the update nag */
+    .update-nag {
+        display: none;
+    }
+}

@@ -25,7 +25,7 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                // dashboard: 'assets/dashboard/main.js',
+                dashboard: 'assets/dashboard/main.js',
 
                 // Tailwind v4
                 'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.js',
@@ -54,6 +54,13 @@ export default defineConfig({
                 resolvers: [
                     IconsResolver(),
                 ],
+            },
+            uiPro: {},
+            ui: {
+                colors: {
+                    primary: 'green',
+                    neutral: 'zinc'
+                }
             }
         }),
         Icons({ autoInstall: true, scale: 1 }),
