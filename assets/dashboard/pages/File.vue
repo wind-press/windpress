@@ -4,6 +4,8 @@ import { useFetch, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import type { Mail } from '../types'
 import InboxList from '../components/inbox/InboxList.vue'
 import InboxMail from '../components/inbox/InboxMail.vue'
+import FileExplorer from '../components/file/FileExplorer.vue'
+import FileEditor from '../components/file/FileEditor.vue'
 
 const tabItems = [{
     label: 'All',
@@ -50,31 +52,43 @@ const isMobile = breakpoints.smaller('lg')
 </script>
 
 <template>
-    <UDashboardPanel id="inbox-1" :default-size="25" :min-size="20" :max-size="30" resizable>
-        <UDashboardNavbar title="Inbox">
+    <UDashboardPanel id="explorer-1" :default-size="25" :min-size="20" :max-size="30" resizable class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
+        <UDashboardNavbar title="Explorer">
             <template #leading>
                 <UDashboardSidebarCollapse />
             </template>
             <template #trailing>
-                <UBadge :label="filteredMails.length" variant="subtle" />
+                <!-- <UBadge :label="filteredMails.length" variant="subtle" /> -->
             </template>
 
             <template #right>
-                <UTabs v-model="selectedTab" :items="tabItems" class="w-32" :content="false" size="xs" />
+                <UTooltip :delay-duration="0" text="Add new file">
+                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" />
+                </UTooltip>
+
+                <UTooltip :delay-duration="0" text="Export vfs">
+                    <UButton color="neutral" variant="outline" icon="i-lucide-download" />
+                </UTooltip>
+
+                <UTooltip :delay-duration="0" text="Import vfs">
+                    <UButton color="neutral" variant="outline" icon="i-lucide-upload" />
+                </UTooltip>
+
             </template>
         </UDashboardNavbar>
 
-        <InboxList v-model="selectedMail" :mails="filteredMails" />
+        <!-- <InboxList v-model="selectedMail" :mails="filteredMails" /> -->
+        <FileExplorer v-model="selectedMail" :mails="filteredMails" />
     </UDashboardPanel>
 
-    <InboxMail v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
+    <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
     <div v-else class="hidden lg:flex flex-1 items-center justify-center">
-        <UIcon name="i-lucide-inbox" class="size-32 text-(--ui-text-dimmed)" />
+        <UIcon name="lucide:file-pen" class="size-32 text-(--ui-text-dimmed)" />
     </div>
 
     <USlideover v-if="isMobile" v-model:open="isMailPanelOpen">
         <template #content>
-            <InboxMail v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
+            <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
         </template>
     </USlideover>
 </template>
