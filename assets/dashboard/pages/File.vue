@@ -2,8 +2,6 @@
 import { computed, ref, watch } from 'vue'
 import { useFetch, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import type { Mail } from '../types'
-import InboxList from '../components/inbox/InboxList.vue'
-import InboxMail from '../components/inbox/InboxMail.vue'
 import FileExplorer from '../components/file/FileExplorer.vue'
 import FileEditor from '../components/file/FileEditor.vue'
 
