@@ -54,14 +54,30 @@ export default defineConfig({
                 resolvers: [
                     IconsResolver(),
                 ],
+
+                // relative paths to the directory to search for components.
+                dirs: 'assets/dashboard/components',
+
+                // Allow subdirectories as namespace prefix for components.
+                directoryAsNamespace: true,
+
+                // Collapse same prefixes (camel-sensitive) of folders and components
+                // to prevent duplication inside namespaced component name.
+                // works when `directoryAsNamespace: true`
+                collapseSamePrefixes: true,
             },
-            uiPro: {},
             ui: {
                 colors: {
                     primary: 'green',
                     neutral: 'zinc'
+                },
+                commandPalette: {
+                    slots: {
+                        root: 'z-[10001]',
+                    }
                 }
-            }
+            },
+
         }),
         Icons({ autoInstall: true, scale: 1 }),
         svgr({

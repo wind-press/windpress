@@ -1,3 +1,11 @@
+html {
+    --wp-admin--sidebar-width: 160px;
+}
+
+html:has(.folded) {
+    --wp-admin--sidebar-width: 36px;
+}
+
 .wp-admin.toplevel_page_windpress {
     #wpcontent {
         padding-left: 0 !important;
@@ -5,7 +13,7 @@
         #wpbody {
             background-color: var(--ui-bg);
             color: var(--ui-text);
-            color-scheme: light;
+            position: fixed !important;
 
             #wpbody-content {
                 padding-bottom: 0;

@@ -1,5 +1,4 @@
-import './styles/wp-admin.css'
-import './styles/tailwind.css'
+import './styles/main.css'
 
 import './wp-admin.js';
 

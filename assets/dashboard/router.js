@@ -6,7 +6,18 @@ const router = createRouter({
         return savedPosition || { left: 0, top: 0 };
     },
     routes: [
-      { path: '/', component: () => import('./pages/index.vue') },
+        { path: '/', name: 'home', redirect: { name: 'files' } },
+        {
+            name: 'files',
+            path: '/files',
+            component: () => import('./pages/Files.vue'),
+        },
+
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'NotFound',
+            component: () => import('./pages/NotFound.vue'),
+        },
     ],
 });
 

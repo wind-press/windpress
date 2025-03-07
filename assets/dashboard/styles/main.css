@@ -1,10 +1,16 @@
-@layer theme, base, components, utilities;
+
+@layer wp-admin, theme, base, components, utilities;
+
+
+/* .windpress-style {
+    z-index: 10001 !important;
+} */
+
+@import './wp-admin.css' layer(base);
 
 @import "tailwindcss/theme.css" layer(theme) theme(static);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
-
-/* @config "../tailwind.config.js"; */
 
 @import "@nuxt/ui-pro";
 

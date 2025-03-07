@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-    <div>
+    <!-- <div>
         <h1>Dashboard</h1>
         <p>Welcome to the WindPress dashboard.</p>
-    </div>
+    </div> -->
 </template>

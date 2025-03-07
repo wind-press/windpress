@@ -1,6 +1,0 @@
-// tailwind.config.js
-export default {
-    // ...
-    important: '#wpbody #windpress-app',
-    // ...
-};
