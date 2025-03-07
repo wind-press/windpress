@@ -32,11 +32,10 @@ export const useBusyStore = defineStore('busy', () => {
         return (task: string): boolean => tasks.value.some((t: Task) => t.task === task);
     });
 
-    function add(task: string|Message, message?: Message) {
-
+    function add(task: string, message?: Message) {
         tasks.value.unshift({
             timestamp: Date.now(),
-            task: typeof task === 'string' ? task : undefined,
+            task,
         });
 
         if (message !== undefined && message !== null) {

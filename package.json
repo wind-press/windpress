@@ -10,7 +10,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint ./assets",
-    "format": "oxlint --fix ./assets"
+    "format": "oxlint --fix ./assets",
+    "test": "vitest"
   },
   "devDependencies": {
     "@iconify-json/arcticons": "^1.2.20",
@@ -46,7 +47,8 @@
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.3.0",
     "vite-plugin-top-level-await": "^1.5.0",
-    "vite-plugin-wasm": "^3.4.1"
+    "vite-plugin-wasm": "^3.4.1",
+    "vitest": "^3.0.8"
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.5.4",

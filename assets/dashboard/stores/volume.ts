@@ -132,16 +132,6 @@ export const useVolumeStore = defineStore('volume', () => {
             .then(res => {
                 const entries = res.entries;
 
-                // Prioritize "tailwind.config.js" and "main.css"
-                const prioritizeFiles = ['tailwind.config.js', 'main.css'];
-                for (const file of prioritizeFiles.reverse()) {
-                    const index = entries.findIndex((entry: Entry) => entry.relative_path === file);
-                    if (index !== -1) {
-                        const [movedFile] = entries.splice(index, 1);
-                        entries.unshift(movedFile);
-                    }
-                }
-
                 data.value.entries = entries;
                 updateInitValues();
             })
@@ -221,5 +211,6 @@ export const useVolumeStore = defineStore('volume', () => {
         entryHasChanged,
         softDeleteEntry,
         resetEntry,
+        cleanPath,
     };
 });
