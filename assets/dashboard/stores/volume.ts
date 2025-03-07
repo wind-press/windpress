@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { shallowRef, ref, computed } from 'vue';
+import { shallowRef, ref, computed, reactive } from 'vue';
 import { useApi } from '@/dashboard/library/api';
 // import { useNotifier } from '@/dashboard/library/notifier.js';
 import { cloneDeep, isEqual } from 'lodash-es';
@@ -31,18 +31,18 @@ export const useVolumeStore = defineStore('volume', () => {
     /**
      * The volume data which will be mounted.
      */
-    const data = shallowRef({
+    const data = reactive({
         entries: [] as Entry[],
     });
 
     /**
      * The initial volume data which will be used to check if the data has changed.
      */
-    const initData = shallowRef({
+    const initData = reactive({
         entries: [] as Entry[],
     });
 
-    const activeViewEntryRelativePath = ref<string | null>(null);
+    const activeViewEntryRelativePath = ref<string | undefined>(undefined);
 
     /**
      * Clean the file path before adding it to the volume of the Simple File System.
@@ -69,19 +69,19 @@ export const useVolumeStore = defineStore('volume', () => {
         filePathParts = cleanPath(filePathParts);
 
         // Check if the file path exists
-        const existingEntryIndex = data.value.entries.findIndex(entry => entry.relative_path === filePathParts);
+        const existingEntryIndex = data.entries.findIndex(entry => entry.relative_path === filePathParts);
 
         if (existingEntryIndex !== -1) {
             // If not hidden, throw
-            if (data.value.entries[existingEntryIndex].hidden === false) {
+            if (data.entries[existingEntryIndex].hidden === false) {
                 throw new Error(__(`A file named "${filePathParts}" already exists`, 'windpress'));
             }
 
             // If hidden, unhide it, and set the content
-            data.value.entries[existingEntryIndex].hidden = false;
-            data.value.entries[existingEntryIndex].content = `/* file: ${filePathParts} */\n\n`;
+            data.entries[existingEntryIndex].hidden = false;
+            data.entries[existingEntryIndex].content = `/* file: ${filePathParts} */\n\n`;
         } else {
-            data.value.entries.push({
+            data.entries.push({
                 name: filePathParts.split('/').pop() || '',
                 content: `/* file: ${filePathParts} */\n\n`,
                 relative_path: `${filePathParts}`,
@@ -93,17 +93,17 @@ export const useVolumeStore = defineStore('volume', () => {
     }
 
     function softDeleteEntry(entry: Entry) {
-        const entryIndex = data.value.entries.findIndex(e => e.relative_path === entry.relative_path);
-        data.value.entries[entryIndex].content = '';
-        data.value.entries[entryIndex].hidden = true;
+        const entryIndex = data.entries.findIndex(e => e.relative_path === entry.relative_path);
+        data.entries[entryIndex].content = '';
+        data.entries[entryIndex].hidden = true;
     }
 
     function resetEntry(entry: Entry) {
-        const entryIndex = data.value.entries.findIndex(e => e.relative_path === entry.relative_path);
-        const initEntry = initData.value.entries.find(e => e.relative_path === entry.relative_path);
+        const entryIndex = data.entries.findIndex(e => e.relative_path === entry.relative_path);
+        const initEntry = initData.entries.find(e => e.relative_path === entry.relative_path);
 
         if (initEntry) {
-            data.value.entries[entryIndex] = cloneDeep(initEntry);
+            data.entries[entryIndex] = cloneDeep(initEntry);
         }
 
         // No need to call both doPush() and doPull()
@@ -112,7 +112,7 @@ export const useVolumeStore = defineStore('volume', () => {
 
     function getKVEntries() {
         // Create a volume object with key-value pairs (relative_path: content) from the volumeStore.data.entries array
-        return data.value.entries.reduce((acc: { [key: string]: string }, entry) => {
+        return data.entries.reduce((acc: { [key: string]: string }, entry) => {
             acc[`/${entry.relative_path}`] = entry.content;
             return acc;
         }, {});
@@ -132,7 +132,7 @@ export const useVolumeStore = defineStore('volume', () => {
             .then(res => {
                 const entries = res.entries;
 
-                data.value.entries = entries;
+                data.entries = entries;
                 updateInitValues();
             })
             .catch(error => {
@@ -154,7 +154,7 @@ export const useVolumeStore = defineStore('volume', () => {
         return api
             .request('/admin/volume/store', {
                 method: 'POST',
-                data: { volume: { entries: data.value.entries } },
+                data: { volume: { entries: data.entries } },
             })
             .then(response => {
                 updateInitValues();
@@ -172,7 +172,7 @@ export const useVolumeStore = defineStore('volume', () => {
      * Store the initial values.
      */
     function updateInitValues() {
-        if (data.value.entries.length === 0) {
+        if (data.entries.length === 0) {
             return;
         }
 
@@ -183,20 +183,20 @@ export const useVolumeStore = defineStore('volume', () => {
         // Avoid unnecessary cloning if nothing has changed
         if (!hasChanged.value) return;
 
-        initData.value.entries = cloneDeep(data.value.entries);
+        initData.entries = cloneDeep(data.entries);
     }
 
     /**
      * Check if the data has changed.
      */
-    const hasChanged = computed(() => !isEqual(data.value.entries, initData.value.entries));
+    const hasChanged = computed(() => !isEqual(data.entries, initData.entries));
 
     /**
      * Check if a specific entry has changed.
      */
     function entryHasChanged(key: string): boolean {
-        const entry = data.value.entries.find(e => e.relative_path === key);
-        const initEntry = initData.value.entries.find(e => e.relative_path === key);
+        const entry = data.entries.find(e => e.relative_path === key);
+        const initEntry = initData.entries.find(e => e.relative_path === key);
         return !isEqual(entry, initEntry);
     }
 
