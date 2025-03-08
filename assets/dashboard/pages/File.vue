@@ -1,39 +1,31 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useFetch, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
-import type { Mail } from '../types'
-import FileExplorer from '../components/file/FileExplorer.vue'
-import FileEditor from '../components/file/FileEditor.vue'
+import { useVolumeStore } from '@/dashboard/stores/volume'
+import type { Mail } from '@/dashboard/types'
+import FileExplorer from '@/dashboard/components/file/FileExplorer.vue'
+import FileEditor from '@/dashboard/components/file/FileEditor.vue'
 
-const tabItems = [{
-    label: 'All',
-    value: 'all'
-}, {
-    label: 'Unread',
-    value: 'unread'
-}]
-const selectedTab = ref('all')
+const volumeStore = useVolumeStore()
 
 const { data: mails } = useFetch('https://dashboard-template.nuxt.dev/api/mails', { initialData: [] }).json<Mail[]>()
 
 // Filter mails based on the selected tab
 const filteredMails = computed(() => {
-    if (selectedTab.value === 'unread') {
-        return mails.value?.filter(mail => !!mail.unread) ?? []
-    }
-
     return mails.value ?? []
 })
 
 const selectedMail = ref<Mail | null>()
 
-const isMailPanelOpen = computed({
+const isFilePanelOpen = computed({
     get() {
-        return !!selectedMail.value
+        // return !!selectedMail.value
+        return !!volumeStore.activeViewEntryRelativePath
     },
     set(value: boolean) {
         if (!value) {
-            selectedMail.value = null
+            // selectedMail.value = null
+            volumeStore.activeViewEntryRelativePath = null
         }
     }
 })
@@ -76,17 +68,18 @@ const isMobile = breakpoints.smaller('lg')
         </UDashboardNavbar>
 
         <!-- <InboxList v-model="selectedMail" :mails="filteredMails" /> -->
-        <FileExplorer v-model="selectedMail" :mails="filteredMails" />
+        <FileExplorer />
     </UDashboardPanel>
 
-    <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
+    <FileEditor v-if="volumeStore.activeViewEntryRelativePath" @close="volumeStore.activeViewEntryRelativePath = null" />
+    <!-- <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" /> -->
     <div v-else class="hidden lg:flex flex-1 items-center justify-center">
         <UIcon name="lucide:file-pen" class="size-32 text-(--ui-text-dimmed)" />
     </div>
 
-    <USlideover v-if="isMobile" v-model:open="isMailPanelOpen">
+    <USlideover v-if="isMobile" v-model:open="isFilePanelOpen">
         <template #content>
-            <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
+            <!-- <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" /> -->
         </template>
     </USlideover>
 </template>

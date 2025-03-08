@@ -42,7 +42,7 @@ export const useVolumeStore = defineStore('volume', () => {
         entries: [] as Entry[],
     });
 
-    const activeViewEntryRelativePath = ref<string | undefined>(undefined);
+    const activeViewEntryRelativePath = ref<string | null>(null);
 
     /**
      * Clean the file path before adding it to the volume of the Simple File System.
@@ -96,6 +96,11 @@ export const useVolumeStore = defineStore('volume', () => {
         const entryIndex = data.entries.findIndex(e => e.relative_path === entry.relative_path);
         data.entries[entryIndex].content = '';
         data.entries[entryIndex].hidden = true;
+
+        // if the active view entry is the one being deleted, set it to null
+        if (activeViewEntryRelativePath.value === entry.relative_path) {
+            activeViewEntryRelativePath.value = null;
+        }
     }
 
     function resetEntry(entry: Entry) {

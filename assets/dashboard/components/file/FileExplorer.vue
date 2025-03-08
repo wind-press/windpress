@@ -15,7 +15,7 @@ const overlay = useOverlay()
 const selectedFilePath = ref<TreeItem | undefined>(undefined)
 
 watch(selectedFilePath, (value) => {
-    volumeStore.activeViewEntryRelativePath = value?.value
+    volumeStore.activeViewEntryRelativePath = value?.value ?? null
 })
 
 function recursiveTreeNodeWalkAndInsert(trees: TreeItem[], entry: Entry, rootPath?: string) {
@@ -77,6 +77,11 @@ const files = computed(() => {
 })
 
 watch(() => volumeStore.activeViewEntryRelativePath, (value) => {
+    if (!value) {
+        selectedFilePath.value = undefined;
+        return;
+    }
+
     // walk the tree and select the file
     const walk = (tree: TreeItem) => {
         if (tree.value === value) {
@@ -113,7 +118,6 @@ const contextMenuItems: ContextMenuItem[] | ContextMenuItem[][] = [
     ]
 ]
 
-
 const deleteModal = overlay.create(DeleteFileModal, {
     props: {
         filePath: ''
@@ -121,8 +125,6 @@ const deleteModal = overlay.create(DeleteFileModal, {
 })
 
 async function ctxMenuDeleteHandler(item: TreeItem) {
-    console.log(item)
-
     const entry = volumeStore.data.entries.find(entry => entry.relative_path === item.value)
 
     if (!entry) {
@@ -138,6 +140,16 @@ async function ctxMenuDeleteHandler(item: TreeItem) {
         toast.add({
             title: `Error: File "${item.value}" is not deletable`,
             description: 'File are managed by external handler',
+            color: 'error',
+            id: 'delete-modal-not-deletable'
+        })
+        return;
+    }
+
+    if (entry.relative_path === 'main.css') {
+        toast.add({
+            title: `Error: File "${item.value}" is not deletable`,
+            description: 'File is required for the Tailwind CSS to work',
             color: 'error',
             id: 'delete-modal-not-deletable'
         })
@@ -172,7 +184,7 @@ async function ctxMenuDeleteHandler(item: TreeItem) {
 onMounted(() => {
     if (!volumeStore.data.entries.length) {
         volumeStore.doPull().then(() => {
-            volumeStore.activeViewEntryRelativePath = 'main.css'
+            // volumeStore.activeViewEntryRelativePath = 'main.css'
         });
     }
 });
@@ -180,7 +192,7 @@ onMounted(() => {
 
 <template>
     <div class="overflow-y-auto divide-y divide-(--ui-border)">
-        <UTree :items="files" v-model="selectedFilePath">
+        <UTree :items="files" v-model="selectedFilePath" >
             <template #tree-file-label="{ item }">
                 <UContextMenu v-if="!item.children?.length" :items="contextMenuItems" :ui="{ content: 'w-48' }">
                     <span>

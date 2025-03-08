@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { codeToHtml } from 'shiki'
+import { codeToHtml } from 'shiki/bundle/web'
 import path from 'path';
 import { computedAsync, useColorMode } from '@vueuse/core';
 
