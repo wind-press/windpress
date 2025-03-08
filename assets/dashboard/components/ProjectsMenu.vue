@@ -3,8 +3,6 @@ import { ref, computed } from 'vue'
 import Logo from '@/dashboard/assets/icon/windpress.svg';
 import { version as tw4_version } from 'tailwindcss/package.json';
 
-console.log(windpress)
-
 const props = defineProps<{
     collapsed?: boolean
 }>()

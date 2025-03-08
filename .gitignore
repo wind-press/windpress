@@ -38,3 +38,6 @@ components.d.ts
 
 # .env files
 *.local
+
+# vitest
+dummy-non-existing-folder

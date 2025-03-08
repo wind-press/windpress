@@ -3,10 +3,14 @@ import { onMounted, computed, ref, watch } from 'vue'
 import { useVolumeStore } from '@/dashboard/stores/volume'
 import path from 'path'
 
-import type { TreeItem } from '@nuxt/ui'
+import type { TreeItem, ContextMenuItem } from '@nuxt/ui'
+
 import type { Entry } from '@/dashboard/stores/volume'
+import DeleteFileModal from './Explorer/ContentMenu/DeleteFileModal.vue'
 
 const volumeStore = useVolumeStore()
+const toast = useToast()
+const overlay = useOverlay()
 
 const selectedFilePath = ref<TreeItem | undefined>(undefined)
 
@@ -25,6 +29,7 @@ function recursiveTreeNodeWalkAndInsert(trees: TreeItem[], entry: Entry, rootPat
             label: currentPart,
             value: entry.relative_path,
             icon: `vscode-icons:file-type-${entry.relative_path === 'main.css' ? 'tailwind' : path.extname(entry.relative_path).replace('.', '')}`,
+            slot: 'tree-file',
         });
         return;
     }
@@ -49,6 +54,10 @@ const files = computed(() => {
     let trees: TreeItem[] = []
 
     volumeStore.data.entries.forEach((entry: Entry) => {
+        if (entry.hidden) {
+            return;
+        }
+
         recursiveTreeNodeWalkAndInsert(trees, entry);
     })
 
@@ -93,6 +102,73 @@ watch(() => volumeStore.activeViewEntryRelativePath, (value) => {
     }
 })
 
+const contextMenuItems: ContextMenuItem[] | ContextMenuItem[][] = [
+    [
+        {
+            label: 'Delete',
+            color: 'error' as const,
+            icon: 'i-lucide-trash',
+            slot: 'ctx-delete',
+        }
+    ]
+]
+
+
+const deleteModal = overlay.create(DeleteFileModal, {
+    props: {
+        filePath: ''
+    }
+})
+
+async function ctxMenuDeleteHandler(item: TreeItem) {
+    console.log(item)
+
+    const entry = volumeStore.data.entries.find(entry => entry.relative_path === item.value)
+
+    if (!entry) {
+        toast.add({
+            title: `Error: File "${item.value}" not found`,
+            color: 'error',
+            id: 'delete-modal-error'
+        })
+        return;
+    }
+
+    if (entry.handler !== 'internal') {
+        toast.add({
+            title: `Error: File "${item.value}" is not deletable`,
+            description: 'File are managed by external handler',
+            color: 'error',
+            id: 'delete-modal-not-deletable'
+        })
+        return;
+    }
+
+    deleteModal.patch({
+        filePath: item.value,
+        fileContent: entry?.content
+    })
+
+    const shouldDelete = await deleteModal.open()
+
+    if (!shouldDelete) {
+        toast.add({
+            title: `Canceled: File "${item.value}" is not deleted`,
+            color: 'info',
+            id: 'delete-modal-dismissed'
+        })
+        return;
+    }
+
+    volumeStore.softDeleteEntry(entry)
+
+    toast.add({
+        title: `Success: File "${item.value}" deleted`,
+        color: 'success',
+        id: 'delete-modal-success'
+    })
+}
+
 onMounted(() => {
     if (!volumeStore.data.entries.length) {
         volumeStore.doPull().then(() => {
@@ -104,6 +180,18 @@ onMounted(() => {
 
 <template>
     <div class="overflow-y-auto divide-y divide-(--ui-border)">
-        <UTree :items="files" v-model="selectedFilePath" />
+        <UTree :items="files" v-model="selectedFilePath">
+            <template #tree-file-label="{ item }">
+                <UContextMenu v-if="!item.children?.length" :items="contextMenuItems" :ui="{ content: 'w-48' }">
+                    <span>
+                        {{ item.label }}
+                    </span>
+
+                    <template #ctx-delete="{ item: ctxItem }">
+                        <span @click="_e => ctxMenuDeleteHandler(item)">{{ ctxItem.label }}</span>
+                    </template>
+                </UContextMenu>
+            </template>
+        </UTree>
     </div>
 </template>
