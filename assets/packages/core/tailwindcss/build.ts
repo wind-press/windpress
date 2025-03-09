@@ -4,21 +4,13 @@ import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_
 import init, { Features, transform } from 'lightningcss-wasm';
 import { loadStylesheet } from './stylesheet.js';
 
-/**
- * Build the CSS
- *
- * @param {object} opts
- * @param {Array<string>} opts.candidates
- * @param {string} opts.entrypoint
- * @param {Record<string, string>} opts.volume
- * @returns {Promise<string>}
- */
-export async function build({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts } = {}) {
-    let compiled = await compile({ candidates, entrypoint, volume, ...opts });
-    return compiled.build(candidates);
+import type { LoadDesignSystemOptions } from './design-system'
+
+export type BuildOptions = LoadDesignSystemOptions & {
+    candidates?: string[];
 }
 
-export async function compile({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts } = {}) {
+export async function compile({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts }: BuildOptions) {
     opts = { candidates, entrypoint, volume, ...opts };
 
     return await _compile(opts.volume[opts.entrypoint], {
@@ -28,12 +20,28 @@ export async function compile({ candidates = [], entrypoint = '/main.css', volum
 }
 
 /**
- * Optimize the CSS
- *
- * @param {string} css
- * @param {boolean} minify Default is `false`. Whether to minify the CSS.
+ * Build the CSS
  */
-export async function optimize(css, minify = false) {
+export async function build({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts }: BuildOptions): Promise<string> {
+    let compiled = await compile({ candidates, entrypoint, volume, ...opts });
+    return compiled.build(candidates);
+}
+
+export type OptimizeOptions = {
+    css: string;
+    minify?: boolean;
+}
+
+export type OptimizeResult = {
+    code: Uint8Array;
+    css: string;
+    warnings: any[];
+}
+
+/**
+ * Optimize the CSS
+ */
+export async function optimize({ css, minify = false }: OptimizeOptions): Promise<OptimizeResult> {
     await init(lightningcssWasmFile);
 
     const result = transform({

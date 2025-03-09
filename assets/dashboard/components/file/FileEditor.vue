@@ -4,6 +4,12 @@ import { computedAsync, useColorMode } from '@vueuse/core';
 import path from 'path';
 import { computed, shallowRef } from 'vue';
 
+import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
+
+// TODO: monaco autocomplete, doSave
+
+type MonacoEditor = typeof monacoEditor;
+
 const volumeStore = useVolumeStore()
 const colorMode = useColorMode()
 
@@ -49,14 +55,7 @@ function doSave() {
 
 }
 
-
-
-function naturalExpand(value, total = null) {
-    const length = typeof total === 'number' ? total.toString().length : 8
-    return ('0'.repeat(length) + value).slice(-length)
-}
-
-function handleEditorMount(editor, monaco) {
+function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: MonacoEditor) {
     monaco.languages.css.cssDefaults.setOptions(
         Object.assign(
             monaco.languages.css.cssDefaults.options,
@@ -184,35 +183,35 @@ function handleEditorMount(editor, monaco) {
 
     editorElementRef.value = editor;
 
-    monaco.languages.registerCompletionItemProvider('css', {
-        async provideCompletionItems(model, position) {
-            const wordInfo = model.getWordUntilPosition(position);
+    // monaco.languages.registerCompletionItemProvider('css', {
+    //     async provideCompletionItems(model, position) {
+    //         const wordInfo = model.getWordUntilPosition(position);
 
-            let variables = [];
+    //         let variables = [];
 
-            if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
-                variables = (await getVariableList({ volume: volumeStore.getKVEntries(), })).map(entry => {
-                    return {
-                        kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
-                        label: entry.key,
-                        insertText: entry.key,
-                        detail: entry.value,
-                        range: {
-                            startLineNumber: position.lineNumber,
-                            startColumn: wordInfo.startColumn,
-                            endLineNumber: position.lineNumber,
-                            endColumn: wordInfo.endColumn
-                        },
-                        sortText: naturalExpand(entry.index)
-                    }
-                });
-            }
+    //         if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
+    //             variables = (await getVariableList({ volume: volumeStore.getKVEntries(), })).map((entry:) => {
+    //                 return {
+    //                     kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
+    //                     label: entry.key,
+    //                     insertText: entry.key,
+    //                     detail: entry.value,
+    //                     range: {
+    //                         startLineNumber: position.lineNumber,
+    //                         startColumn: wordInfo.startColumn,
+    //                         endLineNumber: position.lineNumber,
+    //                         endColumn: wordInfo.endColumn
+    //                     },
+    //                     sortText: naturalExpand(entry.index)
+    //                 }
+    //             });
+    //         }
 
-            return {
-                suggestions: variables
-            };
-        }
-    });
+    //         return {
+    //             suggestions: variables
+    //         };
+    //     }
+    // });
 
     // add key binding command to monaco.editor to save all changes
     monaco.editor.addEditorAction({
@@ -224,10 +223,6 @@ function handleEditorMount(editor, monaco) {
         }
     });
 }
-
-
-
-
 
 </script>
 

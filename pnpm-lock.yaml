@@ -27,7 +27,7 @@ importers:
         version: '@jsr/std__html@1.0.3'
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
-        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/2f28e5fbcb961f474990b290f593a096ffc23d84
+        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed
       '@vueuse/core':
         specifier: ^12.8.2
         version: 12.8.2(typescript@5.6.2)
@@ -1635,8 +1635,8 @@ packages:
   '@tailwindcss/postcss@4.0.12':
     resolution: {integrity: sha512-r59Sdr8djCW4dL3kvc4aWU8PHdUAVM3O3te2nbYzXsWwKLlHPCuUoZAc9FafXb/YyNDZOMI7sTbKTKFmwOrMjw==}
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/2f28e5fbcb961f474990b290f593a096ffc23d84':
-    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/2f28e5fbcb961f474990b290f593a096ffc23d84}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed':
+    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed}
     version: 1.0.0
 
   '@tailwindcss/vite@4.0.12':
@@ -6152,7 +6152,7 @@ snapshots:
       postcss: 8.5.3
       tailwindcss: 4.0.12
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/2f28e5fbcb961f474990b290f593a096ffc23d84': {}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed': {}
 
   '@tailwindcss/vite@4.0.12(vite@6.2.1(@types/node@22.13.9)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))':
     dependencies:

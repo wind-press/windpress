@@ -223,3 +223,8 @@ export async function getClassList(args = {}) {
         .map(prepareClass)
         .sort(sortselectors);
 }
+
+export function naturalExpand(value: number, total?: number) {
+    const length = typeof total === 'number' ? total.toString().length : 8
+    return ('0'.repeat(length) + value).slice(-length)
+}

@@ -5,6 +5,8 @@ import twUtilities from 'tailwindcss/utilities.css?raw';
 import twIndex from 'tailwindcss/index.css?raw';
 import { isValidUrl } from './utils';
 
+import type { VFSContainer} from './vfs'
+
 const twVolume = {
     '/tailwindcss/index.css': twIndex,
     '/tailwindcss/theme.css': twTheme,
@@ -12,11 +14,11 @@ const twVolume = {
     '/tailwindcss/utilities.css': twUtilities
 };
 
-async function httpsProvider(url) {
+async function httpsProvider(url: string): Promise<string> {
     return await fetch(url).then((res) => res.text());
 }
 
-export async function loadStylesheet(id, base = '/', volume = {}) {
+export async function loadStylesheet(id: string, base = '/', volume = {} as VFSContainer): Promise<{ base: string, content: string }> {
     base = base || '/';
 
     volume = {
@@ -103,11 +105,11 @@ export async function loadStylesheet(id, base = '/', volume = {}) {
 
                 data = data
                     // resolve the `@config '|"` imports paths to absolute paths with cdn
-                    .replace(/@config\s+['|"](.*)['|"]/g, (match, p1) => {
+                    .replace(/@config\s+['|"](.*)['|"]/g, (_, p1) => {
                         return `@config 'https://esm.sh${path.resolve(path.dirname(id))}${path.resolve(p1)}'`;
                     })
                     // resolve the `@plugin '|"` imports paths to absolute paths with cdn
-                    .replace(/@plugin\s+['|"](.*)['|"]/g, (match, p1) => {
+                    .replace(/@plugin\s+['|"](.*)['|"]/g, (_, p1) => {
                         return `@plugin 'https://esm.sh${path.resolve(path.dirname(id))}${path.resolve(p1)}'`;
                     });
 
