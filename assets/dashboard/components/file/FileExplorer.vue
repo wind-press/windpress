@@ -29,7 +29,7 @@ function recursiveTreeNodeWalkAndInsert(trees: TreeItem[], entry: Entry, rootPat
             label: currentPart,
             value: entry.relative_path,
             icon: `vscode-icons:file-type-${entry.relative_path === 'main.css' ? 'tailwind' : path.extname(entry.relative_path).replace('.', '')}`,
-            slot: 'tree-file',
+            slot: entry.relative_path !== 'main.css' ? 'tree-file' : undefined,
         });
         return;
     }
@@ -200,7 +200,11 @@ onMounted(() => {
                     </span>
 
                     <template #ctx-delete="{ item: ctxItem }">
-                        <span @click="_e => ctxMenuDeleteHandler(item)">{{ ctxItem.label }}</span>
+                        <UIcon :name="item.icon ?? ''" />
+                        <span @click="_e => ctxMenuDeleteHandler(item)">
+                            {{ ctxItem.label }}
+                            
+                        </span>
                     </template>
                 </UContextMenu>
             </template>

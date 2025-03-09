@@ -6,12 +6,15 @@ import { computed, shallowRef } from 'vue';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
-// TODO: monaco autocomplete, doSave
+import type { Toast } from '@nuxt/ui/composables/useToast.d.ts'
+
+// TODO: monaco autocomplete, broadcast event with channel on save
 
 type MonacoEditor = typeof monacoEditor;
 
 const volumeStore = useVolumeStore()
 const colorMode = useColorMode()
+const toast = useToast()
 
 const emits = defineEmits(['close'])
 
@@ -23,7 +26,6 @@ const currentLanguage = computed(() => {
     return volumeStore.activeViewEntryRelativePath?.endsWith('.css') ? 'css' : 'javascript';
 });
 
-
 const MONACO_EDITOR_OPTIONS = {
     automaticLayout: true,
     formatOnType: false,
@@ -31,8 +33,6 @@ const MONACO_EDITOR_OPTIONS = {
     fontSize: 14,
 };
 
-
-/** @type {?import('monaco-editor').editor.IStandaloneCodeEditor} */
 const editorElementRef = shallowRef();
 
 const entryValue = computed({
@@ -50,9 +50,63 @@ const editorReadOnly = computed(() => {
     return currentEntry.value?.handler === 'read-only';
 });
 
-
 function doSave() {
+    const toastData: Omit<Partial<Toast>, "id"> = {
+        title: 'Saving...',
+        description: 'Please wait while we save your changes.',
+        duration: 0,
+        icon: 'lucide:loader-circle',
+        close: false,
+        color: 'neutral',
+        ui: {
+            icon: 'animate-spin',
+        }
+    };
 
+    if (toast.toasts.value.find(t => t.id === 'file-editor.doSave')) {
+        toast.update('file-editor.doSave', {
+            ...toastData
+        });
+    } else {
+        toast.add({
+            id: 'file-editor.doSave',
+            ...toastData
+        });
+    }
+
+    volumeStore
+        .doPush()
+        .then(() => {
+            toast.update('file-editor.doSave', {
+                title: 'Saved',
+                description: 'Your changes have been saved.',
+                icon: 'i-lucide-save',
+                color: 'success',
+                duration: undefined,
+                close: true,
+                ui: {
+                    icon: undefined,
+                }
+            });
+        })
+        .catch((err) => {
+            toast.update('file-editor.doSave', {
+                title: 'Error',
+                description: 'An error occurred while saving your changes.',
+                icon: 'i-lucide-save',
+                color: 'error',
+                duration: undefined,
+                close: true,
+                ui: {
+                    icon: undefined,
+                }
+            });
+
+            // TODO: log error
+        })
+        .finally(() => {
+            // TODO: broadcast event with channel
+        });
 }
 
 function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: MonacoEditor) {
@@ -223,7 +277,6 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
         }
     });
 }
-
 </script>
 
 <template>
@@ -239,10 +292,14 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
             </template>
 
             <template #right>
-                <UTooltip text="Save">
-                    <UButton icon="i-lucide-save" color="neutral" variant="ghost" @click="doSave" />
+                <UTooltip v-if="currentEntry?.relative_path === 'main.css'" text="Reset to default">
+                    <UButton icon="lucide:file-minus-2" color="warning" variant="ghost" @click="" />
                 </UTooltip>
-                
+
+                <UTooltip text="Save">
+                    <UButton icon="i-lucide-save" color="primary" variant="soft" @click="doSave" />
+                </UTooltip>
+
                 <!-- <UTooltip text="Archive">
                     <UButton icon="i-lucide-inbox" color="neutral" variant="ghost" />
                 </UTooltip>
