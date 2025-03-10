@@ -15,6 +15,7 @@ namespace WindPress\WindPress\Core;
 
 use Exception;
 use WIND_PRESS;
+use WindPress\WindPress\Admin\AdminPage;
 use WindPress\WindPress\Utils\AssetVite;
 use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
@@ -276,6 +277,7 @@ class Runtime
             $metadata['site_meta'] = [
                 'name' => get_bloginfo('name'),
                 'site_url' => get_site_url(),
+                'web_history' => AdminPage::get_page_url(),
             ];
         }
 

@@ -46,6 +46,8 @@ interface Window {
             name: string;
 
             site_url: string;
+
+            web_history: string;
         };
 
         current_user: {

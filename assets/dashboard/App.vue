@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
@@ -33,19 +33,18 @@ const links = [
             children: [
                 {
                     label: 'General',
+                    to: router.resolve({ name: 'settings.general' }),
                     // to: '/settings',
-                    exact: true
-                },
-                {
-                    label: 'License',
-                    // to: '/settings/license',
+                    // exact: true
                 },
                 {
                     label: 'Performance',
+                    to: router.resolve({ name: 'settings.performance' }),
                     // to: '/settings/performance',
                 },
                 {
                     label: 'Integrations',
+                    to: router.resolve({ name: 'settings.integrations' }),
                     // to: '/settings/integrations',
                 }
             ]

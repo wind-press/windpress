@@ -25,7 +25,7 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                dashboard: 'assets/dashboard/main.js',
+                dashboard: 'assets/dashboard/main.ts',
 
                 // Tailwind v4
                 'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.js',

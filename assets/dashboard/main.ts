@@ -1,8 +1,8 @@
 import './styles/main.css'
 
-import './wp-admin.js';
+import './wp-admin';
 
-import('./monaco-editor.js'); // Vite: Using dynamic import() to code-split the application
+import('./monaco-editor'); // Vite: Using dynamic import() to code-split the application
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -11,7 +11,7 @@ import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor';
 
 
 import App from './App.vue'
-import router from './router.js';
+import router from './router';
 
 
 const app = createApp(App)
