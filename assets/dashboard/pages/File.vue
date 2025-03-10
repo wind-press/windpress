@@ -2,12 +2,14 @@
 import { computed, ref, watch } from 'vue'
 import { useFetch, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
-import FileExplorer from '@/dashboard/components/file/FileExplorer.vue'
-import FileEditor from '@/dashboard/components/file/FileEditor.vue'
+import FileExplorer from '@/dashboard/components/File/FileExplorer.vue'
+import FileEditor from '@/dashboard/components/File/FileEditor.vue'
 import { useFileAction } from '@/dashboard/composables/useFileAction'
 
 const volumeStore = useVolumeStore()
 const fileAction = useFileAction()
+
+const importFileField = ref<HTMLInputElement | null>(null)
 
 const isFilePanelOpen = computed({
     get() {
@@ -45,12 +47,14 @@ const isMobile = breakpoints.smaller('lg')
                     <UButton color="primary" variant="subtle" icon="i-lucide-plus" />
                 </UTooltip>
 
-                <UTooltip :delay-duration="0" text="Export vfs">
-                    <UButton color="neutral" variant="outline" icon="i-lucide-download" />
+                <UTooltip :delay-duration="0" text="Export SFS volume">
+                    <UButton color="neutral" variant="outline" icon="i-lucide-download" @click="fileAction.exportVolume()" />
                 </UTooltip>
 
-                <UTooltip :delay-duration="0" text="Import vfs">
-                    <UButton color="neutral" variant="outline" icon="i-lucide-upload" />
+                <UTooltip :delay-duration="0" text="Import SFS volume">
+                    <UButton color="neutral" variant="outline" icon="i-lucide-upload" @click="importFileField?.click()" />
+
+                    <input ref="importFileField" type="file" @change="fileAction.importVolume" style="display:none" accept=".windpress" />
                 </UTooltip>
 
             </template>

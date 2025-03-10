@@ -1,19 +1,5 @@
 import axios from 'redaxios';
 
-declare global {
-    interface Window {
-        windpress: {
-            rest_api: {
-                // The base URL of the WindPress REST API endpoint.
-                url: string;
-
-                // The nonce for authenticating requests to the WindPress REST API.
-                nonce: string;
-            };
-        };
-    }
-}
-
 let apiInstance: ReturnType<typeof axios.create>;
 
 /**

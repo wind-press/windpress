@@ -1,5 +1,8 @@
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
-import ConfirmFileModal from '@/dashboard/components/file/Explorer/ContentMenu/ConfirmFileModal.vue'
+import ConfirmFileModal from '@/dashboard/components/File/Explorer/ContentMenu/ConfirmFileModal.vue'
+import { nanoid } from 'nanoid'
+import lzString from 'lz-string';
+import dayjs from 'dayjs'
 
 const volumeStore = useVolumeStore()
 const toast = useToast()
@@ -143,10 +146,175 @@ async function save() {
         });
 }
 
+function exportVolume() {
+    const data = {
+        entries: volumeStore.data.entries,
+        _windpress: true,
+        _version: window.windpress._version,
+        _wp_version: window.windpress._wp_version,
+        _timestamp: new Date().getTime(),
+        _uid: nanoid(),
+        _type: 'sfs',
+    };
+
+    const compressed = lzString.compressToUint8Array(JSON.stringify(data));
+
+    const blob = new Blob([compressed], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sfs-${dayjs().format('YYYYMMDDHHmmss')}.windpress`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    toast.add({
+        title: 'Exported',
+        description: 'SFS volume data exported',
+        color: 'success',
+        icon: 'i-lucide-download'
+    });
+}
+
+async function importVolume(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target || !target.files || target.files.length === 0) {
+        return;
+    }
+
+    const file = target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!file.name.endsWith('.windpress')) {
+        toast.add({
+            title: 'SFS Import',
+            description: 'Invalid file format',
+            color: 'error',
+            icon: 'i-lucide-upload'
+        });
+
+        return;
+    }
+
+    const doImport = async () => {
+        toast.add({
+            id: 'file-import.doImport',
+            title: 'Importing...',
+            description: 'Please wait while we import the data.',
+            icon: 'lucide:loader-circle',
+            close: false,
+            duration: 0,
+            color: 'neutral',
+            ui: {
+                icon: 'animate-spin',
+            }
+        });
+
+        // delay the execution to show the loading toast
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        try {
+            const data = JSON.parse(lzString.decompressFromUint8Array(new Uint8Array(await file.arrayBuffer())) || '{}');
+
+            if (!data._windpress || data._type !== 'sfs') {
+                throw new Error('File is not a valid WindPress file');
+            }
+
+            // Volume handler require to check the signature of existing files,
+            // so remove the `signature` property where the `handler` property is "internal"
+            const entries = data.entries.map((entry: Entry) => {
+                if (entry.signature && entry.handler === 'internal') {
+                    const { signature: _signature, ...rest } = entry;
+                    return rest;
+                }
+
+                return entry;
+            });
+
+            volumeStore.data.entries = entries;
+
+            // logStore.add({
+            //     type: 'success',
+            //     message: 'SFS data imported',
+            // });
+
+            toast.update('file-import.doImport', {
+                title: 'Success',
+                description: 'SFS data imported. Remember to save the changes.',
+                color: 'success',
+                icon: 'i-lucide-upload',
+                duration: undefined,
+                close: true,
+                ui: {
+                    icon: undefined,
+                }
+            });
+
+            console.log('reader result', data);
+            console.log('reader result', entries);
+
+        } catch (error) {
+            console.error(error);
+
+            // notifier.alert(error.message);
+            toast.update('file-import.doImport', {
+                title: 'Error',
+                description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+                color: 'error',
+                icon: 'i-lucide-upload',
+                close: true,
+                duration: undefined,
+            });
+        }
+    }
+
+    toast.add({
+        title: 'SFS Import',
+        description: 'This will overwrite all existing files. Are you sure you want to continue?',
+        duration: 0,
+        color: 'warning',
+        icon: 'i-lucide-upload',
+        close: false,
+        actions: [
+            {
+                label: 'Yes, continue',
+                color: 'success',
+                variant: 'outline',
+                onClick: (e) => {
+                    doImport();
+                }
+            },
+            {
+                label: 'No',
+                color: 'neutral',
+                variant: 'ghost',
+                onClick: (e) => {
+                    toast.add({
+                        title: 'Canceled',
+                        description: 'SFS import canceled',
+                        icon: 'i-lucide-upload',
+                        color: 'info',
+                        close: true,
+                        duration: undefined,
+                    });
+
+                    target.value = '';
+                }
+            }
+        ]
+    });
+
+}
+
 export function useFileAction() {
     return {
         deleteFile,
         resetFile,
         save,
+        exportVolume,
+        importVolume,
     }
 }

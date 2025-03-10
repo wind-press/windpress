@@ -24,6 +24,9 @@ export type Entry = {
 
     // Readonly file
     readonly?: boolean;
+
+    // Signature to check the authenticity of the file
+    signature?: string;
 };
 
 export const useVolumeStore = defineStore('volume', () => {
