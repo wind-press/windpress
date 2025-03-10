@@ -237,112 +237,80 @@ async function importVolume(event: Event) {
         },
     })
 
-    const shouldInform = await importConfirmModal.open()
+    const shouldImport = await importConfirmModal.open()
 
-
-
-
-
-
-    const doImport = async () => {
+    if (!shouldImport) {
         toast.add({
-            id: 'file-import.doImport',
-            title: 'Importing...',
-            description: 'Please wait while we import the data.',
-            icon: 'lucide:loader-circle',
-            close: false,
-            duration: 0,
-            color: 'neutral',
-            ui: {
-                icon: 'animate-spin',
-            }
+            title: 'Canceled',
+            description: 'SFS import canceled',
+            color: 'info',
+            icon: 'i-lucide-upload'
         });
 
-        // delay the execution to show the loading toast
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        try {
-            // Volume handler require to check the signature of existing files,
-            // so remove the `signature` property where the `handler` property is "internal"
-            const entries = data.entries.map((entry: Entry) => {
-                if (entry.signature && entry.handler === 'internal') {
-                    const { signature: _signature, ...rest } = entry;
-                    return rest;
-                }
-
-                return entry;
-            });
-
-            volumeStore.data.entries = entries;
-
-            // logStore.add({
-            //     type: 'success',
-            //     message: 'SFS data imported',
-            // });
-
-            toast.update('file-import.doImport', {
-                title: 'Success',
-                description: 'SFS data imported. Remember to save the changes.',
-                color: 'success',
-                icon: 'i-lucide-upload',
-                duration: undefined,
-                close: true,
-                ui: {
-                    icon: undefined,
-                }
-            });
-
-            target.value = '';
-        } catch (error) {
-            toast.update('file-import.doImport', {
-                title: 'Error',
-                description: (error instanceof Error) ? error.message : 'An unknown error occurred',
-                color: 'error',
-                icon: 'i-lucide-upload',
-                close: true,
-                duration: undefined,
-            });
-
-            target.value = '';
-        }
+        target.value = '';
+        return;
     }
 
     toast.add({
-        title: 'SFS Import',
-        description: `File are exported on ${dayjs(data._timestamp).format('YYYY-MM-DD HH:mm:ss')}. This will overwrite all existing files. Are you sure you want to continue?`,
-        duration: 0,
-        color: 'warning',
-        icon: 'i-lucide-upload',
+        id: 'file-import.doImport',
+        title: 'Importing...',
+        description: 'Please wait while we import the data.',
+        icon: 'lucide:loader-circle',
         close: false,
-        actions: [
-            {
-                label: 'Yes, continue',
-                color: 'success',
-                variant: 'outline',
-                onClick: (e) => {
-                    doImport();
-                }
-            },
-            {
-                label: 'No',
-                color: 'neutral',
-                variant: 'ghost',
-                onClick: (e) => {
-                    toast.add({
-                        title: 'Canceled',
-                        description: 'SFS import canceled',
-                        icon: 'i-lucide-upload',
-                        color: 'info',
-                        close: true,
-                        duration: undefined,
-                    });
-
-                    target.value = '';
-                }
-            }
-        ]
+        duration: 0,
+        color: 'neutral',
+        ui: {
+            icon: 'animate-spin',
+        }
     });
 
+    // delay the execution to show the loading toast
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    try {
+        // Volume handler require to check the signature of existing files,
+        // so remove the `signature` property where the `handler` property is "internal"
+        const entries = data.entries.map((entry: Entry) => {
+            if (entry.signature && entry.handler === 'internal') {
+                const { signature: _signature, ...rest } = entry;
+                return rest;
+            }
+
+            return entry;
+        });
+
+        volumeStore.data.entries = entries;
+
+        // logStore.add({
+        //     type: 'success',
+        //     message: 'SFS data imported',
+        // });
+
+        toast.update('file-import.doImport', {
+            title: 'Success',
+            description: 'SFS data imported. Remember to save the changes.',
+            color: 'success',
+            icon: 'i-lucide-upload',
+            duration: undefined,
+            close: true,
+            ui: {
+                icon: undefined,
+            }
+        });
+
+        target.value = '';
+    } catch (error) {
+        toast.update('file-import.doImport', {
+            title: 'Error',
+            description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+            color: 'error',
+            icon: 'i-lucide-upload',
+            close: true,
+            duration: undefined,
+        });
+
+        target.value = '';
+    }
 }
 
 export function useFileAction() {
