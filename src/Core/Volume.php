@@ -52,8 +52,9 @@ class Volume
                 'name' => $file->getFilename(),
                 'relative_path' => $file->getRelativePathname(),
                 'content' => $file->getContents(),
-                'handler' => strpos($file->getPathname(), $data_dir) === false ? 'read-only' : 'internal',
+                'handler' => 'internal',
                 'signature' => wp_create_nonce(sprintf('%s:%s', WIND_PRESS::WP_OPTION, $file->getRelativePathname())),
+                'readonly' => strpos($file->getPathname(), $data_dir) === false,
             ];
         }
 
@@ -95,7 +96,7 @@ class Volume
                 continue;
             }
 
-            if ($entry['handler'] === 'read-only') {
+            if ($entry['readonly']) {
                 continue;
             }
 

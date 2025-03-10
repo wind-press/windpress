@@ -6,6 +6,8 @@ import { computedAsync, useColorMode } from '@vueuse/core';
 const props = defineProps<{
     filePath: string,
     fileContent?: string,
+    actionYes: string,
+    actionNo?: string,
 }>()
 
 const colorMode = useColorMode()
@@ -29,7 +31,7 @@ const emit = defineEmits<{ close: [boolean] }>()
 <template>
     <UModal :close="{ onClick: () => emit('close', false) }">
         <template #title>
-            Are you sure you want to delete the <code>{{ filePath }}</code> file?
+            Are you sure you want to {{ actionYes }} the <code>{{ filePath }}</code> file?
         </template>
 
         <template #body v-if="fileContent">
@@ -42,8 +44,8 @@ const emit = defineEmits<{ close: [boolean] }>()
 
         <template #footer>
             <div class="flex gap-2">
-                <UButton color="neutral" variant="soft" label="Cancel" @click="emit('close', false)" />
-                <UButton color="error" variant="soft" label="Delete" @click="emit('close', true)" />
+                <UButton color="neutral" variant="soft" label="cancel" @click="emit('close', false)" class="capitalize" />
+                <UButton color="error" variant="soft" :label="actionYes" @click="emit('close', true)" class="capitalize" />
             </div>
         </template>
     </UModal>

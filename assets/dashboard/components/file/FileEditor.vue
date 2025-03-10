@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
-import { computedAsync, useColorMode } from '@vueuse/core';
+import { useColorMode } from '@vueuse/core';
 import path from 'path';
-import { computed, shallowRef, type Ref } from 'vue';
+import { computed, shallowRef } from 'vue';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
-
-import type { Toast } from '@nuxt/ui/composables/useToast.d.ts'
+import { useFileAction } from '@/dashboard/composables/useFileAction';
 
 // TODO: monaco autocomplete, broadcast event with channel on save
 
@@ -15,32 +14,18 @@ type MonacoEditor = typeof monacoEditor;
 const volumeStore = useVolumeStore()
 const colorMode = useColorMode()
 const toast = useToast()
-
-// const emit = defineEmits([
-//     'close',
-//     'delete',
-//     'reset',
-// ])
+const fileAction = useFileAction()
 
 const props = defineProps<{
     entry: Entry;
 }>()
 
 const emit = defineEmits<{
-    // (event: 'close'): void;
-    // (event: 'delete', entry: Entry): void;
     close: [];
+    save: [];
     delete: [entry: Entry];
+    reset: [entry: Entry];
 }>()
-
-
-// const currentEntry: Ref<Entry | undefined> = computedAsync(() => {
-//     return volumeStore.data.entries.find((entry: Entry) => entry.relative_path === volumeStore.activeViewEntryRelativePath);
-// }, undefined);
-
-const currentLanguage = computed(() => {
-    return volumeStore.activeViewEntryRelativePath?.endsWith('.css') ? 'css' : 'javascript';
-});
 
 const MONACO_EDITOR_OPTIONS = {
     automaticLayout: true,
@@ -50,80 +35,6 @@ const MONACO_EDITOR_OPTIONS = {
 };
 
 const editorElementRef = shallowRef();
-
-const entryValue = computed({
-    get() {
-        return currentEntry.value?.content || '';
-    },
-    set(val) {
-        if (currentEntry.value) {
-            currentEntry.value.content = val;
-        }
-    }
-});
-
-const editorReadOnly = computed(() => {
-    return currentEntry.value?.handler === 'read-only';
-});
-
-function doSave() {
-    const toastData: Omit<Partial<Toast>, "id"> = {
-        title: 'Saving...',
-        description: 'Please wait while we save your changes.',
-        duration: 0,
-        icon: 'lucide:loader-circle',
-        close: false,
-        color: 'neutral',
-        ui: {
-            icon: 'animate-spin',
-        }
-    };
-
-    if (toast.toasts.value.find(t => t.id === 'file-editor.doSave')) {
-        toast.update('file-editor.doSave', {
-            ...toastData
-        });
-    } else {
-        toast.add({
-            id: 'file-editor.doSave',
-            ...toastData
-        });
-    }
-
-    volumeStore
-        .doPush()
-        .then(() => {
-            toast.update('file-editor.doSave', {
-                title: 'Saved',
-                description: 'Your changes have been saved.',
-                icon: 'i-lucide-save',
-                color: 'success',
-                duration: undefined,
-                close: true,
-                ui: {
-                    icon: undefined,
-                }
-            });
-        })
-        .catch((err) => {
-            toast.update('file-editor.doSave', {
-                title: 'Error',
-                description: 'An error occurred while saving your changes.',
-                icon: 'i-lucide-save',
-                color: 'error',
-                duration: undefined,
-                close: true,
-                ui: {
-                    icon: undefined,
-                }
-            });
-
-            // TODO: log error
-        })
-        .finally(() => {
-            // TODO: broadcast event with channel
-        });
-}
 
 function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: MonacoEditor) {
     monaco.languages.css.cssDefaults.setOptions(
@@ -289,7 +200,7 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
         label: 'Save',
         keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
         run: () => {
-            doSave();
+            emit('save');
         }
     });
 }
@@ -297,27 +208,28 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
 
 <template>
     <UDashboardPanel id="explorer-2" class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
-        <UDashboardNavbar :title="currentEntry?.relative_path" :toggle="false">
+        <UDashboardNavbar :title="entry?.relative_path" :toggle="false">
             <template #leading>
                 <UButton icon="i-lucide-x" color="neutral" variant="ghost" class="-ms-1.5" @click="emit('close')" />
             </template>
 
             <template #title>
-                <UIcon :name="`vscode-icons:file-type-${currentEntry?.relative_path === 'main.css' ? 'tailwind' : path.extname(currentEntry?.relative_path ?? '').replace('.', '')}`" class="size-5" />
-                {{ currentEntry?.relative_path }}
+                <UIcon :name="`vscode-icons:file-type-${entry?.relative_path === 'main.css' ? 'tailwind' : path.extname(entry?.relative_path ?? '').replace('.', '')}`" class="size-5" />
+                {{ entry?.relative_path }}
+                <UBadge v-if="props.entry.readonly" label="read-only" color="warning" variant="outline" />
             </template>
 
             <template #right>
-                <UTooltip v-if="currentEntry?.relative_path !== 'main.css'" text="Delete">
-                    <UButton icon="i-lucide-trash" color="error" variant="ghost" @click="emit('delete', currentEntry)" />
+                <UTooltip v-if="entry?.relative_path !== 'main.css'" text="Delete">
+                    <UButton icon="i-lucide-trash" color="error" variant="ghost" @click="emit('delete', entry)" />
                 </UTooltip>
 
-                <UTooltip v-if="currentEntry?.relative_path === 'main.css'" text="Reset to default">
-                    <UButton icon="lucide:file-minus-2" color="warning" variant="ghost" @click="" />
+                <UTooltip v-if="entry?.relative_path === 'main.css'" text="Reset to default">
+                    <UButton icon="lucide:file-minus-2" color="warning" variant="ghost" @click="emit('reset', entry)" />
                 </UTooltip>
 
                 <UTooltip text="Save">
-                    <UButton icon="i-lucide-save" color="primary" variant="soft" @click="doSave" />
+                    <UButton icon="i-lucide-save" color="primary" variant="soft" @click="emit('save')" />
                 </UTooltip>
 
                 <!-- <UTooltip text="Archive">
@@ -335,7 +247,7 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
         </UDashboardNavbar>
 
         <div class="flex-1 overflow-y-auto">
-            <vue-monaco-editor v-model:value="entryValue" :language="currentLanguage" :saveViewState="false" :options="{ ...MONACO_EDITOR_OPTIONS, readOnly: editorReadOnly }" @mount="handleEditorMount" :theme="colorMode === 'dark' ? 'vs-dark' : 'vs'" />
+            <vue-monaco-editor v-model:value="props.entry.content" :language="props.entry.relative_path.endsWith('.css') ? 'css' : 'javascript'" :saveViewState="false" :options="{ ...MONACO_EDITOR_OPTIONS, readOnly: props.entry.readonly }" @mount="handleEditorMount" :theme="colorMode === 'dark' ? 'vs-dark' : 'vs'" />
         </div>
 
     </UDashboardPanel>

@@ -6,11 +6,11 @@ import path from 'path'
 import type { TreeItem, ContextMenuItem } from '@nuxt/ui'
 
 import type { Entry } from '@/dashboard/stores/volume'
-import DeleteFileModal from './Explorer/ContentMenu/DeleteFileModal.vue'
+import { useFileAction } from '@/dashboard/composables/useFileAction'
 
 const volumeStore = useVolumeStore()
 const toast = useToast()
-const overlay = useOverlay()
+const fileAction = useFileAction()
 
 const selectedFilePath = ref<TreeItem | undefined>(undefined)
 
@@ -123,12 +123,6 @@ const contextMenuItems: ContextMenuItem[] | ContextMenuItem[][] = [
     ]
 ]
 
-const deleteModal = overlay.create(DeleteFileModal, {
-    props: {
-        filePath: ''
-    }
-})
-
 async function ctxMenuDeleteHandler(item: TreeItem) {
     const entry = volumeStore.data.entries.find(entry => entry.relative_path === item.value)
 
@@ -136,61 +130,16 @@ async function ctxMenuDeleteHandler(item: TreeItem) {
         toast.add({
             title: `Error: File "${item.value}" not found`,
             color: 'error',
-            id: 'delete-modal-error'
         })
         return;
     }
 
-    if (entry.handler !== 'internal') {
-        toast.add({
-            title: `Error: File "${item.value}" is not deletable`,
-            description: 'File are managed by external handler',
-            color: 'error',
-            id: 'delete-modal-not-deletable'
-        })
-        return;
-    }
-
-    if (entry.relative_path === 'main.css') {
-        toast.add({
-            title: `Error: File "${item.value}" is not deletable`,
-            description: 'File is required for the Tailwind CSS to work',
-            color: 'error',
-            id: 'delete-modal-not-deletable'
-        })
-        return;
-    }
-
-    deleteModal.patch({
-        filePath: item.value,
-        fileContent: entry?.content
-    })
-
-    const shouldDelete = await deleteModal.open()
-
-    if (!shouldDelete) {
-        toast.add({
-            title: `Canceled: File "${item.value}" is not deleted`,
-            color: 'info',
-            id: 'delete-modal-dismissed'
-        })
-        return;
-    }
-
-    volumeStore.softDeleteEntry(entry)
-
-    toast.add({
-        title: `Success: File "${item.value}" deleted`,
-        color: 'success',
-        id: 'delete-modal-success'
-    })
+    fileAction.deleteFile(entry)
 }
 
 onMounted(() => {
     if (!volumeStore.data.entries.length) {
-        volumeStore.doPull().then(() => {
-            // volumeStore.activeViewEntryRelativePath = 'main.css'
-        });
+        volumeStore.doPull();
     }
 });
 </script>

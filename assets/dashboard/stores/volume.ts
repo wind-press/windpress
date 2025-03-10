@@ -21,6 +21,9 @@ export type Entry = {
 
     // Soft delete the file. Default is `false`. If `true`, the file will be hidden and deleted from the volume on push.
     hidden?: boolean;
+
+    // Readonly file
+    readonly?: boolean;
 };
 
 export const useVolumeStore = defineStore('volume', () => {
@@ -105,14 +108,7 @@ export const useVolumeStore = defineStore('volume', () => {
 
     function resetEntry(entry: Entry) {
         const entryIndex = data.entries.findIndex(e => e.relative_path === entry.relative_path);
-        const initEntry = initData.entries.find(e => e.relative_path === entry.relative_path);
-
-        if (initEntry) {
-            data.entries[entryIndex] = cloneDeep(initEntry);
-        }
-
-        // No need to call both doPush() and doPull()
-        doPush().then(updateInitValues);
+        data.entries[entryIndex].content = '';
     }
 
     function getKVEntries() {

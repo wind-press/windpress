@@ -2,7 +2,6 @@
 import { computed, ref, watch } from 'vue'
 import { useFetch, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
-import type { Mail } from '@/dashboard/types'
 import FileExplorer from '@/dashboard/components/file/FileExplorer.vue'
 import FileEditor from '@/dashboard/components/file/FileEditor.vue'
 import { useFileAction } from '@/dashboard/composables/useFileAction'
@@ -10,34 +9,25 @@ import { useFileAction } from '@/dashboard/composables/useFileAction'
 const volumeStore = useVolumeStore()
 const fileAction = useFileAction()
 
-const { data: mails } = useFetch('https://dashboard-template.nuxt.dev/api/mails', { initialData: [] }).json<Mail[]>()
-
-// Filter mails based on the selected tab
-const filteredMails = computed(() => {
-    return mails.value ?? []
-})
-
-const selectedMail = ref<Mail | null>()
-
 const isFilePanelOpen = computed({
     get() {
-        // return !!selectedMail.value
         return !!volumeStore.activeViewEntryRelativePath
     },
     set(value: boolean) {
         if (!value) {
-            // selectedMail.value = null
             volumeStore.activeViewEntryRelativePath = null
         }
     }
 })
 
-// Reset selected mail if it's not in the filtered mails
-watch(filteredMails, () => {
-    if (!filteredMails.value.find(mail => mail.id === selectedMail.value?.id)) {
-        selectedMail.value = null
+const currentEntry = computed<Entry>(() => {
+    const entry = volumeStore.data.entries.find((entry: Entry) => entry.relative_path === volumeStore.activeViewEntryRelativePath);
+    if (entry) {
+        return entry;
+    } else {
+        throw new Error('Entry not found');
     }
-})
+});
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const isMobile = breakpoints.smaller('lg')
@@ -48,9 +38,6 @@ const isMobile = breakpoints.smaller('lg')
         <UDashboardNavbar title="Explorer">
             <template #leading>
                 <UDashboardSidebarCollapse />
-            </template>
-            <template #trailing>
-                <!-- <UBadge :label="filteredMails.length" variant="subtle" /> -->
             </template>
 
             <template #right>
@@ -72,7 +59,7 @@ const isMobile = breakpoints.smaller('lg')
         <FileExplorer />
     </UDashboardPanel>
 
-    <FileEditor v-if="volumeStore.activeViewEntryRelativePath" @close="volumeStore.activeViewEntryRelativePath = null" @delete="(entry: Entry) => fileAction.deleteFile(entry)" />
+    <FileEditor v-if="volumeStore.activeViewEntryRelativePath" @close="volumeStore.activeViewEntryRelativePath = null" :entry="currentEntry" @delete="(entry: Entry) => fileAction.deleteFile(entry)" @save="fileAction.save()" @reset="(entry: Entry) => fileAction.resetFile(entry)" />
     <div v-else class="hidden lg:flex flex-1 items-center justify-center">
         <UIcon name="lucide:file-pen" class="size-32 text-(--ui-text-dimmed)" />
     </div>
