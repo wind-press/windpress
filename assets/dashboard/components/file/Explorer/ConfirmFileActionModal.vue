@@ -37,7 +37,7 @@ const emit = defineEmits<{ close: [boolean] }>()
         <template #body v-if="fileContent">
             <Suspense>
                 <div class="flex">
-                    <div v-html="snippet" class="flex [&>pre]:p-4 [&>pre]:mr-6" />
+                    <div v-html="snippet" class="flex [&>pre]:p-4 [&>pre]:mr-6"></div>
                 </div>
             </Suspense>
         </template>

@@ -44,7 +44,7 @@ const isMobile = breakpoints.smaller('lg')
 
             <template #right>
                 <UTooltip :delay-duration="0" text="Add new file">
-                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" />
+                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="fileAction.addNewFile()" />
                 </UTooltip>
 
                 <UTooltip :delay-duration="0" text="Export SFS volume">

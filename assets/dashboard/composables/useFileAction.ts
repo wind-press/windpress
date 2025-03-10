@@ -2,8 +2,9 @@ import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { nanoid } from 'nanoid'
 import lzString from 'lz-string';
 import dayjs from 'dayjs'
-import ConfirmFileModal from '@/dashboard/components/File/Explorer/ContentMenu/ConfirmFileModal.vue'
+import ConfirmFileActionModal from '@/dashboard/components/File/Explorer/ConfirmFileActionModal.vue'
 import ConfirmVolumeImportModal from '@/dashboard/components/File/Explorer/ConfirmVolumeImportModal.vue';
+import NewFileFormModal from '@/dashboard/components/File/Explorer/NewFileFormModal.vue'
 
 const volumeStore = useVolumeStore()
 const toast = useToast()
@@ -38,7 +39,7 @@ async function deleteFile(entry: Entry) {
         return;
     }
 
-    const deleteModal = overlay.create(ConfirmFileModal, {
+    const deleteModal = overlay.create(ConfirmFileActionModal, {
         destroyOnClose: true,
         props: {
             filePath: entry.relative_path,
@@ -65,9 +66,8 @@ async function deleteFile(entry: Entry) {
     })
 }
 
-
 async function resetFile(entry: Entry) {
-    const resetModal = overlay.create(ConfirmFileModal, {
+    const resetModal = overlay.create(ConfirmFileActionModal, {
         destroyOnClose: true,
         props: {
             filePath: entry.relative_path,
@@ -313,6 +313,42 @@ async function importVolume(event: Event) {
     }
 }
 
+async function addNewFile() {
+    const newFileModal = overlay.create(NewFileFormModal, {
+        destroyOnClose: true,
+    })
+
+    const newFileName = await newFileModal.open()
+
+    if (!newFileName) {
+        toast.add({
+            title: 'Canceled',
+            description: 'New file creation canceled',
+            color: 'info',
+            icon: 'i-lucide-plus'
+        });
+
+        return;
+    }
+
+    try {
+        volumeStore.addNewEntry(newFileName);
+        toast.add({
+            title: 'Success',
+            description: `File "${newFileName}" created`,
+            color: 'success',
+            icon: 'i-lucide-plus'
+        });
+    } catch (error) {
+        toast.add({
+            title: 'Error',
+            description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+            color: 'error',
+            icon: 'i-lucide-plus'
+        });
+    }
+}
+
 export function useFileAction() {
     return {
         deleteFile,
@@ -320,5 +356,6 @@ export function useFileAction() {
         save,
         exportVolume,
         importVolume,
+        addNewFile,
     }
 }
