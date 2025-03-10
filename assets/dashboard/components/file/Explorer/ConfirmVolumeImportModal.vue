@@ -2,28 +2,26 @@
 import { codeToHtml } from 'shiki/bundle/web'
 import path from 'path';
 import { computedAsync, useColorMode } from '@vueuse/core';
+import { VolumeSFSFile } from '@/dashboard/composables/useFileAction';
 
 const props = defineProps<{
-    filePath: string,
-    fileContent?: string,
-    actionYes: string,
-    actionNo?: string,
+    data: VolumeSFSFile,
 }>()
 
 const colorMode = useColorMode()
 
-const snippet = computedAsync(async () => {
-    if (!props.fileContent) {
-        return;
-    }
+// const snippet = computedAsync(async () => {
+//     if (!props.fileContent) {
+//         return;
+//     }
 
-    const fileExt = path.extname(props.filePath).replace('.', '');
+//     const fileExt = path.extname(props.filePath).replace('.', '');
 
-    return codeToHtml(props.fileContent, {
-        lang: fileExt === 'css' ? 'css' : 'javascript',
-        theme: colorMode.value === 'dark' ? 'dark-plus' : 'light-plus',
-    });
-})
+//     return codeToHtml(props.fileContent, {
+//         lang: fileExt === 'css' ? 'css' : 'javascript',
+//         theme: colorMode.value === 'dark' ? 'dark-plus' : 'light-plus',
+//     });
+// })
 
 const emit = defineEmits<{ close: [boolean] }>()
 </script>

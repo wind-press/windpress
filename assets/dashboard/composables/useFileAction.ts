@@ -1,12 +1,23 @@
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
-import ConfirmFileModal from '@/dashboard/components/File/Explorer/ContentMenu/ConfirmFileModal.vue'
 import { nanoid } from 'nanoid'
 import lzString from 'lz-string';
 import dayjs from 'dayjs'
+import ConfirmFileModal from '@/dashboard/components/File/Explorer/ContentMenu/ConfirmFileModal.vue'
+import ConfirmVolumeImportModal from '@/dashboard/components/File/Explorer/ConfirmVolumeImportModal.vue';
 
 const volumeStore = useVolumeStore()
 const toast = useToast()
 const overlay = useOverlay()
+
+export type VolumeSFSFile = {
+    entries: Entry[];
+    _windpress: boolean;
+    _version: string;
+    _wp_version: string;
+    _timestamp: number;
+    _uid: string;
+    _type: string;
+}
 
 async function deleteFile(entry: Entry) {
     if (entry.readonly) {
@@ -155,7 +166,7 @@ function exportVolume() {
         _timestamp: new Date().getTime(),
         _uid: nanoid(),
         _type: 'sfs',
-    };
+    } as VolumeSFSFile;
 
     const compressed = lzString.compressToUint8Array(JSON.stringify(data));
 
@@ -199,6 +210,40 @@ async function importVolume(event: Event) {
         return;
     }
 
+    let data: VolumeSFSFile;
+
+    try {
+        data = JSON.parse(lzString.decompressFromUint8Array(new Uint8Array(await file.arrayBuffer())) || '{}');
+
+        if (!data._windpress || data._type !== 'sfs') {
+            throw new Error('File is not a valid WindPress file');
+        }
+    } catch (error) {
+        toast.add({
+            title: 'SFS Import',
+            description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+            color: 'error',
+            icon: 'i-lucide-upload'
+        });
+
+        return;
+    }
+
+
+    const importConfirmModal = overlay.create(ConfirmVolumeImportModal, {
+        destroyOnClose: true,
+        props: {
+            data,
+        },
+    })
+
+    const shouldInform = await importConfirmModal.open()
+
+
+
+
+
+
     const doImport = async () => {
         toast.add({
             id: 'file-import.doImport',
@@ -217,12 +262,6 @@ async function importVolume(event: Event) {
         await new Promise(resolve => setTimeout(resolve, 500));
 
         try {
-            const data = JSON.parse(lzString.decompressFromUint8Array(new Uint8Array(await file.arrayBuffer())) || '{}');
-
-            if (!data._windpress || data._type !== 'sfs') {
-                throw new Error('File is not a valid WindPress file');
-            }
-
             // Volume handler require to check the signature of existing files,
             // so remove the `signature` property where the `handler` property is "internal"
             const entries = data.entries.map((entry: Entry) => {
@@ -253,13 +292,8 @@ async function importVolume(event: Event) {
                 }
             });
 
-            console.log('reader result', data);
-            console.log('reader result', entries);
-
+            target.value = '';
         } catch (error) {
-            console.error(error);
-
-            // notifier.alert(error.message);
             toast.update('file-import.doImport', {
                 title: 'Error',
                 description: (error instanceof Error) ? error.message : 'An unknown error occurred',
@@ -268,12 +302,14 @@ async function importVolume(event: Event) {
                 close: true,
                 duration: undefined,
             });
+
+            target.value = '';
         }
     }
 
     toast.add({
         title: 'SFS Import',
-        description: 'This will overwrite all existing files. Are you sure you want to continue?',
+        description: `File are exported on ${dayjs(data._timestamp).format('YYYY-MM-DD HH:mm:ss')}. This will overwrite all existing files. Are you sure you want to continue?`,
         duration: 0,
         color: 'warning',
         icon: 'i-lucide-upload',
