@@ -96,7 +96,8 @@ class Volume
                 continue;
             }
 
-            if ($entry['readonly']) {
+            // skip readonly entries
+            if (isset($entry['readonly']) && $entry['readonly']) {
                 continue;
             }
 
