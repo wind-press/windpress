@@ -64,7 +64,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
     for (const mutation of mutationsList) {
         if (mutation.type === 'childList' && mutation.addedNodes.length) {
             mutation.addedNodes.forEach(node => {
-                if (node instanceof Element && node.dataset) {
+                if (node instanceof Element && !node.closest('#wpbody') && node.dataset) {
                     Object.keys(node.dataset).forEach(key => {
                         if (key.startsWith('reka') || key.startsWith('dismissable')) {
                             node.classList.add('windpress-style')
