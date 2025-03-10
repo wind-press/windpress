@@ -67,7 +67,7 @@ class AdminPage
 
         $handle = WIND_PRESS::WP_OPTION . ':admin';
 
-        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [
             'handle' => $handle,
             'in_footer' => true,
             'dependencies' => ['wp-i18n', 'wp-hooks'],

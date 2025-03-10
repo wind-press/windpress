@@ -2,7 +2,7 @@ import * as csstree from 'css-tree';
 
 const link = document.querySelector('link[rel="stylesheet"][href*="wp-admin/load-styles.php"]')
 if (link) {
-    fetch(link.href)
+    fetch((link as HTMLLinkElement).href)
         .then(res => res.text())
         .then(css => {
             const style = document.createElement('style')
@@ -12,7 +12,7 @@ if (link) {
         })
 }
 
-function dontTouchMe(css) {
+function dontTouchMe(css: string) {
     const ast = csstree.parse(css);
 
     csstree.walk(ast, {
@@ -55,16 +55,19 @@ function dontTouchMe(css) {
     return csstree.generate(ast);
 }
 
-document.body.classList.add('folded')
+document.body.classList.add('folded');
 
-document.querySelector('#wpbody').classList.add('windpress-style')
+const wpbody = document.querySelector('#wpbody');
+if (wpbody) {
+    wpbody.classList.add('windpress-style');
+}
 
 // watch for changes in the body element and add the class windpress-style to windpress' element
-const observer = new MutationObserver((mutationsList, observer) => {
+const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
         if (mutation.type === 'childList' && mutation.addedNodes.length) {
             mutation.addedNodes.forEach(node => {
-                if (node instanceof Element && !node.closest('#wpbody') && node.dataset) {
+                if (node instanceof HTMLElement && !node.closest('#wpbody') && node.dataset) {
                     Object.keys(node.dataset).forEach(key => {
                         if (key.startsWith('reka') || key.startsWith('dismissable')) {
                             node.classList.add('windpress-style')

@@ -27,7 +27,7 @@ importers:
         version: '@jsr/std__html@1.0.3'
       '@tailwindcss/root':
         specifier: github:tailwindlabs/tailwindcss
-        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed
+        version: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/de145c5b06b424368249d8068d618bcadbe16c12
       '@vueuse/core':
         specifier: ^13.0.0
         version: 13.0.0(vue@3.5.13(typescript@5.6.2))
@@ -153,8 +153,8 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       '@iconify-json/devicon':
-        specifier: ^1.2.18
-        version: 1.2.18
+        specifier: ^1.2.19
+        version: 1.2.19
       '@iconify-json/fa6-brands':
         specifier: ^1.2.5
         version: 1.2.5
@@ -189,8 +189,11 @@ importers:
         specifier: ^1.2.17
         version: 1.2.17
       '@kucrut/vite-for-wp':
-        specifier: ^0.10.0
-        version: 0.10.0(rollup-plugin-external-globals@0.13.0(rollup@4.35.0))(vite-plugin-external@6.0.1)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
+        specifier: ^0.11.0
+        version: 0.11.0(rollup-plugin-external-globals@0.13.0(rollup@4.35.0))(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
+      '@types/css-tree':
+        specifier: ^2.3.10
+        version: 2.3.10
       '@types/lodash':
         specifier: ^4.17.16
         version: 4.17.16
@@ -769,8 +772,8 @@ packages:
   '@iconify-json/bx@1.2.2':
     resolution: {integrity: sha512-hZVx6LMEkYckScdRdUuQWcmv8Lm2au6Cnf799TLoR6YgiAfFvaJ4M5ElwcnExvCu8ntsS7jW89r0W5LwBAfZXQ==}
 
-  '@iconify-json/devicon@1.2.18':
-    resolution: {integrity: sha512-A2SDG3BOGOlMrz1zGKoWmM9R17tIUNlWA/JO3YKiIFGd3ysvhXaVBj+Tr12ts0y3e/vTgVW/QkrAFqct9bqC9A==}
+  '@iconify-json/devicon@1.2.19':
+    resolution: {integrity: sha512-OnVa/bfWB5K2ZeK/fD6VMwuP4PgfHX4jDFoXmHkBBJr13NmaFSpKcMdEXGpvl9u68u4HiMb3A/9PU4hDW6QXvA==}
 
   '@iconify-json/fa6-brands@1.2.5':
     resolution: {integrity: sha512-U/iFfziz6jSN9zArOJZYTtoj2tQyh6MxPdI8M84DQ2kEulPaj8j+h9bqvjmzszNHmD7v+kmmKd/MLkMKk+3Zuw==}
@@ -805,8 +808,8 @@ packages:
   '@iconify-json/tabler@1.2.17':
     resolution: {integrity: sha512-Jfk20IC/n7UOQQSXM600BUhAwEfg8KU1dNUF+kg4eRhbET5w1Ktyax7CDx8Z8y0H6+J/8//AXpJOEgG8YoP8rw==}
 
-  '@iconify/collections@1.0.525':
-    resolution: {integrity: sha512-bHNSIGgPDAQTkhNAJqcfQlfxfZqBBSrfU2bP86viNp0AU04J2UbJZpuWm+lM4DC3KYzdGdv8R8/XDnQDSQGDBw==}
+  '@iconify/collections@1.0.526':
+    resolution: {integrity: sha512-TARexcspwMZWRxQGKhaPzrciklhLrGfavfjb+7sxv2vWpdF51WyF8DVJLBC7kMnTQZg8SiT+zqqXwOedKH2gEQ==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -870,16 +873,13 @@ packages:
   '@jsr/std__html@1.0.3':
     resolution: {integrity: sha512-yJrM4yMRZ3EQgzqR5oAP4xc4+QVo1GgimZ5NszA38quXCsFna0bEpl4heyosUtcDjuSYSdBGr5dKAQlfkQpZCQ==, tarball: https://npm.jsr.io/~/11/@jsr/std__html/1.0.3.tgz}
 
-  '@kucrut/vite-for-wp@0.10.0':
-    resolution: {integrity: sha512-1fNm9PrUFGvJ1iCcCa3FhXCcwO2jccoTc0wUrg4HTyWy/bENhOYXWBS1/bnLerFK2jEoIOReH7BOCuTVlXt6xg==}
+  '@kucrut/vite-for-wp@0.11.0':
+    resolution: {integrity: sha512-hVEUadizgjcwjEKIur/GlKsczMLonbke2cwyFIv6L8tuhLAIYspuRJEosFgRI7lpUURK8TUM9gsTKMgEJ4WENQ==}
     peerDependencies:
       rollup-plugin-external-globals: ^0.13.0
-      vite: ^6.0.3
-      vite-plugin-external: ^4.0.1
+      vite: ^6.2.1
     peerDependenciesMeta:
       rollup-plugin-external-globals:
-        optional: true
-      vite-plugin-external:
         optional: true
 
   '@monaco-editor/loader@1.5.0':
@@ -1635,8 +1635,8 @@ packages:
   '@tailwindcss/postcss@4.0.12':
     resolution: {integrity: sha512-r59Sdr8djCW4dL3kvc4aWU8PHdUAVM3O3te2nbYzXsWwKLlHPCuUoZAc9FafXb/YyNDZOMI7sTbKTKFmwOrMjw==}
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed':
-    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/de145c5b06b424368249d8068d618bcadbe16c12':
+    resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/de145c5b06b424368249d8068d618bcadbe16c12}
     version: 1.0.0
 
   '@tailwindcss/vite@4.0.12':
@@ -1685,6 +1685,9 @@ packages:
 
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
+
+  '@types/css-tree@2.3.10':
+    resolution: {integrity: sha512-WcaBazJ84RxABvRttQjjFWgTcHvZR9jGr0Y3hccPkHjFyk/a3N8EuxjKr+QfrwjoM5b1yI1Uj1i7EzOAAwBwag==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -2634,8 +2637,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.5.113:
-    resolution: {integrity: sha512-wjT2O4hX+wdWPJ76gWSkMhcHAV2PTMX+QetUCPYEdCIe+cxmgzzSSiGRCKW8nuh4mwKZlpv0xvoW7OF2X+wmHg==}
+  electron-to-chromium@1.5.114:
+    resolution: {integrity: sha512-DFptFef3iktoKlFQK/afbo274/XNWD00Am0xa7M8FZUepHlHT8PEuiNBoRfFHbH1okqN58AlhbJ4QTkcnXorjA==}
 
   elliptic@6.6.1:
     resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
@@ -5238,7 +5241,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/devicon@1.2.18':
+  '@iconify-json/devicon@1.2.19':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -5286,7 +5289,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/collections@1.0.525':
+  '@iconify/collections@1.0.526':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -5361,12 +5364,11 @@ snapshots:
 
   '@jsr/std__html@1.0.3': {}
 
-  '@kucrut/vite-for-wp@0.10.0(rollup-plugin-external-globals@0.13.0(rollup@4.35.0))(vite-plugin-external@6.0.1)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))':
+  '@kucrut/vite-for-wp@0.11.0(rollup-plugin-external-globals@0.13.0(rollup@4.35.0))(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))':
     dependencies:
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0)
     optionalDependencies:
       rollup-plugin-external-globals: 0.13.0(rollup@4.35.0)
-      vite-plugin-external: 6.0.1
 
   '@monaco-editor/loader@1.5.0':
     dependencies:
@@ -5440,7 +5442,7 @@ snapshots:
 
   '@nuxt/icon@1.10.3(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.2))':
     dependencies:
-      '@iconify/collections': 1.0.525
+      '@iconify/collections': 1.0.526
       '@iconify/types': 2.0.0
       '@iconify/utils': 2.3.0
       '@iconify/vue': 4.3.0(vue@3.5.13(typescript@5.6.2))
@@ -6207,7 +6209,7 @@ snapshots:
       postcss: 8.5.3
       tailwindcss: 4.0.12
 
-  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/7005ad7e00fc27889d3cfbc21ddc8b5cce96cfed': {}
+  '@tailwindcss/root@https://codeload.github.com/tailwindlabs/tailwindcss/tar.gz/de145c5b06b424368249d8068d618bcadbe16c12': {}
 
   '@tailwindcss/vite@4.0.12(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.2)(sass@1.85.1)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))':
     dependencies:
@@ -6264,6 +6266,8 @@ snapshots:
   '@types/babel__traverse@7.20.6':
     dependencies:
       '@babel/types': 7.26.9
+
+  '@types/css-tree@2.3.10': {}
 
   '@types/estree@1.0.6': {}
 
@@ -7134,7 +7138,7 @@ snapshots:
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001703
-      electron-to-chromium: 1.5.113
+      electron-to-chromium: 1.5.114
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.4)
 
@@ -7519,7 +7523,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.5.113: {}
+  electron-to-chromium@1.5.114: {}
 
   elliptic@6.6.1:
     dependencies:
