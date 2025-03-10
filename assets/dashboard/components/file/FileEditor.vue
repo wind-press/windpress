@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useVolumeStore } from '@/dashboard/stores/volume'
+import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { computedAsync, useColorMode } from '@vueuse/core';
 import path from 'path';
-import { computed, shallowRef } from 'vue';
+import { computed, shallowRef, type Ref } from 'vue';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
@@ -16,11 +16,27 @@ const volumeStore = useVolumeStore()
 const colorMode = useColorMode()
 const toast = useToast()
 
-const emits = defineEmits(['close'])
+// const emit = defineEmits([
+//     'close',
+//     'delete',
+//     'reset',
+// ])
 
-const currentEntry = computedAsync(() => {
-    return volumeStore.data.entries.find(entry => entry.relative_path === volumeStore.activeViewEntryRelativePath);
-});
+const props = defineProps<{
+    entry: Entry;
+}>()
+
+const emit = defineEmits<{
+    // (event: 'close'): void;
+    // (event: 'delete', entry: Entry): void;
+    close: [];
+    delete: [entry: Entry];
+}>()
+
+
+// const currentEntry: Ref<Entry | undefined> = computedAsync(() => {
+//     return volumeStore.data.entries.find((entry: Entry) => entry.relative_path === volumeStore.activeViewEntryRelativePath);
+// }, undefined);
 
 const currentLanguage = computed(() => {
     return volumeStore.activeViewEntryRelativePath?.endsWith('.css') ? 'css' : 'javascript';
@@ -283,7 +299,7 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
     <UDashboardPanel id="explorer-2" class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
         <UDashboardNavbar :title="currentEntry?.relative_path" :toggle="false">
             <template #leading>
-                <UButton icon="i-lucide-x" color="neutral" variant="ghost" class="-ms-1.5" @click="emits('close')" />
+                <UButton icon="i-lucide-x" color="neutral" variant="ghost" class="-ms-1.5" @click="emit('close')" />
             </template>
 
             <template #title>
@@ -292,6 +308,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
             </template>
 
             <template #right>
+                <UTooltip v-if="currentEntry?.relative_path !== 'main.css'" text="Delete">
+                    <UButton icon="i-lucide-trash" color="error" variant="ghost" @click="emit('delete', currentEntry)" />
+                </UTooltip>
+
                 <UTooltip v-if="currentEntry?.relative_path === 'main.css'" text="Reset to default">
                     <UButton icon="lucide:file-minus-2" color="warning" variant="ghost" @click="" />
                 </UTooltip>

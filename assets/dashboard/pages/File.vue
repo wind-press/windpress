@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useFetch, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
-import { useVolumeStore } from '@/dashboard/stores/volume'
+import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import type { Mail } from '@/dashboard/types'
 import FileExplorer from '@/dashboard/components/file/FileExplorer.vue'
 import FileEditor from '@/dashboard/components/file/FileEditor.vue'
+import { useFileAction } from '@/dashboard/composables/useFileAction'
 
 const volumeStore = useVolumeStore()
+const fileAction = useFileAction()
 
 const { data: mails } = useFetch('https://dashboard-template.nuxt.dev/api/mails', { initialData: [] }).json<Mail[]>()
 
@@ -67,12 +69,10 @@ const isMobile = breakpoints.smaller('lg')
             </template>
         </UDashboardNavbar>
 
-        <!-- <InboxList v-model="selectedMail" :mails="filteredMails" /> -->
         <FileExplorer />
     </UDashboardPanel>
 
-    <FileEditor v-if="volumeStore.activeViewEntryRelativePath" @close="volumeStore.activeViewEntryRelativePath = null" />
-    <!-- <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" /> -->
+    <FileEditor v-if="volumeStore.activeViewEntryRelativePath" @close="volumeStore.activeViewEntryRelativePath = null" @delete="(entry: Entry) => fileAction.deleteFile(entry)" />
     <div v-else class="hidden lg:flex flex-1 items-center justify-center">
         <UIcon name="lucide:file-pen" class="size-32 text-(--ui-text-dimmed)" />
     </div>

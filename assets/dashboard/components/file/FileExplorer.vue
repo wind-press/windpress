@@ -113,7 +113,12 @@ const contextMenuItems: ContextMenuItem[] | ContextMenuItem[][] = [
             label: 'Delete',
             color: 'error' as const,
             icon: 'i-lucide-trash',
-            slot: 'ctx-delete',
+            // slot: 'ctx-delete',
+            onSelect(e) {
+                e.preventDefault()
+                // ctxMenuDeleteHandler(selectedFilePath.value as TreeItem)
+                console.log('Delete', e)
+            },
         }
     ]
 ]
@@ -192,22 +197,19 @@ onMounted(() => {
 
 <template>
     <div class="overflow-y-auto divide-y divide-(--ui-border)">
-        <UTree :items="files" v-model="selectedFilePath" >
-            <template #tree-file-label="{ item }">
-                <UContextMenu v-if="!item.children?.length" :items="contextMenuItems" :ui="{ content: 'w-48' }">
+        <UTree :items="files" v-model="selectedFilePath">
+            <!-- <template #tree-file-label="{ item }">
+                <UContextMenu v-if="!item.children?.length" :items="contextMenuItems" :ui="{ content: 'w-48' }" :data-tree-item="item" >
                     <span>
                         {{ item.label }}
                     </span>
 
+                    
                     <template #ctx-delete="{ item: ctxItem }">
-                        <UIcon :name="item.icon ?? ''" />
-                        <span @click="_e => ctxMenuDeleteHandler(item)">
-                            {{ ctxItem.label }}
-                            
-                        </span>
+                        <span @click="_e => ctxMenuDeleteHandler(item)">{{ ctxItem.label }}</span>
                     </template>
                 </UContextMenu>
-            </template>
+            </template> -->
         </UTree>
     </div>
 </template>
