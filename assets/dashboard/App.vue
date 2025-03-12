@@ -34,18 +34,17 @@ const links = [
                 {
                     label: 'General',
                     to: router.resolve({ name: 'settings.general' }),
-                    // to: '/settings',
-                    // exact: true
+                    exact: true,
                 },
                 {
                     label: 'Performance',
                     to: router.resolve({ name: 'settings.performance' }),
-                    // to: '/settings/performance',
+                    exact: true,
                 },
                 {
                     label: 'Integrations',
                     to: router.resolve({ name: 'settings.integrations' }),
-                    // to: '/settings/integrations',
+                    exact: true,
                 }
             ]
         },
@@ -124,7 +123,7 @@ onMounted(() => {
                     onClick: () => {
                         askForReviewClick('done');
                     }
-                }, 
+                },
                 {
                     label: 'Later',
                     color: 'neutral',
@@ -150,7 +149,7 @@ onMounted(() => {
 
 <template>
     <Suspense>
-        <UApp :toaster="{class: 'windpress-style'}">
+        <UApp :toaster="{ class: 'windpress-style' }">
             <UDashboardGroup storage="local" class="bg-(--ui-bg) text-(--ui-text) top-(--wp-admin--admin-bar--height) left-(--wp-admin--sidebar-width) right-0 bottom-0">
                 <UDashboardSearch :groups="groups" />
 

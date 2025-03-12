@@ -46,10 +46,10 @@ const supportMenuItems = computed<DropdownMenuItem[]>(() => {
         },
     ];
 
-    if (windpress._via_wp_org) {
+    if (window.windpress._via_wp_org) {
         items.push({
             label: 'Upgrade to Pro',
-            icon: 'i-lucide-rocket',
+            icon: 'lucide:sparkles',
             to: `https://wind.press/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${windpress._version}#pricing`,
             target: '_blank'
         })

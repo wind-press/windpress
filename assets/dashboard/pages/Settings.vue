@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { useSettingsStore } from '@/dashboard/stores/settings';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const settingsStore = useSettingsStore()
 
@@ -7,39 +10,36 @@ const links = [
     [
         {
             label: 'General',
-            icon: 'i-lucide-user',
-            to: '/settings',
-            exact: true
+            to: router.resolve({ name: 'settings.general' }),
+            icon: 'lucide:settings',
+            exact: true,
         },
         {
-            label: 'Members',
-            icon: 'i-lucide-users',
-            to: '/settings/members'
+            label: 'Performance',
+            to: router.resolve({ name: 'settings.performance' }),
+            icon: 'lucide:rocket',
+            exact: true,
         },
         {
-            label: 'Notifications',
-            icon: 'i-lucide-bell',
-            to: '/settings/notifications'
+            label: 'Integrations',
+            to: router.resolve({ name: 'settings.integrations' }),
+            icon: 'lucide:package',
+            exact: true,
         },
-        {
-            label: 'Security',
-            icon: 'i-lucide-shield',
-            to: '/settings/security'
-        }
     ],
     [
-        {
-            label: 'Documentation',
-            icon: 'i-lucide-book-open',
-            to: 'https://ui3.nuxt.dev/getting-started/installation/pro/nuxt',
-            target: '_blank'
-        },
-        {
-            label: 'Buy now',
-            icon: 'i-lucide-shopping-cart',
-            to: 'https://ui.nuxt.com/pro/purchase',
-            target: '_blank'
-        }
+        // {
+        //     label: 'Documentation',
+        //     icon: 'i-lucide-book-open',
+        //     to: `https://wind.press/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
+        //     target: '_blank'
+        // },
+        // {
+        //     label: 'Support',
+        //     icon: 'lucide:headset',
+        //     to: `https://rosua.org/support-portal?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${windpress._version}`,
+        //     target: '_blank'
+        // },
     ]
 ]
 </script>
