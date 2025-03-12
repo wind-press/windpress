@@ -41,7 +41,7 @@ const supportMenuItems = computed<DropdownMenuItem[]>(() => {
         {
             label: 'Support',
             icon: 'lucide:headset',
-            to: `https://rosua.org/support-portal?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${windpress._version}`,
+            to: `https://rosua.org/support-portal?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
             target: '_blank'
         },
     ];
@@ -50,7 +50,7 @@ const supportMenuItems = computed<DropdownMenuItem[]>(() => {
         items.push({
             label: 'Upgrade to Pro',
             icon: 'lucide:sparkles',
-            to: `https://wind.press/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${windpress._version}#pricing`,
+            to: `https://wind.press/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}#pricing`,
             target: '_blank'
         })
     }
