@@ -128,46 +128,22 @@ onBeforeMount(() => {
             <UButton form="general" label="Save changes" color="neutral" type="submit" class="w-fit lg:ms-auto" />
         </UPageCard>
 
-
-
         <UPageCard variant="subtle">
             <UFormField label="Tailwind CSS version" description="You must update the `main.css` file accordingly." class="flex max-sm:flex-col justify-between items-start gap-4" 
             :ui="{ container: 'flex-1' }">
                 <template #hint>
                     <ULink to="https://github.com/tailwindlabs/tailwindcss/releases" target="_blank" class="underline">See release notes</ULink>
                 </template>
-
-
-                <!-- <UInput autocomplete="off" /> -->
-
-                <!-- <div class="mt:8 grid grid-cols:2 gap:12 {flex;cursor:pointer;align-items:center;justify-content:center;r:4;px:12;py:12;font:semibold;flex-grow:1;bg:gray-10/.7}>label {bg:gray-10/.1}>label@dark {outline:1|solid|gray-20}>label:hover {bg:sky-70;fg:white}>label:has(:checked) {bg:sky-70;fg:white}>label:has(:checked)@dark">
-                    <label>
-                        <input type="radio" name="tailwindcss_version" value="3" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
-                        <span>{{ tw3_version }}</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="tailwindcss_version" value="4" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
-                        <span>{{ tw4_version }}</span>
-                    </label>
-                </div> -->
-
-
                 <div class="grid grid-cols-2 gap-3">
                     <label class="flex items-center justify-center rounded-md p-3 font-semibold flex-1 bg-(--ui-bg-accented) hover:ring-(--ui-text)/50 hover:ring-1 has-checked:bg-[#0073e0] has-checked:text-white">
-                        <input type="radio" name="tailwindcss_version" value="3" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
+                        <input type="radio" name="tailwindcss_version" :value="3" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
                         <span>{{ tw3_version }}</span>
                     </label>
                     <label class="flex items-center justify-center rounded-md p-3 font-semibold flex-1 bg-(--ui-bg-accented) hover:ring-(--ui-text)/50 hover:ring-1 has-checked:bg-[#0073e0] has-checked:text-white">
-                        <input type="radio" name="tailwindcss_version" value="4" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
+                        <input type="radio" name="tailwindcss_version" :value="4" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
                         <span>{{ tw4_version }}</span>
                     </label>
                 </div>
-
-
-
-
-
-
             </UFormField>
 
             <USeparator />
