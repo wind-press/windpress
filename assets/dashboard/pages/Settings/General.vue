@@ -2,15 +2,19 @@
 import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { useLicenseStore } from '@/dashboard/stores/license';
 import { useBusyStore } from '@/dashboard/stores/busy';
+import { version as tw4_version } from 'tailwindcss/package.json';
+import { version as tw3_version } from 'tailwindcss3/package.json';
+import { useSettingsStore } from '@/dashboard/stores/settings';
 
 const appConfig = useAppConfig()
 
 const toast = useToast()
 
 const licenseStore = useLicenseStore()
+const settingsStore = useSettingsStore()
 const busyStore = useBusyStore()
 
-const licenseKeyError = ref<string|boolean>(false)
+const licenseKeyError = ref<string | boolean>(false)
 
 const license = reactive({
     key: '',
@@ -95,11 +99,10 @@ onBeforeMount(() => {
             <UFormField label="License key" required :error="licenseKeyError" help="To access updates when they are available, please provide your license key.">
                 <div class="flex flex-row gap-4 my-2">
                     <UInput v-model="license.key" type="password" placeholder="WIND-12345-67890-PRESS" class="w-full" data-1p-ignore />
-                    <UButton type="submit" :leading-icon="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'lucide:loader-circle' : undefined" :disabled="!license.key || busyStore.isBusy" :ui="{ leadingIcon: 'animate-spin' }">
+                    <UButton type="submit" color="neutral" :leading-icon="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'lucide:loader-circle' : undefined" :disabled="!license.key || busyStore.isBusy" :ui="{ leadingIcon: 'animate-spin' }">
                         {{(licenseStore.isActivated ? 'Deactivat' : 'Activat') + (busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'ing' : 'e')}}
                     </UButton>
                 </div>
-
                 <template #hint v-if="licenseStore.license.key">
                     <div class="flex items-center gap-2">
                         <span class="text-(--ui-text-muted)">Status:</span>
@@ -108,19 +111,74 @@ onBeforeMount(() => {
                         </UBadge>
                     </div>
                 </template>
+            </UFormField>
+        </UForm>
+    </UPageCard>
 
-                <!-- <template #help>
-                    <p class="mt-2 text-(--ui-text-muted)">To access updates when they are available, please provide your license key.</p>
+
+
+
+
+
+
+
+
+    <UForm id="general" :state="{}">
+        <UPageCard title="General" description="General settings for WindPress." variant="naked" orientation="horizontal" class="mb-4">
+            <UButton form="general" label="Save changes" color="neutral" type="submit" class="w-fit lg:ms-auto" />
+        </UPageCard>
+
+
+
+        <UPageCard variant="subtle">
+            <UFormField label="Tailwind CSS version" description="You must update the `main.css` file accordingly." class="flex max-sm:flex-col justify-between items-start gap-4" 
+            :ui="{ container: 'flex-1' }">
+                <template #hint>
+                    <ULink to="https://github.com/tailwindlabs/tailwindcss/releases" target="_blank" class="underline">See release notes</ULink>
                 </template>
 
-                <template #error>
-                    <p class="mt-2 text-error">{{ licenseKeyError }}</p>
-                </template> -->
+
+                <!-- <UInput autocomplete="off" /> -->
+
+                <!-- <div class="mt:8 grid grid-cols:2 gap:12 {flex;cursor:pointer;align-items:center;justify-content:center;r:4;px:12;py:12;font:semibold;flex-grow:1;bg:gray-10/.7}>label {bg:gray-10/.1}>label@dark {outline:1|solid|gray-20}>label:hover {bg:sky-70;fg:white}>label:has(:checked) {bg:sky-70;fg:white}>label:has(:checked)@dark">
+                    <label>
+                        <input type="radio" name="tailwindcss_version" value="3" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
+                        <span>{{ tw3_version }}</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="tailwindcss_version" value="4" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
+                        <span>{{ tw4_version }}</span>
+                    </label>
+                </div> -->
+
+
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="flex items-center justify-center rounded-md p-3 font-semibold flex-1 bg-(--ui-bg-accented) hover:ring-(--ui-text)/50 hover:ring-1 has-checked:bg-[#0073e0] has-checked:text-white">
+                        <input type="radio" name="tailwindcss_version" value="3" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
+                        <span>{{ tw3_version }}</span>
+                    </label>
+                    <label class="flex items-center justify-center rounded-md p-3 font-semibold flex-1 bg-(--ui-bg-accented) hover:ring-(--ui-text)/50 hover:ring-1 has-checked:bg-[#0073e0] has-checked:text-white">
+                        <input type="radio" name="tailwindcss_version" value="4" v-model="settingsStore.virtualOptions('general.tailwindcss.version', 4).value" class="sr-only">
+                        <span>{{ tw4_version }}</span>
+                    </label>
+                </div>
+
+
+
+
+
+
             </UFormField>
 
-        </UForm>
+            <USeparator />
 
-    </UPageCard>
+
+
+
+        </UPageCard>
+
+
+    </UForm>
 
 
 

@@ -14,7 +14,7 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@iconify-json/arcticons": "^1.2.20",
+    "@iconify-json/arcticons": "^1.2.21",
     "@iconify-json/bx": "^1.2.2",
     "@iconify-json/devicon": "^1.2.19",
     "@iconify-json/fa6-brands": "^1.2.5",
@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.5.4",
-    "@nuxt/ui-pro": "3.0.0-beta.2",
+    "@nuxt/ui-pro": "3.0.0",
     "@std/encoding": "npm:@jsr/std__encoding@^1.0.7",
     "@std/html": "npm:@jsr/std__html@^1.0.3",
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
