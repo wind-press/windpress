@@ -317,6 +317,9 @@ async function importVolume(event: Event) {
             icon: 'i-lucide-upload',
             close: true,
             duration: undefined,
+            ui: {
+                icon: undefined,
+            }
         });
 
         target.value = '';

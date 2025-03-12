@@ -59,7 +59,7 @@ export const useLicenseStore = defineStore('license', () => {
                 };
             })
             .catch((error) => {
-                throw new Error(error.response ? error.response.data.message : error.message);
+                throw new Error(error.data ? error.data.message : error.message);
             })
             .finally(() => {
                 busyStore.remove('settings.license.activate');
