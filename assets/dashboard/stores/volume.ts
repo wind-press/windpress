@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { shallowRef, ref, computed, reactive } from 'vue';
+import { ref, computed, reactive } from 'vue';
 import { useApi } from '@/dashboard/library/api';
 // import { useNotifier } from '@/dashboard/library/notifier.js';
 import { cloneDeep, isEqual } from 'lodash-es';
@@ -204,6 +204,15 @@ export const useVolumeStore = defineStore('volume', () => {
         return !isEqual(entry, initEntry);
     }
 
+    /**
+     * Pull the data from the server when the store is initialized.
+     */
+    function initPull() {
+        if (data.entries.length === 0) {
+            doPull();
+        }
+    }
+
     return {
         data,
         activeViewEntryRelativePath,
@@ -216,5 +225,6 @@ export const useVolumeStore = defineStore('volume', () => {
         softDeleteEntry,
         resetEntry,
         cleanPath,
+        initPull,
     };
 });

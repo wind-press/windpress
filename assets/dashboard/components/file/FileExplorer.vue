@@ -137,11 +137,11 @@ async function ctxMenuDeleteHandler(item: TreeItem) {
     fileAction.deleteFile(entry)
 }
 
-onMounted(() => {
-    if (!volumeStore.data.entries.length) {
-        volumeStore.doPull();
-    }
-});
+// onMounted(() => {
+//     if (!volumeStore.data.entries.length) {
+//         volumeStore.doPull();
+//     }
+// });
 </script>
 
 <template>

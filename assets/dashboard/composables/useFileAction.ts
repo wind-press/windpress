@@ -23,18 +23,20 @@ export type VolumeSFSFile = {
 async function deleteFile(entry: Entry) {
     if (entry.readonly) {
         toast.add({
-            title: `Error: File "${entry.relative_path}" is not deletable`,
-            description: 'File are read-only',
+            title: `Error`,
+            description: `File "${entry.relative_path}" is read-only and not deletable`,
             color: 'error',
+            icon: 'i-lucide-trash'
         })
         return;
     }
 
     if (entry.relative_path === 'main.css') {
         toast.add({
-            title: `Error: File "${entry.relative_path}" is not deletable`,
-            description: 'File is required for the Tailwind CSS to work',
+            title: `Error`,
+            description: `File "${entry.relative_path}" is required for the WindPress to work and not deletable`,
             color: 'error',
+            icon: 'i-lucide-trash',
         })
         return;
     }
@@ -52,8 +54,10 @@ async function deleteFile(entry: Entry) {
 
     if (!shouldDelete) {
         toast.add({
-            title: `Canceled: File "${entry.relative_path}" is not deleted`,
+            title: `Canceled`,
+            description: `File "${entry.relative_path}" is not deleted`,
             color: 'info',
+            icon: 'i-lucide-trash',
         })
         return;
     }
@@ -61,8 +65,10 @@ async function deleteFile(entry: Entry) {
     volumeStore.softDeleteEntry(entry)
 
     toast.add({
-        title: `Success: File "${entry.relative_path}" deleted`,
+        title: `Success`,
+        description: `File "${entry.relative_path}" deleted`,
         color: 'success',
+        icon: 'i-lucide-trash',
     })
 }
 
@@ -80,8 +86,10 @@ async function resetFile(entry: Entry) {
 
     if (!shouldReset) {
         toast.add({
-            title: `Canceled: File "${entry.relative_path}" is not reset`,
+            title: `Canceled`,
+            description: `File "${entry.relative_path}" is not reset`,
             color: 'info',
+            icon: 'lucide:file-minus-2',
         })
         return;
     }
@@ -89,8 +97,10 @@ async function resetFile(entry: Entry) {
     volumeStore.resetEntry(entry);
 
     toast.add({
-        title: `Success: File "${entry.relative_path}" reset`,
+        title: `Success`,
+        description: `File "${entry.relative_path}" reset`,
         color: 'success',
+        icon: 'lucide:file-minus-2',
     })
 
     save().then(() => {

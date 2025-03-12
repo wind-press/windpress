@@ -10,6 +10,12 @@ declare module "*?url"
     export default url;
 }
 
+declare module "*.svg"
+{
+    const content: string;
+    export default content;
+}
+
 interface Window {
     windpress: {
         // The version of WindPress.

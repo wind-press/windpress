@@ -246,16 +246,16 @@ class Runtime
 
         $metadata = apply_filters('f!windpress/core/runtime:print_windpress_metadata', $metadata);
 
-        /**
-         * @see \WP_Scripts::localize()
-         */
-        foreach ($metadata as $key => $value) {
-            if (! is_scalar($value)) {
-                continue;
-            }
+        // /**
+        //  * @see \WP_Scripts::localize()
+        //  */
+        // foreach ($metadata as $key => $value) {
+        //     if (! is_scalar($value)) {
+        //         continue;
+        //     }
 
-            $metadata[$key] = html_entity_decode((string) $value, ENT_QUOTES, 'UTF-8');
-        }
+        //     $metadata[$key] = html_entity_decode((string) $value, ENT_QUOTES, 'UTF-8');
+        // }
 
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo sprintf('<script id="windpress:metadata">var windpress = %s;</script>', wp_json_encode($metadata));

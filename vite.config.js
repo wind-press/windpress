@@ -66,7 +66,7 @@ export default defineConfig({
             },
             ui: {
                 colors: {
-                    primary: 'green',
+                    primary: 'indigo',
                     neutral: 'zinc'
                 },
                 commandPalette: {

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useSettingsStore } from '@/dashboard/stores/settings';
+
+const settingsStore = useSettingsStore()
+
 const links = [
     [
         {

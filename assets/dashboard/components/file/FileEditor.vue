@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
+import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useColorMode } from '@vueuse/core';
 import path from 'path';
-import { computed, shallowRef } from 'vue';
+import { shallowRef } from 'vue';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
-import { useFileAction } from '@/dashboard/composables/useFileAction';
 
 // TODO: monaco autocomplete, broadcast event with channel on save
 
 type MonacoEditor = typeof monacoEditor;
 
 const volumeStore = useVolumeStore()
+const settingsStore = useSettingsStore()
 const colorMode = useColorMode()
-const toast = useToast()
-const fileAction = useFileAction()
 
 const props = defineProps<{
     entry: Entry;
@@ -216,15 +215,15 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
             <template #title>
                 <UIcon :name="`vscode-icons:file-type-${entry?.relative_path === 'main.css' ? 'tailwind' : path.extname(entry?.relative_path ?? '').replace('.', '')}`" class="size-5" />
                 {{ entry?.relative_path }}
-                <UBadge v-if="props.entry.readonly" label="read-only" color="neutral" variant="outline" />
+                <UBadge v-if="props.entry.readonly" label="read-only" color="warning" variant="outline" />
             </template>
 
             <template #right>
-                <UTooltip v-if="entry?.relative_path !== 'main.css'" text="Delete">
+                <UTooltip v-if="entry?.relative_path !== 'main.css' && !(Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" text="Delete">
                     <UButton icon="i-lucide-trash" color="neutral" variant="ghost" @click="emit('delete', entry)" />
                 </UTooltip>
 
-                <UTooltip v-if="entry?.relative_path === 'main.css'" text="Reset to default">
+                <UTooltip v-if="entry?.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" text="Reset to default">
                     <UButton icon="lucide:file-minus-2" color="neutral" variant="ghost" @click="emit('reset', entry)" />
                 </UTooltip>
 

@@ -92,7 +92,7 @@ const groups = computed(() => [
 
 const askForReview = localStorage.getItem(`windpress-ask-for-review-${window.windpress._version}`) ?? -1;
 const isAskForReview = ref(askForReview === -1 || (askForReview !== 'done' && askForReview !== 'never' && new Date() > new Date(askForReview)));
-const askForReviewClick = (action) => {
+const askForReviewClick = (action: string) => {
     localStorage.setItem(`windpress-ask-for-review-${window.windpress._version}`, action);
 
     if (action === 'done') {
@@ -100,7 +100,7 @@ const askForReviewClick = (action) => {
     } else if (action === 'later') {
         const date = new Date();
         date.setDate(date.getDate() + 7);
-        localStorage.setItem(`windpress-ask-for-review-${window.windpress._version}`, date);
+        localStorage.setItem(`windpress-ask-for-review-${window.windpress._version}`, date.toString());
     }
 
     // never
