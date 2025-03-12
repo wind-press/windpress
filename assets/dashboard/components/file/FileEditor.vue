@@ -216,33 +216,21 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
             <template #title>
                 <UIcon :name="`vscode-icons:file-type-${entry?.relative_path === 'main.css' ? 'tailwind' : path.extname(entry?.relative_path ?? '').replace('.', '')}`" class="size-5" />
                 {{ entry?.relative_path }}
-                <UBadge v-if="props.entry.readonly" label="read-only" color="warning" variant="outline" />
+                <UBadge v-if="props.entry.readonly" label="read-only" color="neutral" variant="outline" />
             </template>
 
             <template #right>
                 <UTooltip v-if="entry?.relative_path !== 'main.css'" text="Delete">
-                    <UButton icon="i-lucide-trash" color="error" variant="ghost" @click="emit('delete', entry)" />
+                    <UButton icon="i-lucide-trash" color="neutral" variant="ghost" @click="emit('delete', entry)" />
                 </UTooltip>
 
                 <UTooltip v-if="entry?.relative_path === 'main.css'" text="Reset to default">
-                    <UButton icon="lucide:file-minus-2" color="warning" variant="ghost" @click="emit('reset', entry)" />
+                    <UButton icon="lucide:file-minus-2" color="neutral" variant="ghost" @click="emit('reset', entry)" />
                 </UTooltip>
 
                 <UTooltip text="Save">
-                    <UButton icon="i-lucide-save" color="primary" variant="soft" @click="emit('save')" />
+                    <UButton icon="i-lucide-save" color="primary" variant="subtle" @click="emit('save')" />
                 </UTooltip>
-
-                <!-- <UTooltip text="Archive">
-                    <UButton icon="i-lucide-inbox" color="neutral" variant="ghost" />
-                </UTooltip>
-
-                <UTooltip text="Reply">
-                    <UButton icon="i-lucide-reply" color="neutral" variant="ghost" />
-                </UTooltip> -->
-
-                <!-- <UDropdownMenu :items="dropdownItems">
-                    <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
-                </UDropdownMenu> -->
             </template>
         </UDashboardNavbar>
 

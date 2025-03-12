@@ -28,7 +28,7 @@
     "@iconify-json/octicon": "^1.2.5",
     "@iconify-json/skill-icons": "^1.2.0",
     "@iconify-json/tabler": "^1.2.17",
-    "@kucrut/vite-for-wp": "^0.11.0",
+    "@kucrut/vite-for-wp": "^0.11.2",
     "@types/css-tree": "^2.3.10",
     "@types/lodash": "^4.17.16",
     "@types/lodash-es": "^4.17.12",
@@ -37,7 +37,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "lightningcss": "^1.29.2",
     "memfs": "^4.17.0",
-    "oxlint": "^0.15.13",
+    "oxlint": "^0.15.14",
     "rollup-plugin-external-globals": "^0.13.0",
     "sass": "^1.85.1",
     "unplugin-icons": "^22.1.0",
@@ -87,8 +87,9 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "redaxios": "^0.5.1",
-    "shiki": "^3.1.0",
-    "tailwindcss": "^4.0.12",
+    "shiki": "^3.2.1",
+    "tailwindcss": "^4.0.13",
+    "tailwindcss3": "npm:tailwindcss@3",
     "tippy.js": "^6.3.7",
     "tributejs": "github:zurb/tribute",
     "vscode-languageserver-textdocument": "^1.0.12",
@@ -98,6 +99,11 @@
     "yaml": "^2.7.0"
   },
   "pnpm": {
+    "updateConfig": {
+      "ignoreDependencies": [
+        "tailwindcss3"
+      ]
+    },
     "patchedDependencies": {
       "is-core-module@2.16.1": "assets/patches/is-core-module@2.16.1.patch"
     },

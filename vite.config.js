@@ -29,9 +29,7 @@ export default defineConfig({
 
                 // Tailwind v4
                 'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.js',
-                'packages/core/tailwindcss/play/autocomplete': 'assets/packages/core/tailwindcss/play/autocomplete.js',
-                'packages/core/tailwindcss/play/sort': 'assets/packages/core/tailwindcss/play/sort.js',
-                'packages/core/tailwindcss/play/classname-to-css': 'assets/packages/core/tailwindcss/play/classname-to-css.js',
+                // 'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
                 // // Integrations
                 // 'integration/bricks': 'assets/integration/bricks/main.js',
@@ -88,17 +86,17 @@ export default defineConfig({
         react({
             jsxRuntime: 'classic',
         }),
-        // httpsImports.default({}, function resolver(matcher) {
-        //     return (id, importer) => {
-        //         if (matcher(id)) {
-        //             return id;
-        //         }
-        //         else if (matcher(importer) && !id.includes('vite-plugin-node-polyfills')) {
-        //             return new URL(id, importer).toString();
-        //         }
-        //         return undefined;
-        //     };
-        // }),
+        httpsImports.default({}, function resolver(matcher) {
+            return (id, importer) => {
+                if (matcher(id)) {
+                    return id;
+                }
+                else if (matcher(importer) && !id.includes('vite-plugin-node-polyfills')) {
+                    return new URL(id, importer).toString();
+                }
+                return undefined;
+            };
+        }),
     ],
     build: {
         // target: 'modules',

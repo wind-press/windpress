@@ -12,12 +12,18 @@ declare module "*?url"
 
 interface Window {
     windpress: {
+        // The version of WindPress.
         _version: string;
 
         _wp_version: string;
 
-        _via_wp_org: string;
+        // The version of used Tailwind CSS.
+        _tailwindcss_version: string;
 
+        // The edition of WindPress. If true, the Free Edition is used.
+        _via_wp_org: boolean;
+
+        // Should the WindPress setting panel be displayed in front page?
         is_ubiquitous: boolean;
 
         assets: {
@@ -47,6 +53,7 @@ interface Window {
 
             site_url: string;
 
+            // Vue Router base URL.
             web_history: string;
         };
 
