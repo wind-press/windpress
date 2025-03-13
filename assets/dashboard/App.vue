@@ -12,7 +12,7 @@ const links = [
         {
             label: 'Files',
             icon: 'lucide:folder',
-            to: router.resolve({ name: 'files' })
+            to: router.resolve({ name: 'files' }),
             // badge: '4',
         },
         {
@@ -27,8 +27,8 @@ const links = [
         },
         {
             label: 'Settings',
-            // to: '/settings',
             icon: 'lucide:settings',
+            to: router.resolve({ name: 'settings' }),
             defaultOpen: true,
             children: [
                 {

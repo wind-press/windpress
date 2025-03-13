@@ -30,6 +30,11 @@ function pullCacheInfo() {
     });
 }
 
+function doGenerateCache() {
+  busyStore.add('settings.performance.cached_css.generate');
+  setTimeout(() => busyStore.remove('settings.performance.cached_css.generate'), 2000);
+}
+
 onBeforeMount(() => {
   pullCacheInfo();
 });
@@ -40,7 +45,7 @@ onBeforeMount(() => {
     <UPageCard title="Performance" variant="naked" orientation="horizontal" class="mb-4">
     </UPageCard>
     <UPageCard variant="subtle">
-      <UFormField label="Use cached CSS" description="Serve the CSS file from the cache when available instead of compiling it on the fly." class="flex items-center justify-between gap-4">
+      <UFormField label="Use cached CSS" description="Serve the cached CSS file when available instead of generating the style dynamically using the Compiler.." class="flex items-center justify-between gap-4">
         <USwitch v-model="settingsStore.virtualOptions('performance.cache.enabled', false).value" label="Enable Cached CSS" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
       <USeparator />
@@ -68,7 +73,7 @@ onBeforeMount(() => {
           </div>
         </template>
         <UTooltip :delay-duration="0" text="Generate the cached CSS file">
-          <UButton color="primary" variant="subtle" :disabled="busyStore.isBusy" :loading="busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate')">
+          <UButton color="primary" variant="subtle" @click="doGenerateCache" :disabled="busyStore.isBusy" :loading="busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate')">
             {{ busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate') ? 'Generating...' : 'Generate' }}
           </UButton>
         </UTooltip>
