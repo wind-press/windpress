@@ -9,9 +9,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "oxlint ./assets",
-    "format": "oxlint --fix ./assets",
-    "eslint": "eslint ./assets",
+    "lint": "oxlint ./assets && eslint ./assets",
+    "format": "oxlint --fix ./assets && eslint --fix ./assets",
     "test": "vitest"
   },
   "devDependencies": {
