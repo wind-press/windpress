@@ -1,47 +1,78 @@
 <script setup lang="ts">
 import { onBeforeMount, reactive, ref, watch } from 'vue';
-import { useLicenseStore } from '@/dashboard/stores/license';
 import { useBusyStore } from '@/dashboard/stores/busy';
-import { version as tw4_version } from 'tailwindcss/package.json';
-import { version as tw3_version } from 'tailwindcss3/package.json';
 import { useSettingsStore } from '@/dashboard/stores/settings';
-
-const appConfig = useAppConfig()
+import dayjs from 'dayjs';
+import prettyBytes from 'pretty-bytes';
+import { useApi } from '@/dashboard/library/api';
 
 const toast = useToast()
+const api = useApi();
 
-const licenseStore = useLicenseStore()
 const settingsStore = useSettingsStore()
 const busyStore = useBusyStore()
+
+const css_cache = ref<{
+  last_generated: number | null;
+  file_url: string | null;
+  file_size: number | null;
+}>({
+  last_generated: null,
+  file_url: null,
+  file_size: null,
+});
+
+function pullCacheInfo() {
+  api
+    .get('admin/settings/cache/index')
+    .then((resp: { data: { cache: { last_generated: number | null; file_url: string | null; file_size: number } } }) => {
+      css_cache.value = resp.data.cache;
+    });
+}
+
+onBeforeMount(() => {
+  pullCacheInfo();
+});
 </script>
 
 <template>
-
   <UForm id="performance" :state="{}">
     <UPageCard title="Performance" variant="naked" orientation="horizontal" class="mb-4">
     </UPageCard>
-
     <UPageCard variant="subtle">
       <UFormField label="Use cached CSS" description="Serve the CSS file from the cache when available instead of compiling it on the fly." class="flex items-center justify-between gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('performance.cache.enabled', false).value" label="Enable Cached CSS" :ui="{ label: 'whitespace-nowrap' }" />
+        <USwitch v-model="settingsStore.virtualOptions('performance.cache.enabled', false).value" label="Enable Cached CSS" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
-
       <USeparator />
-
-      <UFormField label="Admin always uses Compiler" description="Exclude the admin from cached CSS and always use the Compiler." class="flex items-center justify-between gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('performance.cache.exclude_admin', false).value" label="Exclude Admin" :ui="{ label: 'whitespace-nowrap' }" />
+      <UFormField label="Admin always uses Compiler" description="Exclude the Admin from the cached CSS to ensure they always use the Compiler." class="flex items-center justify-between gap-4">
+        <USwitch v-model="settingsStore.virtualOptions('performance.cache.exclude_admin', false).value" label="Exclude Admin" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
-
       <USeparator />
-      <UFormField label="Load cached CSS inline" description="Load cached CSS inline instead of as an external file." class="flex items-center justify-between gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('performance.cache.inline_load', false).value" label="Inline Cached CSS" :ui="{ label: 'whitespace-nowrap' }" />
+      <UFormField label="Cached CSS loading method" description="Load cached CSS as an inline instead of an external file." class="flex items-center justify-between gap-4">
+        <USwitch v-model="settingsStore.virtualOptions('performance.cache.inline_load', false).value" label="Inline Cached CSS" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
-
       <USeparator />
-
-
-
-
+      <UFormField label="Generate the cached CSS" class="flex items-center justify-between gap-4">
+        <template #description v-if="css_cache.last_generated">
+          <div class="flex gap-2 items-center">
+            <div class="flex gap-2 items-center">
+              <span class="font-semibold">Last Generated: </span>
+              <span v-if="css_cache.file_size" class="flex gap-1">
+                {{ dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
+                <ULink :to="css_cache.file_url" target="_blank" class="underline">
+                  <UIcon name="lucide:external-link" />
+                </ULink>
+              </span>
+            </div>
+            <UBadge v-if="css_cache.file_size" color="success" variant="subtle"> {{ prettyBytes(css_cache.file_size, { maximumFractionDigits: 2, space: true }) }} </UBadge>
+          </div>
+        </template>
+        <UTooltip :delay-duration="0" text="Generate the cached CSS file">
+          <UButton color="primary" variant="subtle" :disabled="busyStore.isBusy" :loading="busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate')">
+            {{ busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate') ? 'Generating...' : 'Generate' }}
+          </UButton>
+        </UTooltip>
+      </UFormField>
     </UPageCard>
   </UForm>
 </template>

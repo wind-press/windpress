@@ -106,7 +106,7 @@
         <template v-if="licenseStore.license.key" #hint>
           <div class="flex items-center gap-2">
             <span class="text-(--ui-text-muted)">Status:</span>
-            <UBadge :color="licenseStore.isActivated ? 'success' : 'error'" variant="soft">
+            <UBadge :color="licenseStore.isActivated ? 'success' : 'error'" variant="subtle">
               {{ licenseStore.isActivated ? 'Active' : 'Inactive' }}
             </UBadge>
           </div>
@@ -138,7 +138,7 @@
         </div>
       </UFormField>
       <USeparator />
-      <UFormField label="Ubiquitous WindPress panel" description="Access the WindPress panel right from the front page and made adjustment as it is on the wp-admin page." class="flex items-center justify-between not-last:pb-4 gap-4">
+      <UFormField label="Ubiquitous panel" description="Access the WindPress dashboard panel right from the front page and made adjustment as it is on the wp-admin page." class="flex items-center justify-between not-last:pb-4 gap-4">
         <USwitch v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', false).value as boolean" disabled />
       </UFormField>
     </UPageCard>
