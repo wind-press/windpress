@@ -30,7 +30,7 @@ export async function loadModule(modulePath, base, resourceHint, volume = {}) {
 }
 
 export async function importCdnModule(path, base, resourceHint) {
-    let module = await import(/* @vite-ignore */ path).then((m) => m.default ?? m);
+    const module = await import(/* @vite-ignore */ path).then((m) => m.default ?? m);
 
     return module;
 }
@@ -38,13 +38,13 @@ export async function importCdnModule(path, base, resourceHint) {
 export async function importLocalModule(modulePath, base = '/', resourceHint, volume = {}) {
     base = base ?? '/';
     
-    let _path = path.resolve(base, modulePath);
+    const _path = path.resolve(base, modulePath);
 
     if (!volume[_path]) {
         throw new Error(`The ${resourceHint} file "${path.resolve('/', modulePath)}" does not exist in the volume.`);
     }
 
-    let _moduleContent = prepareModuleContent(volume[_path], modulePath, volume);
+    const _moduleContent = prepareModuleContent(volume[_path], modulePath, volume);
 
     return {
         module: await import(/* @vite-ignore */ `data:text/javascript;base64,${encodeBase64(_moduleContent)}`).then((m) => m.default ?? m),
@@ -96,7 +96,7 @@ export function prepareModuleContent(moduleContent, currentPath, volume = {}) {
     // Regex to capture both static and dynamic imports
     const regex = /import\s*(?:[^'"]*\s*from\s*)?['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
 
-    let matchPositions = [];
+    const matchPositions = [];
     let match;
     let shift = 0; // Track the shift in string length due to replacements
 
@@ -113,13 +113,13 @@ export function prepareModuleContent(moduleContent, currentPath, volume = {}) {
         }
 
         // resolve the path and check if the file is in the volume
-        let _path = path.resolve(
+        const _path = path.resolve(
             path.dirname(currentPath),
             importPath
         );
 
         // volume are key-value pairs (relative_path: content).
-        let _importModuleContent = volume[_path];
+        const _importModuleContent = volume[_path];
 
         if (!_importModuleContent) {
             throw new Error(`${currentPath}: The module file "${_path}" does not exist in the volume.`);

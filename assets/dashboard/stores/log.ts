@@ -26,7 +26,7 @@ export const useLogStore = defineStore('log', () => {
     const logs = ref<Log[]>([]);
 
     function add(log: Log): string {
-        let id: string = nanoid(10);
+        const id: string = nanoid(10);
         logs.value.push({
             id,
             timestamp: Date.now(),

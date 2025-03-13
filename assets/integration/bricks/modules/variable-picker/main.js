@@ -36,7 +36,7 @@ app
     ;
 
 app
-    .component('inline-svg', InlineSvg)
+    .component('InlineSvg', InlineSvg)
     ;
 
 app.mount('#windpressbricks-variable-app');

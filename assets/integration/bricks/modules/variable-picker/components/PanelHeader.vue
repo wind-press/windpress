@@ -64,17 +64,30 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="windpressbricks-variable-app-header" class="bg:$(builder-bg) cursor:grab bb:1|solid|$(builder-border-color)">
-        <div class="flex gap:10 align-items:center">
-            <div class="flex align-items:center px:12 py:2">
-                <inline-svg :src="Logo" class="inline-svg fill:current font:24" />
-            </div>
-            <div v-tooltip="{ placement: 'top', content: `v${windpressbricks._version}` }" class="font:bold gap:10 text:center flex-grow:1 align-items:center cursor:default px:12 py:2">
-                WindPress
-            </div>
-            <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="flex align-items:center py:10 px:12 bg:transparent bg:$(builder-bg-accent):hover">
-                <i-fa6-solid-xmark class="iconify fg:$(builder-color)" />
-            </button>
-        </div>
+  <div
+    id="windpressbricks-variable-app-header"
+    class="bg:$(builder-bg) cursor:grab bb:1|solid|$(builder-border-color)"
+  >
+    <div class="flex gap:10 align-items:center">
+      <div class="flex align-items:center px:12 py:2">
+        <inline-svg
+          :src="Logo"
+          class="inline-svg fill:current font:24"
+        />
+      </div>
+      <div
+        v-tooltip="{ placement: 'top', content: `v${windpressbricks._version}` }"
+        class="font:bold gap:10 text:center flex-grow:1 align-items:center cursor:default px:12 py:2"
+      >
+        WindPress
+      </div>
+      <button
+        v-tooltip="{ placement: 'top', content: 'Close' }"
+        class="flex align-items:center py:10 px:12 bg:transparent bg:$(builder-bg-accent):hover"
+        @click="isOpen = !isOpen"
+      >
+        <i-fa6-solid-xmark class="iconify fg:$(builder-color)" />
+      </button>
     </div>
+  </div>
 </template>

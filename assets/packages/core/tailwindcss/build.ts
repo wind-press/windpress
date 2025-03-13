@@ -23,7 +23,7 @@ export async function compile({ candidates = [], entrypoint = '/main.css', volum
  * Build the CSS
  */
 export async function build({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts }: BuildOptions): Promise<string> {
-    let compiled = await compile({ candidates, entrypoint, volume, ...opts });
+    const compiled = await compile({ candidates, entrypoint, volume, ...opts });
     return compiled.build(candidates);
 }
 

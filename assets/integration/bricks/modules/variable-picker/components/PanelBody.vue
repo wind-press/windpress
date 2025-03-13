@@ -227,35 +227,51 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbricks-variable-app-body" class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(builder-border-color)>div:not(:last-child)">
-        <ExpansionPanel namespace="variable" name="color" ref="sectionColor">
-            <template #header>
-                <span class="font:semibold">Color</span>
-            </template>
+  <div
+    id="windpressbricks-variable-app-body"
+    class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(builder-border-color)>div:not(:last-child)"
+  >
+    <ExpansionPanel
+      ref="sectionColor"
+      namespace="variable"
+      name="color"
+    >
+      <template #header>
+        <span class="font:semibold">Color</span>
+      </template>
 
-            <template #default>
-                <ColorVariableItems :variableItems="commonVar.colors" />
-            </template>
-        </ExpansionPanel>
-        <ExpansionPanel namespace="variable" name="typography" ref="sectionTypography">
-            <template #header>
-                <span class="font:semibold">Typography</span>
-            </template>
+      <template #default>
+        <ColorVariableItems :variable-items="commonVar.colors" />
+      </template>
+    </ExpansionPanel>
+    <ExpansionPanel
+      ref="sectionTypography"
+      namespace="variable"
+      name="typography"
+    >
+      <template #header>
+        <span class="font:semibold">Typography</span>
+      </template>
 
-            <template #default>
-                <CommonVariableItems :variableItems="commonVar.typography" />
-            </template>
-        </ExpansionPanel>
-        <ExpansionPanel namespace="variable" name="spacing" ref="sectionSpacing" class="">
-            <template #header>
-                <span class="font:semibold">Sizing</span>
-            </template>
+      <template #default>
+        <CommonVariableItems :variable-items="commonVar.typography" />
+      </template>
+    </ExpansionPanel>
+    <ExpansionPanel
+      ref="sectionSpacing"
+      namespace="variable"
+      name="spacing"
+      class=""
+    >
+      <template #header>
+        <span class="font:semibold">Sizing</span>
+      </template>
 
-            <template #default>
-                <CommonVariableItems :variableItems="commonVar.sizing" />
-            </template>
-        </ExpansionPanel>
-    </div>
+      <template #default>
+        <CommonVariableItems :variable-items="commonVar.sizing" />
+      </template>
+    </ExpansionPanel>
+  </div>
 </template>
 
 <style lang="scss" scoped>

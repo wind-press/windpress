@@ -26,7 +26,7 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
         ...twVolume
     };
 
-    let _id = id;
+    const _id = id;
 
     if (id.startsWith('fetch:') && isValidUrl(id.substring(6))) {
         return {
@@ -69,7 +69,7 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
          */
 
         // consider it's a path of URL
-        let _url = new URL(id, 'https://esm.sh');
+        const _url = new URL(id, 'https://esm.sh');
         _path = _url.pathname;
 
         if (!_path.endsWith('.css')) {

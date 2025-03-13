@@ -7,16 +7,28 @@ const homeLink = router.resolve({ name: 'home' }, )
 </script>
 
 <template>
-    <div class="min-h-full w-full">
-        <div class="h-full flex justify-center border border-b-0 border-(--ui-border-muted) relative p-4 z-[1]">
-            <div class="h-full flex flex-col items-center justify-center text-center">
-                <p class="text-base font-semibold text-(--ui-primary)">404</p>
-                <h1 class="mt-2 text-4xl sm:text-5xl font-bold text-(--ui-text-highlighted) text-balance">Page not found</h1>
-                <p class="mt-4 text-lg text-(--ui-text-muted) text-balance">Sorry, we couldn’t find the page you’re looking for.</p>
-                <div class="mt-8 flex items-center justify-center gap-6">
-                    <UButton :to="homeLink" size="lg" color="primary" variant="solid" label="Back to home" />
-                </div>
-            </div>
+  <div class="min-h-full w-full">
+    <div class="h-full flex justify-center border border-b-0 border-(--ui-border-muted) relative p-4 z-[1]">
+      <div class="h-full flex flex-col items-center justify-center text-center">
+        <p class="text-base font-semibold text-(--ui-primary)">
+          404
+        </p>
+        <h1 class="mt-2 text-4xl sm:text-5xl font-bold text-(--ui-text-highlighted) text-balance">
+          Page not found
+        </h1>
+        <p class="mt-4 text-lg text-(--ui-text-muted) text-balance">
+          Sorry, we couldn’t find the page you’re looking for.
+        </p>
+        <div class="mt-8 flex items-center justify-center gap-6">
+          <UButton
+            :to="homeLink"
+            size="lg"
+            color="primary"
+            variant="solid"
+            label="Back to home"
+          />
         </div>
+      </div>
     </div>
+  </div>
 </template>

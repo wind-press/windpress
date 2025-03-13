@@ -47,7 +47,7 @@ app
     ;
 
 app
-    .component('inline-svg', InlineSvg)
+    .component('InlineSvg', InlineSvg)
     ;
 
 app.mount('#windpressbuilderius-variable-app');

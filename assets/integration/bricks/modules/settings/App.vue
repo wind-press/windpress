@@ -16,79 +16,128 @@ watch(isOpen, (value) => {
 </script>
 
 <template>
-    <div ref="containerEl" v-show="isOpen" id="windpressbricks-settings-app-container" class="flex flex:column">
-        <ul class="w:full">
-            <li class="disabled" style="color: var(--bricks-text-dark);">
-                Module: Plain Classes
-            </li>
-            <li>
-                <span class="label">
-                    <label for="cb-settings-plain-classes-input-field">Input Field</label>
-                </span>
-                <span class="buttons">
-                    <div>
-                        <div data-control="checkbox" type="checkbox">
-                            <input type="checkbox" v-model="settingsState('module.plain-classes.input-field', true).value" id="cb-settings-plain-classes-input-field">
-                        </div>
-                    </div>
-                </span>
-            </li>
-            <li>
-                <span class="label">
-                    <label for="cb-settings-plain-classes-autocomplete">Autocomplete</label>
-                </span>
-                <span class="buttons">
-                    <div>
-                        <div data-control="checkbox" type="checkbox">
-                            <input type="checkbox" v-model="settingsState('module.plain-classes.autocomplete', true).value" id="cb-settings-plain-classes-autocomplete">
-                        </div>
-                    </div>
-                </span>
-            </li>
-            <li>
-                <span class="label">
-                    <label for="cb-settings-plain-classes-hover-preview-classes">Hover Preview</label>
-                </span>
-                <span class="buttons">
-                    <div>
-                        <div data-control="checkbox" type="checkbox">
-                            <input type="checkbox" v-model="settingsState('module.plain-classes.hover-preview-classes', true).value" id="cb-settings-plain-classes-hover-preview-classes">
-                        </div>
-                    </div>
-                </span>
-            </li>
-            <li class="disabled sep-t" style="color: var(--bricks-text-dark);">
-                Module: Generate Cache
-            </li>
-            <li>
-                <span class="label">
-                    <label for="cb-settings-generate-cache-on-save">On Save</label>
-                </span>
-                <span class="buttons">
-                    <div>
-                        <div data-control="checkbox" type="checkbox">
-                            <input type="checkbox" v-model="settingsState('module.generate-cache.on-save', true).value" id="cb-settings-generate-cache-on-save">
-                        </div>
-                    </div>
-                </span>
-            </li>
-            <li class="disabled sep-t" style="color: var(--bricks-text-dark);">
-                Module: HTML2Bricks
-            </li>
-            <li>
-                <span class="label">
-                    <label for="cb-settings-html2bricks-copy-paste">Copy-Paste</label>
-                </span>
-                <span class="buttons">
-                    <div>
-                        <div data-control="checkbox" type="checkbox">
-                            <input type="checkbox" v-model="settingsState('module.html2bricks.copy-paste', true).value" id="cb-settings-html2bricks-copy-paste">
-                        </div>
-                    </div>
-                </span>
-            </li>
-        </ul>
-    </div>
+  <div
+    v-show="isOpen"
+    id="windpressbricks-settings-app-container"
+    ref="containerEl"
+    class="flex flex:column"
+  >
+    <ul class="w:full">
+      <li
+        class="disabled"
+        style="color: var(--bricks-text-dark);"
+      >
+        Module: Plain Classes
+      </li>
+      <li>
+        <span class="label">
+          <label for="cb-settings-plain-classes-input-field">Input Field</label>
+        </span>
+        <span class="buttons">
+          <div>
+            <div
+              data-control="checkbox"
+              type="checkbox"
+            >
+              <input
+                id="cb-settings-plain-classes-input-field"
+                v-model="settingsState('module.plain-classes.input-field', true).value"
+                type="checkbox"
+              >
+            </div>
+          </div>
+        </span>
+      </li>
+      <li>
+        <span class="label">
+          <label for="cb-settings-plain-classes-autocomplete">Autocomplete</label>
+        </span>
+        <span class="buttons">
+          <div>
+            <div
+              data-control="checkbox"
+              type="checkbox"
+            >
+              <input
+                id="cb-settings-plain-classes-autocomplete"
+                v-model="settingsState('module.plain-classes.autocomplete', true).value"
+                type="checkbox"
+              >
+            </div>
+          </div>
+        </span>
+      </li>
+      <li>
+        <span class="label">
+          <label for="cb-settings-plain-classes-hover-preview-classes">Hover Preview</label>
+        </span>
+        <span class="buttons">
+          <div>
+            <div
+              data-control="checkbox"
+              type="checkbox"
+            >
+              <input
+                id="cb-settings-plain-classes-hover-preview-classes"
+                v-model="settingsState('module.plain-classes.hover-preview-classes', true).value"
+                type="checkbox"
+              >
+            </div>
+          </div>
+        </span>
+      </li>
+      <li
+        class="disabled sep-t"
+        style="color: var(--bricks-text-dark);"
+      >
+        Module: Generate Cache
+      </li>
+      <li>
+        <span class="label">
+          <label for="cb-settings-generate-cache-on-save">On Save</label>
+        </span>
+        <span class="buttons">
+          <div>
+            <div
+              data-control="checkbox"
+              type="checkbox"
+            >
+              <input
+                id="cb-settings-generate-cache-on-save"
+                v-model="settingsState('module.generate-cache.on-save', true).value"
+                type="checkbox"
+              >
+            </div>
+          </div>
+        </span>
+      </li>
+      <li
+        class="disabled sep-t"
+        style="color: var(--bricks-text-dark);"
+      >
+        Module: HTML2Bricks
+      </li>
+      <li>
+        <span class="label">
+          <label for="cb-settings-html2bricks-copy-paste">Copy-Paste</label>
+        </span>
+        <span class="buttons">
+          <div>
+            <div
+              data-control="checkbox"
+              type="checkbox"
+            >
+              <input
+                id="cb-settings-html2bricks-copy-paste"
+                v-model="settingsState('module.html2bricks.copy-paste', true).value"
+                type="checkbox"
+              >
+            </div>
+          </div>
+        </span>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style lang="scss" scoped>

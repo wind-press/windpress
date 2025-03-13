@@ -8,10 +8,14 @@ const isOpen = inject('isOpen');
 </script>
 
 <template>
-    <div v-show="isOpen" id="windpressoxygen-variable-app-container" class="flex flex:column w:full h:full">
-        <PanelHeader />
-        <Suspense>
-            <PanelBody />
-        </Suspense>
-    </div>
+  <div
+    v-show="isOpen"
+    id="windpressoxygen-variable-app-container"
+    class="flex flex:column w:full h:full"
+  >
+    <PanelHeader />
+    <Suspense>
+      <PanelBody />
+    </Suspense>
+  </div>
 </template>

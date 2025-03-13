@@ -64,17 +64,30 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="windpressbreakdance-variable-app-header" class="cursor:grab bb:1|solid|$(gray200)">
-        <div class="flex gap:10 align-items:center fg:var(dark)">
-            <div class="flex align-items:center px:12 py:2">
-                <inline-svg :src="Logo" class="inline-svg fill:current font:24" />
-            </div>
-            <div v-tooltip="{ placement: 'top', content: `v${windpressbreakdance._version}` }" class="text-transform:none font:medium text:center flex-grow:1 gap:10 align-items:center cursor:default px:12 py:2">
-                WindPress
-            </div>
-            <button @click="isOpen = !isOpen" v-tooltip="{ placement: 'top', content: 'Close' }" class="flex align-items:center py:10 px:12 fg:$(blue600):hover bg:$(blue50):hover">
-                <i-fa6-solid-xmark class="iconify font:16" />
-            </button>
-        </div>
+  <div
+    id="windpressbreakdance-variable-app-header"
+    class="cursor:grab bb:1|solid|$(gray200)"
+  >
+    <div class="flex gap:10 align-items:center fg:var(dark)">
+      <div class="flex align-items:center px:12 py:2">
+        <inline-svg
+          :src="Logo"
+          class="inline-svg fill:current font:24"
+        />
+      </div>
+      <div
+        v-tooltip="{ placement: 'top', content: `v${windpressbreakdance._version}` }"
+        class="text-transform:none font:medium text:center flex-grow:1 gap:10 align-items:center cursor:default px:12 py:2"
+      >
+        WindPress
+      </div>
+      <button
+        v-tooltip="{ placement: 'top', content: 'Close' }"
+        class="flex align-items:center py:10 px:12 fg:$(blue600):hover bg:$(blue50):hover"
+        @click="isOpen = !isOpen"
+      >
+        <i-fa6-solid-xmark class="iconify font:16" />
+      </button>
     </div>
+  </div>
 </template>

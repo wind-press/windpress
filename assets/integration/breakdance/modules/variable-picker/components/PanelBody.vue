@@ -296,35 +296,66 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbreakdance-variable-app-body" class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(gray200)>div:not(:last-child)">
-        <ExpansionPanel namespace="variable" name="color" ref="sectionColor">
-            <template #header>
-                <span class="font:semibold">Color</span>
-            </template>
+  <div
+    id="windpressbreakdance-variable-app-body"
+    class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(gray200)>div:not(:last-child)"
+  >
+    <ExpansionPanel
+      ref="sectionColor"
+      namespace="variable"
+      name="color"
+    >
+      <template #header>
+        <span class="font:semibold">Color</span>
+      </template>
 
-            <template #default>
-                <ColorVariableItems :variableItems="commonVar.colors" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
-            </template>
-        </ExpansionPanel>
-        <ExpansionPanel namespace="variable" name="typography" ref="sectionTypography">
-            <template #header>
-                <span class="font:semibold">Typography</span>
-            </template>
+      <template #default>
+        <ColorVariableItems
+          :variable-items="commonVar.colors"
+          @preview-enter="onMouseEnter"
+          @preview-leave="onMouseLeave"
+          @preview-chose="onClick"
+        />
+      </template>
+    </ExpansionPanel>
+    <ExpansionPanel
+      ref="sectionTypography"
+      namespace="variable"
+      name="typography"
+    >
+      <template #header>
+        <span class="font:semibold">Typography</span>
+      </template>
 
-            <template #default>
-                <CommonVariableItems :variableItems="commonVar.typography" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
-            </template>
-        </ExpansionPanel>
-        <ExpansionPanel namespace="variable" name="spacing" ref="sectionSpacing" class="">
-            <template #header>
-                <span class="font:semibold">Sizing</span>
-            </template>
+      <template #default>
+        <CommonVariableItems
+          :variable-items="commonVar.typography"
+          @preview-enter="onMouseEnter"
+          @preview-leave="onMouseLeave"
+          @preview-chose="onClick"
+        />
+      </template>
+    </ExpansionPanel>
+    <ExpansionPanel
+      ref="sectionSpacing"
+      namespace="variable"
+      name="spacing"
+      class=""
+    >
+      <template #header>
+        <span class="font:semibold">Sizing</span>
+      </template>
 
-            <template #default>
-                <CommonVariableItems :variableItems="commonVar.sizing" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
-            </template>
-        </ExpansionPanel>
-    </div>
+      <template #default>
+        <CommonVariableItems
+          :variable-items="commonVar.sizing"
+          @preview-enter="onMouseEnter"
+          @preview-leave="onMouseLeave"
+          @preview-chose="onClick"
+        />
+      </template>
+    </ExpansionPanel>
+  </div>
 </template>
 
 <style lang="scss" scoped>

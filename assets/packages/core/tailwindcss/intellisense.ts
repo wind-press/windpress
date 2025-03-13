@@ -60,7 +60,7 @@ export function bigSign(value) {
  * @param {object|DesignSystem} args 
  */
 export async function getVariableList(args = {}) {
-    let design = args.theme ? args : await loadDesignSystem(args);
+    const design = args.theme ? args : await loadDesignSystem(args);
 
     return Array.from(design.theme.entries()).map(
         (entry, index) => {
@@ -91,7 +91,7 @@ export async function getVariableList(args = {}) {
  * @param {Array<string>} classList 
  */
 export async function sortClasses(args = {}, classList) {
-    let design = args.theme ? args : await loadDesignSystem(args);
+    const design = args.theme ? args : await loadDesignSystem(args);
 
     return defaultSort(design.getClassOrder(classList));
 }
@@ -101,19 +101,19 @@ export function addPixelEquivalentsToValue(value, rootFontSize) {
         return value;
     }
 
-    let commentPool = [];
+    const commentPool = [];
 
     parseValue(value).walk((node) => {
         if (node.type !== 'word') {
             return true;
         }
 
-        let unit = parseValue.unit(node.value);
+        const unit = parseValue.unit(node.value);
         if (!unit || (unit.unit !== 'rem' && unit.unit !== 'rem;')) {
             return false;
         }
 
-        let commentStr = ` /* ${parseFloat(unit.number) * rootFontSize}px */`;
+        const commentStr = ` /* ${parseFloat(unit.number) * rootFontSize}px */`;
 
         commentPool.push({
             content: commentStr,
@@ -137,7 +137,7 @@ export function addPixelEquivalentsToValue(value, rootFontSize) {
  * @param {Array<string>} classes 
  */
 export async function candidatesToCss(args = {}, classes) {
-    let design = args.theme ? args : await loadDesignSystem(args);
+    const design = args.theme ? args : await loadDesignSystem(args);
 
     let css = design.candidatesToCss(classes);
 
@@ -152,7 +152,7 @@ export async function candidatesToCss(args = {}, classes) {
  * @returns {Promise<ClassEntity>} The data with ClassEntity type.
  */
 export async function getClassList(args = {}) {
-    let design = args.theme ? args : await loadDesignSystem(args);
+    const design = args.theme ? args : await loadDesignSystem(args);
 
     /** @type {ClassEntity[]} */
     const classList = getUtilityList(design).concat(

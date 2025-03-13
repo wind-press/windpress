@@ -38,10 +38,15 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-show="isOpen" id="windpressbreakdance-variable-app-container" ref="containerRef" class="v-application flex flex:column w:full h:full">
-        <PanelHeader />
-        <Suspense>
-            <PanelBody />
-        </Suspense>
-    </div>
+  <div
+    v-show="isOpen"
+    id="windpressbreakdance-variable-app-container"
+    ref="containerRef"
+    class="v-application flex flex:column w:full h:full"
+  >
+    <PanelHeader />
+    <Suspense>
+      <PanelBody />
+    </Suspense>
+  </div>
 </template>

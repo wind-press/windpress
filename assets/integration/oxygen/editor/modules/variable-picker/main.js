@@ -34,7 +34,7 @@ app
     ;
 
 app
-    .component('inline-svg', InlineSvg)
+    .component('InlineSvg', InlineSvg)
     ;
 
 app.mount('#windpressoxygen-variable-app');

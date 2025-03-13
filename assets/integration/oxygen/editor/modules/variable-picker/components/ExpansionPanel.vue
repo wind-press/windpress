@@ -37,22 +37,34 @@ defineExpose({
 </script>
 
 <template>
-    <div ref="sectionRef" class="expansion-panel mx:10 py:8 mr:4">
-        <div @click="expand[name] = !expand[name]" :class="{}" class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer">
-            <div class="flex-grow:1">
-                <slot name="header"></slot>
-            </div>
-            <div>
-                <i-fa6-solid-chevron-right :class="{ 'rotate(-90)': expand[name] }" class="iconify ~duration:300 font:18" />
-            </div>
-        </div>
-        <Transition>
-            <div v-if="expand[name]" class="expansion-panel__body">
-                <slot></slot>
-            </div>
-        </Transition>
-
+  <div
+    ref="sectionRef"
+    class="expansion-panel mx:10 py:8 mr:4"
+  >
+    <div
+      :class="{}"
+      class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer"
+      @click="expand[name] = !expand[name]"
+    >
+      <div class="flex-grow:1">
+        <slot name="header" />
+      </div>
+      <div>
+        <i-fa6-solid-chevron-right
+          :class="{ 'rotate(-90)': expand[name] }"
+          class="iconify ~duration:300 font:18"
+        />
+      </div>
     </div>
+    <Transition>
+      <div
+        v-if="expand[name]"
+        class="expansion-panel__body"
+      >
+        <slot />
+      </div>
+    </Transition>
+  </div>
 </template>
 
 <style lang="scss" scoped>

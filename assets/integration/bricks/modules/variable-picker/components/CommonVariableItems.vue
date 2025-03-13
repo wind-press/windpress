@@ -52,19 +52,31 @@ function onClick(e, varKey) {
 </script>
 
 <template>
-    <div class="{m:10;pb:15}>div">
-        <div v-for="(item, key) in variableItems" :key="key" class="">
-            <div class="variable-section-title font:14 my:10">
-                {{ key.replace('_', '-') }}
-            </div>
+  <div class="{m:10;pb:15}>div">
+    <div
+      v-for="(item, key) in variableItems"
+      :key="key"
+      class=""
+    >
+      <div class="variable-section-title font:14 my:10">
+        {{ key.replace('_', '-') }}
+      </div>
 
-            <div class="variable-section-items flex flex:row gap:8 flex-wrap:wrap">
-                <template v-if="item.length > 0">
-                    <button v-for="(subItem, subItemKey) in item" :key="subItemKey" @click="(event) => onClick(event, subItem.key)" @mouseenter="(event) => onMouseEnter(event, subItem.key)" @mouseleave="onMouseLeave" v-tooltip="{ placement: 'top', content: `var(${subItem.key}, ${subItem.value})` }" class="px:12 py:8 r:$(builder-border-radius) fg:$(builder-color) bg:$(builder-bg-2) bg:$(builder-bg-3):hover b:0 flex-grow:1 flex-shrink:1 flex-basis:30% text:center {opacity:.5;font:semibold}>span opacity:100:hover>span">
-                        <span class="font:14">{{ subItem.label }}</span>
-                    </button>
-                </template>
-            </div>
-        </div>
+      <div class="variable-section-items flex flex:row gap:8 flex-wrap:wrap">
+        <template v-if="item.length > 0">
+          <button
+            v-for="(subItem, subItemKey) in item"
+            :key="subItemKey"
+            v-tooltip="{ placement: 'top', content: `var(${subItem.key}, ${subItem.value})` }"
+            class="px:12 py:8 r:$(builder-border-radius) fg:$(builder-color) bg:$(builder-bg-2) bg:$(builder-bg-3):hover b:0 flex-grow:1 flex-shrink:1 flex-basis:30% text:center {opacity:.5;font:semibold}>span opacity:100:hover>span"
+            @click="(event) => onClick(event, subItem.key)"
+            @mouseenter="(event) => onMouseEnter(event, subItem.key)"
+            @mouseleave="onMouseLeave"
+          >
+            <span class="font:14">{{ subItem.label }}</span>
+          </button>
+        </template>
+      </div>
     </div>
+  </div>
 </template>
