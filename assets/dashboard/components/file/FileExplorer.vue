@@ -3,14 +3,11 @@ import { onMounted, computed, ref, watch } from 'vue'
 import { useVolumeStore } from '@/dashboard/stores/volume'
 import path from 'path'
 
-import type { TreeItem, ContextMenuItem } from '@nuxt/ui'
+import type { TreeItem } from '@nuxt/ui'
 
 import type { Entry } from '@/dashboard/stores/volume'
-import { useFileAction } from '@/dashboard/composables/useFileAction'
 
 const volumeStore = useVolumeStore()
-const toast = useToast()
-const fileAction = useFileAction()
 
 const selectedFilePath = ref<TreeItem | undefined>(undefined)
 
@@ -82,6 +79,10 @@ watch(() => volumeStore.activeViewEntryRelativePath, (value) => {
         return;
     }
 
+    switchToEntry(value)
+})
+
+function switchToEntry(value: string) {
     // walk the tree and select the file
     const walk = (tree: TreeItem) => {
         if (tree.value === value) {
@@ -105,60 +106,17 @@ watch(() => volumeStore.activeViewEntryRelativePath, (value) => {
             break;
         }
     }
-})
-
-const contextMenuItems: ContextMenuItem[] | ContextMenuItem[][] = [
-    [
-        {
-            label: 'Delete',
-            color: 'error' as const,
-            icon: 'i-lucide-trash',
-            // slot: 'ctx-delete',
-            onSelect(e) {
-                e.preventDefault()
-                // ctxMenuDeleteHandler(selectedFilePath.value as TreeItem)
-                console.log('Delete', e)
-            },
-        }
-    ]
-]
-
-async function ctxMenuDeleteHandler(item: TreeItem) {
-    const entry = volumeStore.data.entries.find(entry => entry.relative_path === item.value)
-
-    if (!entry) {
-        toast.add({
-            title: `Error: File "${item.value}" not found`,
-            color: 'error',
-        })
-        return;
-    }
-
-    fileAction.deleteFile(entry)
 }
 
-// onMounted(() => {
-//     if (!volumeStore.data.entries.length) {
-//         volumeStore.doPull();
-//     }
-// });
+onMounted(() => {
+    if (volumeStore.activeViewEntryRelativePath) {
+        switchToEntry(volumeStore.activeViewEntryRelativePath)
+    }
+});
 </script>
 
 <template>
     <div class="overflow-y-auto divide-y divide-(--ui-border)">
-        <UTree :items="files" v-model="selectedFilePath">
-            <!-- <template #tree-file-label="{ item }">
-                <UContextMenu v-if="!item.children?.length" :items="contextMenuItems" :ui="{ content: 'w-48' }" :data-tree-item="item" >
-                    <span>
-                        {{ item.label }}
-                    </span>
-
-                    
-                    <template #ctx-delete="{ item: ctxItem }">
-                        <span @click="_e => ctxMenuDeleteHandler(item)">{{ ctxItem.label }}</span>
-                    </template>
-                </UContextMenu>
-            </template> -->
-        </UTree>
+        <UTree :items="files" v-model="selectedFilePath" />
     </div>
 </template>

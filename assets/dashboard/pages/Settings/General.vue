@@ -1,85 +1,85 @@
 <script setup lang="ts">
-  import { onBeforeMount, reactive, ref, watch } from 'vue';
-  import { useLicenseStore } from '@/dashboard/stores/license';
-  import { useBusyStore } from '@/dashboard/stores/busy';
-  import { version as tw4_version } from 'tailwindcss/package.json';
-  import { version as tw3_version } from 'tailwindcss3/package.json';
-  import { useSettingsStore } from '@/dashboard/stores/settings';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
+import { useLicenseStore } from '@/dashboard/stores/license';
+import { useBusyStore } from '@/dashboard/stores/busy';
+import { version as tw4_version } from 'tailwindcss/package.json';
+import { version as tw3_version } from 'tailwindcss3/package.json';
+import { useSettingsStore } from '@/dashboard/stores/settings';
 
-  const appConfig = useAppConfig()
+const appConfig = useAppConfig()
 
-  const toast = useToast()
+const toast = useToast()
 
-  const licenseStore = useLicenseStore()
-  const settingsStore = useSettingsStore()
-  const busyStore = useBusyStore()
+const licenseStore = useLicenseStore()
+const settingsStore = useSettingsStore()
+const busyStore = useBusyStore()
 
-  const licenseKeyError = ref<string | boolean>(false)
+const licenseKeyError = ref<string | boolean>(false)
 
-  const license = reactive({
-    key: '',
-  })
+const license = reactive({
+  key: '',
+})
 
-  watch(() => license.key, () => {
-    licenseKeyError.value = false;
-  })
+watch(() => license.key, () => {
+  licenseKeyError.value = false;
+})
 
-  function doLicenseChange() {
-    licenseKeyError.value = false;
+function doLicenseChange() {
+  licenseKeyError.value = false;
 
-    toast.add({
-      id: 'license.change',
-      title: licenseStore.license.key && licenseStore.isActivated ? 'Deactivating license...' : 'Activating license...',
-      description: `Please wait while we ${licenseStore.license.key && licenseStore.isActivated ? 'deactivate' : 'activate'} your license key.`,
-      icon: 'lucide:loader-circle',
-      close: false,
-      duration: 0,
-      color: 'neutral',
+  toast.add({
+    id: 'license.change',
+    title: licenseStore.license.key && licenseStore.isActivated ? 'Deactivating license...' : 'Activating license...',
+    description: `Please wait while we ${licenseStore.license.key && licenseStore.isActivated ? 'deactivate' : 'activate'} your license key.`,
+    icon: 'lucide:loader-circle',
+    close: false,
+    duration: 0,
+    color: 'neutral',
+    ui: {
+      icon: 'animate-spin',
+    }
+  });
+
+  const promise = licenseStore.license.key && licenseStore.isActivated
+    ? licenseStore.doDeactivate()
+    : licenseStore.doActivate(license.key);
+
+  promise.then(() => {
+    license.key = licenseStore.license.key;
+
+    toast.update('license.change', {
+      title: 'License updated',
+      description: `Your license key has been ${licenseStore.isActivated ? 'activated' : 'deactivated'}.`,
+      icon: 'lucide:key-round',
+      color: 'success',
+      duration: undefined,
+      close: true,
       ui: {
-        icon: 'animate-spin',
+        icon: undefined,
+      }
+    });
+  }).catch((error) => {
+    toast.update('license.change', {
+      title: 'License update failed',
+      description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+      icon: 'lucide:key-round',
+      color: 'error',
+      close: true,
+      duration: undefined,
+      ui: {
+        icon: undefined,
       }
     });
 
-    const promise = licenseStore.license.key && licenseStore.isActivated
-      ? licenseStore.doDeactivate()
-      : licenseStore.doActivate(license.key);
-
-    promise.then(() => {
-      license.key = licenseStore.license.key;
-
-      toast.update('license.change', {
-        title: 'License updated',
-        description: `Your license key has been ${licenseStore.isActivated ? 'activated' : 'deactivated'}.`,
-        icon: 'lucide:key-round',
-        color: 'success',
-        duration: undefined,
-        close: true,
-        ui: {
-          icon: undefined,
-        }
-      });
-    }).catch((error) => {
-      toast.update('license.change', {
-        title: 'License update failed',
-        description: (error instanceof Error) ? error.message : 'An unknown error occurred',
-        icon: 'lucide:key-round',
-        color: 'error',
-        close: true,
-        duration: undefined,
-        ui: {
-          icon: undefined,
-        }
-      });
-
-      licenseKeyError.value = 'Invalid license key';
-    });
-  }
-
-  onBeforeMount(() => {
-    licenseStore.doPull().then(() => {
-      license.key = licenseStore.license.key;
-    });
+    licenseKeyError.value = 'Invalid license key';
   });
+}
+
+onBeforeMount(() => {
+  licenseStore.doPull().then(() => {
+    license.key = licenseStore.license.key;
+  });
+});
 
 </script>
 
@@ -94,14 +94,18 @@
     </template>
   </UPageCard>
 
-  <UPageCard v-else title="License" description="" class="bg-gradient-to-tl from-(--ui-primary)/10 from-5% to-(--ui-bg)">
+  <UPageCard v-else title="License" description="" :class="licenseStore.isActivated ? 'from-(--ui-primary)/10' : 'from-(--ui-warning)/10'" class="bg-gradient-to-tl from-5% to-(--ui-bg)">
     <UForm :state="license" @submit="doLicenseChange">
       <UFormField label="License key" required :error="licenseKeyError" help="To access updates when they are available, please provide your license key.">
         <div class="flex flex-row gap-4 my-2">
           <UInput v-model="license.key" type="password" placeholder="WIND-12345-67890-PRESS" class="w-full" data-1p-ignore />
-          <UButton type="submit" color="primary" variant="subtle" :leading-icon="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'lucide:loader-circle' : undefined" :disabled="!license.key || busyStore.isBusy" :ui="{ leadingIcon: 'animate-spin' }">
-            {{(licenseStore.isActivated ? 'Deactivat' : 'Activat') + (busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'ing' : 'e')}}
-          </UButton>
+
+          <UTooltip :delay-duration="0" :text="`${licenseStore.isActivated ? 'Unregister' : 'Register'} your WindPress setup`">
+            <UButton type="submit" color="primary" variant="subtle" :leading-icon="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'lucide:loader-circle' : undefined" :disabled="!license.key || busyStore.isBusy" :ui="{ leadingIcon: 'animate-spin' }">
+              {{(licenseStore.isActivated ? 'Deactivat' : 'Activat') + (busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'ing' : 'e')}}
+            </UButton>
+          </UTooltip>
+
         </div>
         <template v-if="licenseStore.license.key" #hint>
           <div class="flex items-center gap-2">

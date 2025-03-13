@@ -18,7 +18,7 @@ async function pullProviders() {
   await api
     .get('admin/settings/cache/providers')
     .then((resp) => {
-      providers.value = resp.data.providers;
+      providers.value = resp.data.providers.sort((a: Provider, b: Provider) => a.id.localeCompare(b.id));
     });
 }
 
