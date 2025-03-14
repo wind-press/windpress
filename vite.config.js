@@ -31,6 +31,10 @@ export default defineConfig({
                 'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.ts',
                 'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
+                // Tailwind v3
+                'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.ts',
+                'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
+
                 // // Integrations
                 // 'integration/bricks': 'assets/integration/bricks/main.js',
                 // 'integration/breakdance': 'assets/integration/breakdance/main.js',
