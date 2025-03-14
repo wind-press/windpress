@@ -1,22 +1,24 @@
-import { loadDesignSystem } from './design-system';
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
 import { compileCandidates } from '@tailwindcss/root/packages/tailwindcss/src/compile';
 import parseValue from 'postcss-value-parser';
 
-/**
- * @param {DesignSystem} design
- */
-function getUtilityList(design) {
+import type { DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/design-system';
+
+export type ClassEntity = {
+    kind: 'utility' | 'variant';
+    selector: string;
+    declarations?: any[];
+    css?: string;
+}
+
+function getUtilityList(design: DesignSystem): ClassEntity[] {
     return design.getClassList().map((classEntry) => ({
         kind: 'utility',
         selector: classEntry[0]
     }));
 }
 
-/**
- * @param {DesignSystem} design
- */
-function getVariantList(design) {
+function getVariantList(design: DesignSystem): ClassEntity[] {
     return design.getVariants().map((classEntry) => ({
         kind: 'variant',
         selector: classEntry.name
@@ -26,7 +28,7 @@ function getVariantList(design) {
 /**
  * A list of utilities that for some reason are missing from the getUtilityList call
  */
-function unsupportedUtilityList() {
+function unsupportedUtilityList(): ClassEntity[] {
     return [
         {
             kind: 'utility',
@@ -35,7 +37,7 @@ function unsupportedUtilityList() {
     ];
 }
 
-function defaultSort(arrayOfTuples) {
+function defaultSort(arrayOfTuples: [string, bigint | null][]): string[] {
     return arrayOfTuples
         .sort(([, a], [, z]) => {
             if (a === z) return 0;
@@ -46,7 +48,7 @@ function defaultSort(arrayOfTuples) {
         .map(([className]) => className);
 }
 
-export function bigSign(value) {
+export function bigSign(value: number | bigint) {
     if (value > 0n) {
         return 1;
     } else if (value === 0n) {
@@ -56,12 +58,7 @@ export function bigSign(value) {
     }
 }
 
-/**
- * @param {object|DesignSystem} args 
- */
-export async function getVariableList(args = {}) {
-    const design = args.theme ? args : await loadDesignSystem(args);
-
+export async function getVariableList(design: DesignSystem) {
     return Array.from(design.theme.entries()).map(
         (entry, index) => {
             const variable = entry[0];
@@ -86,22 +83,16 @@ export async function getVariableList(args = {}) {
     );
 }
 
-/**
- * @param {object|DesignSystem} args 
- * @param {Array<string>} classList 
- */
-export async function sortClasses(args = {}, classList) {
-    const design = args.theme ? args : await loadDesignSystem(args);
-
+export async function sortClasses(design: DesignSystem, classList: string[]) {
     return defaultSort(design.getClassOrder(classList));
 }
 
-export function addPixelEquivalentsToValue(value, rootFontSize) {
+export function addPixelEquivalentsToValue(value: string, rootFontSize: number) {
     if (!value?.includes('rem')) {
         return value;
     }
 
-    const commentPool = [];
+    const commentPool: { content: string; sourceEndIndex: number }[] = [];
 
     parseValue(value).walk((node) => {
         if (node.type !== 'word') {
@@ -132,51 +123,31 @@ export function addPixelEquivalentsToValue(value, rootFontSize) {
     return value;
 }
 
-/**
- * @param {object|DesignSystem} args 
- * @param {Array<string>} classes 
- */
-export async function candidatesToCss(args = {}, classes) {
-    const design = args.theme ? args : await loadDesignSystem(args);
-
+export async function candidatesToCss(design: DesignSystem, classes: string[]) {
     let css = design.candidatesToCss(classes);
 
-    css = css.map((value) => addPixelEquivalentsToValue(value, 16));
+    css = css.map((value: string | null) => value ? addPixelEquivalentsToValue(value, 16) : value);
 
     return css;
 }
 
-
-/**
- * @param {object|DesignSystem} args 
- * @returns {Promise<ClassEntity>} The data with ClassEntity type.
- */
-export async function getClassList(args = {}) {
-    const design = args.theme ? args : await loadDesignSystem(args);
-
-    /** @type {ClassEntity[]} */
-    const classList = getUtilityList(design).concat(
+export function getClassList(design: DesignSystem): ClassEntity[] {
+    const classList: ClassEntity[] = getUtilityList(design).concat(
         getVariantList(design).concat(unsupportedUtilityList())
     );
 
     /**
      * Exclude utilities
-     * @param {ClassEntity} classEntity - The class entity.
-     * @returns {boolean} The boolean value.
      */
-    const excludeUtilities = (classEntity) => {
+    const excludeUtilities = (classEntity: ClassEntity): boolean => {
         return classEntity.selector !== '*';
     };
 
-    /**
-     * @param {ClassEntity} classEntity 
-     * @returns {ClassEntity}
-     */
-    const prepareClass = (classEntity) => {
+    const prepareClass = (classEntity: ClassEntity): ClassEntity => {
         const astNodes = compileCandidates([classEntity.selector], design).astNodes;
 
         // if astNodes array is not empty, merge all child's nodes into one array
-        const nodes = astNodes.length > 0 ? astNodes.reduce((acc, node) => acc.concat(node.nodes), []) : [];
+        const nodes = astNodes.flatMap(node => "nodes" in node ? node.nodes : []);
 
         let css = design.candidatesToCss([classEntity.selector]).at(0);
 
@@ -203,11 +174,7 @@ export async function getClassList(args = {}) {
         };
     }
 
-    /**
-     * @param {ClassEntity} a - The first class entity.
-     * @param {ClassEntity} z - The second class entity.
-     */
-    const sortselectors = (a, z) => {
+    const sortselectors = (a: ClassEntity, z: ClassEntity) => {
         // if prefix with '-' then sort it to the end, otherwise sort it normally
         if (a.selector.startsWith('-') && !z.selector.startsWith('-')) {
             return 1;

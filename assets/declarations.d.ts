@@ -1,3 +1,5 @@
+import type { } from '@wp'
+
 declare module "*?raw"
 {
     const content: string;

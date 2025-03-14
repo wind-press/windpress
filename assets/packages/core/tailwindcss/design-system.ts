@@ -1,8 +1,9 @@
 import { __unstable__loadDesignSystem } from 'tailwindcss';
 import { loadModule } from './module';
 import { loadStylesheet } from './stylesheet';
+import { preprocess } from './pre-process';
 
-import type {  DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/design-system';
+import type { DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/design-system';
 import type { VFSContainer } from './vfs';
 
 export type LoadDesignSystemOptions = {
@@ -14,6 +15,8 @@ export type LoadDesignSystemOptions = {
 
 export async function loadDesignSystem({ entrypoint = '/main.css', volume = {} as VFSContainer, ...opts }: LoadDesignSystemOptions = {}): Promise<DesignSystem> {
     opts = { entrypoint, volume, ...opts };
+
+    opts.volume[opts.entrypoint] = (await preprocess(opts)).css;
 
     // @ts-ignore
     return __unstable__loadDesignSystem(opts.volume[opts.entrypoint], {

@@ -1,8 +1,9 @@
 import { compile as _compile } from 'tailwindcss';
-import { loadModule } from './module.js';
+import { loadModule } from './module';
 import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_node.wasm?url';
 import init, { Features, transform } from 'lightningcss-wasm';
-import { loadStylesheet } from './stylesheet.js';
+import { loadStylesheet } from './stylesheet';
+import { preprocess } from './pre-process';
 
 import type { LoadDesignSystemOptions } from './design-system'
 
@@ -12,6 +13,8 @@ export type BuildOptions = LoadDesignSystemOptions & {
 
 export async function compile({ candidates = [], entrypoint = '/main.css', volume = {}, ...opts }: BuildOptions) {
     opts = { candidates, entrypoint, volume, ...opts };
+
+    opts.volume[opts.entrypoint] = (await preprocess(opts)).css;
 
     return await _compile(opts.volume[opts.entrypoint], {
         loadModule: async (modulePath, base, resourceHint) => loadModule(modulePath, base, resourceHint, opts.volume),

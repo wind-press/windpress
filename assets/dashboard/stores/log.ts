@@ -10,7 +10,7 @@ export type Log = {
     type: 'success' | 'info' | 'warning' | 'error';
 
     /** The namespace or group name of the log. */
-    group: string;
+    group?: string;
 
     /** The unique identifier of the log (if available). */
     id?: string;

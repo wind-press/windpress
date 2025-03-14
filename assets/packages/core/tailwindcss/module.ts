@@ -2,7 +2,9 @@ import path from 'path';
 import { encodeBase64 } from '@std/encoding/base64';
 import { isValidUrl } from './utils';
 
-export async function loadModule(modulePath, base, resourceHint, volume = {}) {
+import type { VFSContainer } from './vfs';
+
+export async function loadModule(modulePath: string, base: string, resourceHint: 'plugin' | 'config', volume = {} as VFSContainer) {
     let module;
 
     if (modulePath.startsWith('.') || modulePath.startsWith('/')) {
@@ -15,7 +17,11 @@ export async function loadModule(modulePath, base, resourceHint, volume = {}) {
         try {
             module = await importCdnModule(modulePath, base, resourceHint);
         } catch (error) {
-            throw new Error(`The ${resourceHint} file "${modulePath}" could not be loaded. ${error.message}`);
+            if (error instanceof Error) {
+                throw new Error(`The ${resourceHint} file "${modulePath}" could not be loaded. ${error.message}`);
+            } else {
+                throw new Error(`The ${resourceHint} file "${modulePath}" could not be loaded.`);
+            }
         }
     }
 
@@ -29,13 +35,13 @@ export async function loadModule(modulePath, base, resourceHint, volume = {}) {
     };
 }
 
-export async function importCdnModule(path, base, resourceHint) {
-    const module = await import(/* @vite-ignore */ path).then((m) => m.default ?? m);
+export async function importCdnModule(modulePath: string, base: string, resourceHint: 'plugin' | 'config') {
+    const module = await import(/* @vite-ignore */ modulePath).then((m) => m.default ?? m);
 
     return module;
 }
 
-export async function importLocalModule(modulePath, base = '/', resourceHint, volume = {}) {
+export async function importLocalModule(modulePath: string, base: string = '/', resourceHint: 'plugin' | 'config', volume = {} as VFSContainer) {
     base = base ?? '/';
     
     const _path = path.resolve(base, modulePath);
@@ -52,7 +58,7 @@ export async function importLocalModule(modulePath, base = '/', resourceHint, vo
     }
 }
 
-export function prepareModuleContent(moduleContent, currentPath, volume = {}) {
+export function prepareModuleContent(moduleContent: string, modulePath: string, volume = {} as VFSContainer) {
     let _moduleContent = moduleContent
         // replace the module.exports = with export default
         .replace(/module.exports\s*=\s*/, 'export default ')
@@ -114,7 +120,7 @@ export function prepareModuleContent(moduleContent, currentPath, volume = {}) {
 
         // resolve the path and check if the file is in the volume
         const _path = path.resolve(
-            path.dirname(currentPath),
+            path.dirname(modulePath),
             importPath
         );
 
@@ -122,13 +128,13 @@ export function prepareModuleContent(moduleContent, currentPath, volume = {}) {
         const _importModuleContent = volume[_path];
 
         if (!_importModuleContent) {
-            throw new Error(`${currentPath}: The module file "${_path}" does not exist in the volume.`);
+            throw new Error(`${modulePath}: The module file "${_path}" does not exist in the volume.`);
         }
 
         matchPositions.push({
             start: match.index + fullMatch.indexOf(importPath),
             end: match.index + fullMatch.indexOf(importPath) + importPath.length,
-            replacement: (new URL(importPath, windpress.user_data.data_dir.url)).href
+            replacement: (new URL(importPath, window.windpress.user_data.data_dir.url)).href
         });
     }
 
