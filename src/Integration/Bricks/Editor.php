@@ -57,11 +57,7 @@ class Editor
                 const iframeWindow = document.getElementById('bricks-builder-iframe');
 
                 wp.hooks.addFilter('windpressbricks-autocomplete-items-query', 'windpressbricks', async (autocompleteItems, text) => {
-                    if (!iframeWindow.contentWindow.windpress?.loaded?.module?.autocomplete) {
-                        return autocompleteItems;
-                    }
-                    
-                    const windpress_suggestions = await iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', text);
+                    const windpress_suggestions = await iframeWindow.contentWindow.windpress.module.autocomplete.query(text);
 
                     return [...windpress_suggestions, ...autocompleteItems];
                 });

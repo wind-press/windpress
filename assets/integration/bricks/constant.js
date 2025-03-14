@@ -1,4 +1,4 @@
-import { createVirtualRef } from '@/dashboard/composables/virtual.js';
+import { createVirtualRef } from '@/dashboard/composables/virtualRef';
 
 const brx = document.querySelector('.brx-body');
 const brxGlobalProp = document.querySelector('.brx-body').__vue_app__.config.globalProperties;

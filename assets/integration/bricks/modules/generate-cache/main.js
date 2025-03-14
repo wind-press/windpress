@@ -8,7 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { settingsState, brxIframe } from '@/integration/bricks/constant.js';
+import { settingsState } from '@/integration/bricks/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 

@@ -36,7 +36,7 @@ export default defineConfig({
                 'packages/core/tailwindcss-v3/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
                 // // Integrations
-                // 'integration/bricks': 'assets/integration/bricks/main.js',
+                'integration/bricks': 'assets/integration/bricks/main.js',
                 // 'integration/breakdance': 'assets/integration/breakdance/main.js',
                 // 'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
                 // 'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
