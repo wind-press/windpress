@@ -2,10 +2,7 @@ import { encodeBase64 } from '@std/encoding/base64';
 import { build } from '../build';
 import { decodeVFSContainer } from '../vfs';
 
-/**
- * @type {HTMLStyleElement}
- */
-let styleContainer;
+let styleContainer: HTMLStyleElement | null = null;
 
 let lastCandidateSet = new Set();
 
@@ -29,12 +26,9 @@ const domObserver = new MutationObserver(async (mutations) => {
     let needsUpdate = true;
 
     for (let mutation of mutations) {
-        /**
-         * @type {HTMLElement}
-         */
-        const target = mutation.target;
+        const target = mutation.target as HTMLElement;
 
-        if (target.nodeType === 1 && ignoredTags.includes(target.tagName)) {
+        if (target.nodeType === 1 && ignoredTags.includes((target as HTMLElement).tagName)) {
             needsUpdate = false;
         }
 
@@ -46,7 +40,7 @@ const domObserver = new MutationObserver(async (mutations) => {
 
             if (
                 element.nodeType === 1 &&
-                ignoredTags.includes(element.tagName)
+                ignoredTags.includes((element as HTMLElement).tagName)
             ) {
                 needsUpdate = false;
             }
@@ -98,9 +92,9 @@ async function applyStyles() {
         lastCandidateSet = candidates;
 
         styleContainer.textContent = await build({
-            candidates: Array.from(candidates),
+            candidates: Array.from(candidates) as string[],
             entrypoint: '/main.css',
-            volume: decodeVFSContainer(vfsContainer.textContent)
+            volume: decodeVFSContainer(vfsContainer?.textContent || 'e30=')
         });
     }
 }
@@ -118,9 +112,10 @@ export function initListener() {
         const task = 'windpress.code-editor.saved';
 
         if (data.source === source && data.target === target && data.task === task) {
-            vfsContainer.textContent = encodeBase64(JSON.stringify(data.payload.volume));
-
-            await applyStyles();
+            if (vfsContainer) {
+                vfsContainer.textContent = encodeBase64(JSON.stringify(data.payload.volume));
+                await applyStyles();
+            }
         }
     })
 }

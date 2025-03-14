@@ -184,14 +184,14 @@ class Runtime
         // Register the modules
         $loaded_modules = [];
         if ($can_load_modules) {
-            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/intellisense.js', [
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/intellisense.ts', [
                 'handle' => WIND_PRESS::WP_OPTION . ':intellisense',
                 'in-footer' => true,
             ]);
             $loaded_modules[] = WIND_PRESS::WP_OPTION . ':intellisense';
         }
 
-        AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/observer.js', [
+        AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/observer.ts', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
             'in-footer' => true,
             'dependencies' => array_merge(['wp-i18n', 'wp-hooks'], is_array($loaded_modules) ? $loaded_modules : iterator_to_array($loaded_modules)),

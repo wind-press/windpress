@@ -28,8 +28,8 @@ export default defineConfig({
                 dashboard: 'assets/dashboard/main.ts',
 
                 // Tailwind v4
-                'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.js',
-                // 'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
+                'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.ts',
+                'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
                 // // Integrations
                 // 'integration/bricks': 'assets/integration/bricks/main.js',

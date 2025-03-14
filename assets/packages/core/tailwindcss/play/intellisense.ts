@@ -14,7 +14,7 @@ const vfsContainer = document.querySelector('script#windpress\\:vfs[type="text/p
 let design: DesignSystem;
 
 async function updateDesign() {
-    design = await loadDesignSystem({ volume: decodeVFSContainer(vfsContainer?.textContent || '') });
+    design = await loadDesignSystem({ volume: decodeVFSContainer(vfsContainer?.textContent || 'e30=') });
 
     channel.postMessage({
         source: 'windpress/intellisense',
