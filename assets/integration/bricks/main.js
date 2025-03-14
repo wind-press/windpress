@@ -1,5 +1,5 @@
 import { logger } from '@/integration/common/logger.js';
-import './master.css.js';
+// import './master.css.js';
 
 logger('Loading...');
 
@@ -21,14 +21,14 @@ logger('Loading...');
     logger('Loading modules...');
 
     // TODO: dynamic import the features based on the enabled modules
-    await import('./modules/settings/main.js');
-    await import('./modules/plain-classses/main.js');
-    await import('./modules/html2bricks/main.js');
-    await import('./modules/generate-cache/main.js');
+    // await import('./modules/settings/main.js');
+    // await import('./modules/plain-classses/main.js');
+    // await import('./modules/html2bricks/main.js');
+    // await import('./modules/generate-cache/main.js');
 
-    await import('./modules/color-palette/main.js');
-    await import('./modules/variables/main.js');
-    await import('./modules/variable-picker/main.js');
+    // await import('./modules/color-palette/main.js');
+    // await import('./modules/variables/main.js');
+    // await import('./modules/variable-picker/main.js');
 
     logger('Modules loaded!');
 })();

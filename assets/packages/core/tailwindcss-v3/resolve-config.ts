@@ -4,5 +4,5 @@ import { importLocalModule } from '@/packages/core/tailwindcss/module';
 export async function resolveConfig(volume = {}) {
     const importedConfig = await importLocalModule('./tailwind.config.js', undefined, 'config', volume);
 
-    return twResolveConfig(importedConfig);
+    return twResolveConfig(importedConfig.module);
 }

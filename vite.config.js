@@ -33,7 +33,7 @@ export default defineConfig({
 
                 // Tailwind v3
                 'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.ts',
-                'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
+                'packages/core/tailwindcss-v3/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
                 // // Integrations
                 // 'integration/bricks': 'assets/integration/bricks/main.js',

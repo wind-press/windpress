@@ -203,7 +203,7 @@ class Runtime
         // Register the modules
         $loaded_modules = [];
         if ($can_load_modules) {
-            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/intellisense.js', [
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/intellisense.ts', [
                 'handle' => WIND_PRESS::WP_OPTION . ':intellisense',
                 'in-footer' => true,
             ]);
