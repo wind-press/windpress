@@ -10,7 +10,7 @@ const isOpen = inject('isOpen');
   <div
     v-show="isOpen"
     id="windpressbricks-variable-app-container"
-    class="flex flex:column w:full h:full fg:$(builder-color) bg:$(builder-bg)"
+    class="wp-b-var-container"
   >
     <PanelHeader />
     <Suspense>
@@ -20,7 +20,13 @@ const isOpen = inject('isOpen');
 </template>
 
 <style lang="scss" scoped>
-#windpressbricks-variable-app-container {
+.wp-b-var-container {
     // font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    color: var(--builder-color);
+    background-color: var(--builder-bg);
 }
 </style>

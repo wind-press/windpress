@@ -56,7 +56,7 @@ function onClick(e, varKey) {
     <div
       v-for="(item, key) in variableItems"
       :key="key"
-      class=""
+      class="var-item"
     >
       <div class="variable-section-title font:14 my:10">
         {{ key.replace('_', '-') }}
@@ -80,3 +80,51 @@ function onClick(e, varKey) {
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.var-item {
+  margin: 10px;
+  padding-bottom: 15px;
+
+  .variable-section-title {
+      font-size: 14px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+  }
+
+  .variable-section-items {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    button {
+      padding: 8px 12px;
+      border-radius: var(--builder-border-radius);
+      color: var(--builder-color);
+      background-color: var(--builder-bg-2);
+      border: 0;
+      flex-grow: 1;
+      flex-shrink: 1;
+      flex-basis: 30%;
+      text-align: center;
+      
+      span {
+        opacity: .5;
+        font-weight: semibold;
+      }
+
+      &:hover {
+        background-color: var(--builder-bg-3);
+
+        span {
+          opacity: 1;
+        }
+      }
+  }
+}
+}
+
+
+
+</style>

@@ -7,87 +7,125 @@ const variableApp = inject('variableApp');
 const isOpen = inject('isOpen');
 
 function allowDragPanel() {
-    const draggable = variableApp.querySelector('#windpressbricks-variable-app-header');
-    let isDragging = ref(false);
-    let offsetX = 0;
-    let offsetY = 0;
+  const draggable = variableApp.querySelector('#windpressbricks-variable-app-header');
+  let isDragging = ref(false);
+  let offsetX = 0;
+  let offsetY = 0;
 
-    watch(isDragging, (value) => {
-        if (!value) {
-            document.body.style.removeProperty('user-select');
-            brx.style.removeProperty('pointer-events');
+  watch(isDragging, (value) => {
+    if (!value) {
+      document.body.style.removeProperty('user-select');
+      brx.style.removeProperty('pointer-events');
 
-            draggable.style.cursor = 'grab';
-        } else {
-            document.body.style.userSelect = 'none';
-            brx.style.pointerEvents = 'none';
-            draggable.style.cursor = 'grabbing';
-        }
-    });
+      draggable.style.cursor = 'grab';
+    } else {
+      document.body.style.userSelect = 'none';
+      brx.style.pointerEvents = 'none';
+      draggable.style.cursor = 'grabbing';
+    }
+  });
 
-    const handleDragStart = (e) => {
-        isDragging.value = true;
-        const rect = draggable.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
-    };
+  const handleDragStart = (e) => {
+    isDragging.value = true;
+    const rect = draggable.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+  };
 
-    draggable.removeEventListener('mousedown', handleDragStart);
-    draggable.addEventListener('mousedown', handleDragStart);
+  draggable.removeEventListener('mousedown', handleDragStart);
+  draggable.addEventListener('mousedown', handleDragStart);
 
-    const handleDrag = (e) => {
-        if (!isDragging.value) {
-            return;
-        }
-        const rect = draggable.getBoundingClientRect();
-        const clientX = e.clientX;
-        const clientY = e.clientY;
-        const x = clientX - offsetX;
-        const y = clientY - offsetY;
-        const posX = (x < 0 ? 0 : x > window.innerWidth - rect.width ? window.innerWidth - rect.width : x);
-        const posY = y < 0 ? 0 : y > window.innerHeight - rect.height ? window.innerHeight - rect.height : y;
-        variableApp.style.left = `${posX}px`;
-        variableApp.style.top = `${posY}px`;
-    };
-    document.removeEventListener('mousemove', handleDrag);
-    document.addEventListener('mousemove', handleDrag);
-    const endDragging = (e) => {
-        isDragging.value = false;
-    };
-    document.removeEventListener('mouseup', endDragging);
-    document.addEventListener('mouseup', endDragging);
+  const handleDrag = (e) => {
+    if (!isDragging.value) {
+      return;
+    }
+    const rect = draggable.getBoundingClientRect();
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    const x = clientX - offsetX;
+    const y = clientY - offsetY;
+    const posX = (x < 0 ? 0 : x > window.innerWidth - rect.width ? window.innerWidth - rect.width : x);
+    const posY = y < 0 ? 0 : y > window.innerHeight - rect.height ? window.innerHeight - rect.height : y;
+    variableApp.style.left = `${posX}px`;
+    variableApp.style.top = `${posY}px`;
+  };
+  document.removeEventListener('mousemove', handleDrag);
+  document.addEventListener('mousemove', handleDrag);
+  const endDragging = (e) => {
+    isDragging.value = false;
+  };
+  document.removeEventListener('mouseup', endDragging);
+  document.addEventListener('mouseup', endDragging);
 }
 
 onMounted(() => {
-    allowDragPanel();
+  allowDragPanel();
 });
 </script>
 
 <template>
-  <div
-    id="windpressbricks-variable-app-header"
-    class="bg:$(builder-bg) cursor:grab bb:1|solid|$(builder-border-color)"
-  >
-    <div class="flex gap:10 align-items:center">
-      <div class="flex align-items:center px:12 py:2">
-        <inline-svg
-          :src="Logo"
-          class="inline-svg fill:current font:24"
-        />
+  <div id="windpressbricks-variable-app-header" class="header-container ">
+    <div class=" header-content">
+      <div class="header-logo ">
+        <inline-svg :src="Logo" class="inline-svg " />
       </div>
-      <div
-        v-tooltip="{ placement: 'top', content: `v${windpressbricks._version}` }"
-        class="font:bold gap:10 text:center flex-grow:1 align-items:center cursor:default px:12 py:2"
-      >
+      <div v-tooltip="{ placement: 'top', content: `v${windpressbricks._version}` }" class="header-title ">
         WindPress
       </div>
-      <button
-        v-tooltip="{ placement: 'top', content: 'Close' }"
-        class="flex align-items:center py:10 px:12 bg:transparent bg:$(builder-bg-accent):hover"
-        @click="isOpen = !isOpen"
-      >
-        <i-fa6-solid-xmark class="iconify fg:$(builder-color)" />
+      <button v-tooltip="{ placement: 'top', content: 'Close' }" class="header-exit " @click="isOpen = !isOpen">
+        <i-fa6-solid-xmark class="iconify " />
       </button>
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.header-container {
+  background-color: var(--builder-bg);
+  cursor: grab;
+  border-bottom: 1px solid var(--builder-border-color);
+
+  .header-content {
+    padding: 2px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      padding: 2px 12px;
+
+      .inline-svg {
+        fill: currentColor;
+        font-size: 24px;
+      }
+    }
+
+    .header-title {
+      font-weight: bold;
+      gap: 10px;
+      text-align: center;
+      flex-grow: 1;
+      align-items: center;
+      cursor: default;
+      padding: 2px 12px;
+    }
+
+    .header-exit {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      background-color: transparent;
+
+      &:hover {
+        background-color: var(--builder-bg-accent);
+      }
+
+      .iconify {
+        color: var(--builder-color);
+      }
+    }
+  }
+}
+</style>

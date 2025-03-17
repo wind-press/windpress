@@ -1,7 +1,7 @@
 import './style.scss';
 
 import { createApp, nextTick, ref, watch } from 'vue';
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
 import App from './App.vue';
@@ -9,7 +9,6 @@ import { observe } from './utility.js';
 
 const variableApp = document.createElement('windpressbricks-variable-app');
 variableApp.id = 'windpressbricks-variable-app';
-variableApp.classList.add('master-css');
 document.body.appendChild(variableApp);
 
 const isOpen = ref(false);

@@ -8,7 +8,7 @@
  */
 
 import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss';
+import { getVariableList, decodeVFSContainer, loadDesignSystem } from '@/packages/core/tailwindcss';
 import { logger } from '@/integration/common/logger';
 import { customAlphabet } from 'nanoid';
 
@@ -40,7 +40,7 @@ async function registerVariables() {
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables
-    const variableLists = await getVariableList({ volume });
+    const variableLists = await getVariableList(await loadDesignSystem({ volume }));
     variableLists.forEach(variable => {
         brxGlobalProp.$_state.globalVariables.push({
             id: generateId(),

@@ -39,20 +39,20 @@ defineExpose({
 <template>
   <div
     ref="sectionRef"
-    class="expansion-panel mx:10 py:8 mr:4"
+    class="expansion-panel"
   >
     <div
       :class="{}"
-      class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer"
+      class="expansion-panel__header "
       @click="expand[name] = !expand[name]"
     >
-      <div class="flex-grow:1">
+      <div class="header-slot">
         <slot name="header" />
       </div>
       <div>
         <i-fa6-solid-chevron-right
-          :class="{ 'rotate(-90)': expand[name] }"
-          class="iconify ~duration:300 font:18"
+          :style="{ transform: expand[name] ? 'rotate(-90deg)' : 'rotate(0deg)' }"
+          class="iconify"
         />
       </div>
     </div>
@@ -68,6 +68,30 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
+.expansion-panel {
+  margin-left: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 4px;
+
+  .expansion-panel__header {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+
+    .header-slot {
+      flex-grow: 1;
+    }
+
+    .iconify {
+      transition: transform 300ms;
+      font-size: 18px;
+    }
+  }
+}
+
 /* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {

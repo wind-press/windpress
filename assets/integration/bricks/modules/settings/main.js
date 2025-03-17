@@ -42,7 +42,7 @@ settingsButton.addEventListener('click', (event) => {
     }
 });
 
-// // close the settings app when clicked outside
+// close the settings app when clicked outside
 function clickOutside(event) {
     if (event.target.closest('#windpressbricks-settings-app')) {
         return;

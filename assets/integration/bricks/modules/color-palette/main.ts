@@ -8,11 +8,11 @@
  */
 
 import { brxGlobalProp, brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss';
+import { getVariableList, decodeVFSContainer, loadDesignSystem } from '@/packages/core/tailwindcss';
 import { logger } from '@/integration/common/logger';
 import crc32 from 'buffer-crc32';
 
-function generateHash(input) {
+function generateHash(input: string) {
     const hashed = crc32(input).toString('hex');
     return `windpress-${hashed}`;
 }
@@ -24,7 +24,7 @@ async function registerPallete() {
     const vfsContainer = brxIframe.contentWindow.document.querySelector('script#windpress\\:vfs[type="text/plain"]');
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
-    const variableLists = await getVariableList({ volume });
+    const variableLists = await getVariableList(await loadDesignSystem({ volume }));
 
     const colors = [];
     variableLists
