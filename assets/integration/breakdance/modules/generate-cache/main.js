@@ -8,7 +8,6 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { bdeIframe } from '@/integration/breakdance/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 

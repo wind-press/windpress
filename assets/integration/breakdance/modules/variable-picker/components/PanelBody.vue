@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
 import { bdeIframe } from '@/integration/breakdance/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss';
+import { getVariableList, decodeVFSContainer, loadDesignSystem } from '@/packages/core/tailwindcss';
 
 import ExpansionPanel from './ExpansionPanel.vue';
 import { set } from 'lodash-es';
@@ -26,7 +26,7 @@ async function constructVariableList() {
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables
-    const variableLists = await getVariableList({ volume });
+    const variableLists = await getVariableList(await loadDesignSystem({ volume }));
 
     let styleElement = variableApp.querySelector('style#windpressbreakdance-variable-app-body-style');
     if (!styleElement) {
@@ -296,70 +296,51 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-  <div
-    id="windpressbreakdance-variable-app-body"
-    class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(gray200)>div:not(:last-child)"
-  >
-    <ExpansionPanel
-      ref="sectionColor"
-      namespace="variable"
-      name="color"
-    >
-      <template #header>
-        <span class="font:semibold">Color</span>
-      </template>
+    <div id="windpressbreakdance-variable-app-body" class="var-body rel w:full h:full overflow-y:scroll! bb:1|solid|$(gray200)>div:not(:last-child)">
+        <ExpansionPanel ref="sectionColor" namespace="variable" name="color">
+            <template #header>
+                <span class="var-body-title">Color</span>
+            </template>
 
-      <template #default>
-        <ColorVariableItems
-          :variable-items="commonVar.colors"
-          @preview-enter="onMouseEnter"
-          @preview-leave="onMouseLeave"
-          @preview-chose="onClick"
-        />
-      </template>
-    </ExpansionPanel>
-    <ExpansionPanel
-      ref="sectionTypography"
-      namespace="variable"
-      name="typography"
-    >
-      <template #header>
-        <span class="font:semibold">Typography</span>
-      </template>
+            <template #default>
+                <ColorVariableItems :variable-items="commonVar.colors" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
+            </template>
+        </ExpansionPanel>
+        <ExpansionPanel ref="sectionTypography" namespace="variable" name="typography">
+            <template #header>
+                <span class="var-body-title">Typography</span>
+            </template>
 
-      <template #default>
-        <CommonVariableItems
-          :variable-items="commonVar.typography"
-          @preview-enter="onMouseEnter"
-          @preview-leave="onMouseLeave"
-          @preview-chose="onClick"
-        />
-      </template>
-    </ExpansionPanel>
-    <ExpansionPanel
-      ref="sectionSpacing"
-      namespace="variable"
-      name="spacing"
-      class=""
-    >
-      <template #header>
-        <span class="font:semibold">Sizing</span>
-      </template>
+            <template #default>
+                <CommonVariableItems :variable-items="commonVar.typography" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
+            </template>
+        </ExpansionPanel>
+        <ExpansionPanel ref="sectionSpacing" namespace="variable" name="spacing" class="">
+            <template #header>
+                <span class="var-body-title">Sizing</span>
+            </template>
 
-      <template #default>
-        <CommonVariableItems
-          :variable-items="commonVar.sizing"
-          @preview-enter="onMouseEnter"
-          @preview-leave="onMouseLeave"
-          @preview-chose="onClick"
-        />
-      </template>
-    </ExpansionPanel>
-  </div>
+            <template #default>
+                <CommonVariableItems :variable-items="commonVar.sizing" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
+            </template>
+        </ExpansionPanel>
+    </div>
 </template>
 
 <style lang="scss" scoped>
-#windpressbreakdance-variable-app-body {
+.var-body {
     scrollbar-color: var(--gray300) transparent;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll !important;
+
+    &>div:not(:last-child) {
+        border-bottom: 1px solid var(--gray200);
+    }
+
+    .var-body-title {
+        font-weight: semibold;
+    }
 }
 </style>

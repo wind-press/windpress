@@ -1,7 +1,6 @@
 import './style.scss';
 
 import { createApp, ref, watch } from 'vue';
-import './master.css.js';
 import { logger } from '@/integration/common/logger';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
