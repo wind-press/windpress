@@ -21,7 +21,7 @@ import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 
 import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
-import { oxygenScope, iframeScope, oxyIframe } from '@/integration/oxygen/editor/constant.js';
+import { oxygenScope, iframeScope, oxyIframe } from '@/integration/oxygen-classic/editor/constant.js';
 
 import { debounce } from 'lodash-es';
 
@@ -309,10 +309,6 @@ let tippyInstance = tippy(document.createElement('div'), {
 });
 
 function hoverPreviewProvider() {
-    if (oxyIframe.contentWindow.windpress?.loaded?.module?.classnameToCss !== true) {
-        return;
-    }
-
     const hitContainerEl = document.querySelector('.hit-container');
 
     if (hitContainerEl === null) {
@@ -410,10 +406,6 @@ textInput.addEventListener('tribute-active-true', function (e) {
 });
 
 classSortButton.addEventListener('click', async function (e) {
-    if (oxyIframe.contentWindow.windpress?.loaded?.module?.classSorter !== true) {
-        return;
-    }
-
     textInput.value = await oxyIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
     setPlainClassAttribute(textInput.value);
 

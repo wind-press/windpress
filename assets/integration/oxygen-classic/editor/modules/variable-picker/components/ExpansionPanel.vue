@@ -16,7 +16,7 @@ const props = defineProps({
 const sectionRef = ref(null);
 
 const expand = useStorage(
-  `windpressbricks-variable-app.ui.expansion-panels.${props.namespace}`,
+  `windpressoxygen-variable-app.ui.expansion-panels.${props.namespace}`,
   { [`${props.name}`]: false },
   undefined,
   { mergeDefaults: true }
@@ -37,13 +37,13 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="sectionRef" class="expansion-panel">
-    <div :class="{}" class="expansion-panel__header " @click="expand[name] = !expand[name]">
+  <div ref="sectionRef" class="expansion-panel mx:10 py:8 mr:4">
+    <div :class="{}" class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer" @click="expand[name] = !expand[name]">
       <div class="header-slot">
         <slot name="header" />
       </div>
       <div>
-        <i-fa6-solid-chevron-right :style="{ transform: expand[name] ? 'rotate(-90deg)' : 'rotate(0deg)' }" class="iconify" />
+        <i-fa6-solid-chevron-right :style="{ transform: expand[name] ? 'rotate(-90deg)' : 'rotate(0deg)' }" class="iconify ~duration:300 font:18" />
       </div>
     </div>
     <Transition>
@@ -62,6 +62,7 @@ defineExpose({
   margin-right: 4px;
 
   .expansion-panel__header {
+    line-height: 1.7;
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;

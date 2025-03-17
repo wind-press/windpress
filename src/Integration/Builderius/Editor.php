@@ -66,12 +66,7 @@ class Editor
 
                 let iframeWindow = document.getElementById('builderInner');
 
-                // wait for module autocomplete to be ready
-                while (!iframeWindow.contentWindow.windpress?.loaded?.module?.autocomplete) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
-
-                const suggestions = iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', '').map(({ value }) => value);
+                const suggestions = iframeWindow.contentWindow.windpress.module.autocomplete.query('').map(({ value }) => value);
                 
                 window.Builderius.API.store.set('externalCssClasses', {
                     "value": "windpress",

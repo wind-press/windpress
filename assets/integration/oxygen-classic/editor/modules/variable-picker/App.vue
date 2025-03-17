@@ -11,7 +11,6 @@ const isOpen = inject('isOpen');
   <div
     v-show="isOpen"
     id="windpressoxygen-variable-app-container"
-    class="flex flex:column w:full h:full"
   >
     <PanelHeader />
     <Suspense>
@@ -19,3 +18,13 @@ const isOpen = inject('isOpen');
     </Suspense>
   </div>
 </template>
+
+<style scoped>
+#windpressoxygen-variable-app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+</style>
+

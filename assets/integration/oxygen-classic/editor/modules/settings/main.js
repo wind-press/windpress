@@ -1,6 +1,6 @@
 import './style.scss';
 
-import { createVirtualRef } from '@/dashboard/composables/virtual.js';
+import { createVirtualRef } from '@/dashboard/composables/virtualRef';
 import { logger } from '@/integration/common/logger';
 import Logo from '~/windpress.svg?raw';
 
@@ -21,27 +21,28 @@ const { getVirtualRef } = createVirtualRef({}, {
 const oxygenToolbar = document.querySelector(oxygenToolbarSelector);
 oxygenToolbar.insertBefore(settingButtonHtml, oxygenToolbar.firstChild);
 window.tippy('.windpressoxygen-settings-button', {
-    content: 'WindPress — Oxygen settings',
+    // content: 'WindPress — Oxygen settings',
+    content: 'WindPress is detected',
     animation: 'shift-toward',
     placement: 'bottom',
 });
 
 const settingsButton = document.querySelector('.windpressoxygen-settings-button');
 
-function toggleMinimize() {
-    const currentVal = getVirtualRef('window.minimized', false).value;
+// function toggleMinimize() {
+//     const currentVal = getVirtualRef('window.minimized', false).value;
 
-    getVirtualRef('window.minimized', false).value = !currentVal;
+//     getVirtualRef('window.minimized', false).value = !currentVal;
 
-    if (!currentVal === true) {
-        settingsButton.classList.remove('active');
-    } else {
-        settingsButton.classList.add('active');
-    }
-}
+//     if (!currentVal === true) {
+//         settingsButton.classList.remove('active');
+//     } else {
+//         settingsButton.classList.add('active');
+//     }
+// }
 
-settingsButton.addEventListener('click', (event) => {
-    toggleMinimize();
-});
+// settingsButton.addEventListener('click', (event) => {
+//     toggleMinimize();
+// });
 
 logger('Module loaded!', { module: 'settings' });

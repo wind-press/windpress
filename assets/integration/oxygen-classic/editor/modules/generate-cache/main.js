@@ -8,7 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { iframeScope, oxyIframe } from "@/integration/oxygen/editor/constant.js"; 
+import { iframeScope } from "@/integration/oxygen-classic/editor/constant.js"; 
 
 const channel = new BroadcastChannel('windpress');
 

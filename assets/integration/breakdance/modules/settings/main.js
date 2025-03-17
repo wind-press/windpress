@@ -1,5 +1,5 @@
 
-import { createVirtualRef } from '@/dashboard/composables/virtual.js';
+import { createVirtualRef } from '@/dashboard/composables/virtualRef';
 import { logger } from '@/integration/common/logger';
 import { watch } from 'vue';
 import Logo from '~/windpress.svg?raw';

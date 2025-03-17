@@ -48,6 +48,7 @@ class Editor
         ]);
 
         wp_localize_script($handle, 'windpressoxygen', [
+            '_version' => WIND_PRESS::VERSION,
             'assets' => [
                 'url' => AssetVite::asset_base_url(),
             ],
@@ -63,11 +64,7 @@ class Editor
                 const iframeWindow = document.getElementById('ct-artificial-viewport');
 
                 wp.hooks.addFilter('windpressoxygen-autocomplete-items-query', 'windpressoxygen', async (autocompleteItems, text) => {
-                    if (!iframeWindow.contentWindow.windpress?.loaded?.module?.autocomplete) {
-                        return autocompleteItems;
-                    }
-
-                    const windpress_suggestions = await iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', text).map((s) => {
+                    const windpress_suggestions = await iframeWindow.contentWindow.windpress.module.autocomplete.query(text).map((s) => {
                         return {
                             value: s.value,
                             color: s.color,
