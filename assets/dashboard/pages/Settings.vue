@@ -67,7 +67,6 @@ async function saveSetting() {
     .finally(() => {
       // TODO: broadcast event with channel
     });
-
 }
 
 const links = [

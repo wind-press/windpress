@@ -22,6 +22,16 @@ pinia.use(({ store }: PiniaPluginContext) => {
     if (['volume', 'settings'].includes(store.$id)) {
         store.initPull();
     }
+
+    if (store.$id === 'log') {
+        store.add({
+            type: 'debug',
+            message: `Thank you for using WindPress! Join us on the Facebook Group: <a href="https://wind.press/go/facebook" target="_blank" class="underline">https://wind.press/go/facebook</a>`,
+            options: {
+                raw: true
+            }
+        })
+    }
 })
 
 app

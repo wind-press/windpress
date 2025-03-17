@@ -7,7 +7,7 @@ export type Log = {
     message: string;
 
     /** The type of the log entry. */
-    type: 'success' | 'info' | 'warning' | 'error';
+    type: 'success' | 'info' | 'warning' | 'error' | 'debug';
 
     /** The namespace or group name of the log. */
     group?: string;

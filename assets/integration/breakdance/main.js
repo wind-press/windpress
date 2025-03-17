@@ -21,11 +21,15 @@ logger('Loading...');
     // await import('./modules/html2breakdance/main.js');
     await import('./modules/generate-cache/main.js');
 
-    await import('./modules/variable-picker/main.js');
-
-    if (bdeIframe.contentWindow.windpress?.is_ubiquitous) {
-        await import('./modules/settings/main.js');
+    // tailwindcss-v4
+    if (Number(bdeIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
+        await import('./modules/variables/main.ts');
+        // await import('./modules/variable-picker/main.js');
     }
+
+    // if (bdeIframe.contentWindow.windpress?.is_ubiquitous) {
+    //     await import('./modules/settings/main.js');
+    // }
 
     logger('Modules loaded!');
 

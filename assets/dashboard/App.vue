@@ -23,7 +23,7 @@ const links = [
         {
             label: 'Logs',
             icon: 'lucide:logs',
-            // to: '/logs'
+            to: router.resolve({ name: 'logs' }),
         },
         {
             label: 'Settings',

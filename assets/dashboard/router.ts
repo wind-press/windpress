@@ -13,6 +13,11 @@ const router = createRouter({
             component: () => import('./pages/File.vue'),
         },
         {
+            path: '/logs',
+            name: 'logs',
+            component: () => import('./pages/Log.vue'),
+        },
+        {
             path: '/settings',
             name: 'settings',
             redirect: { name: 'settings.general' },
