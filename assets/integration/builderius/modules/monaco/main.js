@@ -9,7 +9,7 @@
 
 import { logger } from '@/integration/common/logger';
 import { uniIframe } from '@/integration/builderius/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss';
+import { getVariableList, decodeVFSContainer, loadDesignSystem } from '@/packages/core/tailwindcss';
 
 function naturalExpand(value, total = null) {
     const length = typeof total === 'number' ? total.toString().length : 8
@@ -21,11 +21,11 @@ function naturalExpand(value, total = null) {
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     window.Builderius.API.monaco.languages.registerCompletionItemProvider('builderius-css', {
-        provideCompletionItems(model, position) {
+        async provideCompletionItems(model, position) {
             const wordInfo = model.getWordUntilPosition(position);
 
             // register variables
-            const variables = getVariableList({ volume }).map(entry => {
+            const variables = getVariableList(await loadDesignSystem({ volume })).map(entry => {
                 return {
                     kind: entry.key.includes('--color') ? window.Builderius.API.monaco.languages.CompletionItemKind.Color : window.Builderius.API.monaco.languages.CompletionItemKind.Variable,
                     label: entry.key,

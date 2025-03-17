@@ -8,7 +8,6 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { uniIframe } from '@/integration/builderius/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 

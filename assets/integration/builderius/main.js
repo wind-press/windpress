@@ -17,8 +17,12 @@ logger('Loading...');
     // await import('./modules/html2builderius/main.js');
     await import('./modules/generate-cache/main.js');
 
-    await import('./modules/monaco/main.js');
-    await import('./modules/variable-picker/main.js');
+    // tailwindcss-v4
+    if (Number(uniIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
+        await import('./modules/variables/main.ts');
+        await import('./modules/monaco/main.js');
+        await import('./modules/variable-picker/main.js');
+    }
 
     logger('Modules loaded!');
 })();
