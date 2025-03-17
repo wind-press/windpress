@@ -62,7 +62,7 @@ class Editor
                     }
 
                     async function searchQuery(query) {
-                        const suggestions = (await iframeWindow.contentWindow.wp.hooks.applyFilters('windpress.module.autocomplete', query)).map((s) => {
+                        const suggestions = (await iframeWindow.contentWindow.windpress.module.autocomplete.query(query)).map((s) => {
                             return {
                                 // color: s.color,
                                 value: s.value,

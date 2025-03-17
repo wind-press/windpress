@@ -49,6 +49,9 @@ export default defineConfig({
             outDir: 'build',
         }),
         vue(),
+        react({
+            // jsxRuntime: 'classic',
+        }),
         wp_scripts(),
         viteUiPro({
             // license: process.env.NUXT_UI_PRO_LICENSE,
@@ -86,9 +89,6 @@ export default defineConfig({
             svgrOptions: {
                 dimensions: false,
             }
-        }),
-        react({
-            jsxRuntime: 'classic',
         }),
         httpsImports.default({}, function resolver(matcher) {
             return (id, importer) => {
