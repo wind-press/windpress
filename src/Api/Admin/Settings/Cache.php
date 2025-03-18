@@ -83,6 +83,7 @@ class Cache extends AbstractApi implements ApiInterface
 
         $cache = [
             'last_generated' => null,
+            'last_full_build' => null,
             'file_url' => null,
             'file_size' => false,
         ];
@@ -91,6 +92,11 @@ class Cache extends AbstractApi implements ApiInterface
             $cache['file_url'] = CoreCache::get_cache_url(CoreCache::CSS_CACHE_FILE);
             $cache['last_generated'] = filemtime($cache_path);
             $cache['file_size'] = filesize($cache_path);
+
+            $last_full_build = wp_cache_get('last_full_build', 'windpress', true);
+            if ($last_full_build) {
+                $cache['last_full_build'] = $last_full_build;
+            }
         }
 
         return new WP_REST_Response([
@@ -118,6 +124,10 @@ class Cache extends AbstractApi implements ApiInterface
                 'status' => 'KO',
                 'message' => 'Save cache error: ' . $throwable->getMessage(),
             ], 500);
+        }
+
+        if (isset($payload['full_build']) && $payload['full_build']) {
+            wp_cache_set('last_full_build', $payload['full_build'], 'windpress');
         }
 
         return $this->index($wprestRequest);

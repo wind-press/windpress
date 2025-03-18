@@ -36,6 +36,14 @@ export const useLogStore = defineStore('log', () => {
         return id;
     }
 
+    function update(id: string, log: Log) {
+        const curr = logs.value.find((l) => l.id === id);
+
+        if (curr) {
+            Object.assign(curr, log);
+        }
+    }
+
     /**
      * @param {string} toSearch The value to search for.
      * @param {string} by The key to search by. Default is `id`. Available keys are `id`, `message`, `type`, and `group`.
@@ -65,6 +73,7 @@ export const useLogStore = defineStore('log', () => {
     return {
         logs,
         add,
+        update,
         remove,
         clear,
     };

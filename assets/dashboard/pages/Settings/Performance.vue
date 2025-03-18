@@ -12,12 +12,16 @@ const api = useApi();
 const settingsStore = useSettingsStore()
 const busyStore = useBusyStore()
 
-const css_cache = ref<{
+type CSS_Cache = {
   last_generated: number | null;
+  last_full_build: number | null;
   file_url: string | null;
   file_size: number | null;
-}>({
+};
+
+const css_cache = ref<CSS_Cache>({
   last_generated: null,
+  last_full_build: null,
   file_url: null,
   file_size: null,
 });
@@ -25,7 +29,7 @@ const css_cache = ref<{
 function pullCacheInfo() {
   api
     .get('admin/settings/cache/index')
-    .then((resp: { data: { cache: { last_generated: number | null; file_url: string | null; file_size: number } } }) => {
+    .then((resp: { data: { cache: CSS_Cache } }) => {
       css_cache.value = resp.data.cache;
     });
 }
