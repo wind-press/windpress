@@ -35,7 +35,7 @@ export default defineConfig({
                 'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.ts',
                 'packages/core/tailwindcss-v3/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
-                // // Integrations
+                // Integrations
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
                 'integration/gutenberg/site-editor': 'assets/integration/gutenberg/site-editor.js',
                 'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
@@ -43,8 +43,8 @@ export default defineConfig({
                 'integration/oxygen-classic/iframe': 'assets/integration/oxygen-classic/iframe/main.js',
                 'integration/oxygen-classic/editor': 'assets/integration/oxygen-classic/editor/main.js',
                 'integration/livecanvas': 'assets/integration/livecanvas/main.js',
-                // 'integration/breakdance': 'assets/integration/breakdance/main.js',
-                // 'integration/builderius': 'assets/integration/builderius/main.js',
+                'integration/breakdance': 'assets/integration/breakdance/main.js',
+                'integration/builderius': 'assets/integration/builderius/main.js',
             },
             outDir: 'build',
         }),

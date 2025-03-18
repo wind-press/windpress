@@ -122,6 +122,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **New**: [Oxygen 6](https://oxygenbuilder.com/) integration **[Pro]**
+* **Improve**: [TW4] The Play Observer / Compiler performance & stability
+
 = 3.3.2 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.14 latest)
 * **New**: Refreshed the WindPress dashboard page design and layout for better user experience. Built with the latest [Nuxt UI](https://ui.nuxt.com/pro?aff=GZ5Zd)

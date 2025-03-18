@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WindPress\WindPress\Integration\Breakdance;
+namespace WindPress\WindPress\Integration\Oxygen;
 
 use WP_Query;
 
@@ -21,13 +21,13 @@ use WP_Query;
 class Compile
 {
     private array $post_meta_keys = [
-        'breakdance_data',
-        '_breakdance_data',
+        'oxygen_data',
+        '_oxygen_data',
     ];
 
     public function __invoke(): array
     {
-        if (! defined('__BREAKDANCE_VERSION') || defined('BREAKDANCE_MODE')) {
+        if (! defined('BREAKDANCE_MODE') || 'oxygen' !== constant('BREAKDANCE_MODE')) {
             return [];
         }
 
@@ -38,7 +38,7 @@ class Compile
     {
         $contents = [];
 
-        $post_types = apply_filters('f!windpress/integration/breakdance/compile:get_contents.post_types', \Breakdance\Settings\get_allowed_post_types());
+        $post_types = apply_filters('f!windpress/integration/oxygen/compile:get_contents.post_types', \Breakdance\Settings\get_allowed_post_types());
 
         $wpQuery = new WP_Query([
             'posts_per_page' => -1,

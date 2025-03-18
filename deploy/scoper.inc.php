@@ -211,6 +211,7 @@ return [
             'KADENCE_VERSION', // Kadence Theme
 
             '__BREAKDANCE_VERSION', // Breakdance
+            'BREAKDANCE_MODE',
 
             'ELEMENTOR_VERSION', // Elementor
 

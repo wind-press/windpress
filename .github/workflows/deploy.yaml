@@ -159,8 +159,8 @@ jobs:
         # - LiveCanvas
         # - Builderius (Planned)
         # else, remove the premium version
-        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,MetaBox,Oxygen}
-        - run: rm -rf assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen} 
+        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,MetaBox,Oxygen,OxygenClassic}
+        - run: rm -rf assets/integration/{breakdance,bricks,builderius,livecanvas,oxygen-classic} 
 
         - run: ls -la
 

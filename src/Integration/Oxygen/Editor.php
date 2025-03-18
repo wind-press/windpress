@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WindPress\WindPress\Integration\Breakdance;
+namespace WindPress\WindPress\Integration\Oxygen;
 
 use WIND_PRESS;
 use WindPress\WindPress\Admin\AdminPage;
@@ -25,7 +25,7 @@ class Editor
 {
     public function __construct()
     {
-        if (! defined('__BREAKDANCE_VERSION') || defined('BREAKDANCE_MODE')) {
+        if (! defined('BREAKDANCE_MODE') || 'oxygen' !== constant('BREAKDANCE_MODE')) {
             return;
         }
 
@@ -37,7 +37,7 @@ class Editor
 
     public function editor_assets()
     {
-        if (! (isset($_GET['breakdance']) && $_GET['breakdance'] === 'builder')) {
+        if (! (isset($_GET['oxygen']) && $_GET['oxygen'] === 'builder')) {
             return;
         }
 
@@ -46,14 +46,14 @@ class Editor
         Runtime::get_instance()->append_header();
         wp_head();
 
-        $handle = WIND_PRESS::WP_OPTION . ':integration-breakdance-editor';
+        $handle = WIND_PRESS::WP_OPTION . ':integration-oxygen-editor';
 
-        AssetVite::get_instance()->enqueue_asset('assets/integration/breakdance/main.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/integration/oxygen/main.js', [
             'handle' => $handle,
             'in_footer' => true,
         ]);
 
-        wp_localize_script($handle, 'windpressbreakdance', [
+        wp_localize_script($handle, 'windpressoxygen', [
             '_version' => WIND_PRESS::VERSION,
             'assets' => [
                 'url' => AssetVite::asset_base_url(),
