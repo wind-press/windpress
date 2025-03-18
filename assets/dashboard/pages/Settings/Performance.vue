@@ -5,6 +5,9 @@ import { useSettingsStore } from '@/dashboard/stores/settings';
 import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
 import { useApi } from '@/dashboard/library/api';
+import { WorkaroundSharedWorker } from '@/packages/core/windpress/utils';
+import compilerWorkerUrl from '@/packages/core/windpress/worker?worker&url';
+import compilerWorkerTest from '@/packages/core/windpress/worker?sharedworker';
 
 const toast = useToast()
 const api = useApi();
@@ -34,9 +37,28 @@ function pullCacheInfo() {
     });
 }
 
+// console.log("Compiler Worker URL", compilerWorkerUrl);
+const worker2 = new compilerWorkerTest();
+
+const worker = WorkaroundSharedWorker(compilerWorkerUrl);
+
+console.log("Worker", worker);
+
+worker.port.onmessage = (e) => {
+    console.log("Message received from worker");
+    console.log(e.data);
+    console.log(e);
+  };
+
 function doGenerateCache() {
   busyStore.add('settings.performance.cached_css.generate');
   setTimeout(() => busyStore.remove('settings.performance.cached_css.generate'), 2000);
+
+  console.log('worker.port', worker);
+
+  worker.port.postMessage({ task: 'generate_cache' });
+
+  console.log("Message posted to worker");
 }
 
 onBeforeMount(() => {

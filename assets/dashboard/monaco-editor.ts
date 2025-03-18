@@ -11,26 +11,16 @@ import * as monaco from 'monaco-editor/esm/vs/editor/edcore.main.js';
 import editorWorkerUrl from 'monaco-editor/esm/vs/editor/editor.worker?worker&url';
 import cssWorkerUrl from 'monaco-editor/esm/vs/language/css/css.worker?worker&url';
 import jsWorkerUrl from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker&url';
-
-function WorkaroundWorker(workerUrl, options) {
-    const js = `import ${JSON.stringify(new URL(workerUrl, import.meta.url))}`;
-    const blob = new Blob([js], { type: "application/javascript" });
-    const objURL = URL.createObjectURL(blob);
-    const worker = new Worker(objURL, { type: "module", name: options?.name });
-    worker.addEventListener("error", (e) => {
-        URL.revokeObjectURL(objURL);
-    })
-    return worker;
-}
+import { WorkaroundWorker } from '@/packages/core/windpress/utils';
 
 self.MonacoEnvironment = {
     async getWorker(_, label) {
         if (label === 'css' || label === 'scss' || label === 'less') {
-            return WorkaroundWorker(cssWorkerUrl);
+            return WorkaroundWorker(cssWorkerUrl) as Worker;
         } else if (label === 'javascript' || label === 'typescript') {
-            return WorkaroundWorker(jsWorkerUrl);
+            return WorkaroundWorker(jsWorkerUrl) as Worker;
         }
-        return WorkaroundWorker(editorWorkerUrl);
+        return WorkaroundWorker(editorWorkerUrl) as Worker;
     }
 }
 
