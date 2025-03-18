@@ -9,7 +9,7 @@
 
 import './style.scss';
 
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 
 import tippy, { followCursor } from 'tippy.js';
 
@@ -381,10 +381,6 @@ let tippyInstance = tippy(document.createElement('div'), {
 });
 
 function hoverPreviewProvider() {
-    if (bdeIframe.contentWindow.windpress?.loaded?.module?.classnameToCss !== true) {
-        return;
-    }
-
     const hitContainerEl = document.querySelector('.hit-container');
 
     if (hitContainerEl === null) {

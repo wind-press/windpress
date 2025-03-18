@@ -10,8 +10,8 @@ import path from 'path';
 import svgr from 'vite-plugin-svgr';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
-import Components from 'unplugin-vue-components/vite';
 import httpsImports from 'vite-plugin-https-imports';
+import viteUiPro from '@nuxt/ui-pro/vite';
 
 export default defineConfig({
     plugins: [
@@ -25,48 +25,70 @@ export default defineConfig({
         }),
         v4wp({
             input: {
-                dashboard: 'assets/apps/dashboard/main.js',
+                dashboard: 'assets/dashboard/main.ts',
 
                 // Tailwind v4
-                'packages/core/tailwindcss-v4/play/observer': 'assets/packages/core/tailwindcss-v4/play/observer.js',
-                'packages/core/tailwindcss-v4/play/autocomplete': 'assets/packages/core/tailwindcss-v4/play/autocomplete.js',
-                'packages/core/tailwindcss-v4/play/sort': 'assets/packages/core/tailwindcss-v4/play/sort.js',
-                'packages/core/tailwindcss-v4/play/classname-to-css': 'assets/packages/core/tailwindcss-v4/play/classname-to-css.js',
+                'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.ts',
+                'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
                 // Tailwind v3
-                'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.js',
-                'packages/core/tailwindcss-v3/play/autocomplete': 'assets/packages/core/tailwindcss-v3/play/autocomplete.js',
-                'packages/core/tailwindcss-v3/play/sort': 'assets/packages/core/tailwindcss-v3/play/sort.js',
-                'packages/core/tailwindcss-v3/play/classname-to-css': 'assets/packages/core/tailwindcss-v3/play/classname-to-css.js',
+                'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.ts',
+                'packages/core/tailwindcss-v3/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
 
-                // Integrations
-                'integration/bricks': 'assets/integration/bricks/main.js',
-                'integration/breakdance': 'assets/integration/breakdance/main.js',
-                'integration/oxygen/iframe': 'assets/integration/oxygen/iframe/main.js',
-                'integration/oxygen/editor': 'assets/integration/oxygen/editor/main.js',
+                // // Integrations
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
                 'integration/gutenberg/site-editor': 'assets/integration/gutenberg/site-editor.js',
                 'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
+                'integration/bricks': 'assets/integration/bricks/main.js',
+                'integration/oxygen-classic/iframe': 'assets/integration/oxygen-classic/iframe/main.js',
+                'integration/oxygen-classic/editor': 'assets/integration/oxygen-classic/editor/main.js',
                 'integration/livecanvas': 'assets/integration/livecanvas/main.js',
-                'integration/builderius': 'assets/integration/builderius/main.js',
+                // 'integration/breakdance': 'assets/integration/breakdance/main.js',
+                // 'integration/builderius': 'assets/integration/builderius/main.js',
             },
             outDir: 'build',
         }),
         vue(),
+        react({
+            // jsxRuntime: 'classic',
+        }),
         wp_scripts(),
-        Components({
-            resolvers: [
-                IconsResolver(),
-            ],
+        viteUiPro({
+            // license: process.env.NUXT_UI_PRO_LICENSE,
+            components: {
+                resolvers: [
+                    IconsResolver(),
+                ],
+
+                // relative paths to the directory to search for components.
+                dirs: 'assets/dashboard/components',
+
+                // Allow subdirectories as namespace prefix for components.
+                directoryAsNamespace: true,
+
+                // Collapse same prefixes (camel-sensitive) of folders and components
+                // to prevent duplication inside namespaced component name.
+                // works when `directoryAsNamespace: true`
+                collapseSamePrefixes: true,
+            },
+            ui: {
+                colors: {
+                    primary: 'indigo',
+                    neutral: 'zinc'
+                },
+                commandPalette: {
+                    slots: {
+                        root: 'z-[10001]',
+                    }
+                }
+            },
+
         }),
         Icons({ autoInstall: true, scale: 1 }),
         svgr({
             svgrOptions: {
                 dimensions: false,
             }
-        }),
-        react({
-            jsxRuntime: 'classic',
         }),
         httpsImports.default({}, function resolver(matcher) {
             return (id, importer) => {
@@ -83,33 +105,6 @@ export default defineConfig({
     build: {
         // target: 'modules',
         sourcemap: false,
-        // rollupOptions: {
-        //     output: {
-        //         manualChunks: {
-        //             'monaco-editor': ['monaco-editor'],
-        //         },
-        //         chunkFileNames: (chunkInfo) => {
-        //             // add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
-        //             // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
-        //             return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? '[name]-[hash].js' : '[name]-[hash].min.js';
-        //         },
-        //     },
-        //     plugins: [
-        //         {
-        //             name: 'rename-workers',
-        //             generateBundle(_, bundle) {
-        //                 // if the fila name is in the format of `*.worker-*.js` and doesn't have '.min.js`, rename it to `*.worker-*.min.js`
-        //                 // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
-        //                 const workerFiles = Object.keys(bundle).filter(file => file.includes('.worker-') && !file.includes('.min.js'));
-        //                 workerFiles.forEach((file) => {
-        //                     const newFileName = file.replace('.js', '.min.js');
-        //                     bundle[newFileName] = { ...bundle[file], fileName: newFileName };
-        //                     delete bundle[file];
-        //                 });
-        //             }
-        //         }
-        //     ],
-        // },
     },
     css: {
         preprocessorOptions: {
@@ -122,10 +117,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '~': path.resolve(__dirname), // root directory
-            '@/dashboard': path.resolve(__dirname, './assets/apps/dashboard'),
-            '@/integration': path.resolve(__dirname, './assets/integration'),
-            '@/common': path.resolve(__dirname, './assets/common'),
-            '@/packages': path.resolve(__dirname, './assets/packages'),
+            '@': path.resolve(__dirname, './assets'),
         },
     },
     server: {

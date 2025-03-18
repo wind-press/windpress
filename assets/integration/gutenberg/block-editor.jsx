@@ -150,10 +150,6 @@ let tippyInstance = tippy(document.createElement('div'), {
 });
 
 function hoverPreviewProvider() {
-    if (window.windpress?.loaded?.module?.classnameToCss !== true) {
-        return;
-    }
-
     const hitContainerEl = document.querySelector('.hit-container');
 
     if (hitContainerEl === null) {
@@ -356,10 +352,6 @@ function addClassInspectorControls(BlockEdit) {
         }
 
         async function handleAutomaticClassSorting() {
-            if (windpress?.loaded?.module?.classSorter !== true) {
-                return;
-            }
-
             const sortedClasses = await windpress.module.classSorter.sort(attributes.className);
 
             setAttributes({ className: sortedClasses });

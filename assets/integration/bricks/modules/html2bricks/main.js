@@ -9,7 +9,7 @@
 
 import { brxGlobalProp, settingsState } from '@/integration/bricks/constant.js';
 import { watch } from 'vue';
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 import { parse } from './dom2elements.js';
 
 /**

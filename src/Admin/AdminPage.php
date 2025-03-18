@@ -56,9 +56,7 @@ class AdminPage
 
     private function init_hooks()
     {
-        add_filter('f!windpress/core/runtime:print_windpress_metadata', fn ($metadata) => array_merge($metadata, [
-            'is_ubiquitous' => false,
-        ]), 1_000_001);
+        add_filter('f!windpress/core/runtime:print_windpress_metadata', fn ($metadata) => $this->print_windpress_metadata($metadata), 1_000_001);
         add_action('admin_enqueue_scripts', fn () => Runtime::get_instance()->print_windpress_metadata(), 1_000_001);
         add_action('admin_enqueue_scripts', fn () => $this->enqueue_scripts(), 1_000_001);
     }
@@ -69,7 +67,7 @@ class AdminPage
 
         $handle = WIND_PRESS::WP_OPTION . ':admin';
 
-        AssetVite::get_instance()->enqueue_asset('assets/apps/dashboard/main.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [
             'handle' => $handle,
             'in_footer' => true,
             'dependencies' => ['wp-i18n', 'wp-hooks'],
@@ -78,5 +76,18 @@ class AdminPage
         wp_set_script_translations($handle, 'windpress');
 
         do_action('a!windpress/admin/admin_page:enqueue_scripts.after');
+    }
+
+    function print_windpress_metadata($metadata) {
+        $current_user = wp_get_current_user();
+
+        $metadata['is_ubiquitous'] = false;
+        $metadata['current_user'] = [
+            'name' => $current_user->display_name,
+            'avatar' => get_avatar_url($current_user->ID),
+            'role' => $current_user->roles[0],
+        ];
+
+        return $metadata;
     }
 }

@@ -1,5 +1,5 @@
 import './style.scss';
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 
 logger('Loading...');
 
@@ -23,12 +23,13 @@ logger('Loading...');
 
     // tailwindcss-v4
     if (Number(bdeIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
+        await import('./modules/variables/main.ts');
         await import('./modules/variable-picker/main.js');
     }
 
-    if (bdeIframe.contentWindow.windpress?.is_ubiquitous) {
-        await import('./modules/settings/main.js');
-    }
+    // if (bdeIframe.contentWindow.windpress?.is_ubiquitous) {
+    //     await import('./modules/settings/main.js');
+    // }
 
     logger('Modules loaded!');
 

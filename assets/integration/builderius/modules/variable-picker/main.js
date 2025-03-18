@@ -1,8 +1,7 @@
 import './style.scss';
 
 import { createApp, ref, watch } from 'vue';
-import './master.css.js';
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
 import App from './App.vue';
@@ -47,7 +46,7 @@ app
     ;
 
 app
-    .component('inline-svg', InlineSvg)
+    .component('InlineSvg', InlineSvg)
     ;
 
 app.mount('#windpressbuilderius-variable-app');

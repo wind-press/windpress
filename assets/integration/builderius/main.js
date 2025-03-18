@@ -1,4 +1,4 @@
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 
 logger('Loading...');
 
@@ -19,6 +19,7 @@ logger('Loading...');
 
     // tailwindcss-v4
     if (Number(uniIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
+        await import('./modules/variables/main.ts');
         await import('./modules/monaco/main.js');
         await import('./modules/variable-picker/main.js');
     }

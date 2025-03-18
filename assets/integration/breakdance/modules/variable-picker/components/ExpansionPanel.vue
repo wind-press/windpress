@@ -3,61 +3,81 @@ import { useStorage } from '@vueuse/core';
 import { ref } from 'vue';
 
 const props = defineProps({
-    namespace: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
+  namespace: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
 });
 
 const sectionRef = ref(null);
 
 const expand = useStorage(
-    `windpressbreakdance-variable-app.ui.expansion-panels.${props.namespace}`,
-    { [`${props.name}`]: false },
-    undefined,
-    { mergeDefaults: true }
+  `windpressbreakdance-variable-app.ui.expansion-panels.${props.namespace}`,
+  { [`${props.name}`]: false },
+  undefined,
+  { mergeDefaults: true }
 );
 
 function togglePanel(val) {
-    expand.value[props.name] = val === null ? !expand.value[props.name] : val;
+  expand.value[props.name] = val === null ? !expand.value[props.name] : val;
 }
 
 function scrollIntoView() {
-    sectionRef.value.scrollIntoView();
+  sectionRef.value.scrollIntoView();
 }
 
 defineExpose({
-    togglePanel,
-    scrollIntoView
+  togglePanel,
+  scrollIntoView
 });
 </script>
 
 <template>
-    <div ref="sectionRef" class="expansion-panel mx:10 py:8 mr:4">
-        <div @click="expand[name] = !expand[name]" :class="{}" class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer">
-            <div class="flex-grow:1">
-                <slot name="header"></slot>
-            </div>
-            <div>
-                <i-fa6-solid-chevron-right :class="{ 'rotate(-90)': expand[name] }" class="iconify ~duration:300 font:18" />
-            </div>
-        </div>
-        <Transition>
-            <div v-if="expand[name]" class="expansion-panel__body">
-                <slot></slot>
-            </div>
-        </Transition>
-
+  <div ref="sectionRef" class="expansion-panel mx:10 py:8 mr:4">
+    <div :class="{}" class="expansion-panel__header flex justify-content:space-between p:10 r:8 cursor:pointer" @click="expand[name] = !expand[name]">
+      <div class="header-slot flex-grow:1">
+        <slot name="header" />
+      </div>
+      <div>
+        <i-fa6-solid-chevron-right :style="{ transform: expand[name] ? 'rotate(-90deg)' : 'rotate(0deg)' }" class="iconify ~duration:300 font:18" />
+      </div>
     </div>
+    <Transition>
+      <div v-if="expand[name]" class="expansion-panel__body">
+        <slot />
+      </div>
+    </Transition>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.expansion-panel__header {
+.expansion-panel {
+  margin-left: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 4px;
+
+  .expansion-panel__header {
     line-height: 1.7;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+
+    .header-slot {
+      flex-grow: 1;
+    }
+
+    .iconify {
+      transition: transform 300ms;
+      font-size: 18px;
+    }
+  }
 }
 
 /* we will explain what these classes do next! */

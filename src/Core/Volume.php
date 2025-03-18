@@ -52,8 +52,9 @@ class Volume
                 'name' => $file->getFilename(),
                 'relative_path' => $file->getRelativePathname(),
                 'content' => $file->getContents(),
-                'handler' => strpos($file->getPathname(), $data_dir) === false ? 'read-only' : 'internal',
+                'handler' => 'internal',
                 'signature' => wp_create_nonce(sprintf('%s:%s', WIND_PRESS::WP_OPTION, $file->getRelativePathname())),
+                'readonly' => strpos($file->getPathname(), $data_dir) === false,
             ];
         }
 
@@ -78,8 +79,8 @@ class Volume
         }
 
         if ($tailwindcss_version === 3) {
-            $stubs_tailwind_config_js = file_get_contents(sprintf('%s/stubs/tailwindcss-v%d/tailwind.config.js', dirname(WIND_PRESS::FILE), $tailwindcss_version));
-            $stubs_wizard_js = file_get_contents(sprintf('%s/stubs/tailwindcss-v%d/wizard.js', dirname(WIND_PRESS::FILE), $tailwindcss_version));
+            $stubs_tailwind_config_js = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/tailwindcss-v3/tailwind.config.js');
+            $stubs_wizard_js = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/tailwindcss-v3/wizard.js');
 
             // check if 'tailwind.config.js' already exists and content is not empty, else use the stubs
             $tailwind_config_js_key = array_search('tailwind.config.js', array_column($entries, 'name'), true);
@@ -132,7 +133,8 @@ class Volume
                 continue;
             }
 
-            if ($entry['handler'] === 'read-only') {
+            // skip the readonly entries
+            if (isset($entry['readonly']) && $entry['readonly']) {
                 continue;
             }
 

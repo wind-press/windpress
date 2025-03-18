@@ -55,9 +55,11 @@ jobs:
         # install dependencies and build the assets
         - run: pnpm install
         - run: pnpm build
+          env:
+            NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
 
         # clean up the dev files
-        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc jsconfig.json
+        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js
         - run: rm -rf ecs.php rector.php
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping

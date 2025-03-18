@@ -8,7 +8,6 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { uniIframe } from '@/integration/builderius/constant.js';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -37,7 +36,6 @@ const channel = new BroadcastChannel('windpress');
                                     task: 'windpress.generate-cache',
                                     payload: {
                                         force_pull: true,
-                                        tailwindcss_version: Number(uniIframe.contentWindow.windpress?._tailwindcss_version)
                                     }
                                 });
                             }

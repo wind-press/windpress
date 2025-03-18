@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
 import { brxIframe } from '@/integration/bricks/constant.js';
-import { getVariableList, decodeVFSContainer } from '@/packages/core/tailwindcss-v4';
+import { getVariableList, decodeVFSContainer, loadDesignSystem } from '@/packages/core/tailwindcss';
 import ExpansionPanel from './ExpansionPanel.vue';
 import { set } from 'lodash-es';
 import CommonVariableItems from './CommonVariableItems.vue';
@@ -21,7 +21,7 @@ async function constructVariableList() {
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables
-    const variableLists = await getVariableList({ volume });
+    const variableLists = await getVariableList(await loadDesignSystem({ volume }));
 
     /**
      * Color
@@ -227,39 +227,51 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbricks-variable-app-body" class="rel w:full h:full overflow-y:scroll! bb:1|solid|$(builder-border-color)>div:not(:last-child)">
-        <ExpansionPanel namespace="variable" name="color" ref="sectionColor">
+    <div id="windpressbricks-variable-app-body" class="var-body ">
+        <ExpansionPanel ref="sectionColor" namespace="variable" name="color">
             <template #header>
-                <span class="font:semibold">Color</span>
+                <span class="var-body-title">Color</span>
             </template>
 
             <template #default>
-                <ColorVariableItems :variableItems="commonVar.colors" />
+                <ColorVariableItems :variable-items="commonVar.colors" />
             </template>
         </ExpansionPanel>
-        <ExpansionPanel namespace="variable" name="typography" ref="sectionTypography">
+        <ExpansionPanel ref="sectionTypography" namespace="variable" name="typography">
             <template #header>
-                <span class="font:semibold">Typography</span>
+                <span class="var-body-title">Typography</span>
             </template>
 
             <template #default>
-                <CommonVariableItems :variableItems="commonVar.typography" />
+                <CommonVariableItems :variable-items="commonVar.typography" />
             </template>
         </ExpansionPanel>
-        <ExpansionPanel namespace="variable" name="spacing" ref="sectionSpacing" class="">
+        <ExpansionPanel ref="sectionSpacing" namespace="variable" name="spacing" class="">
             <template #header>
-                <span class="font:semibold">Sizing</span>
+                <span class="var-body-title">Sizing</span>
             </template>
 
             <template #default>
-                <CommonVariableItems :variableItems="commonVar.sizing" />
+                <CommonVariableItems :variable-items="commonVar.sizing" />
             </template>
         </ExpansionPanel>
     </div>
 </template>
 
 <style lang="scss" scoped>
-#windpressbricks-variable-app-body {
+.var-body {
     scrollbar-color: var(--builder-gray-5) transparent;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll !important;
+
+    &>div:not(:last-child) {
+        border-bottom: 1px solid var(--builder-border-color);
+    }
+
+    .var-body-title {
+        font-weight: semibold;
+    }
 }
 </style>

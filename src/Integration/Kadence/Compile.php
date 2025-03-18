@@ -31,6 +31,7 @@ class Compile
 
         return $this->get_contents($metadata);
     }
+
     public function get_contents($metadata): array
     {
         $contents = [];

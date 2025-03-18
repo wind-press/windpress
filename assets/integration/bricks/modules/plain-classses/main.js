@@ -9,7 +9,7 @@
 
 import './style.scss';
 
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 
 import tippy, { followCursor } from 'tippy.js';
 
@@ -20,8 +20,8 @@ import Tribute from 'tributejs';
 import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 
-import HighlightInTextarea from '@/integration/library/highlight-in-textarea.js';
-import { brxGlobalProp, brxIframeGlobalProp, brxIframe, settingsState } from '@/integration/bricks/constant.js';
+import HighlightInTextarea from '@/integration/library/highlight-in-textarea';
+import { brxGlobalProp, brxIframeGlobalProp, brxIframe, settingsState } from '@/integration/bricks/constant';
 
 import { debounce } from 'lodash-es';
 
@@ -57,6 +57,14 @@ const classSortButton = document.createRange().createContextualFragment(/*html*/
         <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" class="bricks-svg icon icon-tabler icons-tabler-outline icon-tabler-reorder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" /><path d="M16.5 8.5l2.5 2.5l2.5 -2.5" /></svg>    
     </span>
 `).querySelector('#windpressbricks-plc-class-sort');
+
+const classToPlainClassesButton = document.createRange().createContextualFragment(/*html*/ `
+    <span id="windpressbricks-plc-class-down" class="bricks-svg-wrapper windpressbricks-plc-class-down" data-balloon="Move Classes to Plain Classes" data-balloon-pos="bottom-right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Lucide by Lucide Contributors - https://github.com/lucide-icons/lucide/blob/main/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.5 13h6M2 16l4.5-9l4.5 9m7-9v9m-4-4l4 4l4-4"/></svg>    
+    </span>
+`).querySelector('#windpressbricks-plc-class-down');
+
+containerActionButtons.appendChild(classToPlainClassesButton);
 containerActionButtons.appendChild(classSortButton);
 
 const visibleElementPanel = ref(false);
@@ -274,10 +282,6 @@ let tippyInstance = tippy(document.createElement('div'), {
 });
 
 function hoverPreviewProvider() {
-    if (brxIframe.contentWindow.windpress?.loaded?.module?.classnameToCss !== true) {
-        return;
-    }
-
     const hitContainerEl = document.querySelector('.hit-container');
 
     if (hitContainerEl === null) {
@@ -380,12 +384,27 @@ textInput.addEventListener('tribute-active-true', function (e) {
 });
 
 classSortButton.addEventListener('click', async function (e) {
-    if (brxIframe.contentWindow.windpress?.loaded?.module?.classSorter !== true) {
-        return;
-    }
-
     textInput.value = await brxIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
     brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
+    onTextInputChanges();
+});
+
+classToPlainClassesButton.addEventListener('click', async function (e) {
+    const activeEl = brxGlobalProp.$_activeElement.value;
+    const currPlainClasses = textInput.value.split(' ');
+    const bricksGlobalClasses = activeEl.settings?._cssGlobalClasses ? [...activeEl.settings._cssGlobalClasses] : [];
+
+    bricksGlobalClasses.forEach((globalClass) => {
+        let getGlobalClassName = brxGlobalProp.$_getGlobalClassName(globalClass);
+        if (currPlainClasses.includes(getGlobalClassName)) {
+            return;
+        }
+        currPlainClasses.push(getGlobalClassName);
+    });
+
+    textInput.value = currPlainClasses.join(' ');
+    brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
+    brxGlobalProp.$_activeElement.value.settings._cssGlobalClasses = [];
     onTextInputChanges();
 });
 

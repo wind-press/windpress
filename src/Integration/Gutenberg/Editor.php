@@ -65,11 +65,7 @@ class Editor
         wp_add_inline_script($handle, <<<JS
             document.addEventListener('DOMContentLoaded', function () {
                 wp.hooks.addFilter('windpressgutenberg-autocomplete-items-query', 'windpressgutenberg', async (autocompleteItems, text) => {
-                    if (!window.windpress?.loaded?.module?.autocomplete) {
-                        return autocompleteItems;
-                    }
-
-                    const windpress_suggestions = await window.wp.hooks.applyFilters('windpress.module.autocomplete', text);
+                    const windpress_suggestions = await window.windpress.module.autocomplete.query(text);
 
                     return [...windpress_suggestions, ...autocompleteItems];
                 });

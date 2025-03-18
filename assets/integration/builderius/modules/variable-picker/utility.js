@@ -1,4 +1,4 @@
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 
 export function observe({ selector, callback, options, }) {
     const observer = new MutationObserver(callback);

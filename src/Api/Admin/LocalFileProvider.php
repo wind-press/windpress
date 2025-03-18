@@ -23,7 +23,9 @@ use WP_REST_Server;
 
 class LocalFileProvider extends AbstractApi implements ApiInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function get_prefix(): string
     {
@@ -37,8 +39,8 @@ class LocalFileProvider extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/scan',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->scan($wprestRequest),
-                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->scan($wprestRequest),
+                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
     }

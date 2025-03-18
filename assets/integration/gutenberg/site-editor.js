@@ -1,4 +1,4 @@
-import { logger } from '@/integration/common/logger.js';
+import { logger } from '@/integration/common/logger';
 import { debounce } from 'lodash-es';
 
 logger('Loading...');
