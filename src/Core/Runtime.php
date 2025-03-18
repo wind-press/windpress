@@ -105,9 +105,9 @@ class Runtime
             add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
         }
 
-        if ($this->is_ubiquitous_panel()) {
-            add_action('wp_head', fn() => $this->enqueue_front_panel(), 1_000_001);
-        }
+        // if ($this->is_ubiquitous_panel()) {
+        //     add_action('wp_head', fn() => $this->enqueue_front_panel(), 1_000_001);
+        // }
     }
 
     public function is_cache_exists()
@@ -221,7 +221,7 @@ class Runtime
     {
         $handle = WIND_PRESS::WP_OPTION . ':admin';
 
-        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.js', [
+        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [
             'handle' => $handle,
             'in_footer' => true,
             'dependencies' => ['wp-i18n', 'wp-hooks'],
