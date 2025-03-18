@@ -2,10 +2,13 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
+import { useLogStore } from '@/dashboard/stores/log';
+import { setupWorker } from '@/packages/core/windpress/worker';
 
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
+const logStore = useLogStore
 
 const links = [
     [
@@ -108,17 +111,7 @@ const askForReviewClick = (action: string) => {
 
 const channel = new BroadcastChannel('windpress');
 
-channel.addEventListener('message', async (e) => {
-    const data = e.data;
-    const source = 'windpress/compiler';
-    const target = 'windpress/dashboard';
-
-    // if has task and task is prefixed with `log.`
-    if (data.source === source && data.target === target && data.task?.startsWith('log.')) {
-        const task = data.task.replace('log.', '');
-        console.log(`Channel->Compiler Worker: ${task}`, data.data);
-    }
-});
+setupWorker(channel);
 
 onMounted(() => {
     if (isAskForReview.value) {

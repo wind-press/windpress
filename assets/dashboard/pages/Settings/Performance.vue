@@ -5,15 +5,15 @@ import { useSettingsStore } from '@/dashboard/stores/settings';
 import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
 import { useApi } from '@/dashboard/library/api';
-import { WorkaroundSharedWorker } from '@/packages/core/windpress/utils';
-import compilerWorkerUrl from '@/packages/core/windpress/worker?worker&url';
-import compilerWorkerTest from '@/packages/core/windpress/worker?sharedworker';
+import prettyMilliseconds from 'pretty-ms';
 
-const toast = useToast()
 const api = useApi();
+const toast = useToast();
 
 const settingsStore = useSettingsStore()
 const busyStore = useBusyStore()
+
+const channel = new BroadcastChannel('windpress');
 
 type CSS_Cache = {
   last_generated: number | null;
@@ -37,28 +37,82 @@ function pullCacheInfo() {
     });
 }
 
-// console.log("Compiler Worker URL", compilerWorkerUrl);
-const worker2 = new compilerWorkerTest();
-
-const worker = WorkaroundSharedWorker(compilerWorkerUrl);
-
-console.log("Worker", worker);
-
-worker.port.onmessage = (e) => {
-    console.log("Message received from worker");
-    console.log(e.data);
-    console.log(e);
-  };
-
 function doGenerateCache() {
   busyStore.add('settings.performance.cached_css.generate');
-  setTimeout(() => busyStore.remove('settings.performance.cached_css.generate'), 2000);
 
-  console.log('worker.port', worker);
+  const toastData: Omit<Partial<Toast>, "id"> = {
+    title: 'Generating cache...',
+    description: 'Please wait while we generate the CSS cache.',
+    duration: 0,
+    icon: 'lucide:loader-circle',
+    close: false,
+    color: 'neutral',
+    ui: {
+      icon: 'animate-spin',
+    }
+  };
 
-  worker.port.postMessage({ task: 'generate_cache' });
+  if (toast.toasts.value.find(t => t.id === 'worker.doGenerateCache')) {
+    toast.update('worker.doGenerateCache', {
+      ...toastData
+    });
+  } else {
+    toast.add({
+      id: 'worker.doGenerateCache',
+      ...toastData
+    });
+  }
 
-  console.log("Message posted to worker");
+
+  let timeStart = performance.now();
+  let timeEnd = timeStart;
+
+  channel.postMessage({
+    task: 'generate-cache',
+    source: 'windpress/dashboard',
+    target: 'windpress/compiler',
+    data: {
+      tailwindcss_version: Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value),
+    }
+  });
+
+  channel.addEventListener('message', (event) => {
+    const data = event.data;
+    const source = 'windpress/compiler';
+    const target = 'windpress/dashboard';
+    if (data.source === source && data.target === target && data.task === 'generate-cache.response') {
+      busyStore.remove('settings.performance.cached_css.generate');
+      pullCacheInfo();
+
+      timeEnd = performance.now();
+
+      if (data.data.status === 'success') {
+        toast.update('worker.doGenerateCache', {
+          title: 'Generated',
+          description: `Cache generated in ${prettyMilliseconds(timeEnd - timeStart)}.`,
+          icon: 'lucide:codesandbox',
+          color: 'success',
+          duration: undefined,
+          close: true,
+          ui: {
+            icon: undefined,
+          }
+        });
+      } else if (data.data.status === 'error') {
+        toast.update('worker.doGenerateCache', {
+          title: 'Error',
+          description: `An error occurred while generating the CSS cache. Check the Browser's Console for more information`,
+          icon: 'lucide:codesandbox',
+          color: 'error',
+          duration: undefined,
+          close: true,
+          ui: {
+            icon: undefined,
+          }
+        });
+      }
+    }
+  });
 }
 
 onBeforeMount(() => {
