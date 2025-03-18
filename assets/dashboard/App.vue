@@ -2,13 +2,11 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
-import { useLogStore } from '@/dashboard/stores/log';
 import { setupWorker } from '@/packages/core/windpress/worker';
 
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
-const logStore = useLogStore
 
 const links = [
     [
@@ -89,7 +87,7 @@ const groups = computed(() => [
                 target: '_blank',
             },
         ]
-    }
+    },
 ])
 
 const askForReview = localStorage.getItem(`windpress-ask-for-review-${window.windpress._version}`) ?? -1;
