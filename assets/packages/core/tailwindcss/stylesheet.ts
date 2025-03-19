@@ -36,7 +36,7 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
     } else {
         // Volume: resolve relative path as absolute path
         if (id.startsWith('.')) {
-            id = path.resolve(path.dirname(base), id);
+            id = path.resolve(base, id);
 
             /*
              * Resolve default import if no extension is specified
