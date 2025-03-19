@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.3.2
+Stable tag: 3.3.3
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -57,7 +57,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
 * [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
-* [Oxygen](https://oxygenbuilder.com/) — **Pro**
+* [Oxygen 6 / Classic](https://oxygenbuilder.com/) — **Pro**
 * [WPCodeBox 2](https://wpcodebox.com/) — **Pro**
 
 Planned / In Progress
@@ -122,9 +122,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.3.3 =
 * **New**: [Oxygen 6](https://oxygenbuilder.com/) integration **[Pro]**
 * **Improve**: [TW4] The Play Observer / Compiler performance & stability
+* **Fix**: [TW4][Breakdance] The style are now instantly applied on the editor
 
 = 3.3.2 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.14 latest)
