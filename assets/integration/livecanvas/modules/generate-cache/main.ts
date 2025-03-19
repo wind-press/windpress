@@ -9,6 +9,7 @@
 
 import { logger } from '@/integration/common/logger';
 import { previewIframe } from '@/integration/livecanvas/constant.js';
+import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -28,12 +29,17 @@ const channel = new BroadcastChannel('windpress');
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         if (xhr.responseText === 'Save') {
                             channel.postMessage({
+                                task: 'generate-cache',
                                 source: 'windpress/integration',
-                                target: 'windpress/dashboard',
-                                task: 'windpress.generate-cache',
-                                payload: {
-                                    force_pull: true,
-                                }
+                                target: 'windpress/compiler',
+                                data: {
+                                    kind: 'incremental',
+                                    incremental: {
+                                        providers: [
+                                            'livecanvas',
+                                        ]
+                                    }
+                                } as BuildCacheOptions
                             });
                         }
                     }

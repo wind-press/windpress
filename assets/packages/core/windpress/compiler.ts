@@ -1,12 +1,15 @@
 import { encodeBase64 } from '@std/encoding/base64';
 import { unescape } from "@std/html/entities";
-import type { Log } from '@/dashboard/stores/log';
+import { createLogComposable } from '@/dashboard/stores/log'
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
 import { compile as buildV4, find_tw_candidates, optimize as optimizeV4, loadSource } from '@/packages/core/tailwindcss';
 import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwindcss-v3';
 import { nanoid } from 'nanoid';
 import lzString from 'lz-string';
+import { get } from 'lodash-es';
+
+// TODO: Add option to allow enable/disable the incremental cache build
 
 export type Provider = {
     callback?: string;
@@ -27,7 +30,7 @@ export type BuildCacheOptions = {
     // Should the cache be stored on the server?
     store?: boolean;
 
-    // The Tailwind CSS version to use
+    // The Tailwind CSS version to use. If not set, it will be pulled from the server, if failed, it will default to 4
     tailwindcss_version?: 3 | 4;
 
     // Full or incremental cache build. "Full" will scan all providers, while "Incremental" will use the stored sources on the browser's local storage (if available)
@@ -43,27 +46,14 @@ export type BuildCacheOptions = {
     };
 }
 
-function bcLog(channel: BroadcastChannel, task: 'add' | 'update', log: Log) {
-    channel.postMessage({
-        source: 'windpress/compiler',
-        target: 'windpress/dashboard',
-        task: `log.${task}`,
-        data: {
-            log
-        }
-    });
-}
-
 export async function buildCache(opts: BuildCacheOptions = {}) {
     const api = useApi();
+    const log = createLogComposable();
 
-    const channel = new BroadcastChannel("windpress");
-
-    bcLog(channel, 'add', { message: 'Starting cache build...', type: 'info' });
+    log.add({ message: 'Starting cache build...', type: 'info' });
 
     const options: BuildCacheOptions = Object.assign({
         store: true,
-        tailwindcss_version: 4,
         kind: 'full',
     }, opts);
 
@@ -77,7 +67,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         file_size: 0,
     };
 
-    bcLog(channel, 'add', { message: 'Getting the latest Simple File System data...', type: 'info' });
+    log.add({ message: 'Getting the latest Simple File System data...', type: 'info' });
 
     await api
         .get('admin/settings/cache/providers')
@@ -101,8 +91,22 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             }, {});
         })
 
+    // if version is not set, get the setting from the server
+    if (!options.tailwindcss_version) {
+        await api
+            .request('/admin/settings/options/index', { method: 'GET', })
+            .then((response) => {
+                const version = Number(get(response.data.options, 'general.tailwindcss.version', 4));
+                if (version === 3 || version === 4) {
+                    options.tailwindcss_version = version;
+                } else {
+                    options.tailwindcss_version = 4;
+                }
+            })
+    }
+
     if (providers.length === 0 || providers.filter(provider => provider.enabled).length === 0) {
-        bcLog(channel, 'add', { message: 'No cache provider found', type: 'error' });
+        log.add({ message: 'No cache provider found', type: 'error' });
 
         throw new Error('No cache provider found');
     }
@@ -119,7 +123,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             // check if the provider's id is not in the incremental providers list
             if (options.incremental?.providers && !options.incremental.providers.includes(provider.id)) {
                 // use the stored sources on the browser's local storage (if available)
-                let lsCache = localStorage.getItem(`windpress-provider-cache-${provider.id}`);
+                let lsCache = localStorage.getItem(`windpress.cache.provider.${provider.id}`);
 
                 if (lsCache) {
                     let decompressedCache = lzString.decompressFromUTF16(lsCache);
@@ -128,7 +132,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
                     if (cache && !(css_cache.last_full_build !== null && Number(cache.timestamp) < Number(css_cache.last_full_build))) {
                         content_pool.push(...cache.contents);
 
-                        bcLog(channel, 'add', { message: `Using cached sources for provider: ${provider.name}`, type: 'info' });
+                        log.add({ message: `Using cached sources for provider: ${provider.name}`, type: 'info' });
 
                         return Promise.resolve();
                     }
@@ -140,7 +144,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             let logId = nanoid(10);
             let logMessage = `Scanning provider: ${provider.name}... (${batch !== false ? batch : 'initial'})`;
 
-            bcLog(channel, 'add', { message: logMessage, type: 'info', id: logId });
+            log.add({ message: logMessage, type: 'info', id: logId });
 
             const scan: { contents: Array<{ content: string; type: string }>, metadata?: { next_batch?: boolean | string } } = await api
                 .post('admin/settings/cache/providers/scan', {
@@ -153,13 +157,13 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
 
             batch = scan.metadata?.next_batch || false;
 
-            bcLog(channel, 'update', { id: logId, type: 'info', message: `${logMessage} - done` });
+            log.update(logId, { type: 'info', message: `${logMessage} - done` });
         } while (batch !== false);
 
         content_pool.push(...batch_pool);
 
         // store to local storage
-        localStorage.setItem(`windpress-provider-cache-${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
+        localStorage.setItem(`windpress.cache.provider.${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
 
         return Promise.resolve();
     }
@@ -199,16 +203,16 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         // convert to set to remove duplicates, then back to array
         let candidates = [...new Set([...candidates_pool, ...await loadSource(compiled.globs)])];
 
-        bcLog(channel, 'add', { message: 'Scanning complete', type: 'success' });
-        bcLog(channel, 'add', { message: 'Building cache...', type: 'info' });
+        log.add({ message: 'Scanning complete', type: 'success' });
+        log.add({ message: 'Building cache...', type: 'info' });
 
         const result = compiled.build(candidates);
 
         normal = (await optimizeV4({ css: result })).css;
         minified = (await optimizeV4({ css: result, minify: true })).css;
     } else if (options.tailwindcss_version === 3) {
-        bcLog(channel, 'add', { message: 'Scanning complete', type: 'success' });
-        bcLog(channel, 'add', { message: 'Building cache...', type: 'info' });
+        log.add({ message: 'Scanning complete', type: 'success' });
+        log.add({ message: 'Building cache...', type: 'info' });
 
         const result = await buildV3({
             entrypoint: {
@@ -223,7 +227,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         minified = (await optimizeV3(result, true)).css;
     }
 
-    bcLog(channel, 'add', { message: 'Cache built', type: 'success' });
+    log.add({ message: 'Cache built', type: 'success' });
 
     css_cache.last_generated = Date.now();
     css_cache.last_full_build = options.kind === 'full' ? Date.now() : css_cache.last_full_build;
@@ -238,7 +242,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             })
             .then((resp) => {
                 css_cache = resp.data.cache;
-                bcLog(channel, 'add', { message: 'Cache stored', type: 'success' });
+                log.add({ message: 'Cache stored', type: 'success' });
             });
     }
 

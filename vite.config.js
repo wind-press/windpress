@@ -30,6 +30,7 @@ export default defineConfig({
                 // Tailwind v4
                 'packages/core/tailwindcss/play/observer': 'assets/packages/core/tailwindcss/play/observer.ts',
                 'packages/core/tailwindcss/play/intellisense': 'assets/packages/core/tailwindcss/play/intellisense.ts',
+                'packages/core/tailwindcss/play/worker': 'assets/packages/core/tailwindcss/play/worker.ts',
 
                 // Tailwind v3
                 'packages/core/tailwindcss-v3/play/observer': 'assets/packages/core/tailwindcss-v3/play/observer.ts',

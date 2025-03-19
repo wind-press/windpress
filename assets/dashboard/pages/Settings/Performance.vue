@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
 import { useApi } from '@/dashboard/library/api';
 import prettyMilliseconds from 'pretty-ms';
+import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
 
 const api = useApi();
 const toast = useToast();
@@ -73,7 +74,7 @@ function doGenerateCache() {
     target: 'windpress/compiler',
     data: {
       tailwindcss_version: Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value),
-    }
+    } as BuildCacheOptions
   });
 
   channel.addEventListener('message', (event) => {

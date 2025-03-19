@@ -12,23 +12,23 @@ logger('Loading...');
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 
-    const { bdeIframe } = await import('./constant.js');
+    const { bdeIframe } = await import('./constant');
 
     logger('Loading modules...');
 
     // TODO: dynamic import the features based on the enabled modules
-    await import('./modules/plain-classses/main.js');
-    // await import('./modules/html2breakdance/main.js');
-    await import('./modules/generate-cache/main.js');
+    await import('./modules/plain-classses/main');
+    // await import('./modules/html2breakdance/main');
+    await import('./modules/generate-cache/main');
 
     // tailwindcss-v4
     if (Number(bdeIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
-        await import('./modules/variables/main.ts');
-        await import('./modules/variable-picker/main.js');
+        await import('./modules/variables/main');
+        await import('./modules/variable-picker/main');
     }
 
     // if (bdeIframe.contentWindow.windpress?.is_ubiquitous) {
-    //     await import('./modules/settings/main.js');
+    //     await import('./modules/settings/main');
     // }
 
     logger('Modules loaded!');

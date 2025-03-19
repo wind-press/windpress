@@ -1,6 +1,6 @@
 import { find_tw_candidates } from '@windpress/oxide-parser-wasm';
 import { minimatch } from 'minimatch';
-import { useLogStore } from '@/dashboard/stores/log';
+import { createLogComposable } from '@/dashboard/stores/log'
 import { useApi } from '@/dashboard/library/api';
 
 export type Glob = {
@@ -9,7 +9,7 @@ export type Glob = {
 };
 
 export async function loadSource(globs: Glob[]) {
-    const logStore = useLogStore();
+    const logStore = createLogComposable();
 
     let contents: string[] = [];
 
@@ -27,7 +27,7 @@ export async function loadSource(globs: Glob[]) {
         }
 
         if (logId) {
-            let currentLog = logStore.logs.find((log) => log.id === logId);
+            let currentLog = logStore.logs.value.find((log) => log.id === logId);
 
             if (currentLog) {
                 currentLog.message += ' - done';
@@ -47,7 +47,7 @@ export async function loadSource(globs: Glob[]) {
         candidates_pool.push(...candidates);
     });
 
-    let currentLog = logStore.logs.find((log) => log.id === logId);
+    let currentLog = logStore.logs.value.find((log) => log.id === logId);
 
     if (currentLog) {
         currentLog.message += ' - done';

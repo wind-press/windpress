@@ -122,6 +122,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **New**: [TW4] The compiler now can generating cache on the front-end page. This only available if the "Admin always uses Compiler" setting is enabled.
+* **Fix**: [TW4][Breakdance, Bricks, Builderius, LiveCanvas, Oxygen Classic] The "Generate Cache on Save" feature are not available
+
 = 3.3.4 =
 * **Fix**: [TW4] The local stylesheet import is not resolved correctly
 
@@ -182,7 +186,7 @@ Pro version 1.**1**.4
 
 = 3.2.22 =
 * **Fix**: [Gutenberg] The CSS class field autofocusing issue on the block editor
-* **Fix**: [Gutenberg, Breakdance, Bricks, Builderius, LiveCanvas, Oxygen] The generate cache on save feature doesn't use the selected Tailwind CSS version 
+* **Fix**: [Gutenberg, Breakdance, Bricks, Builderius, LiveCanvas, Oxygen] The "Generate Cache on Save" feature doesn't use the selected Tailwind CSS version 
 
 = 3.2.21 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-beta.6 next)

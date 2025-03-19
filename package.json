@@ -79,7 +79,7 @@
     "lz-string": "https://pkg.pr.new/wind-press/lz-string@2c61edc",
     "minimatch": "^10.0.1",
     "monaco-editor": "^0.52.2",
-    "nanoid": "^5.1.4",
+    "nanoid": "^5.1.5",
     "pinia": "^3.0.1",
     "postcss": "^8.5.3",
     "postcss-import": "^16.1.0",

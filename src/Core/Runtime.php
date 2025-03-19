@@ -189,6 +189,12 @@ class Runtime
                 'in-footer' => true,
             ]);
             $loaded_modules[] = WIND_PRESS::WP_OPTION . ':intellisense';
+
+            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/worker.ts', [
+                'handle' => WIND_PRESS::WP_OPTION . ':worker',
+                'in-footer' => true,
+            ]);
+            $loaded_modules[] = WIND_PRESS::WP_OPTION . ':worker';
         }
 
         AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/observer.ts', [

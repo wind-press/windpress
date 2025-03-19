@@ -2,7 +2,6 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
-import { setupWorker } from '@/packages/core/windpress/worker';
 
 const route = useRoute()
 const router = useRouter()
@@ -106,10 +105,6 @@ const askForReviewClick = (action: string) => {
     // never
     isAskForReview.value = false;
 };
-
-const channel = new BroadcastChannel('windpress');
-
-setupWorker(channel);
 
 onMounted(() => {
     if (isAskForReview.value) {

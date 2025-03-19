@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
 import { nanoid } from 'nanoid';
+import { useStorage } from '@vueuse/core'
 
 export type Log = {
     /** The message to log. */
@@ -22,8 +22,18 @@ export type Log = {
     options?: object;
 }
 
-export const useLogStore = defineStore('log', () => {
-    const logs = ref<Log[]>([]);
+export function createLogComposable() {
+    const logs = useStorage('windpress.dashboard.store.logs', [
+        {
+            "id": "JqhEkI6VK0",
+            "timestamp": 1742407548572,
+            "type": "debug",
+            "message": "Thank you for using WindPress! Join us on the Facebook Group: <a href=\"https://wind.press/go/facebook\" target=\"_blank\" class=\"underline\">https://wind.press/go/facebook</a>",
+            "options": {
+                "raw": true
+            }
+        }
+    ] as Log[]);
 
     function add(log: Log): string {
         const id: string = nanoid(10);
@@ -44,10 +54,6 @@ export const useLogStore = defineStore('log', () => {
         }
     }
 
-    /**
-     * @param {string} toSearch The value to search for.
-     * @param {string} by The key to search by. Default is `id`. Available keys are `id`, `message`, `type`, and `group`.
-     */
     function remove(toSearch: string, by: 'id' | 'message' | 'type' | 'group' = 'id'): void {
         switch (by) {
             case 'message':
@@ -76,5 +82,13 @@ export const useLogStore = defineStore('log', () => {
         update,
         remove,
         clear,
+    };
+}
+
+export const useLogStore = defineStore('log', () => {
+    const composable = createLogComposable();
+
+    return {
+        ...composable,
     };
 });

@@ -8,6 +8,7 @@
  */
 
 import { logger } from '@/integration/common/logger';
+import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
 
 const channel = new BroadcastChannel('windpress');
 
@@ -31,12 +32,17 @@ const channel = new BroadcastChannel('windpress');
 
                             if (response.commit_entity?.errors?.length === 0 || response.commit_global?.errors?.length === 0) {
                                 channel.postMessage({
+                                    task: 'generate-cache',
                                     source: 'windpress/integration',
-                                    target: 'windpress/dashboard',
-                                    task: 'windpress.generate-cache',
-                                    payload: {
-                                        force_pull: true,
-                                    }
+                                    target: 'windpress/compiler',
+                                    data: {
+                                        kind: 'incremental',
+                                        incremental: {
+                                            providers: [
+                                                'builderius',
+                                            ]
+                                        }
+                                    } as BuildCacheOptions
                                 });
                             }
                         } catch (err) {
