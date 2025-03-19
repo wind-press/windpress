@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.3.3
+Stable tag: 3.3.4
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -121,6 +121,9 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= 3.3.4 =
+* **Fix**: [TW4] The local stylesheet import is not resolved correctly
 
 = 3.3.3 =
 * **New**: [Oxygen 6](https://oxygenbuilder.com/) integration **[Pro]**
