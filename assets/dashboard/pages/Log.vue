@@ -32,7 +32,7 @@ watch(log.logs, () => {
 </script>
 
 <template>
-  <UDashboardPanel id="logs" :ui="{ body: 'bg-(--ui-text) text-(--ui-bg) dark:text-(--ui-text) dark:bg-(--ui-bg)' }">
+  <UDashboardPanel id="logs" :ui="{ root: 'min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]', body: 'bg-(--ui-text) text-(--ui-bg) dark:text-(--ui-text) dark:bg-(--ui-bg)' }">
     <template #header>
       <UDashboardNavbar title="Logs">
         <template #leading>
