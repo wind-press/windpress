@@ -36,14 +36,14 @@
     "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-vue": "^5.2.3",
     "eslint": "^9.22.0",
-    "eslint-plugin-oxlint": "^0.16.0",
+    "eslint-plugin-oxlint": "^0.16.1",
     "eslint-plugin-vue": "^10.0.0",
     "lightningcss": "^1.29.3",
     "memfs": "^4.17.0",
-    "oxlint": "^0.16.0",
+    "oxlint": "^0.16.1",
     "rollup-plugin-external-globals": "^0.13.0",
     "sass": "^1.86.0",
-    "typescript-eslint": "^8.26.1",
+    "typescript-eslint": "^8.27.0",
     "unplugin-icons": "^22.1.0",
     "unplugin-vue-components": "^28.4.1",
     "vite": "^6.2.2",
@@ -109,9 +109,6 @@
         "tailwindcss3"
       ]
     },
-    "patchedDependencies": {
-      "is-core-module@2.16.1": "assets/patches/is-core-module@2.16.1.patch"
-    },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
       "@swc/core",
@@ -119,5 +116,5 @@
       "vue-demi"
     ]
   },
-  "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b"
+  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
 }
