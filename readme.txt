@@ -19,7 +19,7 @@ WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integr
 
 **Tailwind CSS version**:
 - 3.4.17
-- 4.0.14
+- 4.0.15
 
 ### Features
 
@@ -123,8 +123,9 @@ Free version 1.**0**.4
 Pro version 1.**1**.4
 
 = unreleased =
+* **New**: Upgraded to Tailwind CSS v4 (4.0.15 latest)
 * **New**: [TW4] The compiler now can generating cache on the front-end page. This only available if the "Admin always uses Compiler" setting is enabled.
-* **Fix**: [TW4][Breakdance, Bricks, Builderius, LiveCanvas, Oxygen Classic] The "Generate Cache on Save" feature are not available
+* **Fix**: [TW4][Breakdance, Bricks, Builderius, LiveCanvas, Oxygen Classic] The "Generate Cache on Save" feature are not available on the previous version
 
 = 3.3.4 =
 * **Fix**: [TW4] The local stylesheet import is not resolved correctly
@@ -160,7 +161,7 @@ Pro version 1.**1**.4
 
 = 3.2.30 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.7 latest)
-* **Fix**: The `@source` directive is causing error when loaded in the page builders' editor
+* **Fix**: [TW4] The `@source` directive is causing error when loaded in the page builders' editor
 
 = 3.2.29 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.6 latest)
