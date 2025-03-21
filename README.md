@@ -145,27 +145,16 @@ Seamless integration with the most popular visual/page builders:
 
 - 💬 Join the community on [Facebook Group](https://wind.press/go/facebook) and [Discord](https://wind.press/go/discord)
 
-## Backers
-
-Thank you to all our backers! 🥰🫰🫶
-
-If you like this project, please consider supporting us by becoming a backer. [[Become a backer](https://opencollective.com/windpress#backer)]
-
-<a aria-label="GitHub Sponsors" href="https://github.com/sponsors/suabahasa">
-    <picture>
-        <img alt="GitHub Sponsors button" src="https://img.shields.io/github/sponsors/suabahasa?logo=github">
-    </picture>
-</a>
-
-<a aria-label="Support me on Ko-fi" href="https://ko-fi.com/Q5Q75XSF7">
-    <picture>
-        <img alt="ko-fi button" src="https://img.shields.io/badge/Buy_me_a_Coffee-ff5e5b?logo=ko-fi&label=Ko-fi">
-    </picture>
-</a>
-
 ## Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here and on the [WindPress website](https://wind.press) with a link to your website. [[Become a sponsor](https://ko-fi.com/post/WindPress-Bronze-Sponsor-U7U8143WIP)]
+If you like this project, please consider supporting us by becoming a sponsor through the following platforms:
+
+- [GitHub Sponsors](https://github.com/sponsors/suabahasa)
+- [Ko-fi](https://ko-fi.com/Q5Q75XSF7)
+
+Thank you to all our Sponsors! 🥰🫰🫶
+
+This project is tested with BrowserStack
 
 ## Repo Activity
 
