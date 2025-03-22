@@ -57,7 +57,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
 * [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
-* [Oxygen 6 / Classic](https://oxygenbuilder.com/) — **Pro**
+* [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
 * [WPCodeBox 2](https://wpcodebox.com/) — **Pro**
 
 Planned / In Progress
@@ -131,7 +131,7 @@ Pro version 1.**1**.4
 * **Fix**: [TW4] The local stylesheet import is not resolved correctly
 
 = 3.3.3 =
-* **New**: [Oxygen 6](https://oxygenbuilder.com/) integration **[Pro]**
+* **New**: [Oxygen 6](https://oxygenbuilder.com/ref/12/) integration **[Pro]**
 * **Improve**: [TW4] The Play Observer / Compiler performance & stability
 * **Fix**: [TW4][Breakdance] The style are now instantly applied on the editor
 
@@ -313,7 +313,7 @@ Pro version 1.**1**.4
 * **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]**
 * **New**: [Builderius](https://builderius.io/?referral=afdfca82c8) integration **[Pro]**
 * **New**: [LiveCanvas](https://livecanvas.com/?ref=4008) integration **[Pro]**
-* **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]**
+* **New**: [Oxygen](https://oxygenbuilder.com/ref/12/) integration **[Pro]**
 * **Improve**: Test compatibility with WordPress 6.6
 
 = 1.1.0 =
