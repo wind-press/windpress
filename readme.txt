@@ -122,6 +122,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Fix**: Browser compatibility issue with the latest compiler update.
+* **Fix**: File on the editor are marked as read-only on Windows OS
+
 = 3.3.5 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.15 latest)
 * **New**: [TW4] The compiler now can generating cache on the front-end page. This only available if the "Admin always uses Compiler" setting is enabled.
