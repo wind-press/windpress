@@ -122,7 +122,7 @@ class Cache extends AbstractApi implements ApiInterface
         } catch (\Throwable $throwable) {
             return new WP_REST_Response([
                 'status' => 'KO',
-                'message' => 'Save cache error: ' . $throwable->getMessage(),
+                'message' => __('Save cache error: ', 'windpress') . $throwable->getMessage(),
             ], 500);
         }
 
@@ -152,7 +152,7 @@ class Cache extends AbstractApi implements ApiInterface
         if ($provider === []) {
             return new WP_REST_Response([
                 'status' => 'KO',
-                'message' => 'The provider not found',
+                'message' => __('The provider not found', 'windpress'),
             ], 404);
         }
 
@@ -165,7 +165,7 @@ class Cache extends AbstractApi implements ApiInterface
         } catch (\Throwable $throwable) {
             return new WP_REST_Response([
                 'status' => 'KO',
-                'message' => 'Provider error: ' . $throwable->getMessage(),
+                'message' => __('Provider error: ', 'windpress') . $throwable->__toString(),
             ], 500);
         }
 

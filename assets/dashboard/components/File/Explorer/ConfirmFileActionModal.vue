@@ -31,7 +31,7 @@ const emit = defineEmits<{ close: [boolean] }>()
 <template>
     <UModal :close="{ onClick: () => emit('close', false) }">
         <template #title>
-            Are you sure you want to {{ actionYes }} the <code>{{ filePath }}</code> file?
+            {{ i18n.sprintf(i18n.__('Are you sure you want to %s the "%s" file?', 'windpress'), actionYes, filePath) }}
         </template>
 
         <template #body v-if="fileContent">
@@ -44,7 +44,7 @@ const emit = defineEmits<{ close: [boolean] }>()
 
         <template #footer>
             <div class="flex gap-2">
-                <UButton color="neutral" variant="soft" label="cancel" @click="emit('close', false)" class="capitalize" />
+                <UButton color="neutral" variant="soft" :label="i18n.__('cancel', 'windpress')" @click="emit('close', false)" class="capitalize" />
                 <UButton color="error" variant="soft" :label="actionYes" @click="emit('close', true)" class="capitalize" />
             </div>
         </template>

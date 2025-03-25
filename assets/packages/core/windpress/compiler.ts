@@ -140,25 +140,35 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             }
         }
 
-        do {
-            let logId = nanoid(10);
-            let logMessage = `Scanning provider: ${provider.name}... (${batch !== false ? batch : 'initial'})`;
+        try {
+            do {
+                let logId = nanoid(10);
+                let logMessage = `Scanning provider: ${provider.name}... (${batch !== false ? batch : 'initial'})`;
 
-            log.add({ message: logMessage, type: 'info', id: logId });
+                log.add({ message: logMessage, type: 'info', id: logId });
 
-            const scan: { contents: Array<{ content: string; type: string }>, metadata?: { next_batch?: boolean | string } } = await api
-                .post('admin/settings/cache/providers/scan', {
-                    provider_id: provider.id,
-                    metadata: { next_batch: batch },
-                })
-                .then((resp) => resp.data);
+                const scan: { contents: Array<{ content: string; type: string }>, metadata?: { next_batch?: boolean | string } } = await api
+                    .post('admin/settings/cache/providers/scan', {
+                        provider_id: provider.id,
+                        metadata: { next_batch: batch },
+                    })
+                    .then((resp) => resp.data)
+                    .catch((error) => {
+                        log.update(logId, { type: 'error', message: `${logMessage} - failed: ${error.statusText} -> ${error.data.message}` });
+                        // throw the error to stop the process
+                        throw error;
+                    });
 
-            batch_pool.push(...scan.contents);
+                batch_pool.push(...scan.contents);
 
-            batch = scan.metadata?.next_batch || false;
+                batch = scan.metadata?.next_batch || false;
 
-            log.update(logId, { type: 'info', message: `${logMessage} - done` });
-        } while (batch !== false);
+                log.update(logId, { type: 'info', message: `${logMessage} - done` });
+            } while (batch !== false);
+        } catch (error) {
+            log.add({ message: 'Canceling cache build...', type: 'info' });
+            throw error;
+        }
 
         content_pool.push(...batch_pool);
 

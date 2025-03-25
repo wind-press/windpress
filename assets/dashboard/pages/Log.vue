@@ -34,10 +34,24 @@ watch(log.logs, () => {
 <template>
   <UDashboardPanel id="logs" :ui="{ root: 'min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]', body: 'bg-(--ui-text) text-(--ui-bg) dark:text-(--ui-text) dark:bg-(--ui-bg)' }">
     <template #header>
-      <UDashboardNavbar title="Logs">
+      <UDashboardNavbar :title="i18n.__('Logs', 'windpress')">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
+
+
+
+
+        <template #right>
+            <UTooltip :text="i18n.__('Clear logs', 'windpress')">
+                <UButton icon="lucide:paintbrush" color="neutral" variant="ghost" @click="log.clear()" />
+            </UTooltip>
+
+
+        </template>
+
+
+
       </UDashboardNavbar>
     </template>
 

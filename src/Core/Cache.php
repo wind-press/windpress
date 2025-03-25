@@ -70,7 +70,7 @@ class Cache
             $result = call_user_func($callback, $metadata);
 
             if (! is_array($result)) {
-                throw new \Exception('The callback should return an array');
+                throw new \Exception(__('The callback should return an array', 'windpress'));
             }
 
             $_metadata = array_key_exists('metadata', $result) ? $result['metadata'] : [];

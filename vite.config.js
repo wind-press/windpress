@@ -83,7 +83,6 @@ export default defineConfig({
                     }
                 }
             },
-
         }),
         Icons({ autoInstall: true, scale: 1 }),
         svgr({
@@ -123,5 +122,5 @@ export default defineConfig({
     },
     server: {
         cors: true,
-    }
+    },
 });

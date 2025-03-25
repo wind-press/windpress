@@ -5,6 +5,7 @@ import { useBusyStore } from '@/dashboard/stores/busy';
 import { version as tw4_version } from 'tailwindcss/package.json';
 import { version as tw3_version } from 'tailwindcss3/package.json';
 import { useSettingsStore } from '@/dashboard/stores/settings';
+import { __ } from '@wordpress/i18n';
 
 const appConfig = useAppConfig()
 
@@ -29,8 +30,8 @@ function doLicenseChange() {
 
   toast.add({
     id: 'license.change',
-    title: licenseStore.license.key && licenseStore.isActivated ? 'Deactivating license...' : 'Activating license...',
-    description: `Please wait while we ${licenseStore.license.key && licenseStore.isActivated ? 'deactivate' : 'activate'} your license key.`,
+    title: licenseStore.license.key && licenseStore.isActivated ? __('Deactivating license...', 'windprees') : __('Activating license...', 'windpress'),
+    description: licenseStore.license.key && licenseStore.isActivated ? __('Please wait while we deactivate your license key.', 'windpress') : __('Please wait while we activate your license key.', 'windpress'),
     icon: 'lucide:loader-circle',
     close: false,
     duration: 0,
@@ -48,8 +49,8 @@ function doLicenseChange() {
     license.key = licenseStore.license.key;
 
     toast.update('license.change', {
-      title: 'License updated',
-      description: `Your license key has been ${licenseStore.isActivated ? 'activated' : 'deactivated'}.`,
+      title: __('License updated', 'windpress'),
+      description: licenseStore.isActivated ? __('Your license key has been activated.', 'windpress') : __('Your license key has been deactivated.', 'windpress'),
       icon: 'lucide:key-round',
       color: 'success',
       duration: undefined,
@@ -60,8 +61,8 @@ function doLicenseChange() {
     });
   }).catch((error) => {
     toast.update('license.change', {
-      title: 'License update failed',
-      description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+      title: __('License update failed', 'windpress'),
+      description: (error instanceof Error) ? error.message : __('An unknown error occurred', 'windpress'),
       icon: 'lucide:key-round',
       color: 'error',
       close: true,
@@ -71,7 +72,7 @@ function doLicenseChange() {
       }
     });
 
-    licenseKeyError.value = 'Invalid license key';
+    licenseKeyError.value = __('Invalid license key', 'windpress');
   });
 }
 
@@ -84,34 +85,39 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <UPageCard v-if="window.windpress._via_wp_org" title="License" class="bg-gradient-to-tl from-(--ui-primary)/10 from-5% to-(--ui-bg)">
+  <UPageCard v-if="window.windpress._via_wp_org" :title="i18n.__('License', 'windpress')" class="bg-gradient-to-tl from-(--ui-primary)/10 from-5% to-(--ui-bg)">
     <template #description>
-      You are using the WordPress.org edition.
+      {{ i18n.__('You are using the WordPress.org edition.', 'windpress') }}
     </template>
 
     <template #footer>
-      <UButton label="Upgrade to Pro" color="primary" :trailing-icon="appConfig.ui.icons.external" :ui="{ trailingIcon: 'inline-block size-3 align-top', base: 'gap-[normal] items-start' }" :to="`https://wind.press/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}#pricing`" target="_blank" />
+      <UButton :label="i18n.__('Upgrade to Pro', 'windpress')" color="primary" :trailing-icon="appConfig.ui.icons.external" :ui="{ trailingIcon: 'inline-block size-3 align-top', base: 'gap-[normal] items-start' }" :to="`https://wind.press/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}#pricing`" target="_blank" />
     </template>
   </UPageCard>
 
   <UPageCard v-else title="License" description="" :class="licenseStore.isActivated ? 'from-(--ui-primary)/10' : 'from-(--ui-warning)/10'" class="bg-gradient-to-tl from-5% to-(--ui-bg)">
     <UForm :state="license" @submit="doLicenseChange">
-      <UFormField label="License key" required :error="licenseKeyError" help="To access updates when they are available, please provide your license key.">
+      <UFormField :label="i18n.__('License key', 'windpress')" required :error="licenseKeyError" :help="i18n.__('To access updates when they are available, please provide your license key.', 'windpress')">
         <div class="flex flex-row gap-4 my-2">
           <UInput v-model="license.key" type="password" placeholder="WIND-12345-67890-PRESS" class="w-full" data-1p-ignore />
 
-          <UTooltip :delay-duration="0" :text="`${licenseStore.isActivated ? 'Unregister' : 'Register'} your WindPress setup`">
+          <UTooltip :delay-duration="0" :text="licenseStore.isActivated ? i18n.__('Unregister your WindPress setup', 'windpress') : i18n.__('Register your WindPress setup', 'windpress')">
             <UButton type="submit" color="primary" variant="subtle" :leading-icon="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'lucide:loader-circle' : undefined" :disabled="!license.key || busyStore.isBusy" :ui="{ leadingIcon: 'animate-spin' }">
-              {{(licenseStore.isActivated ? 'Deactivat' : 'Activat') + (busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'ing' : 'e')}}
+              <template v-if="licenseStore.isActivated">
+                {{ busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.deactivate') ? 'Deactivating' : 'Deactivate' }}
+              </template>
+              <template v-else>
+                {{ busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate') ? 'Activating' : 'Activate' }}
+              </template>
             </UButton>
           </UTooltip>
 
         </div>
         <template v-if="licenseStore.license.key" #hint>
           <div class="flex items-center gap-2">
-            <span class="text-(--ui-text-muted)">Status:</span>
+            <span class="text-(--ui-text-muted)"> {{ i18n.__('Status', 'windpress') }} :</span>
             <UBadge :color="licenseStore.isActivated ? 'success' : 'error'" variant="subtle">
-              {{ licenseStore.isActivated ? 'Active' : 'Inactive' }}
+              {{ licenseStore.isActivated ? i18n.__('Active', 'windpress') : i18n.__('Inactive', 'windpress') }}
             </UBadge>
           </div>
         </template>
@@ -120,14 +126,14 @@ onBeforeMount(() => {
   </UPageCard>
 
   <UForm id="general" :state="{}">
-    <UPageCard title="General" description="General settings for WindPress." variant="naked" orientation="horizontal" class="mb-4">
+    <UPageCard :title="i18n.__('General', 'windpress')" :description="i18n.__('General settings for WindPress.', 'windpress')" variant="naked" orientation="horizontal" class="mb-4">
     </UPageCard>
 
     <UPageCard variant="subtle">
-      <UFormField label="Tailwind CSS version" description="You must update the `main.css` file accordingly." class="flex max-sm:flex-col justify-between items-start gap-4" :ui="{ container: 'flex-1' }">
+        <UFormField :label="i18n.__('Tailwind CSS version', 'windpress')" :description="i18n.__('You must update the `main.css` file accordingly.', 'windpress')" class="flex max-sm:flex-col justify-between items-start gap-4" :ui="{ container: 'flex-1' }">
         <template #hint>
           <ULink to="https://github.com/tailwindlabs/tailwindcss/releases" target="_blank" class="underline">
-            See release notes
+            {{ i18n.__('See release notes', 'windpress') }}
           </ULink>
         </template>
         <div class="grid grid-cols-2 gap-3">
@@ -142,8 +148,8 @@ onBeforeMount(() => {
         </div>
       </UFormField>
       <USeparator />
-      <UFormField label="Ubiquitous panel" description="Access the WindPress dashboard panel right from the front page and made adjustment as it is on the wp-admin page." class="flex items-center justify-between not-last:pb-4 gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', false).value as boolean" disabled />
+      <UFormField :label="i18n.__('Ubiquitous panel', 'windpress')" :description="i18n.__('Access the WindPress dashboard panel right from the front page and made adjustment as it is on the wp-admin page.', 'windpress')" class="flex items-center justify-between not-last:pb-4 gap-4">
+        <USwitch v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', false).value" disabled />
       </UFormField>
     </UPageCard>
   </UForm>

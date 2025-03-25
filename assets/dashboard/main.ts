@@ -12,6 +12,8 @@ import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor';
 import App from './App.vue'
 import router from './router';
 
+import i18nPlugin from './plugins/i18n';
+
 import { setupWorker } from '@/packages/core/windpress/worker';
 
 const app = createApp(App)
@@ -31,6 +33,7 @@ app
     .use(ui)
     .use(pinia)
     .use(VueMonacoEditorPlugin)
+    .use(i18nPlugin)
 
 app.mount('#windpress-app')
 

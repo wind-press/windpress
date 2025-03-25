@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { nanoid } from 'nanoid';
 import { useStorage } from '@vueuse/core'
+import { watch } from 'vue';
 
 export type Log = {
     /** The message to log. */
@@ -23,16 +24,18 @@ export type Log = {
 }
 
 export function createLogComposable() {
-    const logs = useStorage('windpress.dashboard.store.logs', [
-        {
-            "id": "JqhEkI6VK0",
-            "timestamp": 1742407548572,
-            "type": "debug",
-            "message": "Thank you for using WindPress! Join us on the Facebook Group: <a href=\"https://wind.press/go/facebook\" target=\"_blank\" class=\"underline\">https://wind.press/go/facebook</a>",
-            "options": {
-                "raw": true
-            }
+    const welcomeLog: Log = {
+        "id": "JqhEkI6VK0",
+        "timestamp": 1742407548572,
+        "type": "debug",
+        "message": "Thank you for using WindPress! Join us on the Facebook Group: <a href=\"https://wind.press/go/facebook\" target=\"_blank\" class=\"underline\">https://wind.press/go/facebook</a>",
+        "options": {
+            "raw": true
         }
+    };
+
+    const logs = useStorage('windpress.dashboard.store.logs', [
+        welcomeLog,
     ] as Log[]);
 
     function add(log: Log): string {
@@ -74,6 +77,7 @@ export function createLogComposable() {
 
     function clear() {
         logs.value = [];
+        logs.value.push(welcomeLog);
     }
 
     return {

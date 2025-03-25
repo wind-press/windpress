@@ -2,6 +2,7 @@
 import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useRouter } from 'vue-router';
 import { useBusyStore } from '@/dashboard/stores/busy';
+import { __ } from '@wordpress/i18n';
 
 const router = useRouter()
 const toast = useToast()
@@ -11,8 +12,8 @@ const busyStore = useBusyStore()
 
 async function saveSetting() {
   const toastData: Omit<Partial<Toast>, "id"> = {
-    title: 'Saving...',
-    description: 'Please wait while we save your changes.',
+    title: __('Saving...', 'windpress'),
+    description: __('Please wait while we save your changes.', 'windpress'),
     duration: 0,
     icon: 'lucide:loader-circle',
     close: false,
@@ -21,7 +22,6 @@ async function saveSetting() {
       icon: 'animate-spin',
     }
   };
-
 
   if (toast.toasts.value.find(t => t.id === 'settings.doSave')) {
     toast.update('settings.doSave', {
@@ -38,8 +38,8 @@ async function saveSetting() {
     .doPush()
     .then(() => {
       toast.update('settings.doSave', {
-        title: 'Saved',
-        description: 'Your changes have been saved.',
+        title: __('Saved', 'windpress'),
+        description: __('Your changes have been saved.', 'windpress'),
         icon: 'i-lucide-save',
         color: 'success',
         duration: undefined,
@@ -51,8 +51,8 @@ async function saveSetting() {
     })
     .catch((err) => {
       toast.update('settings.doSave', {
-        title: 'Error',
-        description: 'An error occurred while saving your changes.',
+        title: __('Error', 'windpress'),
+        description: __('An error occurred while saving your changes.', 'windpress'),
         icon: 'i-lucide-save',
         color: 'error',
         duration: undefined,
@@ -72,19 +72,19 @@ async function saveSetting() {
 const links = [
   [
     {
-      label: 'General',
+      label: __('General', 'windpress'),
       to: router.resolve({ name: 'settings.general' }),
       icon: 'lucide:settings',
       exact: true,
     },
     {
-      label: 'Performance',
+      label: __('Performance', 'windpress'),
       to: router.resolve({ name: 'settings.performance' }),
       icon: 'lucide:rocket',
       exact: true,
     },
     {
-      label: 'Integrations',
+      label: __('Integrations', 'windpress'),
       to: router.resolve({ name: 'settings.integrations' }),
       icon: 'lucide:package',
       exact: true,
@@ -104,7 +104,7 @@ const links = [
     //     target: '_blank'
     // },
     {
-      label: 'Save',
+      label: __('Save', 'windpress'),
       icon: 'lucide:save',
       color: 'primary',
       onSelect: saveSetting,
@@ -117,7 +117,7 @@ const links = [
 <template>
   <UDashboardPanel id="settings" :ui="{ body: 'lg:py-12' }">
     <template #header>
-      <UDashboardNavbar title="Settings">
+      <UDashboardNavbar :title="i18n.__('Settings', 'windpress')">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>

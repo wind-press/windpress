@@ -80,7 +80,7 @@ class License extends AbstractApi implements ApiInterface
 
         if ($new_license_key === '') {
             return new WP_REST_Response([
-                'message' => 'License key is empty',
+                'message' => __('License key is empty', 'windpress'),
             ], 400);
         }
 
@@ -90,7 +90,7 @@ class License extends AbstractApi implements ApiInterface
 
         if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
             return new WP_REST_Response([
-                'message' => is_wp_error($response) ? $response->get_error_message() : 'An error occurred, please try again.',
+                'message' => is_wp_error($response) ? $response->get_error_message() : __('An error occurred, please try again.', 'windpress'),
             ], 500);
         }
 
@@ -110,7 +110,7 @@ class License extends AbstractApi implements ApiInterface
         $plugin_updater->drop_update_cache();
 
         return new WP_REST_Response([
-            'message' => 'Plugin license key activated successfully',
+            'message' => __('Plugin license key activated successfully', 'windpress'),
             'license' => $this->get_license(),
         ]);
     }
@@ -128,7 +128,7 @@ class License extends AbstractApi implements ApiInterface
         ]);
 
         return new WP_REST_Response([
-            'message' => 'Plugin license key de-activated successfully',
+            'message' => __('Plugin license key de-activated successfully', 'windpress'),
             'license' => $this->get_license(),
         ]);
     }

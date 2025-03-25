@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useFetch, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
+import { __ } from '@wordpress/i18n';
+import { computed, ref } from 'vue'
+import { useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import FileExplorer from '@/dashboard/components/File/FileExplorer.vue'
 import FileEditor from '@/dashboard/components/File/FileEditor.vue'
@@ -27,7 +28,7 @@ const currentEntry = computed<Entry>(() => {
     if (entry) {
         return entry;
     } else {
-        throw new Error('Entry not found');
+        throw new Error(__('Entry not found', 'windpress'));
     }
 });
 
@@ -37,21 +38,21 @@ const isMobile = breakpoints.smaller('lg')
 
 <template>
     <UDashboardPanel id="explorer-1" :default-size="25" :min-size="20" :max-size="30" resizable class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
-        <UDashboardNavbar title="Explorer">
+        <UDashboardNavbar :title="i18n.__('Explorer', 'windpress')">
             <template #leading>
                 <UDashboardSidebarCollapse />
             </template>
 
             <template #right>
-                <UTooltip :delay-duration="0" text="Add new file">
+                <UTooltip :delay-duration="0" :text="i18n.__('Add new file', 'windpress')">
                     <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="fileAction.addNewFile()" />
                 </UTooltip>
 
-                <UTooltip :delay-duration="0" text="Export SFS volume">
+                <UTooltip :delay-duration="0" :text="i18n.__('Export SFS volume', 'windpress')">
                     <UButton color="neutral" variant="outline" icon="i-lucide-download" @click="fileAction.exportVolume()" />
                 </UTooltip>
 
-                <UTooltip :delay-duration="0" text="Import SFS volume">
+                <UTooltip :delay-duration="0" :text="i18n.__('Import SFS volume', 'windpress')">
                     <UButton color="neutral" variant="outline" icon="i-lucide-upload" @click="importFileField?.click()" />
 
                     <input ref="importFileField" type="file" @change="fileAction.importVolume" style="display:none" accept=".windpress" />
@@ -70,7 +71,7 @@ const isMobile = breakpoints.smaller('lg')
 
     <USlideover v-if="isMobile" v-model:open="isFilePanelOpen">
         <template #content>
-            <!-- <FileEditor v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" /> -->
+            <FileExplorer />
         </template>
     </USlideover>
 </template>

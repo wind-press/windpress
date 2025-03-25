@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { __ } from '@wordpress/i18n';
 import { ref, computed } from 'vue'
 import type { DropdownMenuItem } from '@nuxt/ui'
 import { useColorMode } from '@vueuse/core'
@@ -21,25 +22,25 @@ const user = ref({
 const supportMenuItems = computed<DropdownMenuItem[]>(() => {
     const items: DropdownMenuItem[] = [
         {
-            label: 'Rate us',
+            label: __('Rate us', 'windpress'),
             icon: 'lucide:star',
             to: 'https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post',
             target: '_blank'
         },
         {
-            label: 'Community',
+            label: __('Community', 'windpress'),
             icon: 'fa6-brands:facebook',
             to: 'https://wind.press/go/facebook',
             target: '_blank'
         },
         {
-            label: 'Report an issue',
+            label: __('Report an issue', 'windpress'),
             icon: 'lucide:bug',
             to: 'https://github.com/wind-press/windpress/issues',
             target: '_blank'
         },
         {
-            label: 'Support',
+            label: __('Support', 'windpress'),
             icon: 'lucide:headset',
             to: `https://rosua.org/support-portal?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
             target: '_blank'
@@ -48,7 +49,7 @@ const supportMenuItems = computed<DropdownMenuItem[]>(() => {
 
     if (window.windpress._via_wp_org) {
         items.push({
-            label: 'Upgrade to Pro',
+            label: __('Upgrade to Pro', 'windpress'),
             icon: 'lucide:sparkles',
             to: `https://wind.press/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}#pricing`,
             target: '_blank'
@@ -69,11 +70,11 @@ const items = computed<DropdownMenuItem[][]>(() => (
         ],
         [
             {
-                label: 'Appearance',
+                label: __('Appearance', 'windpress'),
                 icon: 'i-lucide-sun-moon',
                 children: [
                     {
-                        label: 'Light',
+                        label: __('Light', 'windpress'),
                         icon: appConfig.ui.icons.light,
                         type: 'checkbox',
                         checked: colorMode.value === 'light',
@@ -84,7 +85,7 @@ const items = computed<DropdownMenuItem[][]>(() => (
                         }
                     },
                     {
-                        label: 'Dark',
+                        label: __('Dark', 'windpress'),
                         icon: appConfig.ui.icons.dark,
                         type: 'checkbox',
                         checked: colorMode.value === 'dark',
@@ -98,7 +99,7 @@ const items = computed<DropdownMenuItem[][]>(() => (
                         }
                     },
                     {
-                        label: 'System',
+                        label: __('System', 'windpress'),
                         icon: appConfig.ui.icons.system,
                         type: 'checkbox',
                         checked: colorMode.value === 'system',

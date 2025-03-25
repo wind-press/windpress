@@ -2,6 +2,7 @@ import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { nanoid } from 'nanoid'
 import lzString from 'lz-string';
 import dayjs from 'dayjs'
+import { __, sprintf } from '@wordpress/i18n';
 import ConfirmFileActionModal from '@/dashboard/components/File/Explorer/ConfirmFileActionModal.vue'
 import ConfirmVolumeImportModal from '@/dashboard/components/File/Explorer/ConfirmVolumeImportModal.vue';
 import NewFileFormModal from '@/dashboard/components/File/Explorer/NewFileFormModal.vue'
@@ -23,8 +24,8 @@ export type VolumeSFSFile = {
 async function deleteFile(entry: Entry) {
     if (entry.readonly) {
         toast.add({
-            title: `Error`,
-            description: `File "${entry.relative_path}" is read-only and not deletable`,
+            title: __('Error', 'windpress'),
+            description: sprintf(__('File "%s" is read-only and not deletable', 'windpress'), entry.relative_path),
             color: 'error',
             icon: 'i-lucide-trash'
         })
@@ -33,8 +34,8 @@ async function deleteFile(entry: Entry) {
 
     if (entry.relative_path === 'main.css') {
         toast.add({
-            title: `Error`,
-            description: `File "${entry.relative_path}" is required for the WindPress to work and not deletable`,
+            title: __('Error', 'windpress'),
+            description: sprintf(__('File "%s" is required for the WindPress to work and not deletable', 'windpress'), entry.relative_path),
             color: 'error',
             icon: 'i-lucide-trash',
         })
@@ -46,7 +47,7 @@ async function deleteFile(entry: Entry) {
         props: {
             filePath: entry.relative_path,
             fileContent: entry.content,
-            actionYes: 'delete',
+            actionYes: __('delete', 'windpress'),
         },
     })
 
@@ -54,8 +55,8 @@ async function deleteFile(entry: Entry) {
 
     if (!shouldDelete) {
         toast.add({
-            title: `Canceled`,
-            description: `File "${entry.relative_path}" is not deleted`,
+            title: __('Canceled', 'windpress'),
+            description: sprintf(__('File "%s" is not deleted', 'windpress'), entry.relative_path),
             color: 'info',
             icon: 'i-lucide-trash',
         })
@@ -65,8 +66,8 @@ async function deleteFile(entry: Entry) {
     volumeStore.softDeleteEntry(entry)
 
     toast.add({
-        title: `Success`,
-        description: `File "${entry.relative_path}" deleted`,
+        title: __('Success', 'windpress'),
+        description: sprintf(__('File "%s" deleted', 'windpress'), entry.relative_path),
         color: 'success',
         icon: 'i-lucide-trash',
     })
@@ -78,7 +79,7 @@ async function resetFile(entry: Entry) {
         props: {
             filePath: entry.relative_path,
             fileContent: entry.content,
-            actionYes: 'reset',
+            actionYes: __('reset', 'windpress'),
         },
     })
 
@@ -86,8 +87,8 @@ async function resetFile(entry: Entry) {
 
     if (!shouldReset) {
         toast.add({
-            title: `Canceled`,
-            description: `File "${entry.relative_path}" is not reset`,
+            title: __('Canceled', 'windpress'),
+            description: sprintf(__('File "%s" is not reset', 'windpress'), entry.relative_path),
             color: 'info',
             icon: 'lucide:file-minus-2',
         })
@@ -97,8 +98,8 @@ async function resetFile(entry: Entry) {
     volumeStore.resetEntry(entry);
 
     toast.add({
-        title: `Success`,
-        description: `File "${entry.relative_path}" reset`,
+        title: __('Success', 'windpress'),
+        description: sprintf(__('File "%s" reset', 'windpress'), entry.relative_path),
         color: 'success',
         icon: 'lucide:file-minus-2',
     })
@@ -110,8 +111,8 @@ async function resetFile(entry: Entry) {
 
 async function save() {
     const toastData: Omit<Partial<Toast>, "id"> = {
-        title: 'Saving...',
-        description: 'Please wait while we save your changes.',
+        title: __('Saving...', 'windpress'),
+        description: __('Please wait while we save your changes.', 'windpress'),
         duration: 0,
         icon: 'lucide:loader-circle',
         close: false,
@@ -136,8 +137,8 @@ async function save() {
         .doPush()
         .then(() => {
             toast.update('file-editor.doSave', {
-                title: 'Saved',
-                description: 'Your changes have been saved.',
+                title: __('Saved', 'windpress'),
+                description: __('Your changes have been saved.', 'windpress'),
                 icon: 'i-lucide-save',
                 color: 'success',
                 duration: undefined,
@@ -149,8 +150,8 @@ async function save() {
         })
         .catch((err) => {
             toast.update('file-editor.doSave', {
-                title: 'Error',
-                description: 'An error occurred while saving your changes.',
+                title: __('Error', 'windpress'),
+                description: __('An error occurred while saving your changes.', 'windpress'),
                 icon: 'i-lucide-save',
                 color: 'error',
                 duration: undefined,
@@ -190,8 +191,8 @@ function exportVolume() {
     URL.revokeObjectURL(url);
 
     toast.add({
-        title: 'Exported',
-        description: 'SFS volume data exported',
+        title: __('Exported', 'windpress'),
+        description: __('SFS volume data exported', 'windpress'),
         color: 'success',
         icon: 'i-lucide-download'
     });
@@ -211,8 +212,8 @@ async function importVolume(event: Event) {
 
     if (!file.name.endsWith('.windpress')) {
         toast.add({
-            title: 'SFS Import',
-            description: 'Invalid file format',
+            title: __('SFS Import', 'windpress'),
+            description: __('Invalid file format', 'windpress'),
             color: 'error',
             icon: 'i-lucide-upload'
         });
@@ -226,12 +227,12 @@ async function importVolume(event: Event) {
         data = JSON.parse(lzString.decompressFromUint8Array(new Uint8Array(await file.arrayBuffer())) || '{}');
 
         if (!data._windpress || data._type !== 'sfs') {
-            throw new Error('File is not a valid WindPress file');
+            throw new Error(__('File is not a valid WindPress file', 'windpress'));
         }
     } catch (error) {
         toast.add({
-            title: 'SFS Import',
-            description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+            title: __('SFS Import', 'windpress'),
+            description: (error instanceof Error) ? error.message : __('An unknown error occurred', 'windpress'),
             color: 'error',
             icon: 'i-lucide-upload'
         });
@@ -251,8 +252,8 @@ async function importVolume(event: Event) {
 
     if (!shouldImport) {
         toast.add({
-            title: 'Canceled',
-            description: 'SFS import canceled',
+            title: __('Canceled', 'windpress'),
+            description: __('SFS import canceled', 'windpress'),
             color: 'info',
             icon: 'i-lucide-upload'
         });
@@ -263,8 +264,8 @@ async function importVolume(event: Event) {
 
     toast.add({
         id: 'file-import.doImport',
-        title: 'Importing...',
-        description: 'Please wait while we import the data.',
+        title: __('Importing...', 'windpress'),
+        description: __('Please wait while we import the data.', 'windpress'),
         icon: 'lucide:loader-circle',
         close: false,
         duration: 0,
@@ -297,8 +298,8 @@ async function importVolume(event: Event) {
         // });
 
         toast.update('file-import.doImport', {
-            title: 'Success',
-            description: 'SFS data imported. Remember to save the changes.',
+            title: __('Success', 'windpress'),
+            description: __('SFS data imported. Remember to save the changes.', 'windpress'),
             color: 'success',
             icon: 'i-lucide-upload',
             duration: undefined,
@@ -311,8 +312,8 @@ async function importVolume(event: Event) {
         target.value = '';
     } catch (error) {
         toast.update('file-import.doImport', {
-            title: 'Error',
-            description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+            title: __('Error', 'windpress'),
+            description: (error instanceof Error) ? error.message : __('An unknown error occurred', 'windpress'),
             color: 'error',
             icon: 'i-lucide-upload',
             close: true,
@@ -335,8 +336,8 @@ async function addNewFile() {
 
     if (!newFileName) {
         toast.add({
-            title: 'Canceled',
-            description: 'New file creation canceled',
+            title: __('Canceled', 'windpress'),
+            description: __('New file creation canceled', 'windpress'),
             color: 'info',
             icon: 'i-lucide-plus'
         });
@@ -347,15 +348,15 @@ async function addNewFile() {
     try {
         volumeStore.addNewEntry(newFileName);
         toast.add({
-            title: 'Success',
-            description: `File "${newFileName}" created`,
+            title: __('Success', 'windpress'),
+            description: sprintf(__('File "%s" created', 'windpress'), newFileName),
             color: 'success',
             icon: 'i-lucide-plus'
         });
     } catch (error) {
         toast.add({
-            title: 'Error',
-            description: (error instanceof Error) ? error.message : 'An unknown error occurred',
+            title: __('Error', 'windpress'),
+            description: (error instanceof Error) ? error.message : __('An unknown error occurred', 'windpress'),
             color: 'error',
             icon: 'i-lucide-plus'
         });

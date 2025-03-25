@@ -1,48 +1,48 @@
 <script setup lang="ts">
+import { __ } from '@wordpress/i18n';
 import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
 
-const route = useRoute()
 const router = useRouter()
 const toast = useToast()
 
 const links = [
     [
         {
-            label: 'Files',
+            label: __('Files', 'windpress'),
             icon: 'lucide:folder',
             to: router.resolve({ name: 'files' }),
             // badge: '4',
         },
         {
-            label: 'Wizard',
+            label: __('Wizard', 'windpress'),
             icon: 'lucide:zap',
             // to: '/wizard'
         },
         {
-            label: 'Logs',
+            label: __('Logs', 'windpress'),
             icon: 'lucide:logs',
             to: router.resolve({ name: 'logs' }),
         },
         {
-            label: 'Settings',
+            label: __('Settings', 'windpress'),
             icon: 'lucide:settings',
             to: router.resolve({ name: 'settings' }),
             defaultOpen: true,
             children: [
                 {
-                    label: 'General',
+                    label: __('General', 'windpress'),
                     to: router.resolve({ name: 'settings.general' }),
                     exact: true,
                 },
                 {
-                    label: 'Performance',
+                    label: __('Performance', 'windpress'),
                     to: router.resolve({ name: 'settings.performance' }),
                     exact: true,
                 },
                 {
-                    label: 'Integrations',
+                    label: __('Integrations', 'windpress'),
                     to: router.resolve({ name: 'settings.integrations' }),
                     exact: true,
                 }
@@ -51,13 +51,13 @@ const links = [
     ],
     [
         {
-            label: 'Documentation',
+            label: __('Documentation', 'windpress'),
             icon: 'i-lucide-book-open',
-            to: `https://wind.press/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${windpress._version}`,
+            to: `https://wind.press/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
             target: '_blank'
         },
         {
-            label: 'Discussions',
+            label: __('Discussions', 'windpress'),
             icon: 'lucide:messages-square',
             to: 'https://github.com/wind-press/windpress/discussions',
             target: '_blank'
@@ -68,12 +68,12 @@ const links = [
 const groups = computed(() => [
     {
         id: 'links',
-        label: 'Go to',
+        label: __('Go to', 'windpress'),
         items: links.flat()
     },
     {
         id: 'other-products',
-        label: 'Other Products',
+        label: __('Other Products', 'windpress'),
         items: [
             {
                 id: 'yabe-webfont',
@@ -82,7 +82,7 @@ const groups = computed(() => [
                     src: YabeWebfontIcon,
                     alt: 'Yabe Webfont'
                 },
-                to: `https://webfont.yabe.land/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${windpress._version}`,
+                to: `https://webfont.yabe.land/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
                 target: '_blank',
             },
         ]
@@ -109,14 +109,14 @@ const askForReviewClick = (action: string) => {
 onMounted(() => {
     if (isAskForReview.value) {
         toast.add({
-            title: 'WindPress will always try to make you smile.',
+            title: __('WindPress will always try to make you smile.', 'windpress'),
             icon: 'lucide:smile',
-            description: 'Would you mind taking a moment to leave a review on WordPress.org? It would mean a lot to us!',
+            description: __('Would you mind taking a moment to leave a review on WordPress.org? It would mean a lot to us!', 'windpress'),
             duration: 0,
             close: false,
             actions: [
                 {
-                    label: `OK, Let's do it!`,
+                    label: __(`OK, Let's do it!`, 'windpress'),
                     color: 'success',
                     variant: 'outline',
                     block: true,

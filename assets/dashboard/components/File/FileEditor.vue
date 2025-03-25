@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { __ } from '@wordpress/i18n';
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useColorMode } from '@vueuse/core';
 import path from 'path';
 import { shallowRef } from 'vue';
+import { getVariableList, loadDesignSystem, naturalExpand } from '@/packages/core/tailwindcss';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
@@ -49,10 +51,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@theme',
                                     status: 'standard',
-                                    description: 'Theme variables are special CSS variables defined using the `@theme` directive that influence which utility classes exist in your project.',
+                                    description: __('Theme variables are special CSS variables defined using the `@theme` directive that influence which utility classes exist in your project.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Theme variables',
+                                            name: __('Docs: Theme variables', 'windpress'),
                                             url: 'https://tailwindcss.com/docs/theme'
                                         }
                                     ],
@@ -60,14 +62,14 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@plugin',
                                     status: 'standard',
-                                    description: 'Use the `@plugin` directive to load a legacy JavaScript-based plugin.',
+                                    description: __('Use the `@plugin` directive to load a legacy JavaScript-based plugin.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Functions & Directives',
+                                            name: __('Docs: Functions & Directives', 'windpress'),
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#plugin-directive',
                                         },
                                         {
-                                            name: 'Docs: Tailwind CSS plugins',
+                                            name: __('Docs: Tailwind CSS plugins', 'windpress'),
                                             url: 'https://wind.press/docs/configuration/file-main-css#tailwind-css-plugins',
                                         },
                                     ],
@@ -75,14 +77,14 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@config',
                                     status: 'standard',
-                                    description: 'Use the `@config` directive to load a legacy JavaScript-based configuration file.',
+                                    description: __('Use the `@config` directive to load a legacy JavaScript-based configuration file.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Functions & Directives',
+                                            name: __('Docs: Functions & Directives', 'windpress'),
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#config-directive',
                                         },
                                         {
-                                            name: 'Docs: Tailwind CSS configuration',
+                                            name: __('Docs: Tailwind CSS configuration', 'windpress'),
                                             url: 'https://wind.press/docs/configuration/file-main-css#tailwind-css-configuration',
                                         }
                                     ],
@@ -90,10 +92,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@tailwind',
                                     status: 'standard',
-                                    description: 'Use the `@tailwind` directive to insert Tailwind\'s `base`, `components`, `utilities` and `variants` styles into your CSS.',
+                                    description: __('Use the `@tailwind` directive to insert Tailwind\'s `base`, `components`, `utilities` and `variants` styles into your CSS.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Functions & Directives',
+                                            name: __('Docs: Tailwind CSS functions & directives', 'windpress'),
                                             url: 'https://v3.tailwindcss.com/docs/functions-and-directives#tailwind',
                                         },
                                     ],
@@ -101,10 +103,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@apply',
                                     status: 'standard',
-                                    description: 'Use `@apply` to inline any existing utility classes into your own custom CSS.',
+                                    description: __('Use the `@apply` directive to inline any existing utility classes into your own custom CSS.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Functions & Directives',
+                                            name: __('Docs: Tailwind CSS functions & directives', 'windpress'),
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#apply-directive',
                                         },
                                     ],
@@ -112,10 +114,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@utility',
                                     status: 'standard',
-                                    description: 'Use the `@utility` directive to add custom utilities to your project that work with variants like `hover`, `focus` and `lg``.',
+                                    description: __('Use the `@utility` directive to add custom utilities to your project that work with variants like `hover`, `focus` and `lg``.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Functions & Directives',
+                                            name: __('Docs: Tailwind CSS functions & directives', 'windpress'),
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#utility-directive',
                                         },
                                     ],
@@ -123,10 +125,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@custom-variant',
                                     status: 'standard',
-                                    description: 'Use the `@custom-variant` directive to add a custom variant in your project.',
+                                    description: __('Use the `@custom-variant` directive to add a custom variant in your project.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Functions & Directives',
+                                            name: __('Docs: Tailwind CSS functions & directives', 'windpress'),
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#custom-variant-directive',
                                         },
                                     ],
@@ -134,10 +136,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@variant',
                                     status: 'standard',
-                                    description: 'Use the `@variant` directive to apply a Tailwind variant to styles in your CSS.',
+                                    description: __('Use the `@variant` directive to apply a Tailwind variant to styles in your CSS.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Functions & Directives',
+                                            name: __('Docs: Tailwind CSS functions & directives', 'windpress'),
                                             url: 'https://tailwindcss.com/docs/functions-and-directives#variant-directive',
                                         },
                                     ],
@@ -145,10 +147,10 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                                 {
                                     name: '@source',
                                     status: 'standard',
-                                    description: 'Use the `@source` directive to scan additional source files.',
+                                    description: __('Use the `@source` directive to scan additional source files.', 'windpress'),
                                     references: [
                                         {
-                                            name: 'Docs: Scanning additional Sources',
+                                            name: __('Docs: Scanning additional Sources', 'windpress'),
                                             url: 'https://wind.press/docs/configuration/file-main-css#scanning-additional-sources',
                                         },
                                     ],
@@ -163,40 +165,40 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
 
     editorElementRef.value = editor;
 
-    // monaco.languages.registerCompletionItemProvider('css', {
-    //     async provideCompletionItems(model, position) {
-    //         const wordInfo = model.getWordUntilPosition(position);
+    monaco.languages.registerCompletionItemProvider('css', {
+        async provideCompletionItems(model, position) {
+            const wordInfo = model.getWordUntilPosition(position);
 
-    //         let variables = [];
+            let variables: any[] = [];
 
-    //         if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
-    //             variables = (await getVariableList({ volume: volumeStore.getKVEntries(), })).map((entry:) => {
-    //                 return {
-    //                     kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
-    //                     label: entry.key,
-    //                     insertText: entry.key,
-    //                     detail: entry.value,
-    //                     range: {
-    //                         startLineNumber: position.lineNumber,
-    //                         startColumn: wordInfo.startColumn,
-    //                         endLineNumber: position.lineNumber,
-    //                         endColumn: wordInfo.endColumn
-    //                     },
-    //                     sortText: naturalExpand(entry.index)
-    //                 }
-    //             });
-    //         }
+            if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
+                variables = (await getVariableList(await loadDesignSystem({ volume: volumeStore.getKVEntries() }))).map((entry) => {
+                    return {
+                        kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
+                        label: entry.key,
+                        insertText: entry.key,
+                        detail: entry.value,
+                        range: {
+                            startLineNumber: position.lineNumber,
+                            startColumn: wordInfo.startColumn,
+                            endLineNumber: position.lineNumber,
+                            endColumn: wordInfo.endColumn
+                        },
+                        sortText: naturalExpand(entry.index)
+                    }
+                });
+            }
 
-    //         return {
-    //             suggestions: variables
-    //         };
-    //     }
-    // });
+            return {
+                suggestions: variables
+            };
+        }
+    });
 
     // add key binding command to monaco.editor to save all changes
     monaco.editor.addEditorAction({
         id: 'save',
-        label: 'Save',
+        label: __('Save', 'windpress'),
         keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
         run: () => {
             emit('save');
@@ -227,7 +229,7 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                     <UButton icon="lucide:file-minus-2" color="neutral" variant="ghost" @click="emit('reset', entry)" />
                 </UTooltip>
 
-                <UTooltip text="Save">
+                <UTooltip :text="i18n.__('Save', 'windpress')">
                     <UButton icon="i-lucide-save" color="primary" variant="subtle" @click="emit('save')" />
                 </UTooltip>
             </template>

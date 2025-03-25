@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref, watch } from 'vue';
+import { __, sprintf } from '@wordpress/i18n';
+import { onBeforeMount, ref } from 'vue';
 import { useBusyStore } from '@/dashboard/stores/busy';
 import { useSettingsStore } from '@/dashboard/stores/settings';
 import dayjs from 'dayjs';
@@ -42,8 +43,8 @@ function doGenerateCache() {
   busyStore.add('settings.performance.cached_css.generate');
 
   const toastData: Omit<Partial<Toast>, "id"> = {
-    title: 'Generating cache...',
-    description: 'Please wait while we generate the CSS cache.',
+    title: __('Generating cache...', 'windpress'),
+    description: __('Please wait while we generate the CSS cache.', 'windpress'),
     duration: 0,
     icon: 'lucide:loader-circle',
     close: false,
@@ -89,8 +90,8 @@ function doGenerateCache() {
 
       if (data.data.status === 'success') {
         toast.update('worker.doGenerateCache', {
-          title: 'Generated',
-          description: `Cache generated in ${prettyMilliseconds(timeEnd - timeStart)}.`,
+          title: __('Cache generated', 'windpress'),
+          description: sprintf(__('Cache generated in %s.', 'windpress'), prettyMilliseconds(timeEnd - timeStart)),
           icon: 'lucide:codesandbox',
           color: 'success',
           duration: undefined,
@@ -101,8 +102,8 @@ function doGenerateCache() {
         });
       } else if (data.data.status === 'error') {
         toast.update('worker.doGenerateCache', {
-          title: 'Error',
-          description: `An error occurred while generating the CSS cache. Check the Browser's Console for more information`,
+          title: __('Generate Cache Error', 'windpress'),
+          description: __('An error occurred while generating the CSS cache. Check the Browser\'s Console for more information', 'windpress'),
           icon: 'lucide:codesandbox',
           color: 'error',
           duration: undefined,
@@ -123,26 +124,26 @@ onBeforeMount(() => {
 
 <template>
   <UForm id="performance" :state="{}">
-    <UPageCard title="Performance" variant="naked" orientation="horizontal" class="mb-4">
+    <UPageCard :title="i18n.__('Performance', 'windpress')" variant="naked" orientation="horizontal" class="mb-4">
     </UPageCard>
     <UPageCard variant="subtle">
-      <UFormField label="Use cached CSS" description="Serve the cached CSS file when available instead of generating the style dynamically using the Compiler.." class="flex items-center justify-between gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('performance.cache.enabled', false).value" label="Enable Cached CSS" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
+      <UFormField :label="i18n.__('Use cached CSS', 'windpress')" :description="i18n.__('Serve the cached CSS file when available instead of generating the style dynamically using the Compiler.', 'windpress')" class="flex items-center justify-between gap-4">
+        <USwitch v-model="settingsStore.virtualOptions('performance.cache.enabled', false).value" :label="i18n.__('Enable Cached CSS', 'windpress')" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
       <USeparator />
-      <UFormField label="Admin always uses Compiler" description="Exclude the Admin from the cached CSS to ensure they always use the Compiler." class="flex items-center justify-between gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('performance.cache.exclude_admin', false).value" label="Exclude Admin" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
+      <UFormField :label="i18n.__('Admin always uses Compiler', 'windpress')" :description="i18n.__('Exclude the Admin from the cached CSS to ensure they always use the Compiler.', 'windpress')" class="flex items-center justify-between gap-4">
+        <USwitch v-model="settingsStore.virtualOptions('performance.cache.exclude_admin', false).value" :label="i18n.__('Exclude Admin', 'windpress')" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
       <USeparator />
-      <UFormField label="Cached CSS loading method" description="Load cached CSS as an inline instead of an external file." class="flex items-center justify-between gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('performance.cache.inline_load', false).value" label="Inline Cached CSS" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
+      <UFormField :label="i18n.__('Cached CSS loading method', 'windpress')" :description="i18n.__('Load cached CSS as an inline instead of an external file.', 'windpress')" class="flex items-center justify-between gap-4">
+        <USwitch v-model="settingsStore.virtualOptions('performance.cache.inline_load', false).value" :label="i18n.__('Inline Cached CSS', 'windpress')" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
       <USeparator />
-      <UFormField label="Generate the cached CSS" class="flex items-center justify-between gap-4">
+      <UFormField :label="i18n.__('Generate the cached CSS', 'windpress')" class="flex items-center justify-between gap-4">
         <template #description v-if="css_cache.last_generated">
           <div class="flex gap-2 items-center">
             <div class="flex gap-2 items-center">
-              <span class="font-semibold">Last Generated: </span>
+              <span class="font-semibold"> {{ i18n.__('Last Generated', 'windpress') }}: </span>
               <span v-if="css_cache.file_size" class="flex gap-1">
                 {{ dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
                 <ULink :to="css_cache.file_url" target="_blank" class="underline">
@@ -153,9 +154,9 @@ onBeforeMount(() => {
             <UBadge v-if="css_cache.file_size" color="success" variant="subtle"> {{ prettyBytes(css_cache.file_size, { maximumFractionDigits: 2, space: true }) }} </UBadge>
           </div>
         </template>
-        <UTooltip :delay-duration="0" text="Generate the cached CSS file">
+        <UTooltip :delay-duration="0" :text="i18n.__('Generate the cached CSS file', 'windpress')">
           <UButton color="primary" variant="subtle" @click="doGenerateCache" :disabled="busyStore.isBusy" :loading="busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate')">
-            {{ busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate') ? 'Generating...' : 'Generate' }}
+            {{ busyStore.isBusy && busyStore.hasTask('settings.performance.cached_css.generate') ? i18n.__('Generating...', 'windpress') : i18n.__('Generate', 'windpress') }}
           </UButton>
         </UTooltip>
       </UFormField>

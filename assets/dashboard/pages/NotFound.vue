@@ -14,10 +14,10 @@ const homeLink = router.resolve({ name: 'home' }, )
           404
         </p>
         <h1 class="mt-2 text-4xl sm:text-5xl font-bold text-(--ui-text-highlighted) text-balance">
-          Page not found
+          {{ i18n.__('Page not found', 'windpress') }}
         </h1>
         <p class="mt-4 text-lg text-(--ui-text-muted) text-balance">
-          Sorry, we couldn’t find the page you’re looking for.
+          {{ i18n.__('Sorry, we couldn’t find the page you’re looking for.', 'windpress') }}
         </p>
         <div class="mt-8 flex items-center justify-center gap-6">
           <UButton
@@ -25,7 +25,7 @@ const homeLink = router.resolve({ name: 'home' }, )
             size="lg"
             color="primary"
             variant="solid"
-            label="Back to home"
+            :label="i18n.__('Back to home', 'windpress')"
           />
         </div>
       </div>

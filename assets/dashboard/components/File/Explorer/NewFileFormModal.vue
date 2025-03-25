@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { __, sprintf } from '@wordpress/i18n';
 import { ref, watch } from 'vue'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 
@@ -20,22 +21,22 @@ function confirm() {
     error.value = false
 
     if (!filePath.value) {
-        error.value = 'Filename is required'
+        error.value = __('Filename is required', 'windpress')
         return
     }
 
     if (!filePath.value.endsWith('.css') && !filePath.value.endsWith('.js')) {
-        error.value = 'File extension must be .css or .js'
+        error.value = __('File extension must be .css or .js', 'windpress')
         return
     }
 
     if (!/^[a-zA-Z0-9_.\-\/]+$/.test(filePath.value)) {
-        error.value = 'Only alphanumeric, dash, underscore, forward slash, and dot are allowed'
+        error.value = __('Only alphanumeric, dash, underscore, forward slash, and dot are allowed', 'windpress')
         return
     }
 
     if (volumeStore.data.entries.find((entry: Entry) => entry.relative_path === `${filePath.value}` && entry.hidden !== true)) {
-        error.value = `A file named "${filePath.value}" already exists`
+        error.value = sprintf(__('A file named "%s" already exists', 'windpress'), filePath.value)
         return
     }
 
@@ -47,19 +48,19 @@ function confirm() {
 <template>
     <UModal :close="{ onClick: () => emit('close') }">
         <template #title>
-            Create New File
+            {{ i18n.__('Create New File', 'windpress') }}
         </template>
 
         <template #body>
-            <UFormField label="Filename" required description="Filename may include a path. (css or js)" :error>
+            <UFormField label="Filename" required :description="i18n.__('Filename may include a path. (css or js)')" :error="error">
                 <UInput v-model="filePath" placeholder="theme/color.css" class="w-full" />
             </UFormField>
         </template>
 
         <template #footer>
             <div class="flex gap-2">
-                <UButton color="neutral" variant="soft" label="cancel" @click="emit('close')" class="capitalize" />
-                <UButton color="primary" variant="soft" label="Submit" @click="confirm" class="capitalize" />
+                <UButton color="neutral" variant="soft" :label="i18n.__('cancel', 'windpress')" @click="emit('close')" class="capitalize" />
+                <UButton color="primary" variant="soft" :label="i18n.__('Submit', 'windpress')" @click="confirm" class="capitalize" />
             </div>
         </template>
     </UModal>

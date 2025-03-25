@@ -70,7 +70,7 @@ class Volume extends AbstractApi implements ApiInterface
         CoreVolume::save_entries($entries);
 
         return new WP_REST_Response([
-            'message' => 'data stored successfully',
+            'message' => __('data stored successfully', 'windpress'),
         ]);
     }
 }

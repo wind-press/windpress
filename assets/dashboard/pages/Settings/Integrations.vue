@@ -29,7 +29,7 @@ onBeforeMount(() => {
 
 <template>
   <UForm id="integrations" :state="{}">
-    <UPageCard title="Integrations" description="Enable or disable integrations with other services." variant="naked" class="mb-4">
+    <UPageCard :title="i18n.__('Integrations', 'windpress')" :description="i18n.__('Enable or disable integrations with other services.', 'windpress')" variant="naked" class="mb-4">
     </UPageCard>
     <UPageCard variant="subtle" :ui="{ container: 'divide-y divide-(--ui-border)' }">
       <UFormField v-for="provider in providers" :key="provider.id" :name="provider.id" :label="provider.name" :description="provider.description" class="flex items-center justify-between not-last:pb-4 gap-4">

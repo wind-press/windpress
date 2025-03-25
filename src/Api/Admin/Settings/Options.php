@@ -82,7 +82,7 @@ class Options extends AbstractApi implements ApiInterface
         do_action('a!windpress/api/admin/settings/options:store.after', $options);
 
         return new WP_REST_Response([
-            'message' => 'Settings updated',
+            'message' => __('Settings updated', 'windpress'),
         ]);
     }
 }

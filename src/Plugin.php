@@ -194,7 +194,9 @@ final class Plugin
         do_action('a!windpress/plugin:init_plugin.start');
 
         // Load translations.
-        // load_plugin_textdomain(WIND_PRESS::TEXT_DOMAIN, false, dirname(plugin_basename(WIND_PRESS::FILE)) . '/languages/');
+        if (defined('WIND_PRESS_LOAD_TEXT_DOMAIN') && constant('WIND_PRESS_LOAD_TEXT_DOMAIN')) {
+            load_plugin_textdomain(WIND_PRESS::TEXT_DOMAIN, false, dirname(plugin_basename(WIND_PRESS::FILE)) . '/languages/');
+        }
 
         new ApiRouter();
 
