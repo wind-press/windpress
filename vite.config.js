@@ -107,12 +107,17 @@ export default defineConfig({
         sourcemap: false,
         rollupOptions: {
             output: {
-                manualChunks: {
-                    'monaco-editor': ['monaco-editor'],
-                },
+                // manualChunks: {
+                //     'monaco-editor': ['monaco-editor'],
+                // },
                 chunkFileNames: (chunkInfo) => {
                     // add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
                     // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
+
+                    if (chunkInfo.name === 'monaco-editor') {
+                        return 'chunks/[name]-[hash].min.js';
+                    }
+
                     return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? 'assets/[name]-[hash].js' : 'chunks/[name]-[hash].min.js';
                 },
             },
