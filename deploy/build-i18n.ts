@@ -1,3 +1,5 @@
+// https://developer.wordpress.org/apis/internationalization/#internationalizing-javascript
+
 import gettextParser from "npm:gettext-parser";
 import { readFileSync, writeFileSync } from 'node:fs';
 
@@ -5,19 +7,20 @@ const input = readFileSync('./languages/windpress.pot');
 
 let po = gettextParser.po.parse(input);
 
-let content = `(() => {\n`;
+let body;
 
 for (const key in po.translations['']) {
     if (key === '') {
         continue;
     }
-    content += `\twp.i18n.__("${po.translations[''][key].msgid.replace(/"/g, '\\"')}", "windpress");\n`;
+    // escape single quote
+    body += `\t__('${po.translations[''][key].msgid.replace(/'/g, "\\'")}', 'windpress');\n`;
 }
 
-content += `});\n`;
+const content = `(() => {\n\tconst { __, _x, _n, sprintf } = wp.i18n;\n${body}\n});`;
 
 // let it readable on GitHub Actions
 console.log(content);
 
-// (() => {});
+// (() => {const { __, _x, _n, sprintf } = wp.i18n;});
 writeFileSync('./src/Admin/i18n.js', content);
