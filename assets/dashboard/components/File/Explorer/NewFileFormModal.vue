@@ -52,7 +52,7 @@ function confirm() {
         </template>
 
         <template #body>
-            <UFormField label="Filename" required :description="i18n.__('Filename may include a path. (css or js)')" :error="error">
+            <UFormField label="Filename" required :description="i18n.__('Filename may include a path. (css or js)', 'windpress')" :error="error">
                 <UInput v-model="filePath" placeholder="theme/color.css" class="w-full" />
             </UFormField>
         </template>
