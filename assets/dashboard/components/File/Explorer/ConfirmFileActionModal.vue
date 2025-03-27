@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { codeToHtml } from 'shiki/bundle/web'
+import { createHighlighterCore, type HighlighterCore } from 'shiki/core';
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 import path from 'path';
 import { computedAsync, useColorMode } from '@vueuse/core';
+import { ref } from 'vue';
 
 const props = defineProps<{
     filePath: string,
@@ -12,19 +14,34 @@ const props = defineProps<{
 
 const colorMode = useColorMode()
 
+let shikiHighlighter = ref<HighlighterCore | null>(null);
+
+(async () => {
+    shikiHighlighter.value = await createHighlighterCore({
+        themes: [
+            import('shiki/themes/dark-plus.mjs'),
+            import('shiki/themes/light-plus.mjs'),
+        ],
+        langs: [
+            import('shiki/langs/css.mjs'),
+            import('shiki/langs/javascript.mjs'),
+        ],
+        engine: createOnigurumaEngine(import('shiki/wasm')),
+    });
+})();
+
 const snippet = computedAsync(async () => {
-    if (!props.fileContent) {
+    if (!props.fileContent || !shikiHighlighter.value) {
         return;
     }
 
     const fileExt = path.extname(props.filePath).replace('.', '');
 
-    return codeToHtml(props.fileContent, {
+    return shikiHighlighter.value.codeToHtml(props.fileContent, {
         lang: fileExt === 'css' ? 'css' : 'javascript',
         theme: colorMode.value === 'dark' ? 'dark-plus' : 'light-plus',
     });
 })
-
 const emit = defineEmits<{ close: [boolean] }>()
 </script>
 

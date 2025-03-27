@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed, reactive } from 'vue';
 import { useApi } from '@/dashboard/library/api';
-// import { useNotifier } from '@/dashboard/library/notifier.js';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { __ } from '@wordpress/i18n';
 import { useBusyStore } from './busy';
@@ -32,7 +31,6 @@ export type Entry = {
 export const useVolumeStore = defineStore('volume', () => {
     const api = useApi();
     const busyStore = useBusyStore();
-    // const notifier = useNotifier();
 
     /**
      * The volume data which will be mounted.

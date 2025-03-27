@@ -2,13 +2,11 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { useApi } from '@/dashboard/library/api.js';
 import { useBusyStore } from './busy.js';
-// import { useNotifier } from '@/dashboard/library/notifier.js';
 import { cloneDeep, get } from 'lodash-es';
 
 export const useLicenseStore = defineStore('license', () => {
     const busyStore = useBusyStore();
     const api = useApi();
-    // const notifier = useNotifier();
 
     const license = ref({
         key: ''

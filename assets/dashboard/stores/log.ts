@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { nanoid } from 'nanoid';
 import { useStorage } from '@vueuse/core'
-import { watch } from 'vue';
 
 export type Log = {
     /** The message to log. */

@@ -1,14 +1,12 @@
 import { defineStore } from 'pinia';
 import { useApi } from '../library/api.js';
 import { useBusyStore } from './busy.js';
-// import { useNotifier } from '../library/notifier.js';
 import { cloneDeep } from 'lodash-es';
 import { createVirtualRef } from '@/dashboard/composables/virtualRef';
 
 export const useSettingsStore = defineStore('settings', () => {
     const busyStore = useBusyStore();
     const api = useApi();
-    // const notifier = useNotifier();
 
     const { state: options, getVirtualRef: virtualOptions } = createVirtualRef({});
 
