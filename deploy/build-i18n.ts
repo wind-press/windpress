@@ -16,7 +16,7 @@ for (const key in po.translations['']) {
     }
 }
 
-const content = `(() => {\n\tconst { __, _x, _n, sprintf } = wp.i18n;\n${body}\n});`;
+const content = `(() => {\n\tconst { __, _x, _n, sprintf } = wp.i18n;\n${body}});`;
 
 // let it readable on GitHub Actions
 console.log(content);
