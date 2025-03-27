@@ -82,7 +82,11 @@ jobs:
           with:
             php-version: 8.2
             coverage: none
-          
+
+        # install wp-cli
+        - name: Setup WP-CLI
+          uses: godaddy-wordpress/setup-wp-cli@1
+
         # prefix the namespaces
         - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
 
@@ -134,6 +138,21 @@ jobs:
             git push --quiet origin ${GITHUB_REF#refs/tags/}
 
         # WordPress.org build
+
+        - name: Install Deno
+          uses: denoland/setup-deno@v2
+          with:
+            deno-version: v2.x
+
+        # make pot file,
+        - name: "Make pot file"
+          run: php -d memory_limit=-1 /usr/local/bin/wp i18n make-pot ./ ./languages/windpress.pot
+
+        # run the deno script to build the i18n.php file
+        - name: "Build i18n.php"
+          run: |
+            deno run --allow-all deploy/build-i18n.ts
+            rm -rf ./languages
 
         # Get the current tag from github.ref, where the tag name is the version number.
         # tag name pattern: X.Y.Z, where X, Y, Z are integers
