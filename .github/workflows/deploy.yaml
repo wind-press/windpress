@@ -28,6 +28,10 @@ jobs:
         #   if: "startsWith(github.ref, 'refs/tags/')"
         #   run: sleep 20
 
+        # clean up the dev files
+        - run: rm -rf tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
+        - run: rm -rf ecs.php rector.php
+
         - uses: actions/checkout@v4
           with:
             fetch-depth: 0
@@ -54,13 +58,11 @@ jobs:
 
         # install dependencies and build the assets
         - run: pnpm install
+
         - run: pnpm build
           env:
             NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
-
-        # clean up the dev files
-        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
-        - run: rm -rf ecs.php rector.php
+            WP_I18N: 'true'
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
         - uses: shivammathur/setup-php@v2
@@ -70,6 +72,37 @@ jobs:
           # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
           env:
             COMPOSER_TOKEN: ${{ secrets.ORG_DEV_PAT }}
+
+        # preparing translations
+
+        # install wp-cli
+        - name: Setup WP-CLI
+          uses: godaddy-wordpress/setup-wp-cli@1
+
+        - name: Install Deno
+          uses: denoland/setup-deno@v2
+          with:
+            deno-version: v2.x
+
+        # make pot file,
+        - name: "Make pot file"
+          run: php -d memory_limit=-1 /usr/local/bin/wp i18n make-pot ./ ./languages/windpress.pot
+
+        # run the deno script to build the i18n.js file
+        - name: "Build i18n.js"
+          run: |
+            deno run --allow-all deploy/build-i18n.ts
+            rm -rf ./languages
+        
+        # rebuild the assets
+        - run: pnpm build
+          env:
+            NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
+            WP_I18N: 'false'
+
+        # clean up the dev files
+        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
+        - run: rm -rf ecs.php rector.php
 
         # install only prod dependencies
         - run: composer install --no-dev --classmap-authoritative --ansi
@@ -82,10 +115,6 @@ jobs:
           with:
             php-version: 8.2
             coverage: none
-
-        # install wp-cli
-        - name: Setup WP-CLI
-          uses: godaddy-wordpress/setup-wp-cli@1
 
         # prefix the namespaces
         - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
@@ -138,21 +167,6 @@ jobs:
             git push --quiet origin ${GITHUB_REF#refs/tags/}
 
         # WordPress.org build
-
-        - name: Install Deno
-          uses: denoland/setup-deno@v2
-          with:
-            deno-version: v2.x
-
-        # make pot file,
-        - name: "Make pot file"
-          run: php -d memory_limit=-1 /usr/local/bin/wp i18n make-pot ./ ./languages/windpress.pot
-
-        # run the deno script to build the i18n.php file
-        - name: "Build i18n.php"
-          run: |
-            deno run --allow-all deploy/build-i18n.ts
-            rm -rf ./languages
 
         # Get the current tag from github.ref, where the tag name is the version number.
         # tag name pattern: X.Y.Z, where X, Y, Z are integers

@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css 
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.3.15
+Stable tag: 3.3.16
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -122,7 +122,7 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= 3.3.15 =
+= 3.3.16 =
 * **Improve**: The plugin is now fully translatable. Help us to translate the plugin into your language on [WordPress.org](https://translate.wordpress.org/projects/wp-plugins/windpress)
 
 = 3.3.12 =

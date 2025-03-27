@@ -103,14 +103,15 @@ export default defineConfig({
         }),
     ],
     build: {
-        // target: 'modules',
         sourcemap: false,
         rollupOptions: {
             output: {
-                // manualChunks: {
-                //     'monaco-editor': ['monaco-editor'],
-                // },
                 chunkFileNames: (chunkInfo) => {
+                    // if the process.env.WP_I18N is available and true, add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
+                    if (process.env.WP_I18N === 'true') {
+                        return 'chunks/[name]-[hash].min.js';
+                    }
+
                     // add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
                     // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
 
@@ -119,6 +120,9 @@ export default defineConfig({
                     }
 
                     return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? 'assets/[name]-[hash].js' : 'chunks/[name]-[hash].min.js';
+                },
+                entryFileNames: (chunkInfo) => {
+                    return process.env.WP_I18N === 'true' ? "[name].min.js" : "[name].js";
                 },
             },
             plugins: [
