@@ -137,6 +137,7 @@ export default defineConfig({
                 }
             ],
         },
+        minify: false,
     },
     css: {
         preprocessorOptions: {
