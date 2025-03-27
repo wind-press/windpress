@@ -67,13 +67,14 @@ class AdminPage
 
         $handle = WIND_PRESS::WP_OPTION . ':admin';
 
+        wp_enqueue_script($handle . ':i18n', plugins_url('/src/Admin/i18n.js', WIND_PRESS::FILE), ['wp-i18n'], null);
+        wp_set_script_translations($handle . ':i18n', 'windpress');
+
         AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [
             'handle' => $handle,
             'in_footer' => true,
-            'dependencies' => ['wp-i18n', 'wp-hooks'],
+            'dependencies' => ['wp-hooks'],
         ]);
-
-        wp_set_script_translations($handle, 'windpress');
 
         do_action('a!windpress/admin/admin_page:enqueue_scripts.after');
     }
