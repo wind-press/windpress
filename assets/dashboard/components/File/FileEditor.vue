@@ -217,15 +217,15 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
             <template #title>
                 <UIcon :name="`vscode-icons:file-type-${entry?.relative_path === 'main.css' ? 'tailwind' : path.extname(entry?.relative_path ?? '').replace('.', '')}`" class="size-5" />
                 {{ entry?.relative_path }}
-                <UBadge v-if="props.entry.readonly" label="read-only" color="warning" variant="outline" />
+                <UBadge v-if="props.entry.readonly" :label="i18n.__('read-only', 'windpress')" color="warning" variant="outline" />
             </template>
 
             <template #right>
-                <UTooltip v-if="entry?.relative_path !== 'main.css' && !(Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" text="Delete">
+                <UTooltip v-if="entry?.relative_path !== 'main.css' && !(Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" :text="i18n.__('Delete', 'windpress')">
                     <UButton icon="i-lucide-trash" color="neutral" variant="ghost" @click="emit('delete', entry)" />
                 </UTooltip>
 
-                <UTooltip v-if="entry?.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" text="Reset to default">
+                <UTooltip v-if="entry?.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" :text="i18n.__('Reset to default', 'windpress')">
                     <UButton icon="lucide:file-minus-2" color="neutral" variant="ghost" @click="emit('reset', entry)" />
                 </UTooltip>
 

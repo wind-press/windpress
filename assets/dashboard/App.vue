@@ -125,7 +125,7 @@ onMounted(() => {
                     }
                 },
                 {
-                    label: 'Later',
+                    label: _('Later', 'windpress'),
                     color: 'neutral',
                     variant: 'ghost',
                     onClick: () => {
@@ -133,7 +133,7 @@ onMounted(() => {
                     },
                 },
                 {
-                    label: 'Never',
+                    label: _('Never', 'windpress'),
                     color: 'error',
                     variant: 'ghost',
                     onClick: () => {
