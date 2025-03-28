@@ -50,6 +50,7 @@
     "vite-plugin-external": "^6.0.1",
     "vite-plugin-https-imports": "https://pkg.pr.new/wind-press/vite-plugin-https-imports@28e1201",
     "vite-plugin-node-polyfills": "^0.23.0",
+    "vite-plugin-static-copy": "^2.3.0",
     "vite-plugin-svgr": "^4.3.0",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.4.1",

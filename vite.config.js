@@ -12,6 +12,7 @@ import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import httpsImports from 'vite-plugin-https-imports';
 import viteUiPro from '@nuxt/ui-pro/vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
     plugins: [
@@ -101,6 +102,14 @@ export default defineConfig({
                 return undefined;
             };
         }),
+        viteStaticCopy({
+            targets: [
+                {
+                    src: 'wp-i18n.js',
+                    dest: './'
+                }
+            ]
+        })
     ],
     build: {
         sourcemap: false,
@@ -108,9 +117,9 @@ export default defineConfig({
             output: {
                 chunkFileNames: (chunkInfo) => {
                     // if the process.env.WP_I18N is available and true, add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
-                    if (process.env.WP_I18N !== 'true') {
-                        return 'chunks/[name]-[hash].min.js';
-                    }
+                    // if (process.env.WP_I18N !== 'true') {
+                    //     return 'chunks/[name]-[hash].min.js';
+                    // }
 
                     // add .min to the vendor module to exclude it from the `wp i18n make-pot` command.
                     // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
@@ -121,9 +130,9 @@ export default defineConfig({
 
                     return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? 'assets/[name]-[hash].js' : 'chunks/[name]-[hash].min.js';
                 },
-                entryFileNames: (chunkInfo) => {
-                    return process.env.WP_I18N !== 'true' ? "assets/[name]-[hash].min.js" : "assets/[name]-[hash].js";
-                },
+                // entryFileNames: (chunkInfo) => {
+                //     return process.env.WP_I18N !== 'true' ? "assets/[name]-[hash].min.js" : "assets/[name]-[hash].js";
+                // },
             },
             plugins: [
                 {

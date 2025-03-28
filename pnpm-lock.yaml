@@ -255,6 +255,9 @@ importers:
       vite-plugin-node-polyfills:
         specifier: ^0.23.0
         version: 0.23.0(rollup@4.37.0)(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.3)(sass@1.86.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
+      vite-plugin-static-copy:
+        specifier: ^2.3.0
+        version: 2.3.0(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.3)(sass@1.86.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
       vite-plugin-svgr:
         specifier: ^4.3.0
         version: 4.3.0(rollup@4.37.0)(typescript@5.6.2)(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.3)(sass@1.86.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0))
@@ -3793,6 +3796,10 @@ packages:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
 
+  p-map@7.0.3:
+    resolution: {integrity: sha512-VkndIv2fIB99swvQoA65bm+fsmt6UNdGeIB0oxBs+WhAhdh08QA04JXpI7rbB9r08/nkbysKoya9rtDERYOYMA==}
+    engines: {node: '>=18'}
+
   p-try@2.2.0:
     resolution: {integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==}
     engines: {node: '>=6'}
@@ -4923,6 +4930,12 @@ packages:
     resolution: {integrity: sha512-4n+Ys+2bKHQohPBKigFlndwWQ5fFKwaGY6muNDMTb0fSQLyBzS+jjUNRZG9sKF0S/Go4ApG6LFnUGopjkILg3w==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
+
+  vite-plugin-static-copy@2.3.0:
+    resolution: {integrity: sha512-LLKwhhHetGaCnWz4mas4qqjjguDka6/6b4+SeIohRroj8aCE7QTfiZECfPecslFQkWZ3HdQuq5kOPmWZjNYlKA==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      vite: ^5.0.0 || ^6.0.0
 
   vite-plugin-svgr@4.3.0:
     resolution: {integrity: sha512-Jy9qLB2/PyWklpYy0xk0UU3TlU0t2UMpJXZvf+hWII1lAmRHrOUKi11Uw8N3rxoNk7atZNYO3pR3vI1f7oi+6w==}
@@ -9188,6 +9201,8 @@ snapshots:
     dependencies:
       p-limit: 3.1.0
 
+  p-map@7.0.3: {}
+
   p-try@2.2.0: {}
 
   package-json-from-dist@1.0.1: {}
@@ -10354,6 +10369,15 @@ snapshots:
       vite: 6.2.3(@types/node@22.13.14)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.3)(sass@1.86.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0)
     transitivePeerDependencies:
       - rollup
+
+  vite-plugin-static-copy@2.3.0(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.3)(sass@1.86.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0)):
+    dependencies:
+      chokidar: 3.6.0
+      fast-glob: 3.3.3
+      fs-extra: 11.3.0
+      p-map: 7.0.3
+      picocolors: 1.1.1
+      vite: 6.2.3(@types/node@22.13.14)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.3)(sass@1.86.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0)
 
   vite-plugin-svgr@4.3.0(rollup@4.37.0)(typescript@5.6.2)(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.29.3)(sass@1.86.0)(stylus@0.63.0)(terser@5.34.1)(yaml@2.7.0)):
     dependencies:

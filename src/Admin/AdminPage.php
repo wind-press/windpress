@@ -67,7 +67,7 @@ class AdminPage
 
         $handle = WIND_PRESS::WP_OPTION . '-admin';
 
-        wp_enqueue_script($handle . '-i18n', plugins_url('/src/Admin/wp-i18n.js', WIND_PRESS::FILE), ['wp-i18n'], null);
+        wp_enqueue_script($handle . '-i18n', plugins_url('build/wp-i18n.js', WIND_PRESS::FILE), ['wp-i18n'], null);
         wp_set_script_translations($handle . '-i18n', 'windpress');
 
         AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [

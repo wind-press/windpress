@@ -94,11 +94,11 @@ jobs:
             deno run --allow-all deploy/build-i18n.ts
             rm -rf ./languages
         
-        # rebuild the assets
-        - run: pnpm build
-          env:
-            NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
-            WP_I18N: 'false'
+        # # rebuild the assets
+        # - run: pnpm build
+        #   env:
+        #     NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
+        #     WP_I18N: 'false'
 
         # clean up the dev files
         - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
