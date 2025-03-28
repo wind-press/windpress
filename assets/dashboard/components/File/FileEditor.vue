@@ -211,7 +211,9 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
     <UDashboardPanel id="explorer-2" class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
         <UDashboardNavbar :title="entry?.relative_path" :toggle="false">
             <template #leading>
-                <UButton icon="i-lucide-x" color="neutral" variant="ghost" class="-ms-1.5" @click="emit('close')" />
+                <UTooltip :text="i18n.__('Close', 'windpress')">
+                    <UButton icon="i-lucide-x" color="neutral" variant="ghost" class="-ms-1.5" @click="emit('close')" />
+                </UTooltip>
             </template>
 
             <template #title>

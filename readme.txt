@@ -122,6 +122,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Improve**: Add keyboard shortcuts to Generate Cache on the WindPress dashboard page
+
 = 3.3.22 =
 * **Fix**: Storage issue on the Incremental Generate Cache feature [#34](https://github.com/wind-press/windpress/issues/34)
 

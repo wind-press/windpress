@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
+import { generateCache } from '@/dashboard/composables/useGenerateCache';
 
 const router = useRouter()
 const toast = useToast()
@@ -70,6 +71,20 @@ const groups = computed(() => [
         id: 'links',
         label: __('Go to', 'windpress'),
         items: links.flat()
+    },
+    {
+        id: 'actions',
+        label: __('Actions', 'windpress'),
+        items: [
+            {
+                label: __('Generate cache', 'windpress'),
+                icon: 'lucide:codesandbox',
+                kbds: ['meta', 'J'],
+                onSelect: () => {
+                    generateCache();
+                }
+            }
+        ]
     },
     {
         id: 'other-products',
@@ -145,13 +160,15 @@ onMounted(() => {
     }
 });
 
+
+defineShortcuts(extractShortcuts(groups.value))
 </script>
 
 <template>
     <Suspense>
         <UApp :toaster="{ class: 'windpress-style' }">
             <UDashboardGroup storage="local" class="bg-(--ui-bg) text-(--ui-text) top-(--wp-admin--admin-bar--height) left-(--wp-admin--sidebar-width) right-0 bottom-0">
-                <UDashboardSearch :groups="groups" />
+                <UDashboardSearch :groups="groups" :placeholder="i18n.__('Type a command or search...', 'windpress')" />
 
                 <UDashboardSidebar collapsible resizable class="bg-(--ui-bg-elevated)/25 min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]" :ui="{ root: 'flex', footer: 'lg:border-t lg:border-(--ui-border)' }">
                     <template #header="{ collapsed }">
@@ -159,7 +176,7 @@ onMounted(() => {
                     </template>
 
                     <template #default="{ collapsed }">
-                        <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-(--ui-border)" />
+                        <UDashboardSearchButton :label="i18n.__('Search...', 'windpress')" :collapsed="collapsed" class="bg-transparent ring-(--ui-border)" />
 
                         <UNavigationMenu :collapsed="collapsed" :items="links[0]" orientation="vertical" />
 

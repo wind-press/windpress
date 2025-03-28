@@ -104,10 +104,10 @@ onBeforeMount(() => {
           <UTooltip :delay-duration="0" :text="licenseStore.isActivated ? i18n.__('Unregister your WindPress setup', 'windpress') : i18n.__('Register your WindPress setup', 'windpress')">
             <UButton type="submit" color="primary" variant="subtle" :leading-icon="busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate' || t.task === 'settings.license.deactivate') ? 'lucide:loader-circle' : undefined" :disabled="!license.key || busyStore.isBusy" :ui="{ leadingIcon: 'animate-spin' }">
               <template v-if="licenseStore.isActivated">
-                {{ busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.deactivate') ? 'Deactivating' : 'Deactivate' }}
+                {{ busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.deactivate') ? i18n.__('Deactivating', 'windpress') : i18n.__('Deactivate', 'windpress') }}
               </template>
               <template v-else>
-                {{ busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate') ? 'Activating' : 'Activate' }}
+                {{ busyStore.isBusy && busyStore.tasks.some((t) => t.task === 'settings.license.activate') ? i18n.__('Activating', 'windpress') : i18n.__('Activate', 'windpress') }}
               </template>
             </UButton>
           </UTooltip>
