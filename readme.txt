@@ -1,7 +1,7 @@
 === WindPress - Tailwind CSS integration for WordPress ===
 Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
-Tags: tailwind, tailwindcss, tailwind css 
+Tags: tailwind, tailwindcss, tailwind css
 Requires at least: 6.0
 Tested up to: 6.7
 Stable tag: 3.3.22
@@ -71,7 +71,7 @@ Note: The core feature will remain available on all versions, but some integrati
 
 ### Bring Your Own Integration
 
-WindPress is designed to be easily extensible, so you can build your integrations with Tailwind CSS. The plugin provides a simple API for adding integrations. 
+WindPress is designed to be easily extensible, so you can build your integrations with Tailwind CSS. The plugin provides a simple API for adding integrations.
 Check out our detailed [guide](https://wind.press/docs/integrations/custom-theme) to get started.
 
 
@@ -123,7 +123,7 @@ Free version 1.**0**.4
 Pro version 1.**1**.4
 
 = 3.3.22 =
-* **Fix**: Storage issue on the Incremental Generate Cache feature [#34](https://github.com/wind-press/windpress/issues/34) 
+* **Fix**: Storage issue on the Incremental Generate Cache feature [#34](https://github.com/wind-press/windpress/issues/34)
 
 = 3.3.21 =
 * **Improve**: [Experimental] The plugin is now fully translatable. Help us to translate the plugin into your language on [WordPress.org](https://translate.wordpress.org/projects/wp-plugins/windpress)
@@ -169,7 +169,7 @@ Pro version 1.**1**.4
 = 3.2.32 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.8 latest)
 * **New**: [WPCodeBox 2](https://wpcodebox.com/) integration **[Pro]**
-* **Improve**: Better performance on the generating cache process 
+* **Improve**: Better performance on the generating cache process
 * **Change**: [TW4] Generating the CSS cache will remove unused CSS variables. To always keep it, add them within the `@theme static { }` block in the `main.css` file. Alternatively, you can replace the `@import 'tailwindcss/theme.css' layer(theme);` code to `@import "tailwindcss/theme.css" layer(theme) theme(static);` on your `main.css` file.
 
 = 3.2.31 =
@@ -203,7 +203,7 @@ Pro version 1.**1**.4
 
 = 3.2.22 =
 * **Fix**: [Gutenberg] The CSS class field autofocusing issue on the block editor
-* **Fix**: [Gutenberg, Breakdance, Bricks, Builderius, LiveCanvas, Oxygen] The "Generate Cache on Save" feature doesn't use the selected Tailwind CSS version 
+* **Fix**: [Gutenberg, Breakdance, Bricks, Builderius, LiveCanvas, Oxygen] The "Generate Cache on Save" feature doesn't use the selected Tailwind CSS version
 
 = 3.2.21 =
 * **New**: Upgraded to Tailwind CSS v4 (4.0.0-beta.6 next)
