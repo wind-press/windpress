@@ -8,6 +8,7 @@ import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwi
 import { nanoid } from 'nanoid';
 import lzString from 'lz-string';
 import { get } from 'lodash-es';
+import { get as getIdb, set as setIdb } from 'idb-keyval';
 
 // TODO: Add option to allow enable/disable the incremental cache build
 
@@ -123,7 +124,8 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             // check if the provider's id is not in the incremental providers list
             if (options.incremental?.providers && !options.incremental.providers.includes(provider.id)) {
                 // use the stored sources on the browser's local storage (if available)
-                let lsCache = localStorage.getItem(`windpress.cache.provider.${provider.id}`);
+                // let lsCache = localStorage.getItem(`windpress.cache.provider.${provider.id}`);
+                let lsCache = await getIdb(`windpress.cache.provider.${provider.id}`);
 
                 if (lsCache) {
                     let decompressedCache = lzString.decompressFromUTF16(lsCache);
@@ -173,7 +175,8 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         content_pool.push(...batch_pool);
 
         // store to local storage
-        localStorage.setItem(`windpress.cache.provider.${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
+        // localStorage.setItem(`windpress.cache.provider.${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
+        setIdb(`windpress.cache.provider.${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
 
         return Promise.resolve();
     }

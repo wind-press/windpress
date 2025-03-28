@@ -75,6 +75,7 @@
     "dayjs": "^1.11.13",
     "floating-vue": "^5.2.2",
     "fuse.js": "^7.1.0",
+    "idb-keyval": "^6.2.1",
     "lightningcss-wasm": "^1.29.3",
     "lodash-es": "^4.17.21",
     "lz-string": "https://pkg.pr.new/wind-press/lz-string@2c61edc",
