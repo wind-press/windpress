@@ -16,10 +16,10 @@
   "devDependencies": {
     "@iconify-json/arcticons": "^1.2.21",
     "@iconify-json/bx": "^1.2.2",
-    "@iconify-json/devicon": "^1.2.22",
+    "@iconify-json/devicon": "^1.2.23",
     "@iconify-json/fa6-brands": "^1.2.5",
     "@iconify-json/fa6-solid": "^1.2.3",
-    "@iconify-json/fluent": "^1.2.16",
+    "@iconify-json/fluent": "^1.2.18",
     "@iconify-json/healthicons": "^1.2.8",
     "@iconify-json/iconoir": "^1.2.7",
     "@iconify-json/line-md": "^1.2.5",
@@ -32,21 +32,21 @@
     "@types/css-tree": "^2.3.10",
     "@types/lodash": "^4.17.16",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.13.14",
+    "@types/node": "^22.13.17",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-vue": "^5.2.3",
     "eslint": "^9.23.0",
-    "eslint-plugin-oxlint": "^0.16.3",
+    "eslint-plugin-oxlint": "^0.16.4",
     "eslint-plugin-vue": "^10.0.0",
     "lightningcss": "^1.29.3",
     "memfs": "^4.17.0",
-    "oxlint": "^0.16.3",
+    "oxlint": "^0.16.4",
     "rollup-plugin-external-globals": "^0.13.0",
-    "sass": "^1.86.0",
-    "typescript-eslint": "^8.28.0",
+    "sass": "^1.86.1",
+    "typescript-eslint": "^8.29.0",
     "unplugin-icons": "^22.1.0",
     "unplugin-vue-components": "^28.4.1",
-    "vite": "^6.2.3",
+    "vite": "^6.2.4",
     "vite-plugin-external": "^6.0.1",
     "vite-plugin-https-imports": "https://pkg.pr.new/wind-press/vite-plugin-https-imports@28e1201",
     "vite-plugin-node-polyfills": "^0.23.0",
@@ -54,11 +54,11 @@
     "vite-plugin-svgr": "^4.3.0",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.4.1",
-    "vitest": "^3.0.9"
+    "vitest": "^3.1.1"
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.5.5",
-    "@nuxt/ui-pro": "3.0.1",
+    "@nuxt/ui-pro": "3.0.2",
     "@std/encoding": "npm:@jsr/std__encoding@^1.0.8",
     "@std/html": "npm:@jsr/std__html@^1.0.3",
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
@@ -90,11 +90,11 @@
     "postcss-value-parser": "^4.2.0",
     "pretty-bytes": "^6.1.1",
     "pretty-ms": "^9.2.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "redaxios": "^0.5.1",
     "shiki": "^3.2.1",
-    "tailwindcss": "^4.0.17",
+    "tailwindcss": "^4.1.0",
     "tailwindcss3": "npm:tailwindcss@3",
     "tippy.js": "^6.3.7",
     "tributejs": "github:zurb/tribute",
@@ -102,7 +102,7 @@
     "vue": "^3.5.13",
     "vue-inline-svg": "^4.0.0",
     "vue-router": "^4.5.0",
-    "yaml": "^2.7.0",
+    "yaml": "^2.7.1",
     "zod": "^3.24.2"
   },
   "pnpm": {
@@ -118,5 +118,5 @@
       "vue-demi"
     ]
   },
-  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
+  "packageManager": "pnpm@10.7.1+sha512.2d92c86b7928dc8284f53494fb4201f983da65f0fb4f0d40baafa5cf628fa31dae3e5968f12466f17df7e97310e30f343a648baea1b9b350685dafafffdf5808"
 }
