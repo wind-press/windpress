@@ -21,7 +21,7 @@ class AdminPage
 {
     public function __construct()
     {
-        add_action('admin_menu', fn () => $this->add_admin_menu(), 1_000_001);
+        add_action('admin_menu', fn() => $this->add_admin_menu(), 1_000_001);
     }
 
     public static function get_page_url(): string
@@ -38,13 +38,13 @@ class AdminPage
             __('WindPress', 'windpress'),
             'manage_options',
             WIND_PRESS::WP_OPTION,
-            fn () => $this->render(),
+            fn() => $this->render(),
             // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
             'data:image/svg+xml;base64,' . base64_encode(file_get_contents(dirname(WIND_PRESS::FILE) . '/windpress.svg')),
             1_000_001
         );
 
-        add_action('load-' . $hook, fn () => $this->init_hooks());
+        add_action('load-' . $hook, fn() => $this->init_hooks());
     }
 
     private function render()
@@ -56,9 +56,9 @@ class AdminPage
 
     private function init_hooks()
     {
-        add_filter('f!windpress/core/runtime:print_windpress_metadata', fn ($metadata) => $this->print_windpress_metadata($metadata), 1_000_001);
-        add_action('admin_enqueue_scripts', fn () => Runtime::get_instance()->print_windpress_metadata(), 1_000_001);
-        add_action('admin_enqueue_scripts', fn () => $this->enqueue_scripts(), 1_000_001);
+        add_filter('f!windpress/core/runtime:print_windpress_metadata', fn($metadata) => $this->print_windpress_metadata($metadata), 1_000_001);
+        add_action('admin_enqueue_scripts', fn() => Runtime::get_instance()->print_windpress_metadata(), 1_000_001);
+        add_action('admin_enqueue_scripts', fn() => $this->enqueue_scripts(), 1_000_001);
     }
 
     private function enqueue_scripts()
@@ -67,7 +67,9 @@ class AdminPage
 
         $handle = WIND_PRESS::WP_OPTION . '-admin';
 
-        wp_enqueue_script($handle . '-i18n', plugins_url('build/wp-i18n.js', WIND_PRESS::FILE), ['wp-i18n'], null);
+        $manifest = AssetVite::get_instance()->get_manifest(dirname(WIND_PRESS::FILE) . '/build');
+
+        wp_enqueue_script($handle . '-i18n', $manifest->is_dev ? AssetVite::get_instance()->generate_development_asset_src($manifest, 'assets/wp-i18n.js') : AssetVite::get_instance()->prepare_asset_url($manifest->dir) . '/wp-i18n.js', ['wp-i18n'], null);
         wp_set_script_translations($handle . '-i18n', 'windpress');
 
         AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [
@@ -79,7 +81,8 @@ class AdminPage
         do_action('a!windpress/admin/admin_page:enqueue_scripts.after');
     }
 
-    function print_windpress_metadata($metadata) {
+    function print_windpress_metadata($metadata)
+    {
         $current_user = wp_get_current_user();
 
         $metadata['is_ubiquitous'] = false;

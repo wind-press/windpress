@@ -105,7 +105,7 @@ export default defineConfig({
         viteStaticCopy({
             targets: [
                 {
-                    src: 'wp-i18n.js',
+                    src: 'assets/wp-i18n.js',
                     dest: './'
                 }
             ]
