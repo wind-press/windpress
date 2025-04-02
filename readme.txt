@@ -125,6 +125,7 @@ Pro version 1.**1**.4
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.1 latest)
 * **Improve**: Add keyboard shortcuts to Generate Cache on the WindPress dashboard page
+* **Improve**: [TW3] The Play Observer / Compiler performance & stability
 
 = 3.3.22 =
 * **Fix**: Storage issue on the Incremental Generate Cache feature [#34](https://github.com/wind-press/windpress/issues/34)

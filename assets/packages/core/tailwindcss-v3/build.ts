@@ -2,29 +2,29 @@ import lightningcssWasmFile from '~/node_modules/lightningcss-wasm/lightningcss_
 import init, { transform, browserslistToTargets } from 'lightningcss-wasm';
 import { compile } from './compile';
 import { version as tw3_version } from 'tailwindcss3/package.json';
+import type { VFSContainer } from '@/packages/core/tailwindcss/vfs';
 
-/**
- * Build the CSS
- *
- * @param {object} opts
- * @param {Array<string>} opts.contents
- * @param {Record<string, string>} opts.entrypoint
- * @param {Record<string, string>} opts.volume
- */
-export async function build({ contents = [], entrypoint = {}, volume = {}, ...opts } = {}) {
+export type BuildOptions = {
+    volume?: VFSContainer;
+    [key: string]: any;
+    contents?: string[];
+    entrypoint?: {
+        css?: string;
+        config?: string;
+    };
+}
+
+export async function build({ contents = [], entrypoint = {
+    css: '/main.css',
+    config: '/tailwind.config.js'
+}, volume = {}, ...opts }: BuildOptions) {
     opts = { contents, entrypoint, volume, ...opts };
     let result = await compile(opts);
 
     return `/*! tailwindcss v${tw3_version} | MIT License | https://tailwindcss.com */\n${result}`;
 }
 
-/**
- * Optimize the CSS
- *
- * @param {string} css
- * @param {boolean} minify Default is `false`. Whether to minify the CSS.
- */
-export async function optimize(css, minify = false) {
+export async function optimize(css: string, minify: boolean = false) {
     await init(lightningcssWasmFile);
 
     const { default: browserslist } = await import('browserslist');

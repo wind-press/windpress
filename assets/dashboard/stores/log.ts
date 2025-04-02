@@ -37,6 +37,8 @@ export function createLogComposable() {
         welcomeLog,
     ] as Log[]);
 
+    // TODO: clear logs older than 30 days or over 150 entries
+
     function add(log: Log): string {
         const id: string = nanoid(10);
         logs.value.push({

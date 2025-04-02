@@ -1,16 +1,20 @@
 import * as csstree from 'css-tree';
 
-const link = document.querySelector('link[rel="stylesheet"][href*="wp-admin/load-styles.php"]')
-if (link) {
-    fetch((link as HTMLLinkElement).href)
-        .then(res => res.text())
-        .then(css => {
-            const style = document.createElement('style')
-            style.textContent = dontTouchMe(css);
-            document.head.prepend(style)
-            link.remove()
-        })
-}
+const links = document.querySelectorAll('link[rel="stylesheet"][href*="wp-admin/load-styles.php"], link[rel="stylesheet"][href*="wp-admin/css/colors/"]')
+
+// reverse the links to load the last one first
+Array.from(links).reverse().forEach(link => {
+    if (link instanceof HTMLLinkElement) {
+        fetch(link.href)
+            .then(res => res.text())
+            .then(css => {
+                const style = document.createElement('style')
+                style.textContent = dontTouchMe(css);
+                document.head.prepend(style)
+                link.remove()
+            })
+    }
+})
 
 function dontTouchMe(css: string) {
     const ast = csstree.parse(css);
