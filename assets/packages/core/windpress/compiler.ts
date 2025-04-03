@@ -214,7 +214,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         });
 
         // convert to set to remove duplicates, then back to array
-        let candidates = [...new Set([...candidates_pool, ...await loadSource(compiled.globs)])];
+        let candidates = [...new Set([...candidates_pool, ...await loadSource(compiled.sources)])];
 
         log.add({ message: 'Scanning complete', type: 'success' });
         log.add({ message: 'Building cache...', type: 'info' });

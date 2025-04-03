@@ -122,6 +122,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Fix**: [TW4] Error on generate cache caused by the `@source` directive change in the Tailwind CSS v4 (4.1.1)
+
 = 3.3.23 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.1 latest)
 * **Improve**: Add keyboard shortcuts to Generate Cache on the WindPress dashboard page

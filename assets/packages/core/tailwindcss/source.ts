@@ -3,27 +3,32 @@ import { minimatch } from 'minimatch';
 import { createLogComposable } from '@/dashboard/stores/log'
 import { useApi } from '@/dashboard/library/api';
 
-export type Glob = {
-    pattern: string;
+export type Source = {
     base: string;
+    pattern: string;
+    negated: boolean;
 };
 
-export async function loadSource(globs: Glob[]) {
+export async function loadSource(sources: Source[]) {
     const logStore = createLogComposable();
 
     let contents: string[] = [];
 
-    const promises = globs.map(async (glob) => {
+    const promises = sources.map(async (source) => {
+        if (source.negated) {
+            return;
+        }
+
         let logId;
-        if (glob.pattern.startsWith('jsdelivr:')) {
-            logId = logStore.add({ message: `Loading source: jsDelivr (${glob.pattern})`, type: 'info', group: 'source' });
-            contents.push(...await jsDelivrProvider(glob));
-        } else if (glob.pattern.startsWith('http')) {
-            logId = logStore.add({ message: `Loading source: Network (${glob.pattern})`, type: 'info', group: 'source' });
-            contents.push(...await httpFileProvider(glob));
-        } else if (glob.pattern.startsWith('wp-content:')) {
-            logId = logStore.add({ message: `Loading source: WP Content (${glob.pattern})`, type: 'info', group: 'source' });
-            contents.push(...await wpContentProvider(glob));
+        if (source.pattern.startsWith('jsdelivr:')) {
+            logId = logStore.add({ message: `Loading source: jsDelivr (${source.pattern})`, type: 'info', group: 'source' });
+            contents.push(...await jsDelivrProvider(source));
+        } else if (source.pattern.startsWith('http')) {
+            logId = logStore.add({ message: `Loading source: Network (${source.pattern})`, type: 'info', group: 'source' });
+            contents.push(...await httpFileProvider(source));
+        } else if (source.pattern.startsWith('wp-content:')) {
+            logId = logStore.add({ message: `Loading source: WP Content (${source.pattern})`, type: 'info', group: 'source' });
+            contents.push(...await wpContentProvider(source));
         }
 
         if (logId) {
@@ -56,11 +61,11 @@ export async function loadSource(globs: Glob[]) {
     return Array.from(new Set(candidates_pool));
 }
 
-async function jsDelivrProvider(glob: Glob) {
+async function jsDelivrProvider(source: Source) {
     const contents_pool: string[] = [];
 
     // get the path without `jsdelivr:` prefix
-    let sourcePath = glob.pattern.slice(String('jsdelivr:').length);
+    let sourcePath = source.pattern.slice(String('jsdelivr:').length);
 
     let [packageNameVersion, ...pathPatternArray] = sourcePath.split('/');
     let pathPattern = '/' + pathPatternArray.join('/');
@@ -88,15 +93,15 @@ async function jsDelivrProvider(glob: Glob) {
     return contents_pool;
 }
 
-async function httpFileProvider(glob: Glob) {
-    let content = await fetch(glob.pattern)
+async function httpFileProvider(source: Source) {
+    let content = await fetch(source.pattern)
         .then((response) => response.text());
 
     return [content];
 }
 
-async function wpContentProvider(glob: Glob) {
-    let sourcePath = glob.pattern.slice(String('wp-content:').length);
+async function wpContentProvider(source: Source) {
+    let sourcePath = source.pattern.slice(String('wp-content:').length);
 
     const scan = await useApi()
         .post('admin/local-file-provider/scan', {
