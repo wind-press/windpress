@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.3.23
+Stable tag: 3.3.24
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -48,7 +48,7 @@ Visit [our website](https://wind.press) for more information.
 It's easy to build design with Tailwind CSS thanks to the seamless integration with the most popular visual/page builders:
 
 * [Gutenberg](https://wordpress.org/gutenberg) / Block Editor
-* [GreenShift](https://greenshiftwp.com/)
+* [GreenShift](https://shop.greenshiftwp.com/?from=3679)
 * [Kadence WP](https://kadencewp.com)
 * [LiveCanvas](https://livecanvas.com/?ref=4008)
 * [Timber](https://upstatement.com/timber/)
@@ -122,7 +122,7 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.3.24 =
 * **Fix**: [TW4] Error on generate cache caused by the `@source` directive change in the Tailwind CSS v4 (4.1.1)
 
 = 3.3.23 =
@@ -324,7 +324,7 @@ Pro version 1.**1**.4
 
 = 3.1.8 =
 * **New**: [Gutenberg](https://wordpress.org/gutenberg) integration.
-* **New**: [GreenShift](https://greenshiftwp.com) integration.
+* **New**: [GreenShift](https://shop.greenshiftwp.com/?from=3679) integration.
 * **New**: [Kadence WP](https://kadencewp.com) integration.
 
 = 3.1.6 =
