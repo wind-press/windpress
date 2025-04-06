@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 3.3.24
+Stable tag: 3.3.25
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -122,7 +122,7 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= unreleased =
+= 3.3.25 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.3 latest)
 * **Improve**: [TW4] Autocompletion feature now supports user-defined classes from the Simple File System data.
 * **Improve**: Exclude the WindPress files from being processed by the SiteGround Speed Optimizer plugin
