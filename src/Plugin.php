@@ -20,6 +20,7 @@ use WindPress\WindPress\Admin\AdminPage;
 use WindPress\WindPress\Api\Router as ApiRouter;
 use WindPress\WindPress\Core\Runtime;
 use WindPress\WindPress\Integration\Loader as IntegrationLoader;
+use WindPress\WindPress\Utils\Cache as UtilsCache;
 use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Notice;
 use WP_Upgrader;
@@ -203,6 +204,7 @@ final class Plugin
         Runtime::get_instance()->init();
         // Instantiate the AdminPage class.
         new AdminPage();
+        UtilsCache::exclude_optimization();
 
         do_action('a!windpress/plugin:init_plugin.end');
     }

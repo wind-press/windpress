@@ -124,6 +124,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.3 latest)
+* **Improve**: Exclude the WindPress files from being processed by the SiteGround Speed Optimizer plugin 
 
 = 3.3.24 =
 * **Fix**: [TW4] Error on generate cache caused by the `@source` directive change in the Tailwind CSS v4 (4.1.1)
