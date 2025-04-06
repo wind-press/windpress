@@ -29,7 +29,7 @@ jobs:
         #   run: sleep 20
 
         # clean up the dev files
-        - run: rm -rf tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
+        - run: rm -rf tsconfig.json mago.toml eslint.config.js
         - run: rm -rf ecs.php rector.php
 
         - uses: actions/checkout@v4
@@ -125,6 +125,7 @@ jobs:
             repository: wind-press/windpress-deployed
             ref: main
             path: remote-repository
+            fetch-depth: 0
             token: ${{ secrets.ORG_DEV_PAT }}
 
         # remove remote files, to avoid piling up dead code in remote repository
