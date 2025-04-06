@@ -5,7 +5,7 @@ import parseValue from 'postcss-value-parser';
 import type { DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/design-system';
 
 export type ClassEntity = {
-    kind: 'utility' | 'variant';
+    kind: 'utility' | 'variant' | 'user';
     selector: string;
     declarations?: any[];
     css?: string;

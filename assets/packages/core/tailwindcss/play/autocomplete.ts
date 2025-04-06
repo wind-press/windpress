@@ -1,8 +1,10 @@
 import Fuse from 'fuse.js';
+import * as csstree from 'css-tree';
 import { getClassList } from '../intellisense';
 
 import type { DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/design-system';
 import type { ClassEntity } from '../intellisense';
+import { type VFSContainer } from '../vfs';
 
 let classLists: ClassEntity[] = [];
 
@@ -14,11 +16,50 @@ export function getColor(declarations: any[] | undefined) {
     return color?.value || null;
 }
 
-export function searchClassList(design: DesignSystem, query: string) {
-    if (classLists.length === 0) {
-        classLists = getClassList(design);
+function getUserClassList(volume: VFSContainer): ClassEntity[] {
+    // Collect all class names
+    const classNames: Set<string> = new Set();
+
+    const unescapedClassName = (s: string): string =>
+        s
+            .replace(/\\([0-9a-fA-F]{1,6}) ?/g, (_, hex: string) => String.fromCodePoint(parseInt(hex, 16))) // unicode escapes
+            .replace(/\\([^\s])/g, '$1'); // common escapes like \:
+
+    // loop through all the files in the volume
+    for (const file of Object.keys(volume)) {
+        // if the file is a .css file, parse it
+        if (file.endsWith('.css')) {
+            const ast = csstree.parse(volume[file]);
+            csstree.walk(ast, {
+                visit: 'Selector',
+                enter(node) {
+                    csstree.walk(node, {
+                        visit: 'ClassSelector',
+                        enter(classNode) {
+                            classNames.add(unescapedClassName(classNode.name));
+                        }
+                    });
+                }
+            });
+        }
     }
-    
+
+    return Array.from(classNames).map((className) => {
+        return {
+            kind: 'user',
+            selector: className,
+        }
+    });
+}
+
+export function searchClassList(volume: VFSContainer, design: DesignSystem, query: string) {
+    if (classLists.length === 0) {
+        classLists = [
+            ...getClassList(design),
+            ...getUserClassList(volume),
+        ];
+    }
+
     // if the query is empty, return all classList
     if (query === '') {
         return classLists.map((classList) => {

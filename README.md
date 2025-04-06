@@ -92,7 +92,7 @@ Seamless integration with the most popular visual/page builders:
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
-* [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
+* [Meta Box Views](https://metabox.sjv.io/OeOeZr) — **Pro**
 * [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
 * [WPCodeBox 2](https://wpcodebox.com/) — **Pro**
 

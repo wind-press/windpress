@@ -52,7 +52,7 @@ export default defineConfig({
         }),
         vue(),
         react({
-            // jsxRuntime: 'classic',
+            jsxRuntime: 'classic',
         }),
         wp_scripts(),
         viteUiPro({

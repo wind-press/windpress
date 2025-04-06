@@ -56,7 +56,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
-* [Meta Box Views](https://metabox.io/plugins/mb-views/) — **Pro**
+* [Meta Box Views](https://metabox.sjv.io/OeOeZr) — **Pro**
 * [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
 * [WPCodeBox 2](https://wpcodebox.com/) — **Pro**
 
@@ -124,7 +124,9 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.3 latest)
-* **Improve**: Exclude the WindPress files from being processed by the SiteGround Speed Optimizer plugin 
+* **Improve**: [TW4] Autocompletion feature now supports user-defined classes from the Simple File System data.
+* **Improve**: Exclude the WindPress files from being processed by the SiteGround Speed Optimizer plugin
+* **Fix**: [Gutenberg] Misconfigured integration on the block editor
 
 = 3.3.24 =
 * **Fix**: [TW4] Error on generate cache caused by the `@source` directive change in the Tailwind CSS v4 (4.1.1)
