@@ -83,6 +83,9 @@ importers:
       nanoid:
         specifier: ^5.1.5
         version: 5.1.5
+      parse-package-name:
+        specifier: ^1.0.0
+        version: 1.0.0
       pinia:
         specifier: ^3.0.1
         version: 3.0.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
@@ -3884,6 +3887,9 @@ packages:
   parse-node-version@1.0.1:
     resolution: {integrity: sha512-3YHlOa/JgH6Mnpr05jP9eDG254US9ek25LyIxZlDItp2iJtwyaXQb57lBYLdT3MowkUFYEV2XXNAYIPlESvJlA==}
     engines: {node: '>= 0.10'}
+
+  parse-package-name@1.0.0:
+    resolution: {integrity: sha512-kBeTUtcj+SkyfaW4+KBe0HtsloBJ/mKTPoxpVdA57GZiPerREsUWJOhVj9anXweFiJkm5y8FG1sxFZkZ0SN6wg==}
 
   parse-path@7.0.1:
     resolution: {integrity: sha512-6ReLMptznuuOEzLoGEa+I1oWRSj2Zna5jLWC+l6zlfAI4dbbSaIES29ThzuPkbhNahT65dWzfoZEO6cfJw2Ksg==}
@@ -9303,6 +9309,8 @@ snapshots:
 
   parse-node-version@1.0.1:
     optional: true
+
+  parse-package-name@1.0.0: {}
 
   parse-path@7.0.1:
     dependencies:

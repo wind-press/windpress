@@ -122,6 +122,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Fix**: [TW4] `@source` directive with `jsdelivr` CDN is not working correctly
+
 = 3.3.26 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.3 latest)
 * **Improve**: [TW4] Autocompletion feature now supports user-defined classes from the Simple File System data.

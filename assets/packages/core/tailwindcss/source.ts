@@ -2,6 +2,7 @@ import { find_tw_candidates } from '@windpress/oxide-parser-wasm';
 import { minimatch } from 'minimatch';
 import { createLogComposable } from '@/dashboard/stores/log'
 import { useApi } from '@/dashboard/library/api';
+import { parse as parsePackageName } from 'parse-package-name';
 
 export type Source = {
     base: string;
@@ -67,22 +68,21 @@ async function jsDelivrProvider(source: Source) {
     // get the path without `jsdelivr:` prefix
     let sourcePath = source.pattern.slice(String('jsdelivr:').length);
 
-    let [packageNameVersion, ...pathPatternArray] = sourcePath.split('/');
-    let pathPattern = '/' + pathPatternArray.join('/');
+    let { name: packageName, version: packageVersion, path: pathPattern  } = parsePackageName(sourcePath);
 
     /**
      * Get files list from jsDelivr API and filter by path pattern
      * @see https://www.jsdelivr.com/docs/data.jsdelivr.com#get-/v1/packages/npm/-package-@-version-
      */
 
-    let files: string[] = await fetch(`https://data.jsdelivr.com/v1/packages/npm/${packageNameVersion}?structure=flat`)
+    let files: string[] = await fetch(`https://data.jsdelivr.com/v1/packages/npm/${packageName}@${packageVersion}?structure=flat`)
         .then((response) => response.json())
         .then((data) => data.files)
         .then((files: { name: string }[]) => files.map((file) => file.name))
         .then((files) => files.filter((file) => minimatch(file, pathPattern)));
 
     const promises = files.map(async (file) => {
-        let content = await fetch(`https://cdn.jsdelivr.net/npm/${packageNameVersion}${file}`)
+        let content = await fetch(`https://cdn.jsdelivr.net/npm/${packageName}@${packageVersion}${file}`)
             .then((response) => response.text());
 
         contents_pool.push(content);
