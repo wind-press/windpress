@@ -5,5 +5,10 @@ export type VFSContainer = {
 }
 
 export function decodeVFSContainer(vfsContainer: string): VFSContainer {
-    return JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer)));
+    try {
+        return JSON.parse(new TextDecoder().decode(decodeBase64(vfsContainer)));
+    } catch (error) {
+        console.warn('Failed to decode VFS container. Falling back to polyfill.');
+        return JSON.parse(atob(vfsContainer));
+    }
 }

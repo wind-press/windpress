@@ -123,6 +123,7 @@ Free version 1.**0**.4
 Pro version 1.**1**.4
 
 = unreleased =
+* **Improve**: Safari browser compatibility
 * **Improve**: [Metabox Views] Scanner now use the rendered data instead of the raw data
 
 = 3.3.27 =
