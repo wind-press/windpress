@@ -49,16 +49,19 @@ class Compile
             'paged' => $next_batch,
         ]);
 
+        $meta_box_renderer = new \MBViews\Renderer\MetaBox;
+        $renderer = new \MBViews\Renderer($meta_box_renderer);
+
         foreach ($wpQuery->posts as $post) {
             if (trim($post->post_content) === '' || trim($post->post_content) === '0') {
                 continue;
             }
 
-            $post_content = $post->post_content;
+            $post_content = '';
 
             if (apply_filters('f!windpress/integration/metabox/views/compile:get_contents.render', true, $post)) {
                 try {
-                    $post_content = base64_decode($post_content);
+                    $post_content = $renderer->render($post->ID);
                 } catch (\Throwable $th) {
                     if (WP_DEBUG) {
                         error_log($th->getMessage());

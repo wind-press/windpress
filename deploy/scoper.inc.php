@@ -139,6 +139,7 @@ return [
         'Breakdance',
         'Builderius',
         'Elementor',
+        'MBViews',
 
         'SiteGround_Optimizer',
     ],

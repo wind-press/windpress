@@ -122,6 +122,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Improve**: [Metabox Views] Scanner now use the rendered data instead of the raw data
+
 = 3.3.27 =
 * **Fix**: [TW4] `@source` directive with `jsdelivr` CDN is not working correctly
 
