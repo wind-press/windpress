@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { onBeforeMount, ref } from 'vue';
 import { useBusyStore } from '@/dashboard/stores/busy';
 import { useSettingsStore } from '@/dashboard/stores/settings';
 import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
 import { useApi } from '@/dashboard/library/api';
-import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
 import { generateCache } from '@/dashboard/composables/useGenerateCache';
 
 const api = useApi();

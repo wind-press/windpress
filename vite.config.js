@@ -168,6 +168,8 @@ export default defineConfig({
     },
     server: {
         // cors: true,
+
+        // BrowserStackLocal
         allowedHosts: true,
         origin: 'http://localhost:3000',
         port: 3000,
