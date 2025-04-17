@@ -79,7 +79,7 @@ Check out our detailed [guide](https://wind.press/docs/integrations/custom-theme
 - Give a [5-star review](https://wordpress.org/support/plugin/windpress/reviews/?filter=5/#new-post)
 - Purchase the [Pro version](https://wind.press)
 - Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943)
-- Sponsor us on [GitHub](https://github.com/sponsors/suabahasa) or [Ko-fi](https://ko-fi.com/Q5Q75XSF7)
+- Sponsor us on [GitHub](https://github.com/sponsors/suasgn) or [Ko-fi](https://ko-fi.com/Q5Q75XSF7)
 
 = Credits =
 - Image by [Pixel perfect](https://www.flaticon.com/free-icon/wind_727964) on Flaticon

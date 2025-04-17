@@ -46,9 +46,9 @@
     </picture>
   </a>
   <br />
-  <a aria-label="GitHub Sponsors" href="https://github.com/sponsors/suabahasa">
+  <a aria-label="GitHub Sponsors" href="https://github.com/sponsors/suasgn">
     <picture>
-      <img alt="GitHub Sponsors button" src="https://img.shields.io/github/sponsors/suabahasa?logo=github">
+      <img alt="GitHub Sponsors button" src="https://img.shields.io/github/sponsors/suasgn?logo=github">
     </picture>
   </a>
   <a aria-label="Support me on Ko-fi" href="https://ko-fi.com/Q5Q75XSF7">
@@ -149,7 +149,7 @@ Seamless integration with the most popular visual/page builders:
 
 If you like this project, please consider supporting us by becoming a sponsor through the following platforms:
 
-- [GitHub Sponsors](https://github.com/sponsors/suabahasa)
+- [GitHub Sponsors](https://github.com/sponsors/suasgn)
 - [Ko-fi](https://ko-fi.com/Q5Q75XSF7)
 
 Thank you to all our Sponsors! 🥰🫰🫶
