@@ -22,7 +22,13 @@ logger('Loading...');
 
     // TODO: dynamic import the features based on the enabled modules
     await import('./modules/settings/main');
-    await import('./modules/plain-classses/main');
+
+    if (window.bricksData.version.startsWith('1')) {
+        await import('./modules/plain-classses/main-1.x');
+    } else {
+        await import('./modules/plain-classses/main');
+    }
+
     await import('./modules/html2bricks/main');
     await import('./modules/generate-cache/main');
 

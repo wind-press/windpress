@@ -44,27 +44,31 @@ const textInput = document.createRange().createContextualFragment(/*html*/ `
     <textarea id="windpressbricks-plc-input" class="windpressbricks-plc-input" rows="2" spellcheck="false"></textarea>
 `).querySelector('#windpressbricks-plc-input');
 
-// panelElement actions
-const panelElementActions = [];
+const containerAction = document.createRange().createContextualFragment(/*html*/ `
+    <div class="windpressbricks-plc-action-container">
+        <div class="actions">
+        </div>
+    </div>
+`).querySelector('.windpressbricks-plc-action-container');
+const containerActionButtons = containerAction.querySelector('.actions');
 
-const classSortAction = document.createRange().createContextualFragment(/*html*/ `
-    <span id="windpressbricks-plc-class-sort" class="bricks-svg-wrapper windpressbricks-plc windpressbricks-plc-class-sort" data-balloon="Automatic Class Sorting" data-balloon-pos="left">
-        <svg xmlns="http://www.w3.org/2000/svg" class="bricks-svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" class="bricks-svg icon icon-tabler icons-tabler-outline icon-tabler-reorder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" /><path d="M16.5 8.5l2.5 2.5l2.5 -2.5" /></svg>    
+const classSortButton = document.createRange().createContextualFragment(/*html*/ `
+    <span id="windpressbricks-plc-class-sort" class="bricks-svg-wrapper windpressbricks-plc-class-sort" data-balloon="Automatic Class Sorting" data-balloon-pos="bottom-right">
+        <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round" class="bricks-svg icon icon-tabler icons-tabler-outline icon-tabler-reorder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M17 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" /><path d="M5 11v-3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v3" /><path d="M16.5 8.5l2.5 2.5l2.5 -2.5" /></svg>    
     </span>
 `).querySelector('#windpressbricks-plc-class-sort');
 
-const classToPlainClassesAction = document.createRange().createContextualFragment(/*html*/ `
-    <span id="windpressbricks-plc-class-down" class="bricks-svg-wrapper windpressbricks-plc windpressbricks-plc-class-down" data-balloon="Move Classes to Plain Classes" data-balloon-pos="left">
-        <svg xmlns="http://www.w3.org/2000/svg" class="bricks-svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Lucide by Lucide Contributors - https://github.com/lucide-icons/lucide/blob/main/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.5 13h6M2 16l4.5-9l4.5 9m7-9v9m-4-4l4 4l4-4"/></svg>    
+const classToPlainClassesButton = document.createRange().createContextualFragment(/*html*/ `
+    <span id="windpressbricks-plc-class-down" class="bricks-svg-wrapper windpressbricks-plc-class-down" data-balloon="Move Classes to Plain Classes" data-balloon-pos="bottom-right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Lucide by Lucide Contributors - https://github.com/lucide-icons/lucide/blob/main/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.5 13h6M2 16l4.5-9l4.5 9m7-9v9m-4-4l4 4l4-4"/></svg>    
     </span>
 `).querySelector('#windpressbricks-plc-class-down');
 
-panelElementActions.push(classSortAction);
-panelElementActions.push(classToPlainClassesAction);
+containerActionButtons.appendChild(classToPlainClassesButton);
+containerActionButtons.appendChild(classSortButton);
 
 const visibleElementPanel = ref(false);
 const activeElementId = ref(null);
-const historyIndex = ref(0);
 
 let hit = null; // highlight any text except spaces and new lines
 
@@ -175,6 +179,7 @@ tribute.events.callbacks = function () {
 tribute.attach(textInput);
 
 const observer = new MutationObserver(function (mutations) {
+
     mutations.forEach(function (mutation) {
         if (mutation.type === 'attributes') {
             if (mutation.target.id === 'bricks-panel-element' && mutation.attributeName === 'style') {
@@ -210,23 +215,8 @@ observer.observe(document.getElementById('bricks-panel-element'), {
     childList: true,
 });
 
-const historyIndexObserver = new MutationObserver(function (mutations) {
-    nextTick(() => {
-        if (historyIndex.value === brxGlobalProp.$_state.historyIndex) {
-            historyIndex.value = 0;
-        }
-        historyIndex.value = brxGlobalProp.$_state.historyIndex;
-    });
-});
-
-// observe `#bricks-toolbar > ul.group-wrapper.end > li.undo` and `#bricks-toolbar > ul.group-wrapper.end > li.redo`. 
-historyIndexObserver.observe(document.querySelector('#bricks-toolbar > ul.group-wrapper.end > li.undo'), {
-    subtree: false,
-    attributeFilter: ['class'],
-});
-
-watch([activeElementId, visibleElementPanel, historyIndex], (newVal, oldVal) => {
-    if (newVal[0] !== oldVal[0] || newVal[2] !== oldVal[2]) {
+watch([activeElementId, visibleElementPanel], (newVal, oldVal) => {
+    if (newVal[0] !== oldVal[0]) {
         nextTick(() => {
             textInput.value = brxGlobalProp.$_activeElement.value?.settings?._cssClasses || '';
             onTextInputChanges();
@@ -235,41 +225,26 @@ watch([activeElementId, visibleElementPanel, historyIndex], (newVal, oldVal) => 
 
     if (newVal[0] && newVal[1]) {
         nextTick(() => {
-            const panelElementEl = document.querySelector('#bricks-panel-sticky');
+            const panelElementClassesEl = document.querySelector('#bricks-panel-element-classes');
+            if (settingsState('module.plain-classes.input-field', true).value && panelElementClassesEl.querySelector('.windpressbricks-plc-input') === null) {
+                panelElementClassesEl.appendChild(containerAction);
 
-            if (settingsState('module.plain-classes.input-field', true).value) {
-                if (panelElementEl.querySelector('.windpressbricks-plc-input') === null) {
-                    const containerEl = document.createElement('div');
-                    containerEl.style.padding = '0 var(--builder-spacing)';
-                    containerEl.appendChild(textInput);
-                    panelElementEl.appendChild(containerEl);
+                panelElementClassesEl.appendChild(textInput);
+                hit = new HighlightInTextarea(textInput, {
+                    highlight: [
+                        {
+                            highlight: /(?<=\s|^)(?:(?!\s).)+(?=\s|$)/g,
+                            className: 'word',
+                        },
+                        {
+                            highlight: /(?<=\s)\s/g,
+                            className: 'multispace',
+                            blank: true,
+                        },
+                    ],
+                });
 
-                    hit = new HighlightInTextarea(textInput, {
-                        highlight: [
-                            {
-                                highlight: /(?<=\s|^)(?:(?!\s).)+(?=\s|$)/g,
-                                className: 'word',
-                            },
-                            {
-                                highlight: /(?<=\s)\s/g,
-                                className: 'multispace',
-                                blank: true,
-                            },
-                        ],
-                    });
-
-                    autosize.update(textInput);
-                }
-
-                // actions container
-                const actionsContainer = document.querySelector('#bricks-panel-element-classes > div > div.actions-wrapper > div > div.dropdown-wrapper > div');
-                const existingActions = actionsContainer.querySelectorAll('.windpressbricks-plc');
-                // if the actions not found, append the actions to the container
-                if (existingActions.length === 0) {
-                    panelElementActions.forEach((action) => {
-                        actionsContainer.appendChild(action);
-                    });
-                }
+                autosize.update(textInput);
             }
         });
     }
@@ -408,13 +383,13 @@ textInput.addEventListener('tribute-active-true', function (e) {
     });
 });
 
-classSortAction.addEventListener('click', async function (e) {
+classSortButton.addEventListener('click', async function (e) {
     textInput.value = await brxIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
     brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
     onTextInputChanges();
 });
 
-classToPlainClassesAction.addEventListener('click', async function (e) {
+classToPlainClassesButton.addEventListener('click', async function (e) {
     const activeEl = brxGlobalProp.$_activeElement.value;
     const currPlainClasses = textInput.value.split(' ');
     const bricksGlobalClasses = activeEl.settings?._cssGlobalClasses ? [...activeEl.settings._cssGlobalClasses] : [];

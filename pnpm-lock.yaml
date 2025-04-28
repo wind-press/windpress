@@ -1628,7 +1628,6 @@ packages:
   '@tailwindcss/oxide-wasm32-wasi@4.1.4':
     resolution: {integrity: sha512-2TLe9ir+9esCf6Wm+lLWTMbgklIjiF0pbmDnwmhR9MksVOq+e8aP3TSsXySnBDDvTTVd/vKu1aNttEGj3P6l8Q==}
     engines: {node: '>=14.0.0'}
-    cpu: [wasm32]
     bundledDependencies:
       - '@napi-rs/wasm-runtime'
       - '@emnapi/core'

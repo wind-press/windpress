@@ -122,6 +122,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Fix**: [Bricks] The Plain Classes field is absent in version 2.0-alpha
+* **Fix**: [Bricks] The Plain Classes field is not synchronized with the history (undo/redo) actions.
+
 = 3.3.29 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.4 latest)
 

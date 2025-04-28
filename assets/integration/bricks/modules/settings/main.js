@@ -5,7 +5,7 @@ import { logger } from '@/integration/common/logger';
 import Logo from '~/windpress.svg?raw';
 import App from './App.vue';
 
-const bricksToolbarSelector = '#bricks-toolbar ul.group-wrapper.right';
+const bricksToolbarSelector = '#bricks-toolbar ul.group-wrapper.end, #bricks-toolbar ul.group-wrapper.right';
 
 // create element from html string
 const settingButtonHtml = document.createRange().createContextualFragment(/*html*/`
