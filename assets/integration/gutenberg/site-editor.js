@@ -49,7 +49,7 @@ logger('Loading...');
     logger('found WindPress script');
 
     async function injectIntoEditorCanvas() {
-        let editorCanvas;
+        let patternIframes = [];
 
         let timeoutOccurred = false;
         let timeout = setTimeout(() => {
@@ -58,8 +58,16 @@ logger('Loading...');
 
         // wait for the editor canvas to be available
         while (!timeoutOccurred) {
-            editorCanvas = document.querySelector('iframe.edit-site-visual-editor__editor-canvas');
+            let editorCanvas = document.querySelector('iframe.edit-site-visual-editor__editor-canvas');
+            patternIframes = [
+                ...document.querySelectorAll('div.block-editor-block-preview__container > div > div > div.block-editor-iframe__scale-container > iframe')
+            ];
+
             if (editorCanvas) {
+                patternIframes.push(editorCanvas);
+            }
+
+            if (patternIframes.length > 0) {
                 clearTimeout(timeout);
                 break;
             }
@@ -82,33 +90,35 @@ logger('Loading...');
 
         logger('canvas loader removed');
 
-        let contentWindow = editorCanvas.contentWindow || editorCanvas;
-        let contentDocument = editorCanvas.contentDocument || contentWindow.document;
+        patternIframes.forEach(async (patternIframe) => {
+            let contentWindow = patternIframe.contentWindow || patternIframe;
+            let contentDocument = patternIframe.contentDocument || contentWindow.document;
 
-        // wait until contentDocument.head is available
-        while (!contentDocument.head) {
-            await new Promise(resolve => setTimeout(resolve, 300));
-        }
+            // wait until contentDocument.head is available
+            while (!contentDocument.head) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
 
-        // Inject the script into the root iframe
-        logger('injecting WindPress script into the root container');
+            // Inject the script into the root iframe
+            logger('injecting WindPress script into the root container');
 
-        let injectedScript = contentDocument.querySelectorAll('script');
+            let injectedScript = contentDocument.querySelectorAll('script');
 
-        // check if the script is already injected if it has any script's id that starts with 'windpress:'
-        let isScriptInjected = Array.from(injectedScript).some(script => {
-            let id = script.getAttribute('id');
-            return id && id.startsWith('windpress:');
-        });
-
-        if (!isScriptInjected) {
-            logger('starting the root injection process...');
-            scriptElements.forEach(scriptElement => {
-                contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+            // check if the script is already injected if it has any script's id that starts with 'windpress:'
+            let isScriptInjected = Array.from(injectedScript).some(script => {
+                let id = script.getAttribute('id');
+                return id && id.startsWith('windpress:');
             });
-        } else {
-            logger('WindPress script is already injected, skipping the injection process...');
-        }
+
+            if (!isScriptInjected) {
+                logger('starting the root injection process...');
+                scriptElements.forEach(scriptElement => {
+                    contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+                });
+            } else {
+                logger('WindPress script is already injected, skipping the injection process...');
+            }
+        });
     }
 
     const injectIntoEditorCanvasDebounced = debounce(injectIntoEditorCanvas, 1000);

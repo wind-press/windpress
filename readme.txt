@@ -123,8 +123,9 @@ Free version 1.**0**.4
 Pro version 1.**1**.4
 
 = unreleased =
-* **Fix**: [Bricks] The Plain Classes field is absent in version 2.0-alpha
-* **Fix**: [Bricks] The Plain Classes field is not synchronized with the history (undo/redo) actions.
+* **Improve**: [Gutenberg] Load the The Play Observer / Compiler to the Pattern preview [#40](https://github.com/wind-press/windpress/issues/40)
+* **Fix**: [Bricks] The Plain Classes field is absent in version 2.0-alpha [#42](https://github.com/wind-press/windpress/issues/42)
+* **Fix**: [Bricks] The Plain Classes field is not synchronized with the history (undo/redo) actions [#44](https://github.com/wind-press/windpress/issues/44)
 
 = 3.3.29 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.4 latest)
