@@ -124,6 +124,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.5 latest)
+* **Improve**: [TW4] The compiler is now logging the candidates it has found to aid in debugging
 
 = 3.3.30 =
 * **Improve**: [Gutenberg] Load the The Play Observer / Compiler to the Pattern preview [#40](https://github.com/wind-press/windpress/issues/40)

@@ -217,6 +217,9 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         let candidates = [...new Set([...candidates_pool, ...await loadSource(compiled.sources)])];
 
         log.add({ message: 'Scanning complete', type: 'success' });
+
+        log.add({ message: `Found ${candidates.length} candidates`, type: 'info', options: { raw: true, candidates: candidates.sort() } });
+
         log.add({ message: 'Building cache...', type: 'info' });
 
         const result = compiled.build(candidates);

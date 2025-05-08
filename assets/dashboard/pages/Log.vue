@@ -43,9 +43,9 @@ watch(log.logs, () => {
 
 
         <template #right>
-            <UTooltip :text="i18n.__('Clear logs', 'windpress')">
-                <UButton icon="lucide:paintbrush" color="neutral" variant="ghost" @click="log.clear()" />
-            </UTooltip>
+          <UTooltip :text="i18n.__('Clear logs', 'windpress')">
+            <UButton icon="lucide:paintbrush" color="neutral" variant="ghost" @click="log.clear()" />
+          </UTooltip>
 
 
         </template>
@@ -69,7 +69,22 @@ watch(log.logs, () => {
                 <span v-else-if="history.type === 'debug'" class="">[DEBUG]</span>
               </span>
               <template v-if="history.options?.raw">
-                <span v-html="history.message"></span>
+                <UPopover v-if="history.options?.candidates" mode="hover">
+                  <span v-html="history.message"></span>
+                  <template #content>
+                    <!-- candidates -->
+                    <div class="p-6 max-w-[800px] max-h-[400px] overflow-auto">
+                      <div class="gap-2 flex flex-wrap">
+                        <div v-for="candidate in history.options?.candidates" class="">
+                          <UBadge color="neutral" variant="outline">
+                            {{ candidate }}
+                          </UBadge>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </UPopover>
+                <span v-else v-html="history.message"></span>
               </template>
               <template v-else>
                 {{ history.message }}
