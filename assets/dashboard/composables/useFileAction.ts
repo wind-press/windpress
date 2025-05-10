@@ -51,7 +51,7 @@ async function deleteFile(entry: Entry) {
         },
     })
 
-    const shouldDelete = await deleteModal.open()
+    const shouldDelete = await deleteModal.open().result
 
     if (!shouldDelete) {
         toast.add({
@@ -83,7 +83,7 @@ async function resetFile(entry: Entry) {
         },
     })
 
-    const shouldReset = await resetModal.open()
+    const shouldReset = await resetModal.open().result
 
     if (!shouldReset) {
         toast.add({
@@ -248,7 +248,7 @@ async function importVolume(event: Event) {
         },
     })
 
-    const shouldImport = await importConfirmModal.open()
+    const shouldImport = await importConfirmModal.open().result
 
     if (!shouldImport) {
         toast.add({
@@ -332,7 +332,7 @@ async function addNewFile() {
         destroyOnClose: true,
     })
 
-    const newFileName = await newFileModal.open()
+    const newFileName = await newFileModal.open().result
 
     if (!newFileName) {
         toast.add({

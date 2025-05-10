@@ -122,6 +122,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Fix**: Unable to add new files to the Simple File System
+
 = 3.3.31 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.5 latest)
 * **Improve**: [TW4] The compiler is now logging the candidates it has found to aid in debugging
