@@ -124,6 +124,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.7 latest)
+* **New**: Added context menu to the Simple File System explorer (right-click on the file explorer)
 
 = 3.3.32 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.6 latest)

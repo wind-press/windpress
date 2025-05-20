@@ -6,6 +6,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import ConfirmFileActionModal from '@/dashboard/components/File/Explorer/ConfirmFileActionModal.vue'
 import ConfirmVolumeImportModal from '@/dashboard/components/File/Explorer/ConfirmVolumeImportModal.vue';
 import NewFileFormModal from '@/dashboard/components/File/Explorer/NewFileFormModal.vue'
+import RenameFileFormModal from '@/dashboard/components/File/Explorer/RenameFileFormModal.vue'
 
 const volumeStore = useVolumeStore()
 const toast = useToast()
@@ -363,6 +364,43 @@ async function addNewFile() {
     }
 }
 
+async function renameFile(entry: Entry) {
+    const newFileName = await overlay.create(RenameFileFormModal, {
+        destroyOnClose: true,
+        props: {
+            filePath: entry.relative_path,
+        },
+    }).open().result
+
+    if (!newFileName) {
+        toast.add({
+            title: __('Canceled', 'windpress'),
+            description: __('File rename canceled', 'windpress'),
+            color: 'info',
+            icon: 'i-lucide-edit'
+        });
+
+        return;
+    }
+
+    try {
+        volumeStore.renameEntry(entry, newFileName);
+        toast.add({
+            title: __('Success', 'windpress'),
+            description: sprintf(__('File "%s" renamed to "%s"', 'windpress'), entry.relative_path, newFileName),
+            color: 'success',
+            icon: 'i-lucide-edit'
+        });
+    } catch (error) {
+        toast.add({
+            title: __('Error', 'windpress'),
+            description: (error instanceof Error) ? error.message : __('An unknown error occurred', 'windpress'),
+            color: 'error',
+            icon: 'i-lucide-edit'
+        });
+    }
+}
+
 export function useFileAction() {
     return {
         deleteFile,
@@ -371,5 +409,6 @@ export function useFileAction() {
         exportVolume,
         importVolume,
         addNewFile,
+        renameFile,
     }
 }

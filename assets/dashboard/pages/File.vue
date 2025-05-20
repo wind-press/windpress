@@ -28,7 +28,10 @@ const currentEntry = computed<Entry>(() => {
     if (entry) {
         return entry;
     } else {
-        throw new Error(__('Entry not found', 'windpress'));
+        // throw new Error(__('Entry not found', 'windpress'));
+        console.error(__('Entry not found: ', 'windpress'), volumeStore.activeViewEntryRelativePath);
+        volumeStore.activeViewEntryRelativePath = 'main.css'
+        return volumeStore.data.entries.find((entry: Entry) => entry.relative_path === volumeStore.activeViewEntryRelativePath) as Entry;
     }
 });
 
@@ -61,7 +64,7 @@ const isMobile = breakpoints.smaller('lg')
             </template>
         </UDashboardNavbar>
 
-        <FileExplorer />
+        <FileExplorer @rename="(entry: Entry) => fileAction.renameFile(entry)" @delete="(entry: Entry) => fileAction.deleteFile(entry)" @reset="(entry: Entry) => fileAction.resetFile(entry)"/>
     </UDashboardPanel>
 
     <FileEditor v-if="volumeStore.activeViewEntryRelativePath" @close="volumeStore.activeViewEntryRelativePath = null" :entry="currentEntry" @delete="(entry: Entry) => fileAction.deleteFile(entry)" @save="fileAction.save()" @reset="(entry: Entry) => fileAction.resetFile(entry)" />

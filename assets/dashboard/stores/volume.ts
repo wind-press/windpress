@@ -107,6 +107,44 @@ export const useVolumeStore = defineStore('volume', () => {
         }
     }
 
+    function renameEntry(entry: Entry, filePath: string) {
+        const entryIndex = data.entries.findIndex(e => e.relative_path === entry.relative_path);
+
+        let filePathParts = filePath.split('/').map(cleanPath).join('/');
+        filePathParts = cleanPath(filePathParts);
+
+        // check if the file path exists
+        const existingEntryIndex = data.entries.findIndex(e => e.relative_path === filePathParts);
+
+        if (existingEntryIndex !== -1) {
+            // If not hidden, throw
+            if (data.entries[existingEntryIndex].hidden === false) {
+                throw new Error(__(`A file named "${filePathParts}" already exists`, 'windpress'));
+            }
+            // If hidden, unhide it, and set the content
+            data.entries[existingEntryIndex].hidden = false;
+            data.entries[existingEntryIndex].content = data.entries[entryIndex].content;
+
+            // delete signature if it exists
+            if (data.entries[existingEntryIndex].signature) {
+                delete data.entries[existingEntryIndex].signature;
+            }
+
+        } else {
+            // clone the entry
+            const newEntry = cloneDeep(data.entries[entryIndex]);
+            newEntry.relative_path = filePathParts;
+            newEntry.name = filePathParts.split('/').pop() || '';
+            newEntry.content = data.entries[entryIndex].content;
+            newEntry.hidden = false;
+            newEntry.signature = undefined;
+            data.entries.push(newEntry);
+        }
+
+        // soft delete the old entry
+        softDeleteEntry(entry);
+    }
+
     function resetEntry(entry: Entry) {
         const entryIndex = data.entries.findIndex(e => e.relative_path === entry.relative_path);
         data.entries[entryIndex].content = '';
@@ -222,6 +260,7 @@ export const useVolumeStore = defineStore('volume', () => {
         entryHasChanged,
         softDeleteEntry,
         resetEntry,
+        renameEntry,
         cleanPath,
         initPull,
     };

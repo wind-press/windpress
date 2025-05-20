@@ -9,6 +9,12 @@ import type { Entry } from '@/dashboard/stores/volume'
 
 const volumeStore = useVolumeStore()
 
+const emit = defineEmits<{
+    delete: [entry: Entry];
+    rename: [entry: Entry];
+    reset: [entry: Entry];
+}>()
+
 const selectedFilePath = ref<TreeItem | undefined>(undefined)
 
 watch(selectedFilePath, (value) => {
@@ -26,7 +32,9 @@ function recursiveTreeNodeWalkAndInsert(trees: TreeItem[], entry: Entry, rootPat
             label: currentPart,
             value: entry.relative_path,
             icon: `vscode-icons:file-type-${entry.relative_path === 'main.css' ? 'tailwind' : path.extname(entry.relative_path).replace('.', '')}`,
-            slot: entry.relative_path !== 'main.css' ? 'tree-file' : undefined,
+            // slot: entry.relative_path !== 'main.css' ? 'tree-file' : undefined,
+            slot: 'tree-file',
+            entry,
         });
         return;
     }
@@ -117,6 +125,41 @@ onMounted(() => {
 
 <template>
     <div class="overflow-y-auto divide-y divide-(--ui-border)">
-        <UTree :items="files" v-model="selectedFilePath" />
+        <!-- <UTree :items="files" v-model="selectedFilePath" /> -->
+        <UTree :items="files" v-model="selectedFilePath">
+            <template #tree-file="{ item }: { item: TreeItem }">
+                <UContextMenu :items="[
+                    {
+                        label: 'Reset',
+                        icon: 'lucide:file-minus-2',
+                        disabled: item.entry.relative_path !== 'main.css',
+                        onSelect: () => {
+                            emit('reset', item.entry)
+                        }
+                    },
+                    {
+                        label: 'Rename',
+                        icon: 'i-lucide-edit',
+                        disabled: item.entry.relative_path === 'main.css',
+                        onSelect: () => {
+                            emit('rename', item.entry)
+                        }
+                    },
+                    {
+                        label: 'Delete',
+                        icon: 'i-lucide-trash-2',
+                        disabled: item.entry.relative_path === 'main.css',
+                        onSelect: () => {
+                            emit('delete', item.entry)
+                        }
+                    },
+                ]">
+                    <div class="flex items-center gap-1.5 w-full">
+                        <UIcon v-if="item.icon" :name="item.icon" class="shrink-0 size-5" />
+                        {{ item.label }}
+                    </div>
+                </UContextMenu>
+            </template>
+        </UTree>
     </div>
 </template>
