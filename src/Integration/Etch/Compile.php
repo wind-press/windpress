@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\Etch;
 
 use WindPress\WindPress\Core\Cache as CoreCache;
-use WP_Query;
 
 /**
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
@@ -28,7 +27,12 @@ class Compile
     {
         $providers = CoreCache::get_providers();
 
-        $gutenbergProvider = array_values(array_filter($providers, fn($provider) => $provider['id'] === 'gutenberg'))[0] ?? null;
+        $gutenbergProvider = array_values(array_filter($providers, fn ($provider) => $provider['id'] === 'gutenberg'))[0] ?? null;
+
+        // If the Gutenberg provider is not found, return an empty array. Essentially, it depends on the Gutenberg provider.
+        if ($gutenbergProvider === null) {
+            return [];
+        }
 
         // Gutenberg is enabled. Skip the compile process as it has been handled by the Gutenberg provider.
         if ($gutenbergProvider['enabled']) {

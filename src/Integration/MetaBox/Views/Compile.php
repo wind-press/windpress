@@ -49,8 +49,8 @@ class Compile
             'paged' => $next_batch,
         ]);
 
-        $meta_box_renderer = new \MBViews\Renderer\MetaBox;
-        $renderer = new \MBViews\Renderer($meta_box_renderer);
+        $metaBox = new \MBViews\Renderer\MetaBox();
+        $renderer = new \MBViews\Renderer($metaBox);
 
         foreach ($wpQuery->posts as $post) {
             if (trim($post->post_content) === '' || trim($post->post_content) === '0') {
