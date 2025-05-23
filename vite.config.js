@@ -47,6 +47,7 @@ export default defineConfig({
                 'integration/livecanvas': 'assets/integration/livecanvas/main.js',
                 'integration/breakdance': 'assets/integration/breakdance/main.js',
                 'integration/builderius': 'assets/integration/builderius/main.js',
+                'integration/etch': 'assets/integration/etch/main.js',
             },
             outDir: 'build',
         }),

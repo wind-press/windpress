@@ -50,6 +50,13 @@ class Compile
                 continue;
             }
 
+            /**
+             * @TODO: More robust and reliable API for external usage.
+             */
+            if (apply_filters('f!windpress/integration/gutenberg/compile:get_contents.skip', false, $post)) {
+                continue;
+            }
+
             $post_content = $post->post_content;
 
             if (apply_filters('f!windpress/integration/gutenberg/compile:get_contents.render', true, $post)) {

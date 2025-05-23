@@ -193,7 +193,7 @@ jobs:
         # - LiveCanvas
         # - Builderius (Planned)
         # else, remove the premium version
-        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,MetaBox,Oxygen,OxygenClassic,WPCodeBox2}
+        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,Etch,MetaBox,Oxygen,OxygenClassic,WPCodeBox2}
 
         - run: ls -la
 

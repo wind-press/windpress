@@ -56,6 +56,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
+* [Etch](https://etchwp.com/) — **Pro**
 * [Meta Box Views](https://metabox.sjv.io/OeOeZr) — **Pro**
 * [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
 * [WPCodeBox 2](https://wpcodebox.com/?ref=185) — **Pro**
@@ -121,6 +122,9 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= unreleased =
+* **New**: [Etch](https://etchwp.com/) integration **[Pro]** (experimental)
 
 = 3.3.33 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.7 latest)
@@ -188,7 +192,7 @@ Pro version 1.**1**.4
 * **Fix**: [TW4] The local stylesheet import is not resolved correctly
 
 = 3.3.3 =
-* **New**: [Oxygen 6](https://oxygenbuilder.com/ref/12/) integration **[Pro]**
+* **New**: [Oxygen 6](https://oxygenbuilder.com/ref/12/) integration **[Pro]** (experimental)
 * **Improve**: [TW4] The Play Observer / Compiler performance & stability
 * **Fix**: [TW4][Breakdance] The style are now instantly applied on the editor
 
