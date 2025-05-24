@@ -54,5 +54,12 @@ class Editor
                 'admin_url' => AdminPage::get_page_url(),
             ],
         ]);
+
+        wp_add_inline_script($handle, <<<JS
+            // add __windpress__disablePlayObserver to window if not exists
+            if (typeof window.__windpress__disablePlayObserver === 'undefined') {
+                window.__windpress__disablePlayObserver = true;
+            }
+        JS, 'after');
     }
 }

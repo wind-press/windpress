@@ -170,7 +170,7 @@ function rebuild(kind: 'full' | 'incremental') {
 // - Changes to any element's class attribute
 // - New stylesheets being added to the page
 // - New elements (with classes) being added to the page
-new MutationObserver((records) => {
+const observer = new MutationObserver((records) => {
     let full = 0
     let incremental = 0
 
@@ -206,13 +206,26 @@ new MutationObserver((records) => {
     } else if (incremental > 0) {
         return rebuild('incremental')
     }
-}).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class'],
-    childList: true,
-    subtree: true,
-})
+});
 
-rebuild('full')
+// if not found constant that disable the observer don't run the observer
+if (!(window as any)['__windpress__disablePlayObserver']) {
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+        childList: true,
+        subtree: true,
+    });
 
-document.head.append(sheet)
+    rebuild('full');
+
+    document.head.append(sheet);
+} else {
+    console.warn('Play Observer is disabled.');
+}
+
+// expose the observer to the global scope for debugging
+try {
+    (window as any).twPlayObserver = observer
+}
+catch (e) {}

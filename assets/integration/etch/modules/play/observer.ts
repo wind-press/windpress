@@ -5,7 +5,7 @@ import { etchIframe } from '@/integration/etch/constant.js';
     let rootContainer = etchIframe;
     let scriptElements: NodeListOf<HTMLScriptElement> | HTMLScriptElement[] = [];
 
-    logger('finding WindPress script...', {module: 'play/observer'});
+    logger('finding WindPress script...', { module: 'play/observer' });
 
     // Timeout flag and timer to limit the search duration
     let timeoutOccurred = false;
@@ -32,11 +32,11 @@ import { etchIframe } from '@/integration/etch/constant.js';
     }
 
     if (timeoutOccurred) {
-        logger('time out! failed to find WindPress script', {module: 'play/observer'});
+        logger('time out! failed to find WindPress script', { module: 'play/observer' });
         return;
     }
 
-    logger('found WindPress script', {module: 'play/observer'});
+    logger('found WindPress script', { module: 'play/observer' });
 
     let contentWindow = rootContainer.contentWindow || rootContainer;
     let contentDocument = rootContainer.contentDocument || contentWindow.document;
@@ -47,7 +47,7 @@ import { etchIframe } from '@/integration/etch/constant.js';
     }
 
     // Inject the script into the root iframe
-    logger('injecting WindPress script into the root container', {module: 'play/observer'});
+    logger('injecting WindPress script into the root container', { module: 'play/observer' });
 
     let injectedScript = contentDocument.querySelectorAll('script');
 
@@ -58,11 +58,18 @@ import { etchIframe } from '@/integration/etch/constant.js';
     });
 
     if (!isScriptInjected) {
-        logger('starting the root injection process...', {module: 'play/observer'});
+        logger('starting the root injection process...', { module: 'play/observer' });
         (scriptElements as HTMLScriptElement[]).forEach(scriptElement => {
-            contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+            // if the script id is 'windpress:metadata' or 'windpress:metadata', put it in the head, else put it in the body
+            let id = scriptElement.getAttribute('id');
+            if (id && (id.startsWith('windpress:metadata') || id.startsWith('vite-client'))) {
+                contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+            }
+            else {
+                contentDocument.body.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+            }
         });
     } else {
-        logger('WindPress script is already injected, skipping the injection process...', {module: 'play/observer'});
+        logger('WindPress script is already injected, skipping the injection process...', { module: 'play/observer' });
     }
 })();
