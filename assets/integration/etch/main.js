@@ -11,5 +11,9 @@ logger('Loading...');
 
     await import('./modules/play/observer');
 
+    // TODO: Autcomplete
     // document.querySelector('.etch-html-editor .cm-editor .cm-content').cmView
+
+    // TODO: merge with other module (refactor)
+    await import('./modules/intellisense/classname-to-css');
 })();

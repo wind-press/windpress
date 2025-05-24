@@ -1,0 +1,8 @@
+.tippy-content {
+    pre.shiki {
+        padding: 10px 20px;
+
+        // width is add 20px for the padding
+        width: calc(100% + 40px);
+    }
+}
