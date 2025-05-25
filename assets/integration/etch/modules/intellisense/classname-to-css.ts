@@ -36,7 +36,7 @@ let tippyInstance = tippy(document.createElement('div'), {
 // tippyInstance.reference = hitContainerEl;
 
 async function showTippy(classname: string) {
-    const generatedCssCode = await etchIframe.contentWindow.windpress.module.classnameToCss.generate(classname);
+    const generatedCssCode = await etchIframe().contentWindow.windpress.module.classnameToCss.generate(classname);
     if (generatedCssCode === null || generatedCssCode.trim() === '') {
         return null;
     };

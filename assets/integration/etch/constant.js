@@ -1,4 +1,4 @@
-const etchIframe = document.getElementById('etch-iframe');
+const etchIframe = () => document.getElementById('etch-iframe');
 
 export {
     etchIframe

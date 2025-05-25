@@ -1,8 +1,8 @@
 import { logger } from '@/integration/common/logger';
 import { etchIframe } from '@/integration/etch/constant.js';
 
-(async () => {
-    let rootContainer = etchIframe;
+async function registerPlayObserver() {
+    let iframeEl = etchIframe();
     let scriptElements: NodeListOf<HTMLScriptElement> | HTMLScriptElement[] = [];
 
     logger('finding WindPress script...', { module: 'play/observer' });
@@ -38,8 +38,8 @@ import { etchIframe } from '@/integration/etch/constant.js';
 
     logger('found WindPress script', { module: 'play/observer' });
 
-    let contentWindow = rootContainer.contentWindow || rootContainer;
-    let contentDocument = rootContainer.contentDocument || contentWindow.document;
+    let contentWindow = iframeEl.contentWindow || iframeEl;
+    let contentDocument = iframeEl.contentDocument || contentWindow.document;
 
     // wait until contentDocument.head is available
     while (!contentDocument.head) {
@@ -69,7 +69,27 @@ import { etchIframe } from '@/integration/etch/constant.js';
                 contentDocument.body.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
             }
         });
+        logger('WindPress script injected successfully', { module: 'play/observer' });
     } else {
         logger('WindPress script is already injected, skipping the injection process...', { module: 'play/observer' });
     }
-})();
+
+    iframeEl.dataset.windpressInjected = 'true';
+}
+
+const observer = new MutationObserver(() => {
+    const target: HTMLElement | null = etchIframe();
+
+    if (target && !target.dataset.windpressInjected) {
+        setTimeout(() => {
+            registerPlayObserver();
+        }, 100); // Delay to ensure the iframe is fully loaded
+    }
+});
+
+observer.observe(document, {
+    subtree: true,
+    childList: true,
+});
+
+logger('Play Observer module loaded',);
