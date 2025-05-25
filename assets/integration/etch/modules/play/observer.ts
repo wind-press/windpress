@@ -82,6 +82,10 @@ const observer = new MutationObserver(() => {
 
     if (target && !target.dataset.windpressInjected) {
         setTimeout(() => {
+            if (target.dataset.windpressInjected) {
+                return; // Already injected
+            }
+
             registerPlayObserver();
         }, 100); // Delay to ensure the iframe is fully loaded
     }
@@ -92,4 +96,4 @@ observer.observe(document, {
     childList: true,
 });
 
-logger('Play Observer module loaded',);
+logger('Play: observer.ts module loaded',);

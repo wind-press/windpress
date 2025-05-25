@@ -16,4 +16,5 @@ logger('Loading...');
 
     // TODO: merge with other module (refactor)
     await import('./modules/intellisense/classname-to-css');
+    await import('./modules/intellisense/element-attribute-panel');
 })();

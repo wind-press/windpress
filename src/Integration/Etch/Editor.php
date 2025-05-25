@@ -60,6 +60,24 @@ class Editor
             if (typeof window.__windpress__disablePlayObserver === 'undefined') {
                 window.__windpress__disablePlayObserver = true;
             }
+
+            document.addEventListener('DOMContentLoaded', async function () {
+                let iframeWindow = document.getElementById('etch-iframe');
+                
+                // wait for the iframe to be ready
+                while (
+                    (iframeWindow.contentDocument?.body?.innerHTML === '' || iframeWindow.contentDocument?.body?.innerHTML === undefined)
+                    || (iframeWindow.contentWindow?.document?.body?.innerHTML === '' || iframeWindow.contentWindow?.document?.body?.innerHTML === undefined)
+                ) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                wp.hooks.addFilter('windpressetch-autocomplete-items-query', 'windpressetch', async (autocompleteItems, text) => {
+                    const windpress_suggestions = await iframeWindow.contentWindow.windpress.module.autocomplete.query(text);
+
+                    return [...windpress_suggestions, ...autocompleteItems];
+                });
+            });
         JS, 'after');
     }
 }
