@@ -123,6 +123,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Improve**: [Gutenberg] The Play Observer / Compiler stability
+
 = 3.3.34 =
 * **New**: [Etch](https://etchwp.com/) integration **[Pro]** (experimental)
 

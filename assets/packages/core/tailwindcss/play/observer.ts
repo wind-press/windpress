@@ -127,8 +127,6 @@ async function build(kind: 'full' | 'incremental') {
     I.end(`Build utilities`)
 }
 
-
-
 function rebuild(kind: 'full' | 'incremental') {
     async function run() {
         if (!compiler && kind !== 'full') {
@@ -209,7 +207,7 @@ const observer = new MutationObserver((records) => {
 });
 
 // if not found constant that disable the observer don't run the observer
-if (!(window as any)['__windpress__disablePlayObserver']) {
+if (!(window as any)['__windpress__disable_playObserver']) {
     observer.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['class'],

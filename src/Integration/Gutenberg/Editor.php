@@ -63,6 +63,11 @@ class Editor
         ]);
 
         wp_add_inline_script($handle, <<<JS
+            // add __windpress__disable_playObserver to window if not exists
+            if (typeof window.__windpress__disable_playObserver === 'undefined') {
+                window.__windpress__disable_playObserver = true;
+            }
+
             document.addEventListener('DOMContentLoaded', function () {
                 wp.hooks.addFilter('windpressgutenberg-autocomplete-items-query', 'windpressgutenberg', async (autocompleteItems, text) => {
                     const windpress_suggestions = await window.windpress.module.autocomplete.query(text);

@@ -56,9 +56,9 @@ class Editor
         ]);
 
         wp_add_inline_script($handle, <<<JS
-            // add __windpress__disablePlayObserver to window if not exists
-            if (typeof window.__windpress__disablePlayObserver === 'undefined') {
-                window.__windpress__disablePlayObserver = true;
+            // add __windpress__disable_playObserver to window if not exists
+            if (typeof window.__windpress__disable_playObserver === 'undefined') {
+                window.__windpress__disable_playObserver = true;
             }
 
             document.addEventListener('DOMContentLoaded', async function () {

@@ -5,7 +5,7 @@ import twUtilities from 'tailwindcss/utilities.css?raw';
 import twIndex from 'tailwindcss/index.css?raw';
 import { isValidUrl } from './utils';
 
-import type { VFSContainer} from './vfs'
+import type { VFSContainer } from './vfs'
 
 const twVolume = {
     '/tailwindcss/index.css': twIndex,
@@ -20,11 +20,6 @@ async function httpsProvider(url: string): Promise<string> {
 
 export async function loadStylesheet(id: string, base = '/', volume = {} as VFSContainer): Promise<{ base: string, content: string }> {
     base = base || '/';
-
-    volume = {
-        ...volume,
-        ...twVolume
-    };
 
     const _id = id;
 
@@ -53,6 +48,16 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
                 }
             }
         }
+
+        // Reserved id for bundled Tailwind CSS' path
+        if (Object.keys(twVolume).includes(path.resolve(id))) {
+            base = '/';
+        }
+
+        volume = {
+            ...volume,
+            ...twVolume
+        };
 
         // check if the file is in the volume
         let _path = path.resolve(base, id);
