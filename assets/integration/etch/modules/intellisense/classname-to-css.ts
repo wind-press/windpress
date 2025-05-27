@@ -50,8 +50,7 @@ async function showTippy(classname: string) {
 }
 
 const observer = new MutationObserver(() => {
-    const elements = document.querySelectorAll('.cm-etch-selector');
-    // <span class="cm-etch-selector"><span class="ͼ15">mx-auto</span></span>
+    const elements = document.querySelectorAll('.cm-etch-selector:not([data-windpressInjected])');
     elements.forEach((element) => {
         element.addEventListener('mouseover', () => {
             // get the text content of the element like `mx-auto`
@@ -67,11 +66,13 @@ const observer = new MutationObserver(() => {
             // hide the tippy instance
             tippyInstance.hide();
         });
+
+        // mark the element as injected to avoid duplicate event listeners
+        element.setAttribute('data-windpressInjected', 'true');
     });
 });
 
 observer.observe(document, {
-    characterData: true,
     subtree: true,
     childList: true,
 });
