@@ -81,7 +81,11 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
             _path = _path.concat('/index.css')
         }
 
-        _path = path.join(base, _path);
+        // if base starts with a slash, assume it's not from the CDN
+        if (base.startsWith('/')) {
+            // remove the leading slash from base
+            _path = path.join(base, _path);
+        }
 
         if (volume[_path]) {
             return {

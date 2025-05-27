@@ -125,6 +125,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **Improve**: [Gutenberg] The Play Observer / Compiler stability
+* **Fix**: [TW4] `@import` a CDN stylesheet is not working correctly
 
 = 3.3.34 =
 * **New**: [Etch](https://etchwp.com/) integration **[Pro]** (experimental)
