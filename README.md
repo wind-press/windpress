@@ -83,15 +83,16 @@ Use Tailwind CSS within the block editor, page builders, plugins, and themes —
 
 Seamless integration with the most popular visual/page builders:
 
-* [Gutenberg](https://wordpress.org/gutenberg) / Block Editor
+* [Gutenberg](https://wordpress.org/gutenberg/?ref=windpress) / Block Editor
 * [GreenShift](https://shop.greenshiftwp.com/?from=3679)
-* [Kadence WP](https://kadencewp.com)
+* [Kadence WP](https://kadencewp.com/?ref=windpress)
 * [LiveCanvas](https://livecanvas.com/?ref=4008)
-* [Timber](https://upstatement.com/timber/)
+* [Timber](https://upstatement.com/timber/?ref=windpress)
 * [Blockstudio](https://blockstudio.dev/?ref=7) — **Pro**
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
-* [Bricks](https://bricksbuilder.io/) — **Pro**
+* [Bricks](https://bricksbuilder.io/?ref=windpress) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
+* [Etch](https://etchwp.com/?ref=windpress) — **Pro**
 * [Meta Box Views](https://metabox.sjv.io/OeOeZr) — **Pro**
 * [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
 * [WPCodeBox 2](https://wpcodebox.com/?ref=185) — **Pro**
@@ -100,8 +101,8 @@ Seamless integration with the most popular visual/page builders:
 
 * [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
 * [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
-* [Pinegrow](https://pinegrow.com/wordpress)
-* [Zion Builder](https://zionbuilder.io/)
+* [Pinegrow](https://pinegrow.com/wordpress?ref=windpress)
+* [Zion Builder](https://zionbuilder.io/?ref=windpress)
 
 ## 🛠 Development
 
