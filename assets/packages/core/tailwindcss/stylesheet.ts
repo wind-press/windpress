@@ -8,6 +8,7 @@ import { isValidUrl } from './utils';
 import type { VFSContainer } from './vfs'
 
 const twVolume = {
+    '/tailwindcss': `@import './tailwindcss/index.css';`,
     '/tailwindcss/index.css': twIndex,
     '/tailwindcss/theme.css': twTheme,
     '/tailwindcss/preflight.css': twPreflight,
@@ -29,10 +30,31 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
             content: await httpsProvider(new URL(id.substring(6)).toString())
         }
     } else {
+        // if the twVolume is not existing in the volume, add it
+        for (const [key, value] of Object.entries(twVolume)) {
+            if (!Object.keys(volume).includes(key)) {
+                volume[key] = value;
+            }
+        }
+
+        // Reserved id for bundled Tailwind CSS' path
+        if (
+            !id.startsWith('/')
+            && (
+                Object.keys(twVolume).includes(path.resolve(id))
+                || Object.keys(twVolume).includes(path.resolve(id).concat('.css'))
+            )
+        ) {
+            base = '/';
+            id = path.resolve(id);
+        }
+
         // Volume: resolve relative path as absolute path
         if (id.startsWith('.')) {
             id = path.resolve(base, id);
+        }
 
+        if (id.startsWith('/')) {
             /*
              * Resolve default import if no extension is specified
              * */
@@ -53,16 +75,6 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
             }
         }
 
-        // Reserved id for bundled Tailwind CSS' path
-        if (Object.keys(twVolume).includes(path.resolve(id))) {
-            base = '/';
-        }
-
-        volume = {
-            ...volume,
-            ...twVolume
-        };
-
         // check if the file is in the volume
         let _path = path.resolve(base, id);
 
@@ -73,35 +85,11 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
             }
         }
 
-        /*
-         * Resolve default import if no extension is specified
-         */
+        // CDN
 
         // consider it's a path of URL
         const _url = new URL(id, 'https://esm.sh');
         _path = _url.pathname;
-
-        // if (!_path.endsWith('.css')) {
-        //     _path = _path.concat('/index.css')
-        // }
-
-        // if base starts with a slash, assume it's not from the CDN
-        // if (base.startsWith('/')) {
-        //     // remove the leading slash from base
-        //     _path = path.join(base, _path);
-        // }
-
-        if (volume[_path]) {
-            return {
-                base: path.dirname(id),
-                content: volume[_path]
-            }
-        }
-
-        // CDN
-
-        // join the _path with the search params if any
-        _path = _path.concat(_url.search);
 
         // fetch and store in volume
         let fetchSuccess = false;
@@ -113,6 +101,9 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
             tryPaths.push(_path + '.css');
             tryPaths.push(_path + '/index.css');
         }
+
+        // join the _path with the search params if any
+        _path = _path.concat(_url.search);
 
         for (const tryPath of tryPaths) {
             try {
@@ -141,6 +132,7 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
                     });
 
                 volume[tryPath] = data;
+
                 _path = tryPath;
                 fetchSuccess = true;
                 break;
