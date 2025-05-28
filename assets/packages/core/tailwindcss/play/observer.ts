@@ -164,6 +164,20 @@ function rebuild(kind: 'full' | 'incremental') {
 //     })
 // }
 
+// Handle changes to the script element with id "windpress:vfs" and type "text/plain" content
+let scriptObserver = new MutationObserver(() => rebuild('full'))
+
+function observeScript(script: HTMLScriptElement) {
+    console.debug('Observing script element:', script);
+    scriptObserver.observe(script, {
+        attributes: true,
+        attributeFilter: ['type', 'src'],
+        characterData: true,
+        subtree: true,
+        childList: true,
+    });
+}
+
 // Handle changes to the document that could affect the styles
 // - Changes to any element's class attribute
 // - New stylesheets being added to the page
@@ -197,6 +211,14 @@ const observer = new MutationObserver((records) => {
         if (record.type === 'attributes') {
             incremental++
         }
+
+        // Changes to the script element with id "windpress:vfs" and type "text/plain"
+        if (record.target instanceof HTMLScriptElement &&
+            record.target.id === 'windpress:vfs' &&
+            record.target.type === 'text/plain') {
+            observeScript(record.target);
+            full++;
+        }
     }
 
     if (full > 0) {
@@ -222,8 +244,28 @@ if (!(window as any)['__windpress__disable_playObserver']) {
     console.warn('Play Observer is disabled.');
 }
 
+// listen to broadcast messages of updates to the VFS
+(() => {
+    const channel = new BroadcastChannel('windpress');
+
+    channel.addEventListener('message', async (e) => {
+        const data = e.data;
+        const source = 'windpress/dashboard';
+        const target = 'windpress/observer';
+        const task = 'windpress.code-editor.saved';
+
+        if (data.source === source && data.target === target && data.task === task) {
+            let script = document.querySelector('script#windpress\\:vfs[type="text/plain"]') as HTMLScriptElement | null;
+
+            if (script) {
+                script.textContent = data.payload.volume;
+            }
+        }
+    })
+})();
+
 // expose the observer to the global scope for debugging
 try {
     (window as any).twPlayObserver = observer
 }
-catch (e) {}
+catch (e) { }

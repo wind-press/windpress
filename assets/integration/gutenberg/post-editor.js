@@ -152,7 +152,6 @@ logger('Loading...');
 
     // block-editor-inserter__block-patterns-tabs-container
     const patternPreviewSidebarObserver = new MutationObserver(async (mutationsList) => {
-        console.log('patternPreviewSidebarObserver started');
         let needInject = false;
         let patternIframes = [];
         let waitingTry = 20000;

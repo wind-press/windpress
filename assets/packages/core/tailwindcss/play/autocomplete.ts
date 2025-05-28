@@ -7,6 +7,7 @@ import type { ClassEntity } from '../intellisense';
 import { type VFSContainer } from '../vfs';
 
 let classLists: ClassEntity[] = [];
+let previousTimestamp = 0;
 
 export function getColor(declarations: any[] | undefined) {
     const color = declarations?.find((declaration) =>
@@ -52,8 +53,15 @@ function getUserClassList(volume: VFSContainer): ClassEntity[] {
     });
 }
 
-export function searchClassList(volume: VFSContainer, design: DesignSystem, query: string) {
-    if (classLists.length === 0) {
+export function searchClassList(volume: VFSContainer, design: DesignSystem, query: string, lastTimestamp: number = 0){
+    let forceReload = false;
+    // if the last timestamp is greater than the previous timestamp, reload the classLists
+    if (lastTimestamp > previousTimestamp) {
+        previousTimestamp = lastTimestamp;
+        forceReload = true;
+    }
+
+    if (classLists.length === 0 || forceReload) {
         classLists = [
             ...getClassList(design),
             ...getUserClassList(volume),

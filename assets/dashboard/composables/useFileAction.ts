@@ -1,4 +1,5 @@
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
+import { encodeVFSContainer } from '@/packages/core/tailwindcss/vfs';
 import { nanoid } from 'nanoid'
 import lzString from 'lz-string';
 import dayjs from 'dayjs'
@@ -165,7 +166,20 @@ async function save() {
             // TODO: log error
         })
         .finally(() => {
-            // TODO: broadcast event with channel
+            const channel = new BroadcastChannel('windpress');
+
+            ['windpress/observer', 'windpress/intellisense'].forEach((target) => {
+                channel.postMessage({
+                    source: 'windpress/dashboard',
+                    target,
+                    task: 'windpress.code-editor.saved',
+                    payload: {
+                        volume: encodeVFSContainer(volumeStore.getKVEntries()),
+                    }
+                });
+            });
+
+            channel.close();
         });
 }
 

@@ -14,9 +14,16 @@ const vfsContainer = document.querySelector('script#windpress\\:vfs[type="text/p
 let design: DesignSystem;
 let volume: VFSContainer;
 
+let previousTimestamp = 0;
+let lastTimestamp = 0;
+
 async function updateDesign() {
     volume = decodeVFSContainer(vfsContainer?.textContent || 'e30=');
     design = await loadDesignSystem({ volume });
+
+    const currTimestamp = Date.now();
+    previousTimestamp = lastTimestamp;
+    lastTimestamp = currTimestamp;
 
     channel.postMessage({
         source: 'windpress/intellisense',
@@ -28,21 +35,10 @@ async function updateDesign() {
 // initial load
 updateDesign();
 
-if (vfsContainer) {
-    const vfsObserver = new MutationObserver(async () => {
-        updateDesign();
-    });
-
-    vfsObserver.observe(vfsContainer, {
-        characterData: true,
-        subtree: true
-    });
-}
-
 channel.addEventListener('message', async (e) => {
     const data = e.data;
     const source = 'windpress/dashboard';
-    const target = 'windpress/observer';
+    const target = 'windpress/intellisense';
     const task = 'windpress.code-editor.saved';
 
     if (data.source === source && data.target === target && data.task === task) {
@@ -50,6 +46,6 @@ channel.addEventListener('message', async (e) => {
     }
 });
 
-set(window, 'windpress.module.autocomplete.query', (q: string) => searchClassList(volume, design, q));
+set(window, 'windpress.module.autocomplete.query', (q: string) => searchClassList(volume, design, q, lastTimestamp));
 set(window, 'windpress.module.classnameToCss.generate', async (input: string) => classnameToCss(design, input));
 set(window, 'windpress.module.classSorter.sort', async (input: string) => classSorter(design, input));
