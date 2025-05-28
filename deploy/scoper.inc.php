@@ -100,23 +100,23 @@ return [
         /**
          * @see https://github.com/humbug/php-scoper/issues/841
          */
-        static function (string $filePath, string $prefix, string $contents): string {
-            if (preg_match('/vendor\/composer\/autoload_real\.php$/', $filePath)) {
-                return preg_replace(
-                    [
-                        "/'Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'/",
-                        "/spl_autoload_unregister\(array\('ComposerAutoloaderInit/",
-                    ],
-                    [
-                        "'{$prefix}\\\\\\\\Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'",
-                        "spl_autoload_unregister(array('{$prefix}\\\\\\\\ComposerAutoloaderInit",
-                    ],
-                    $contents
-                );
-            }
+        // static function (string $filePath, string $prefix, string $contents): string {
+        //     if (preg_match('/vendor\/composer\/autoload_real\.php$/', $filePath)) {
+        //         return preg_replace(
+        //             [
+        //                 "/'Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'/",
+        //                 "/spl_autoload_unregister\(array\('ComposerAutoloaderInit/",
+        //             ],
+        //             [
+        //                 "'{$prefix}\\\\\\\\Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'",
+        //                 "spl_autoload_unregister(array('{$prefix}\\\\\\\\ComposerAutoloaderInit",
+        //             ],
+        //             $contents
+        //         );
+        //     }
 
-            return $contents;
-        },
+        //     return $contents;
+        // },
     ],
 
     // List of symbols to consider internal i.e. to leave untouched.
@@ -127,6 +127,8 @@ return [
         // '~^PHPUnit\\\\Framework$~',    // The whole namespace PHPUnit\Framework (but not sub-namespaces)
         // '~^$~',                        // The root namespace only
         // '',                            // Any namespace,
+
+        // 'Composer',
 
         'WindPress',
         'WIND_PRESS',
