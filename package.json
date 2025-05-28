@@ -59,6 +59,7 @@
   },
   "dependencies": {
     "@adobe/css-tools": "^4.4.3",
+    "@ampproject/remapping": "^2.3.0",
     "@guolao/vue-monaco-editor": "^1.5.5",
     "@nuxt/ui-pro": "3.1.3",
     "@std/encoding": "npm:@jsr/std__encoding@^1.0.10",
@@ -82,6 +83,7 @@
     "lightningcss-wasm": "^1.30.1",
     "lodash-es": "^4.17.21",
     "lz-string": "https://pkg.pr.new/wind-press/lz-string@2c61edc",
+    "magic-string": "^0.30.17",
     "minimatch": "^10.0.1",
     "monaco-editor": "^0.52.2",
     "nanoid": "^5.1.5",

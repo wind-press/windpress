@@ -16,6 +16,9 @@ importers:
       '@adobe/css-tools':
         specifier: ^4.4.3
         version: 4.4.3
+      '@ampproject/remapping':
+        specifier: ^2.3.0
+        version: 2.3.0
       '@guolao/vue-monaco-editor':
         specifier: ^1.5.5
         version: 1.5.5(monaco-editor@0.52.2)(vue@3.5.15(typescript@5.6.2))
@@ -85,6 +88,9 @@ importers:
       lz-string:
         specifier: https://pkg.pr.new/wind-press/lz-string@2c61edc
         version: https://pkg.pr.new/wind-press/lz-string@2c61edc
+      magic-string:
+        specifier: ^0.30.17
+        version: 0.30.17
       minimatch:
         specifier: ^10.0.1
         version: 10.0.1
