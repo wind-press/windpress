@@ -3,8 +3,8 @@ import { unescape } from "@std/html/entities";
 import { createLogComposable } from '@/dashboard/stores/log'
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
-import { compile as buildV4, find_tw_candidates, optimize as optimizeV4, loadSource } from '@/packages/core/tailwindcss';
-import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwindcss-v3';
+// import { compile as buildV4, find_tw_candidates, optimize as optimizeV4, loadSource } from '@/packages/core/tailwindcss';
+// import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwindcss-v3';
 import { nanoid } from 'nanoid';
 import lzString from 'lz-string';
 import { get } from 'lodash-es';
@@ -200,6 +200,9 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
     let minified = null;
 
     if (options.tailwindcss_version === 4) {
+        // import the modules dynamically to avoid bundling them in the main bundle
+        const { compile: buildV4, find_tw_candidates, optimize: optimizeV4, loadSource } = await import('@/packages/core/tailwindcss');
+
         const candidates_pool: string[] = [];
 
         contents.forEach((content) => {
@@ -227,6 +230,9 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         normal = (await optimizeV4({ css: result })).css;
         minified = (await optimizeV4({ css: result, minify: true })).css;
     } else if (options.tailwindcss_version === 3) {
+        // import the modules dynamically to avoid bundling them in the main bundle
+        const { build: buildV3, optimize: optimizeV3 } = await import('@/packages/core/tailwindcss-v3');
+
         log.add({ message: 'Scanning complete', type: 'success' });
         log.add({ message: 'Building cache...', type: 'info' });
 
