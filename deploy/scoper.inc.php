@@ -128,7 +128,7 @@ return [
         // '~^$~',                        // The root namespace only
         // '',                            // Any namespace,
 
-        'Composer',
+        // 'Composer',
 
         'WindPress',
         'WIND_PRESS',

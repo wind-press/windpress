@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: tailwind, tailwindcss, tailwind css
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 3.3.38
+Stable tag: 3.3.39
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -123,7 +123,7 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-= 3.3.38 =
+= 3.3.39 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.8 latest)
 * **Improve**: [TW4] The Play Observer / Compiler performance & stability
 * **Improve**: [TW4] Robust `@import` handling

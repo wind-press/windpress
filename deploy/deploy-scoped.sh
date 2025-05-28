@@ -55,8 +55,9 @@ note "Running scoper to $RESULT_DIRECTORY"
 php -d memory_limit=-1 php-scoper.phar add-prefix --output-dir "../$RESULT_DIRECTORY" --config "deploy/scoper.inc.php" --force --ansi --working-dir "$DEPLOY_DIRECTORY";
 rm -f "$RESULT_DIRECTORY/php-scoper.phar"
 
-# note "Dumping Composer Autoload"
+note "Dumping Composer Autoload"
 # composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --classmap-authoritative --no-dev
+composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --no-dev
 
 # clean deploy files and directories
 rm -rf "$DEPLOY_DIRECTORY"
