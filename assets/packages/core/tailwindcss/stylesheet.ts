@@ -43,7 +43,11 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
                     )
                 ) {
                     id = id.concat('.css')
-                } else {
+                } else if (
+                    Object.keys(volume).some((file) =>
+                        file.includes(id.concat('/index.css'))
+                    )
+                ) {
                     id = id.concat('/index.css')
                 }
             }
@@ -77,15 +81,15 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
         const _url = new URL(id, 'https://esm.sh');
         _path = _url.pathname;
 
-        if (!_path.endsWith('.css')) {
-            _path = _path.concat('/index.css')
-        }
+        // if (!_path.endsWith('.css')) {
+        //     _path = _path.concat('/index.css')
+        // }
 
         // if base starts with a slash, assume it's not from the CDN
-        if (base.startsWith('/')) {
-            // remove the leading slash from base
-            _path = path.join(base, _path);
-        }
+        // if (base.startsWith('/')) {
+        //     // remove the leading slash from base
+        //     _path = path.join(base, _path);
+        // }
 
         if (volume[_path]) {
             return {
@@ -100,14 +104,28 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
         _path = _path.concat(_url.search);
 
         // fetch and store in volume
-        await fetch(`https://esm.sh${_path}`)
-            .then(async (response) => {
+        let fetchSuccess = false;
+        let fetchError: Error | null = null;
+        let fetchCurrPath = null;
+        const tryPaths = [_path];
+
+        if (!_path.endsWith('.css')) {
+            tryPaths.push(_path + '.css');
+            tryPaths.push(_path + '/index.css');
+        }
+
+        for (const tryPath of tryPaths) {
+            try {
+                fetchCurrPath = tryPath;
+                const response = await fetch(`https://esm.sh${tryPath}`);
                 if (!response.ok) {
-                    throw new Error(
-                        _id.startsWith('.')
-                            ? `Cannot find stylesheet '${_id}' on the Simple File System`
-                            : `Cannot find stylesheet '${_id}' on the CDN`
-                    );
+                    throw new Error();
+                }
+
+                // Ensure the response is a CSS file
+                const contentType = response.headers.get('content-type') || '';
+                if (!contentType.includes('text/css')) {
+                    throw new Error(`Response is not a CSS file: ${contentType}`);
                 }
 
                 let data = await response.text();
@@ -122,8 +140,26 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
                         return `@plugin 'https://esm.sh${path.resolve(path.dirname(id))}${path.resolve(p1)}'`;
                     });
 
-                volume[_path] = data;
-            });
+                volume[tryPath] = data;
+                _path = tryPath;
+                fetchSuccess = true;
+                break;
+            } catch (err: any) {
+                fetchError = err;
+            }
+        }
+
+        if (fetchError) {
+            if (fetchSuccess) {
+                console.warn(`Warning: The stylesheet '${_id}' was successfully fetched from the CDN using fallback path '${fetchCurrPath}'.`);
+            } else {
+                throw new Error(
+                    _id.startsWith('.')
+                        ? `Cannot find stylesheet '${_id}' on the Simple File System`
+                        : `Cannot find stylesheet '${_id}' on the CDN`
+                );
+            }
+        }
 
         return {
             base: path.dirname(id),
