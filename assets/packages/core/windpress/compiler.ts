@@ -107,9 +107,9 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
     }
 
     if (providers.length === 0 || providers.filter(provider => provider.enabled).length === 0) {
-        log.add({ message: 'No cache provider found', type: 'error' });
+        log.add({ message: 'No scanner provider found. If this is unexpected, please check the integrations setting page.', type: 'warning' });
 
-        throw new Error('No cache provider found');
+        // throw new Error('No cache provider found');
     }
 
     let content_pool: Array<{ content: string; type: string }> = [];

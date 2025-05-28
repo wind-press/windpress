@@ -79,7 +79,6 @@ logger('Loading...');
 
     // observe if 'body > div.components-modal__screen-overlay' is added or removed
     const patterPreviewOverlayObserver = new MutationObserver(async (mutationsList) => {
-        console.log('patterPreviewOverlayObserver started');
         let needInject = false;
         let patternIframes = [];
         let waitingTry = 2000;

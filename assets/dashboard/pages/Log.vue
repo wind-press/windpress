@@ -69,7 +69,7 @@ watch(log.logs, () => {
                 <span v-else-if="history.type === 'debug'" class="">[DEBUG]</span>
               </span>
               <template v-if="history.options?.raw">
-                <UPopover v-if="history.options?.candidates" mode="hover">
+                <UPopover v-if="history.options?.candidates && history.options?.candidates.length > 0" mode="hover">
                   <span v-html="history.message"></span>
                   <template #content>
                     <!-- candidates -->

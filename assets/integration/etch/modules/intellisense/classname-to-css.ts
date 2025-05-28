@@ -56,7 +56,6 @@ const observer = new MutationObserver(() => {
             // get the text content of the element like `mx-auto`
             const textContent = element.firstChild?.textContent;
             if (textContent) {
-                // console.log('textContent', textContent);
                 showTippy(textContent);
                 // show the tippy instance
             }
