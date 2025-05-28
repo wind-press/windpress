@@ -55,6 +55,7 @@ class Volume
                 'handler' => 'internal',
                 'signature' => wp_create_nonce(sprintf('%s:%s', WIND_PRESS::WP_OPTION, $file->getRelativePathname())),
                 'readonly' => strpos(wp_normalize_path($file->getPathname()), wp_normalize_path($data_dir)) === false,
+                'path_on_disk' => $file->getPathname(),
             ];
         }
 

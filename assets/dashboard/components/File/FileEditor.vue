@@ -209,7 +209,7 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
 
 <template>
     <UDashboardPanel id="explorer-2" class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
-        <UDashboardNavbar :title="entry?.relative_path" :toggle="false">
+        <UDashboardNavbar :title="entry?.relative_path" :toggle="false" :ui="{title: 'text-sm'}">
             <template #leading>
                 <UTooltip :text="i18n.__('Close', 'windpress')">
                     <UButton icon="i-lucide-x" color="neutral" variant="ghost" class="-ms-1.5" @click="emit('close')" />
@@ -220,6 +220,14 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                 <UIcon :name="`vscode-icons:file-type-${entry?.relative_path === 'main.css' ? 'tailwind' : path.extname(entry?.relative_path ?? '').replace('.', '')}`" class="size-5" />
                 {{ entry?.relative_path }}
                 <UBadge v-if="props.entry.readonly" :label="i18n.__('read-only', 'windpress')" color="warning" variant="outline" />
+                <UTooltip v-if="entry?.path_on_disk" :text="`${i18n.__('Path on disk', 'windpress')}: ${entry?.path_on_disk}`">
+                    <span class="text-xs opacity-60 font-normal">
+                        [ 
+                        <UIcon name="i-lucide-hard-drive" class="inline-block align-middle me-1" />
+                        {{ entry?.path_on_disk }} 
+                        ]
+                    </span>
+                </UTooltip>
             </template>
 
             <template #right>

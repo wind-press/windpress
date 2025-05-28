@@ -26,6 +26,8 @@ export type Entry = {
 
     // Signature to check the authenticity of the file
     signature?: string;
+
+    path_on_disk?: string; // The path on disk, used for the file manager
 };
 
 export const useVolumeStore = defineStore('volume', () => {

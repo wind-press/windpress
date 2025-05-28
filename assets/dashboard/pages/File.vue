@@ -41,7 +41,7 @@ const isMobile = breakpoints.smaller('lg')
 
 <template>
     <UDashboardPanel id="explorer-1" :default-size="25" :min-size="20" :max-size="30" resizable class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
-        <UDashboardNavbar :title="i18n.__('Explorer', 'windpress')">
+        <UDashboardNavbar :title="i18n.__('Explorer', 'windpress')" class="text-sm">
             <template #leading>
                 <UDashboardSidebarCollapse />
             </template>
