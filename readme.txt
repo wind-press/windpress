@@ -19,7 +19,7 @@ WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integr
 
 **Tailwind CSS version**:
 - 3.4.17
-- 4.1.7
+- 4.1.8
 
 ### Features
 
@@ -122,6 +122,11 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= unreleased =
+* **New**: Upgraded to Tailwind CSS v4 (4.1.8 latest)
+* **Improve**: [TW4] The Play Observer / Compiler performance & stability
+* **Improve**: [TW4] Robust `@import` handling
 
 = 3.3.35 =
 * **Improve**: [Gutenberg] The Play Observer / Compiler stability
