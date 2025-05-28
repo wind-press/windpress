@@ -32,7 +32,7 @@
     "@types/css-tree": "^2.3.10",
     "@types/lodash": "^4.17.17",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.23",
     "@types/postcss-import": "^14.0.3",
     "@vitejs/plugin-react": "^4.5.0",
     "@vitejs/plugin-vue": "^5.2.4",
@@ -44,7 +44,7 @@
     "oxlint": "^0.16.12",
     "rollup-plugin-external-globals": "^0.13.0",
     "sass": "^1.89.0",
-    "typescript-eslint": "^8.32.1",
+    "typescript-eslint": "^8.33.0",
     "unplugin-icons": "^22.1.0",
     "unplugin-vue-components": "^28.7.0",
     "vite": "^6.3.5",
@@ -65,8 +65,8 @@
     "@std/html": "npm:@jsr/std__html@^1.0.4",
     "@tailwindcss/oxide-wasm32-wasi": "4.1.7",
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
-    "@vueuse/core": "^13.2.0",
-    "@vueuse/integrations": "^13.2.0",
+    "@vueuse/core": "^13.3.0",
+    "@vueuse/integrations": "^13.3.0",
     "@windpress/oxide-parser-wasm": "^1.0.35",
     "@wordpress/block-editor": "^14.19.0",
     "@wordpress/components": "^29.10.0",
@@ -107,7 +107,7 @@
     "vue-inline-svg": "^4.0.1",
     "vue-router": "^4.5.1",
     "yaml": "^2.8.0",
-    "zod": "^3.25.28"
+    "zod": "^3.25.32"
   },
   "pnpm": {
     "updateConfig": {
