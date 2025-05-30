@@ -135,30 +135,22 @@ export default defineConfig({
                 //     return process.env.WP_I18N !== 'true' ? "assets/[name]-[hash].min.js" : "assets/[name]-[hash].js";
                 // },
             },
-            plugins: [
-                {
-                    name: 'rename-workers',
-                    generateBundle(_, bundle) {
-                        // if the fila name is in the format of `*.worker-*.js` and doesn't have '.min.js`, rename it to `*.worker-*.min.js`
-                        // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
-                        const workerFiles = Object.keys(bundle).filter(file => file.includes('.worker-') && !file.includes('.min.js'));
-                        workerFiles.forEach((file) => {
-                            const newFileName = file.replace('.js', '.min.js');
-                            bundle[newFileName] = { ...bundle[file], fileName: newFileName };
-                            delete bundle[file];
-                        });
-                    }
-                }
-            ],
         },
-        minify: false,
+        // minify: false, // Uncomment this for debugging purposes, otherwise it will minify the code.
+        cssMinify: 'lightningcss',
+    },
+    worker: {
+        rollupOptions: {
+            output: {
+                // add .min to the worker filename to exclude it from the `wp i18n make-pot` command.
+                // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
+                entryFileNames: 'assets/[name]-[hash].min.js',
+                chunkFileNames: 'assets/[name]-[hash].min.js',
+            }
+        }
     },
     css: {
-        preprocessorOptions: {
-            scss: {
-                api: 'modern-compiler',
-            },
-        },
+        transformer: 'lightningcss',
     },
     publicDir: 'assets/static',
     resolve: {
