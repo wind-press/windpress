@@ -17,7 +17,7 @@ jobs:
     # Don't run on forks.
     if: github.repository == 'wind-press/windpress'
 
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
     timeout-minutes: 30
 
     steps:
@@ -37,7 +37,7 @@ jobs:
             fetch-depth: 0
 
         # Use pnpm to install dependencies and build the assets.
-        - uses: actions/setup-node@v4
+        - uses: buildjet/setup-node@v4
           with:
             node-version: 22
 
@@ -48,7 +48,7 @@ jobs:
           run: |
             echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-        - uses: actions/cache@v4
+        - uses: buildjet/cache@v4
           name: Setup pnpm cache
           with:
             path: ${{ env.STORE_PATH }}
