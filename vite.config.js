@@ -126,10 +126,10 @@ export default defineConfig({
                     // @see https://developer.wordpress.org/cli/commands/i18n/make-pot/
 
                     if (chunkInfo.name === 'monaco-editor') {
-                        return 'chunks/[name]-[hash].min.js';
+                        return 'assets/[name]-[hash].min.js';
                     }
 
-                    return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? 'assets/[name]-[hash].js' : 'chunks/[name]-[hash].min.js';
+                    return chunkInfo.name !== 'plugin' && chunkInfo.moduleIds.some(id => id.includes('assets') && !id.includes('node_modules')) ? 'assets/[name]-[hash].js' : 'assets/[name]-[hash].min.js';
                 },
                 // entryFileNames: (chunkInfo) => {
                 //     return process.env.WP_I18N !== 'true' ? "assets/[name]-[hash].min.js" : "assets/[name]-[hash].js";
