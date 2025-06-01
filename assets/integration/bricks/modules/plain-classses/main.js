@@ -63,7 +63,7 @@ panelElementActions.push(classSortAction);
 panelElementActions.push(classToPlainClassesAction);
 
 const visibleElementPanel = ref(false);
-const activeElementId = ref(null);
+const activeElementIds = ref([]); // used to store the active element ids, so we can check if the element is active or not
 const historyIndex = ref(0);
 
 let hit = null; // highlight any text except spaces and new lines
@@ -174,24 +174,15 @@ tribute.events.callbacks = function () {
 
 tribute.attach(textInput);
 
-const observer = new MutationObserver(function (mutations) {
+const visibleElementPanelObserver = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
         if (mutation.type === 'attributes') {
             if (mutation.target.id === 'bricks-panel-element' && mutation.attributeName === 'style') {
-                if (mutation.target.style.display !== 'none') {
-                    visibleElementPanel.value = true;
-                } else {
-                    visibleElementPanel.value = false;
-                }
-            } else if ('placeholder' === mutation.attributeName && 'INPUT' === mutation.target.tagName && mutation.target.classList.contains('placeholder')) {
-                activeElementId.value = brxGlobalProp.$_activeElement.value.id;
+                visibleElementPanel.value = mutation.target.style.display !== 'none';
             }
         } else if (mutation.type === 'childList') {
             if (mutation.addedNodes.length > 0) {
-
-                if (mutation.target.id === 'bricks-panel-sticky' && mutation.addedNodes[0].id === 'bricks-panel-element-classes') {
-                    activeElementId.value = brxGlobalProp.$_activeElement.value.id;
-                } else if (mutation.target.dataset && mutation.target.dataset.controlkey === '_cssClasses' && mutation.addedNodes[0].childNodes.length > 0) {
+                if (mutation.target.dataset && mutation.target.dataset.controlkey === '_cssClasses' && mutation.addedNodes[0].childNodes.length > 0) {
                     document.querySelector('#_cssClasses').addEventListener('input', function (e) {
                         nextTick(() => {
                             textInput.value = e.target.value;
@@ -204,7 +195,23 @@ const observer = new MutationObserver(function (mutations) {
     });
 });
 
-observer.observe(document.getElementById('bricks-panel-element'), {
+visibleElementPanelObserver.observe(document.getElementById('bricks-panel-element'), {
+    subtree: true,
+    attributes: true,
+    childList: true,
+});
+
+const activeElementObserver = new MutationObserver(function (mutations) {
+    if (brxGlobalProp.$_state.selectedElements.length > 0) {
+        activeElementIds.value = brxGlobalProp.$_state.selectedElements.map((el) => el.id);
+    } else if (brxGlobalProp.$_activeElement.value) {
+        activeElementIds.value = [brxGlobalProp.$_activeElement.value.id];
+    } else {
+        activeElementIds.value = [];
+    }
+});
+
+activeElementObserver.observe(document.querySelector('#bricks-structure'), {
     subtree: true,
     attributes: true,
     childList: true,
@@ -225,10 +232,21 @@ historyIndexObserver.observe(document.querySelector('#bricks-toolbar > ul.group-
     attributeFilter: ['class'],
 });
 
-watch([activeElementId, visibleElementPanel, historyIndex], (newVal, oldVal) => {
+watch([activeElementIds, visibleElementPanel, historyIndex], (newVal, oldVal) => {
     if (newVal[0] !== oldVal[0] || newVal[2] !== oldVal[2]) {
         nextTick(() => {
-            textInput.value = brxGlobalProp.$_activeElement.value?.settings?._cssClasses || '';
+            if (newVal[0].length > 0) {
+                const cssClassesList = newVal[0].map(id => {
+                    return brxGlobalProp.$_state.content.find(el => el.id === id)?.settings?._cssClasses || '';
+                });
+
+                // if all cssClasses are the same, set the textInput value to that value
+                // otherwise, set the textInput value to an empty string
+                textInput.value = cssClassesList.every(val => val === cssClassesList[0]) ? cssClassesList[0] : '';
+            } else {
+                textInput.value = '';
+            }
+
             onTextInputChanges();
         });
     }
@@ -277,7 +295,13 @@ watch([activeElementId, visibleElementPanel, historyIndex], (newVal, oldVal) => 
 
 
 textInput.addEventListener('input', function (e) {
-    brxGlobalProp.$_activeElement.value.settings._cssClasses = e.target.value;
+    // loop the activeElementIds and set the _cssClasses to the value of textInput
+    activeElementIds.value.forEach((id) => {
+        const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
+        if (activeElement) {
+            activeElement.settings._cssClasses = e.target.value;
+        }
+    });
 });
 
 function onTextInputChanges() {
@@ -410,7 +434,15 @@ textInput.addEventListener('tribute-active-true', function (e) {
 
 classSortAction.addEventListener('click', async function (e) {
     textInput.value = await brxIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
-    brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
+    
+    // brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
+    activeElementIds.value.forEach((id) => {
+        const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
+        if (activeElement) {
+            activeElement.settings._cssClasses = e.target.value;
+        }
+    });
+
     onTextInputChanges();
 });
 

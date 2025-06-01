@@ -168,7 +168,6 @@ function rebuild(kind: 'full' | 'incremental') {
 let scriptObserver = new MutationObserver(() => rebuild('full'))
 
 function observeScript(script: HTMLScriptElement) {
-    console.debug('Observing script element:', script);
     scriptObserver.observe(script, {
         attributes: true,
         attributeFilter: ['type', 'src'],

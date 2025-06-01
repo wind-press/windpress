@@ -59,7 +59,7 @@ async function mountVariablesStylesheet() {
 const channel = new BroadcastChannel('windpress');
 channel.addEventListener('message', async (e) => {
     const data = e.data;
-    const source = 'windpress/autocomplete';
+    const source = 'windpress/intellisense';
     const target = 'any';
     const task = 'windpress.code-editor.saved.done';
 

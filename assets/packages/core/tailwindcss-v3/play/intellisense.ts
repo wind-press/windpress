@@ -53,7 +53,7 @@ async function preloadItems() {
     classLists = results;
 
     channel.postMessage({
-        source: 'windpress/autocomplete',
+        source: 'windpress/intellisense',
         target: 'any',
         task: `windpress.code-editor.saved.done`
     });

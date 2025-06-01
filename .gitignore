@@ -1,5 +1,4 @@
-build/*
-!build/vendor/
+build
 languages
 node_modules
 vendor

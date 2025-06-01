@@ -123,6 +123,10 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Improve**: [Bricks] The Plain Classes and Variables feature compat for version 2.0-beta
+* **Improve**: Optimize the bundle (Zip) size of the plugin
+
 = 3.3.39 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.8 latest)
 * **Improve**: [TW4] The Play Observer / Compiler performance & stability
