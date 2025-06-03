@@ -66,6 +66,7 @@ class Editor
                 
                 // wait for the iframe to be ready
                 while (
+                    !iframeWindow ||
                     (iframeWindow.contentDocument?.body?.innerHTML === '' || iframeWindow.contentDocument?.body?.innerHTML === undefined)
                     || (iframeWindow.contentWindow?.document?.body?.innerHTML === '' || iframeWindow.contentWindow?.document?.body?.innerHTML === undefined)
                 ) {
