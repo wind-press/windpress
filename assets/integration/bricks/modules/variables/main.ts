@@ -42,6 +42,11 @@ async function registerVariables() {
     // register variables
     const variableLists = await getVariableList(await loadDesignSystem({ volume }));
     variableLists.forEach(variable => {
+        // Temp workaround as Bricks doesn't use cascade layers for the global variables
+        if (variable.value?.includes('--')) {
+            return;
+        }
+
         brxGlobalProp.$_state.globalVariables.push({
             id: generateId(),
             name: variable.key.substring(2),

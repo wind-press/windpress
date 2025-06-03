@@ -29,6 +29,8 @@ async function registerPallete() {
     const colors = [];
     variableLists
         .filter((variable) => variable.key.startsWith('--color'))
+        // Temp workaround as Bricks doesn't use cascade layers for the global variables
+        .filter((variable) => !variable.value?.includes('--'))
         .forEach((variable) => {
             colors.push({
                 id: generateHash(variable.key),
