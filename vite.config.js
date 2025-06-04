@@ -138,6 +138,7 @@ export default defineConfig({
         },
         // minify: false, // Uncomment this for debugging purposes, otherwise it will minify the code.
         cssMinify: 'lightningcss',
+        minify: true
     },
     worker: {
         rollupOptions: {

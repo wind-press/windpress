@@ -125,6 +125,7 @@ Pro version 1.**1**.4
 
 = unreleased =
 * **Fix**: [Bricks] Variables contain `--` in the value being registered to the Bricks Global Variables system
+* **Fix**: Plugin's bundle (Zip) file are not generated correctly
 
 = 3.3.40 =
 * **Improve**: [Bricks] The Plain Classes and Variables feature compat for version 2.0-beta
