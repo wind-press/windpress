@@ -123,6 +123,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **Improve**: [Gutenberg] Run the Play Observer / Compiler even if the visual editor is not iframed
+
 = 3.3.41 =
 * **Fix**: [Bricks] Variables contain `--` in the value being registered to the Bricks Global Variables system
 * **Fix**: Plugin's bundle (Zip) file are not generated correctly

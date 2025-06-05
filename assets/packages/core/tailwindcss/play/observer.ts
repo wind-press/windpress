@@ -227,8 +227,7 @@ const observer = new MutationObserver((records) => {
     }
 });
 
-// if not found constant that disable the observer don't run the observer
-if (!(window as any)['__windpress__disable_playObserver']) {
+function startPlayObserver() {
     observer.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['class'],
@@ -239,6 +238,11 @@ if (!(window as any)['__windpress__disable_playObserver']) {
     rebuild('full');
 
     document.head.append(sheet);
+}
+
+// if not found constant that disable the observer don't run the observer
+if (!(window as any)['__windpress__disable_playObserver']) {
+    startPlayObserver();
 } else {
     console.warn('Play Observer is disabled.');
 }
@@ -265,6 +269,11 @@ if (!(window as any)['__windpress__disable_playObserver']) {
 
 // expose the observer to the global scope for debugging
 try {
-    (window as any).twPlayObserver = observer
+    (window as any).twPlayObserver = observer;
+    (window as any).twPlayObserverStart = () => {
+        startPlayObserver();
+        console.warn('Play Observer started manually.');
+    };
+    
 }
 catch (e) { }

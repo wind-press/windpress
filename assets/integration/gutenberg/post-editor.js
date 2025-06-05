@@ -3,14 +3,46 @@ import { logger } from '@/integration/common/logger';
 logger('Loading...');
 
 (async () => {
-    let rootContainer;
+    let editorVisualEditor;
+    let iframeEl;
     let scriptElements;
+    
+    // wait for the editor-visual-editor
+    logger('waiting for the editor-visual-editor...');
+    
+    let tryCount = 0;
+    const maxTries = 300; // 30 seconds max wait time
+    while(!editorVisualEditor && tryCount < maxTries) {
+        editorVisualEditor = document.querySelector('div.editor-visual-editor');
+        tryCount++;
+        if (tryCount >= maxTries) {
+            logger('time out! failed to find editor-visual-editor');
+            break;
+        }
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
 
-    logger('waiting for the rootContainer...');
+    if (!editorVisualEditor) {
+        logger('editor-visual-editor not found, skipping the injection process...');
+        return;
+    }
+
+    // if the editor-visual-editor is not iframed, we can start the observer immediately
+    if (!editorVisualEditor.classList.contains('is-iframed')) {
+        logger('editor-visual-editor is not iframed, starting the observer immediately...');
+        if (window.twPlayObserverStart) {
+            window.twPlayObserverStart();
+        }
+
+        return;
+    }
+    
+
+    logger('waiting for the iframeEl...');
 
     // wait for the root container to be available
-    while (!rootContainer) {
-        rootContainer = document.querySelector('iframe[name="editor-canvas"]');
+    while (!iframeEl) {
+        iframeEl = document.querySelector('iframe[name="editor-canvas"]');
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 
@@ -47,8 +79,8 @@ logger('Loading...');
 
     logger('found WindPress script');
 
-    let contentWindow = rootContainer.contentWindow || rootContainer;
-    let contentDocument = rootContainer.contentDocument || contentWindow.document;
+    let contentWindow = iframeEl.contentWindow || iframeEl;
+    let contentDocument = iframeEl.contentDocument || contentWindow.document;
 
     // wait until contentDocument.head is available
     while (!contentDocument.head) {

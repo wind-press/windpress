@@ -246,10 +246,17 @@ const observerAutocomplete = new MutationObserver(function (mutations) {
     });
 });
 
-function previewAddClass(className) {
+function getContentDocument() {
     const rootContainer = document.querySelector('iframe[name="editor-canvas"]');
-    const contentWindow = rootContainer.contentWindow || rootContainer;
-    const contentDocument = rootContainer.contentDocument || contentWindow.document;
+    const contentWindow = rootContainer?.contentWindow || rootContainer;
+    return rootContainer?.contentDocument || contentWindow?.document;
+}
+
+function previewAddClass(className) {
+    const contentDocument = getContentDocument();
+    if (!contentDocument) {
+        return;
+    }
 
     const block = contentDocument.getElementById(`block-${currentBlockId.value}`);
 
@@ -259,9 +266,10 @@ function previewAddClass(className) {
 }
 
 function previewResetClass(className) {
-    const rootContainer = document.querySelector('iframe[name="editor-canvas"]');
-    const contentWindow = rootContainer.contentWindow || rootContainer;
-    const contentDocument = rootContainer.contentDocument || contentWindow.document;
+    const contentDocument = getContentDocument();
+    if (!contentDocument) {
+        return;
+    }
 
     const block = contentDocument.getElementById(`block-${currentBlockId.value}`);
 
