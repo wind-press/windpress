@@ -23,8 +23,8 @@ export function parse(domData) {
     const elements = [];
     domData.childNodes.forEach((node) => {
         const transformedNode = transformNode(node);
-        if (transformedNode) {
-            elements.push(transformedNode);
+        if (transformedNode.transformedNode) {
+            elements.push(transformedNode.transformedNode);
         }
     });
 
@@ -37,7 +37,7 @@ export function parse(domData) {
  */
 function transformElement(el) {
     const tagName = el.tagName.toLowerCase();
-    const brxNode = {
+    let brxNode = {
         id: generateId(),
         name: 'div',
         settings: {
@@ -45,7 +45,7 @@ function transformElement(el) {
         },
         children: [],
     };
-    
+
     const attrs = [];
 
     const preservedAttrs = ['id', 'class', 'href', 'src'];
@@ -169,9 +169,16 @@ function transformElement(el) {
     }
 
     el.childNodes.forEach((node) => {
-        const transformedNode = transformNode(node);
+        const { transformedNode,
+            brxNode: transformedBrxNode = null,
+        } = transformNode(node, el, brxNode);
+
         if (transformedNode) {
             brxNode.children.push(transformedNode);
+        }
+
+        if (transformedBrxNode) {
+            brxNode = transformedBrxNode;
         }
     });
 
@@ -182,25 +189,48 @@ function transformElement(el) {
  * using childNodes instead of children
  * 
  * @param {ChildNode} node 
+ * @param {Element|null} parent
+ * @param {Object|null} brxNode
  */
-function transformNode(node) {
+function transformNode(node, parent = null, brxNode = null) {
     if (node.nodeType === Node.ELEMENT_NODE) {
-        return transformElement(/** @type {Element} */ (node));
+        const transformedNode = transformElement(/** @type {Element} */(node));
+        return {
+            transformedNode,
+        }
     }
 
     if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== '') {
-        return {
-            id: generateId(),
-            name: 'text-basic',
-            settings: {
-                tag: 'span',
+        // if the parent element has only one child node,
+        // and is an p, span, or div, unwrap the text node and merge it with the parent
+        if (parent && brxNode && parent.childNodes.length === 1 && (parent.tagName.toLowerCase() === 'p' || parent.tagName.toLowerCase() === 'span' || parent.tagName.toLowerCase() === 'div')) {
+            brxNode.name = 'text-basic';
+            merge(brxNode.settings, {
                 text: node.nodeValue,
-            },
-            children: [],
+            });
+
+            return {
+                transformedNode: null,
+                brxNode
+            };
+        }
+
+        return {
+            transformedNode: {
+                id: generateId(),
+                name: 'text-basic',
+                settings: {
+                    tag: 'span',
+                    text: node.nodeValue,
+                },
+                children: [],
+            }
         };
     }
 
-    return null;
+    return {
+        transformedNode: null,
+    };
 }
 
 /**
