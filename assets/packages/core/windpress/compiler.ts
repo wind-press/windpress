@@ -3,8 +3,6 @@ import { unescape } from "@std/html/entities";
 import { createLogComposable } from '@/dashboard/stores/log'
 import { useApi } from '@/dashboard/library/api';
 import { stringify as stringifyYaml } from 'yaml';
-// import { compile as buildV4, find_tw_candidates, optimize as optimizeV4, loadSource } from '@/packages/core/tailwindcss';
-// import { build as buildV3, optimize as optimizeV3 } from '@/packages/core/tailwindcss-v3';
 import { nanoid } from 'nanoid';
 import lzString from 'lz-string';
 import { get } from 'lodash-es';
