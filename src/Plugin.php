@@ -49,16 +49,12 @@ final class Plugin
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Singletons should not be cloneable.
      */
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     /**
      * Singletons should not be restorable from strings.
@@ -95,8 +91,8 @@ final class Plugin
         do_action('a!windpress/plugin:boot.start');
 
         // (de)activation hooks.
-        register_activation_hook(WIND_PRESS::FILE, fn () => $this->activate_plugin());
-        register_deactivation_hook(WIND_PRESS::FILE, fn () => $this->deactivate_plugin());
+        register_activation_hook(WIND_PRESS::FILE, fn() => $this->activate_plugin());
+        register_deactivation_hook(WIND_PRESS::FILE, fn() => $this->deactivate_plugin());
 
         // upgrade hooks.
         add_action('upgrader_process_complete', function (WP_Upgrader $wpUpgrader, array $options): void {
@@ -111,47 +107,10 @@ final class Plugin
 
         $this->maybe_update_plugin();
 
-        add_action('plugins_loaded', fn () => $this->plugins_loaded(), 9);
-        add_action('init', fn () => $this->init_plugin());
+        add_action('plugins_loaded', fn() => $this->plugins_loaded(), 9);
+        add_action('init', fn() => $this->init_plugin());
 
         do_action('a!windpress/plugin:boot.end');
-    }
-
-    /**
-     * Initialize the plugin updater.
-     * Pro version only.
-     *
-     * @return PluginUpdater
-     */
-    public function maybe_update_plugin()
-    {
-        if (! class_exists(PluginUpdater::class)) {
-            return null;
-        }
-
-        if ($this->plugin_updater instanceof \EDD_SL\PluginUpdater) {
-            return $this->plugin_updater;
-        }
-
-        $license = get_option(WIND_PRESS::WP_OPTION . '_license', [
-            'key' => '',
-            'opt_in_pre_release' => false,
-        ]);
-
-        $this->plugin_updater = new PluginUpdater(
-            WIND_PRESS::WP_OPTION,
-            [
-                'version' => WIND_PRESS::VERSION,
-                'license' => $license['key'] ? trim($license['key']) : false,
-                'beta' => $license['opt_in_pre_release'],
-                'plugin_file' => WIND_PRESS::FILE,
-                'item_id' => WIND_PRESS::EDD_STORE['item_id'],
-                'store_url' => WIND_PRESS::EDD_STORE['store_url'],
-                'author' => WIND_PRESS::EDD_STORE['author'],
-            ]
-        );
-
-        return $this->plugin_updater;
     }
 
     /**
@@ -164,6 +123,7 @@ final class Plugin
 
         update_option(WIND_PRESS::WP_OPTION . '_version', WIND_PRESS::VERSION);
 
+        $this->maybe_new_plugin_version();
         $this->maybe_embedded_license();
 
         do_action('a!windpress/plugin:activate_plugin.end');
@@ -219,8 +179,8 @@ final class Plugin
         IntegrationLoader::get_instance()->register_integrations();
 
         if (is_admin()) {
-            add_action('admin_notices', static fn () => Notice::admin_notices());
-            add_filter('plugin_action_links_' . plugin_basename(WIND_PRESS::FILE), fn ($links) => $this->plugin_action_links($links));
+            add_action('admin_notices', static fn() => Notice::admin_notices());
+            add_filter('plugin_action_links_' . plugin_basename(WIND_PRESS::FILE), fn($links) => $this->plugin_action_links($links));
         }
 
         do_action('a!windpress/plugin:plugins_loaded.end');
@@ -253,6 +213,56 @@ final class Plugin
         }
 
         return $links;
+    }
+
+    /**
+     * Initialize the plugin updater.
+     * Pro version only.
+     *
+     * @return PluginUpdater
+     */
+    private function maybe_update_plugin()
+    {
+        if (! class_exists(PluginUpdater::class)) {
+            return null;
+        }
+
+        if ($this->plugin_updater instanceof \EDD_SL\PluginUpdater) {
+            return $this->plugin_updater;
+        }
+
+        $license = get_option(WIND_PRESS::WP_OPTION . '_license', [
+            'key' => '',
+            'opt_in_pre_release' => false,
+        ]);
+
+        $this->plugin_updater = new PluginUpdater(
+            WIND_PRESS::WP_OPTION,
+            [
+                'version' => WIND_PRESS::VERSION,
+                'license' => $license['key'] ? trim($license['key']) : false,
+                'beta' => $license['opt_in_pre_release'],
+                'plugin_file' => WIND_PRESS::FILE,
+                'item_id' => WIND_PRESS::EDD_STORE['item_id'],
+                'store_url' => WIND_PRESS::EDD_STORE['store_url'],
+                'author' => WIND_PRESS::EDD_STORE['author'],
+            ]
+        );
+
+        return $this->plugin_updater;
+    }
+
+    /**
+     * Check if the plugin has a new version by clearing the cache.
+     * Pro version only.
+     */
+    private function maybe_new_plugin_version(): void
+    {
+        if (! class_exists(PluginUpdater::class)) {
+            return;
+        }
+
+        $this->maybe_update_plugin()->clear_cache();
     }
 
     /**
