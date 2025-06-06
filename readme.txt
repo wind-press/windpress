@@ -89,13 +89,15 @@ Affiliate Disclosure: This readme.txt may contain affiliate links. If you decide
 
 == Screenshots ==
 
-1. The WindPress settings page to choose the Tailwind CSS version or generate the cached CSS file.
+1. The WindPress settings page to choose the Tailwind CSS version.
 2. The `tailwind.config.js` file editor, which let adding the Tailwind CSS plugins.
 3. The `main.css` file editor, which let adding the custom CSS.
 4. The Tailwind CSS class name suggestions feature on the Gutenberg editor.
 5. Sort the Tailwind CSS classes on the input field.
 6. Hover over the Tailwind CSS class name to see the complete outputted CSS and the preview of the design canvas.
 7. The front-end page with the Tailwind CSS classes applied, as was added from the Gutenberg editor.
+8. The WindPress settings page to generate the cached CSS file.
+9. The WindPress log page to see the compiler logs.
 
 == Frequently Asked Questions ==
 
