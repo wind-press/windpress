@@ -125,6 +125,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
+= unreleased =
+* **New**: Upgraded to Tailwind CSS v4 (4.1.10 latest)
+
 = 3.3.42 =
 * **Improve**: [Gutenberg] Run the Play Observer / Compiler even if the visual editor is not iframed
 
