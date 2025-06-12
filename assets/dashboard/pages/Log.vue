@@ -60,7 +60,7 @@ watch(log.logs, () => {
         <div class="flex flex-col gap-4 sm:gap-6 lg:gap-12  mx-auto">
           <div v-if="log.logs.length > 0" role="group" class="flex flex-col">
             <div v-for="history in log.logs" :key="history.id" class="font-mono">
-              <span :title="history.id" class="text-(--ui-bg)/50 dark:text-(--ui-text)/50">[{{ dayjs(history.timestamp).format('HH:mm:ss.SSS') }}]</span>
+              <span :title="history.id" class="text-(--ui-bg)/50 dark:text-(--ui-text)/50 group">[<span class="hidden group-hover:inline-block">{{ dayjs(history.timestamp).format('YYYY/MM/DD_') }}</span>{{ dayjs(history.timestamp).format('HH:mm:ss.SSS') }}]</span>
               <span class="mr-4">
                 <span v-if="history.type === 'error'" class="text-(--ui-error)">[ERROR]</span>
                 <span v-else-if="history.type === 'warning'" class="text-(--ui-warning)">[WARNING]</span>
