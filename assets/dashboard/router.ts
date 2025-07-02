@@ -18,6 +18,11 @@ const router = createRouter({
             component: () => import('./pages/Log.vue'),
         },
         {
+            path: '/wizard',
+            name: 'wizard',
+            component: () => import('./pages/Wizard.vue'),
+        },
+        {
             path: '/settings',
             name: 'settings',
             redirect: { name: 'settings.general' },
