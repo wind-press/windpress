@@ -19,6 +19,9 @@ importers:
       '@ampproject/remapping':
         specifier: ^2.3.0
         version: 2.3.0
+      '@atlaskit/pragmatic-drag-and-drop':
+        specifier: ^1.7.4
+        version: 1.7.4
       '@guolao/vue-monaco-editor':
         specifier: ^1.5.5
         version: 1.5.5(monaco-editor@0.52.2)(vue@3.5.17(typescript@5.6.2))
@@ -358,6 +361,9 @@ packages:
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  '@atlaskit/pragmatic-drag-and-drop@1.7.4':
+    resolution: {integrity: sha512-lZHnO9BJdHPKnwB0uvVUCyDnIhL+WAHzXQ2EXX0qacogOsnvIUiCgY0BLKhBqTCWln3/f/Ox5jU54MKO6ayh9A==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -2272,6 +2278,9 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
+  bind-event-listener@3.0.0:
+    resolution: {integrity: sha512-PJvH288AWQhKs2v9zyfYdPzlPqf5bXbGMmhmUIY9x4dAUGIWgomO771oBQNwJnMQSnUIXhKu6sgzpBRXTlvb8Q==}
+
   birpc@2.4.0:
     resolution: {integrity: sha512-5IdNxTyhXHv2UlgnPHQ0h+5ypVmkrYHzL8QT+DwFZ//2N/oNV8Ch+BCRmTJ3x6/z9Axo/cXYBc9eprsUVK/Jsg==}
 
@@ -4158,6 +4167,9 @@ packages:
   radix3@1.1.2:
     resolution: {integrity: sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==}
 
+  raf-schd@4.0.3:
+    resolution: {integrity: sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ==}
+
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
 
@@ -5434,6 +5446,12 @@ snapshots:
       '@ariakit/react-core': 0.4.17(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
+
+  '@atlaskit/pragmatic-drag-and-drop@1.7.4':
+    dependencies:
+      '@babel/runtime': 7.25.7
+      bind-event-listener: 3.0.0
+      raf-schd: 4.0.3
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -7758,6 +7776,8 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
+  bind-event-listener@3.0.0: {}
+
   birpc@2.4.0: {}
 
   bl@5.1.0:
@@ -9752,6 +9772,8 @@ snapshots:
   queue-microtask@1.2.3: {}
 
   radix3@1.1.2: {}
+
+  raf-schd@4.0.3: {}
 
   randombytes@2.1.0:
     dependencies:

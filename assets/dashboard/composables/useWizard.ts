@@ -254,7 +254,7 @@ export function parseWizardFile(fileContent: string): WizardTheme {
         const ast = cssToolsParse(fileContent);
         theme.ast = ast;
 
-        console.log('Parsed AST:', JSON.stringify(ast, null, 2));
+        // console.log('Parsed AST:', JSON.stringify(ast, null, 2));
 
         // Find and process the @theme rule
         if (ast.stylesheet?.rules) {
@@ -265,7 +265,7 @@ export function parseWizardFile(fileContent: string): WizardTheme {
                     );
                     
                     if (themeSelector) {
-                        console.log('Found @theme rule:', rule);
+                        // console.log('Found @theme rule:', rule);
 
                         // Parse @theme modifiers
                         if (themeSelector === '@theme static') {
@@ -276,7 +276,7 @@ export function parseWizardFile(fileContent: string): WizardTheme {
                         if (rule.declarations) {
                             for (const declaration of rule.declarations) {
                                 if (declaration.type === 'declaration' && declaration.property.startsWith('--')) {
-                                    console.log('Declaration:', declaration.property, '=', declaration.value);
+                                    // console.log('Declaration:', declaration.property, '=', declaration.value);
                                     processDeclaration(theme, declaration.property, declaration.value);
                                 }
                             }
