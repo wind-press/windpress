@@ -94,6 +94,9 @@ importers:
       magic-string:
         specifier: ^0.30.17
         version: 0.30.17
+      maska:
+        specifier: ^3.2.0
+        version: 3.2.0
       minimatch:
         specifier: ^10.0.3
         version: 10.0.3
@@ -3585,6 +3588,9 @@ packages:
   make-dir@2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
     engines: {node: '>=6'}
+
+  maska@3.2.0:
+    resolution: {integrity: sha512-zSmSgs5/q9vMSmrdZT3rKOv9uLznNWR/niuuAdBZDTvB3SMKOX9vhMtDijFyExz+B4UClu2rvksylUh/ea1bLA==}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -9176,6 +9182,8 @@ snapshots:
       pify: 4.0.1
       semver: 5.7.2
     optional: true
+
+  maska@3.2.0: {}
 
   math-intrinsics@1.1.0: {}
 

@@ -1,38 +1,224 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { inject, nextTick, ref, watch, type Ref } from 'vue';
+import { nanoid } from 'nanoid';
 
-import type { TreeItem } from '@nuxt/ui'
+import type { TreeItem, DropdownMenuItem } from '@nuxt/ui';
+import { type WizardTheme } from '@/dashboard/composables/useWizard';
 
-const items: TreeItem[] = [
-    {
-        label: 'app/',
-        defaultExpanded: true,
-        onToggle: (e: Event) => {
-            e.preventDefault()
-        },
-        children: [
-            {
-                label: 'composables/',
-                children: [
-                    { label: 'useAuth.ts', icon: 'i-vscode-icons-file-type-typescript' },
-                    { label: 'useUser.ts', icon: 'i-vscode-icons-file-type-typescript' }
-                ]
-            },
-            {
-                label: 'components/',
-                defaultExpanded: true,
-                children: [
-                    { label: 'Card.vue', icon: 'i-vscode-icons-file-type-vue' },
-                    { label: 'Button.vue', icon: 'i-vscode-icons-file-type-vue' }
-                ]
+const theme = inject('theme') as Ref<WizardTheme>;
+
+console.log('Screens page loaded', theme.value);
+
+// Support nesting / recursive structure for breakpoints by adding it to the `children` property of each TreeItem.
+function breakpointToTree(breakpoint: WizardTheme['namespaces']['breakpoint']): TreeItem[] {
+    return Object.entries(breakpoint)
+        .map(([key, value]) => {
+            // skip if the key is $value
+            if (key === '$value') {
+                return null;
             }
-        ]
-    },
-    { label: 'app.vue', icon: 'i-vscode-icons-file-type-vue' },
-    { label: 'nuxt.config.ts', icon: 'i-vscode-icons-file-type-nuxt' }
-]
 
-const value = ref()
+            const item: TreeItem = {
+                value: nanoid(), // Generate a unique ID for each item
+                var: {
+                    key: key,
+                    value: value,
+                },
+                defaultExpanded: true,
+                onSelect: (e: Event) => {
+                    e.preventDefault();
+                },
+            };
+
+            // If the value is an object, we can assume it has nested breakpoints
+            if (typeof value === 'object' && value !== null) {
+                item.onToggle = (e: Event) => {
+                    e.preventDefault()
+                };
+
+                item.children = breakpointToTree(value);
+
+                // if the value has a $value property, we can use that as the value
+                if (value.$value !== undefined) {
+                    item.var.value = value.$value;
+                } else {
+                    item.var.value = ''; // Ensure empty string for parent items without explicit value
+                }
+            } else {
+                item.var.value = value;
+            }
+
+            return item;
+        })
+        .filter((item): item is TreeItem => item !== null)
+
+        ;
+}
+
+// Convert the tree items back to the breakpoint structure
+function treeToBreakpoint(items: TreeItem[]): WizardTheme['namespaces']['breakpoint'] {
+    const breakpoint: WizardTheme['namespaces']['breakpoint'] = {};
+
+    items.forEach(item => {
+        if (!item.var.key) return; // Skip items without labels
+
+        if (item.children && item.children.length > 0) {
+            breakpoint[item.var.key] = {
+                ...treeToBreakpoint(item.children),
+            };
+
+            // If the item has a value (including empty string), we can set it as $value
+            if (item.var.value !== undefined && item.var.value !== null) {
+                breakpoint[item.var.key].$value = item.var.value;
+            }
+        } else if (item.var.value !== undefined && item.var.value !== null) {
+            breakpoint[item.var.key] = item.var.value;
+        }
+    });
+
+    return breakpoint;
+}
+
+// Create a reactive ref for items
+const items = ref<TreeItem[]>([]);
+
+// Initialize items from theme
+items.value = breakpointToTree(theme.value.namespaces.breakpoint);
+
+// Only watch theme changes and update items (one-way)
+watch(() => theme.value.namespaces.breakpoint, () => {
+    items.value = breakpointToTree(theme.value.namespaces.breakpoint);
+    console.log('Updated items from theme:', items.value);
+}, { deep: true });
+
+// Function to manually update theme when items change
+function updateThemeFromItems() {
+    const newBreakpoint = treeToBreakpoint(items.value);
+    console.log('Setting new breakpoint:', newBreakpoint);
+    // theme.value.namespaces.breakpoint = newBreakpoint;
+
+    nextTick(() => {
+        // Ensure the theme is updated after the next DOM update cycle
+        theme.value.namespaces.breakpoint = newBreakpoint;
+        console.log('Updated theme from items:', theme.value.namespaces.breakpoint);
+    });
+}
+
+function addBreakpointChild(uid: string) {
+    console.log('Adding breakpoint child for uid:', uid);
+
+    // Find the current item by uid
+    function findItemByUid(items: TreeItem[], targetUid: string): TreeItem | null {
+        for (const item of items) {
+            if (item.value === targetUid) {
+                return item;
+            }
+            if (item.children && item.children.length > 0) {
+                const found = findItemByUid(item.children, targetUid);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+
+    const currentItem = findItemByUid(items.value, uid);
+    if (!currentItem) {
+        console.error('Item not found for uid:', uid);
+        return;
+    }
+
+    // Create a new breakpoint item
+    const newBreakpoint: TreeItem = {
+        value: nanoid(), // Generate a unique ID for the new item
+        var: {
+            key: 'new-breakpoint',
+            value: '',
+        },
+        defaultExpanded: true,
+        children: [],
+        onSelect: (e: Event) => {
+            e.preventDefault();
+        },
+    };
+
+    // If the current item has children, add to its children
+    if (currentItem.children) {
+        currentItem.children.push(newBreakpoint);
+    } else {
+        // If it has no children, create an empty array and add the new breakpoint
+        currentItem.children = [newBreakpoint];
+    }
+
+    // Update the theme from items after adding
+    updateThemeFromItems();
+}
+
+function addBreakpointNext(uid: string) {
+    console.log('Adding breakpoint next to uid:', uid);
+
+    // Find the current item by uid
+    function findItemByUid(items: TreeItem[], targetUid: string): TreeItem | null {
+        for (const item of items) {
+            if (item.value === targetUid) {
+                return item;
+            }
+            if (item.children && item.children.length > 0) {
+                const found = findItemByUid(item.children, targetUid);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+
+    const currentItem = findItemByUid(items.value, uid);
+    if (!currentItem) {
+        console.error('Item not found for uid:', uid);
+        return;
+    }
+
+    // Create a new breakpoint item
+    const newBreakpoint: TreeItem = {
+        value: nanoid(), // Generate a unique ID for the new item
+        var: {
+            key: 'new-breakpoint',
+            value: '',
+        },
+        defaultExpanded: true,
+        children: [],
+        onSelect: (e: Event) => {
+            e.preventDefault();
+        },
+    };
+
+    // Find the parent of the current item and add the new breakpoint as a sibling
+    function findAndAddSibling(items: TreeItem[], target: TreeItem): boolean {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].uid === target.uid) {
+                // Found the target, add the new breakpoint after it
+                items.splice(i + 1, 0, newBreakpoint);
+                return true;
+            }
+
+            // If the current item has children, recursively search them
+            if (items[i].children && items[i].children.length > 0) {
+                if (findAndAddSibling(items[i].children!, target)) {
+                    return true;
+                }
+            }
+        }
+        console.warn('Parent not found for uid:', target.uid);
+        return false;
+    }
+
+    // Try to find and add the sibling
+    if (!findAndAddSibling(items.value, currentItem)) {
+        // If we couldn't find the parent, add to the root level
+        items.value.push(newBreakpoint);
+    }
+
+    // Update the theme from items after adding
+    updateThemeFromItems();
+}
 </script>
 
 <template>
@@ -50,14 +236,66 @@ const value = ref()
             </template>
 
             <template #right>
-                <UTooltip :text="i18n.__('Save', 'windpress')">
+                <UTooltip :text="i18n.__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/responsive-design#customizing-your-theme" target="_blank" />
                 </UTooltip>
             </template>
         </UDashboardNavbar>
 
-        <div class="flex-1 overflow-y-auto">
-            <!-- <vue-monaco-editor v-model:value="props.entry.content" :language="props.entry.relative_path.endsWith('.css') ? 'css' : 'javascript'" :saveViewState="false" :options="{ ...MONACO_EDITOR_OPTIONS, readOnly: props.entry.readonly }" @mount="handleEditorMount" :theme="colorMode === 'dark' ? 'vs-dark' : 'vs'" /> -->
+        <div class="flex-1 overflow-y-auto p-4">
+            <!-- TreeItem -->
+            <UTree :items :ui="{ link: 'py-4' }">
+                <template #item="{ item }">
+                    <div class="bg-elevated rounded p-1 hover:bg-accented cursor-grab">
+                        <UIcon name="lucide:grip-vertical" class="size-4 text-dimmed" />
+                    </div>
+                    <div>
+                        <UInput v-model="item.var.key" @update:model-value="(val) => {
+                            // Only allow alphanumeric characters, hyphens, and underscores
+                            const sanitized = val.replace(/[^a-zA-Z0-9\-_]/g, '');
+                            item.var.key = sanitized;
+                            updateThemeFromItems();
+                        }" placeholder="" :ui="{ base: 'peer' }">
+                            <label class="pointer-events-none absolute left-0 -top-2.5 text-highlighted text-xs font-medium px-1.5 transition-all peer-focus:-top-2.5 peer-focus:text-highlighted peer-focus:text-xs peer-focus:font-medium peer-placeholder-shown:text-sm peer-placeholder-shown:text-dimmed peer-placeholder-shown:top-1.5 peer-placeholder-shown:font-normal">
+                                <span class="inline-flex bg-default px-1">{{ i18n.__('Name') }}</span>
+                            </label>
+                        </UInput>
+                    </div>
+                    <div class="w-full">
+                        <UInput v-model="item.var.value" @update:model-value="(value) => { item.var.value = value; updateThemeFromItems(); }" placeholder="" :ui="{ base: 'peer', root: 'block' }">
+                            <label class="pointer-events-none absolute left-0 -top-2.5 text-highlighted text-xs font-medium px-1.5 transition-all peer-focus:-top-2.5 peer-focus:text-highlighted peer-focus:text-xs peer-focus:font-medium peer-placeholder-shown:text-sm peer-placeholder-shown:text-dimmed peer-placeholder-shown:top-1.5 peer-placeholder-shown:font-normal">
+                                <span class="inline-flex bg-default px-1">{{ i18n.__('Value') }}</span>
+                            </label>
+                        </UInput>
+                    </div>
+                    <div>
+                        <UDropdownMenu :items="[
+                            {
+                                label: i18n.__('Add (next)', 'windpress'),
+                                icon: 'i-lucide-plus',
+                                onSelect() {
+                                    addBreakpointNext(item.value);
+                                },
+                            },
+                            {
+                                label: i18n.__('Add (child)', 'windpress'),
+                                icon: 'lucide:corner-down-right',
+                                onSelect() {
+                                    addBreakpointChild(item.value);
+                                },
+                            },
+                            {
+                                label: 'Delete',
+                                icon: 'i-lucide-trash-2',
+                            }
+                        ]" :ui="{
+                            content: 'w-48'
+                        }">
+                            <UButton icon="lucide:ellipsis" color="neutral" variant="ghost" />
+                        </UDropdownMenu>
+                    </div>
+                </template>
+            </UTree>
         </div>
 
     </UDashboardPanel>

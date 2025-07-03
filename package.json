@@ -85,6 +85,7 @@
     "lodash-es": "^4.17.21",
     "lz-string": "https://pkg.pr.new/wind-press/lz-string@2c61edc",
     "magic-string": "^0.30.17",
+    "maska": "^3.2.0",
     "minimatch": "^10.0.3",
     "monaco-editor": "^0.52.2",
     "nanoid": "^5.1.5",

@@ -67,7 +67,7 @@ export interface ThemeNamespaces {
     text: Record<string, NestedThemeValue>;
     font: Record<string, NestedThemeValue>;
     spacing: Record<string, NestedThemeValue>;
-    breakpoint: Record<string, string>;
+    breakpoint: Record<string, NestedThemeValue>;
 }
 
 /** Main wizard theme structure */
@@ -96,7 +96,7 @@ const THEME_NAMESPACES = {
     text: { supportsNesting: true },
     font: { supportsNesting: true, excludePatterns: ['weight'] },
     spacing: { supportsNesting: true },
-    breakpoint: { supportsNesting: false },
+    breakpoint: { supportsNesting: true },
 } as const;
 
 /** Special CSS properties that require special handling */
@@ -332,8 +332,9 @@ function processDeclaration(theme: WizardTheme, property: string, value: string)
 
     // Process the property based on namespace
     if (namespace === 'breakpoint') {
-        // Breakpoints are flat key-value pairs
-        theme.namespaces.breakpoint[key] = value;
+        // Breakpoints now support nesting like other namespaces
+        const parts = key.split('-');
+        setNestedValue(theme.namespaces.breakpoint, parts, value);
     } else {
         // Other namespaces support nesting
         const parts = key.split('-');
@@ -353,20 +354,11 @@ function serializeNamespaces(theme: WizardTheme, declarations: Array<{ type: 'de
     Object.entries(namespaces).forEach(([namespace, values]) => {
         if (!values || Object.keys(values).length === 0) return;
 
-        if (namespace === 'breakpoint') {
-            // Breakpoints are flat key-value pairs
-            Object.entries(values).forEach(([key, value]) => {
-                if (typeof value === 'string') {
-                    addOrUpdateDeclaration(declarations, `--breakpoint-${key}`, value);
-                }
-            });
-        } else {
-            // Other namespaces support nesting
-            const properties = flattenNestedObject(values, namespace);
-            properties.forEach(({ property, value }) => {
-                addOrUpdateDeclaration(declarations, property, value);
-            });
-        }
+        // All namespaces now support nesting
+        const properties = flattenNestedObject(values, namespace);
+        properties.forEach(({ property, value }) => {
+            addOrUpdateDeclaration(declarations, property, value);
+        });
     });
 }
 

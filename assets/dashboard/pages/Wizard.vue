@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onBeforeUnmount } from 'vue';
+import { ref, onBeforeMount, onBeforeUnmount, provide } from 'vue';
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { useWizard } from '@/dashboard/composables/useWizard';
@@ -11,6 +11,7 @@ const wizard = useWizard();
 const router = useRouter()
 
 const theme = ref(wizard.getDefaultTheme());
+provide('theme', theme);
 
 onBeforeMount(async () => {
     await volumeStore.initPull();
