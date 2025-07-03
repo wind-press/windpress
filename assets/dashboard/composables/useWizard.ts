@@ -24,12 +24,42 @@ import { parse as cssToolsParse, stringify as cssToolsStringify } from '@adobe/c
  * - --animate-*        Animation utilities like animate-spin
  */
 
+/**
+ * Example of how nested CSS variables are handled:
+ * 
+ * Input CSS:
+ * --color-primary: #fff;
+ * --color-primary-card: #ff2;
+ * --color-primary-card-front: #000;
+ * 
+ * Parsed nested structure:
+ * theme.namespaces.color = {
+ *   primary: {
+ *     $value: "#fff",        // --color-primary
+ *     card: {
+ *       $value: "#ff2",      // --color-primary-card
+ *       front: "#000"        // --color-primary-card-front
+ *     }
+ *   }
+ * }
+ * 
+ * Serialized back to CSS:
+ * --color-primary: #fff;
+ * --color-primary-card: #ff2;
+ * --color-primary-card-front: #000;
+ */
+
 // =============================================================================
 // Types
 // =============================================================================
 
-/** Recursive type for nested theme values */
-type NestedThemeValue<T = string> = T | { [key: string]: NestedThemeValue<T> };
+/** Recursive type for nested theme values that supports both direct values and nested children */
+type NestedThemeValue<T = string> = T | NestedThemeObject<T>;
+
+/** Object type for nested theme values with optional direct value */
+type NestedThemeObject<T = string> = { 
+    $value?: T; // Direct value when the property also has nested children
+} & { [key: string]: NestedThemeValue<T> };
 
 /** Theme namespaces with their corresponding CSS variable prefixes */
 export interface ThemeNamespaces {
@@ -81,6 +111,7 @@ const SPECIAL_PROPERTIES = {
 
 /**
  * Sets a nested value in an object using a path array
+ * Handles the case where a property can have both a direct value and nested children
  * @param obj - The target object
  * @param path - Array of keys representing the path
  * @param value - The value to set
@@ -91,19 +122,33 @@ function setNestedValue(obj: any, path: string[], value: string): void {
     // Navigate to the parent of the final key
     for (let i = 0; i < path.length - 1; i++) {
         const key = path[i];
-        if (!current[key] || typeof current[key] === 'string') {
+        if (!current[key]) {
             current[key] = {};
+        } else if (typeof current[key] === 'string') {
+            // Convert string value to object with special '$value' key for the original value
+            const originalValue = current[key];
+            current[key] = { $value: originalValue };
         }
         current = current[key];
     }
 
     // Set the final value
     const finalKey = path[path.length - 1];
-    current[finalKey] = value;
+    if (current[finalKey] && typeof current[finalKey] === 'object' && current[finalKey].$value === undefined) {
+        // There are already nested properties, add the value as $value
+        current[finalKey].$value = value;
+    } else if (current[finalKey] && typeof current[finalKey] === 'object' && current[finalKey].$value !== undefined) {
+        // Update existing $value
+        current[finalKey].$value = value;
+    } else {
+        // Simple case - no existing nested properties
+        current[finalKey] = value;
+    }
 }
 
 /**
  * Flattens a nested object into CSS custom properties
+ * Handles the special $value key for properties that have both direct values and nested children
  * @param obj - The nested object to flatten
  * @param prefix - The CSS variable prefix
  * @returns Array of property-value pairs
@@ -116,9 +161,24 @@ function flattenNestedObject(obj: any, prefix: string): Array<{ property: string
             // This is a leaf node, create the CSS custom property
             result.push({ property: `--${prefix}-${key}`, value });
         } else if (typeof value === 'object' && value !== null) {
-            // This is a nested object, recurse deeper
-            const nestedResults = flattenNestedObject(value, `${prefix}-${key}`);
-            result.push(...nestedResults);
+            // Check if this object has a direct value (using $value key)
+            const valueObj = value as any;
+            if ('$value' in valueObj && typeof valueObj.$value === 'string') {
+                // Add the direct value for this level
+                result.push({ property: `--${prefix}-${key}`, value: valueObj.$value });
+                
+                // Process nested properties (excluding $value)
+                const nestedObj = { ...valueObj };
+                delete nestedObj.$value;
+                if (Object.keys(nestedObj).length > 0) {
+                    const nestedResults = flattenNestedObject(nestedObj, `${prefix}-${key}`);
+                    result.push(...nestedResults);
+                }
+            } else {
+                // This is a nested object without direct value, recurse deeper
+                const nestedResults = flattenNestedObject(value, `${prefix}-${key}`);
+                result.push(...nestedResults);
+            }
         }
     }
 
