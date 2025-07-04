@@ -47,7 +47,8 @@ function recursiveTreeNodeWalkAndInsert(trees: TreeItem[], entry: Entry, rootPat
             children: [],
             onSelect: (e: Event) => {
                 e.preventDefault()
-            }
+            },
+ 
         };
         trees.push(tree);
     }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onBeforeRouteLeave } from 'vue-router'
 import { ref, onBeforeMount, onBeforeUnmount, provide } from 'vue';
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
@@ -38,9 +39,6 @@ function saveWizard() {
     }
 }
 
-onBeforeUnmount(() => {
-    saveWizard();
-});
 
 const links = ref<NavigationMenuItem[][]>([
     [
@@ -78,6 +76,20 @@ const links = ref<NavigationMenuItem[][]>([
         },
     ]
 ]);
+
+
+// onBeforeUnmount(() => {
+//     console.log('Before unmounting, saving wizard...');
+//     saveWizard();
+// });
+
+onBeforeRouteLeave((to, from, next) => {
+    console.log('Before route leave, saving wizard...');
+
+    // Save the theme when leaving the route
+    saveWizard();
+    next();
+});
 </script>
 
 <template>

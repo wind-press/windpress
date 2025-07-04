@@ -57,7 +57,7 @@ import { parse as cssToolsParse, stringify as cssToolsStringify } from '@adobe/c
 type NestedThemeValue<T = string> = T | NestedThemeObject<T>;
 
 /** Object type for nested theme values with optional direct value */
-type NestedThemeObject<T = string> = { 
+type NestedThemeObject<T = string> = {
     $value?: T; // Direct value when the property also has nested children
 } & { [key: string]: NestedThemeValue<T> };
 
@@ -166,7 +166,7 @@ function flattenNestedObject(obj: any, prefix: string): Array<{ property: string
             if ('$value' in valueObj && typeof valueObj.$value === 'string') {
                 // Add the direct value for this level
                 result.push({ property: `--${prefix}-${key}`, value: valueObj.$value });
-                
+
                 // Process nested properties (excluding $value)
                 const nestedObj = { ...valueObj };
                 delete nestedObj.$value;
@@ -215,7 +215,7 @@ function addOrUpdateDeclaration(
 function shouldExcludeProperty(namespace: string, key: string): boolean {
     const config = THEME_NAMESPACES[namespace as keyof typeof THEME_NAMESPACES];
     if (!config || !('excludePatterns' in config)) return false;
-    
+
     return config.excludePatterns?.some(pattern => key.startsWith(pattern)) ?? false;
 }
 
@@ -260,10 +260,10 @@ export function parseWizardFile(fileContent: string): WizardTheme {
         if (ast.stylesheet?.rules) {
             for (const rule of ast.stylesheet.rules) {
                 if (rule.type === 'rule' && rule.selectors) {
-                    const themeSelector = rule.selectors.find((selector: string) => 
+                    const themeSelector = rule.selectors.find((selector: string) =>
                         selector.startsWith('@theme')
                     );
-                    
+
                     if (themeSelector) {
                         // console.log('Found @theme rule:', rule);
 
@@ -394,20 +394,20 @@ function updateExistingAST(theme: WizardTheme): string {
     if (ast.stylesheet?.rules) {
         for (const rule of ast.stylesheet.rules) {
             if (rule.type === 'rule' && rule.selectors) {
-                const themeSelector = rule.selectors.find((selector: string) => 
+                const themeSelector = rule.selectors.find((selector: string) =>
                     selector.startsWith('@theme')
                 );
-                
+
                 if (themeSelector) {
                     // Update the selector based on theme flags
                     rule.selectors = [theme.isStatic ? '@theme static' : '@theme'];
 
-                    // Start with existing declarations from the original rule
+                    // Start with existing declarations to preserve positions
                     const declarations: Array<{ type: 'declaration'; property: string; value: string }> = [
                         ...(rule.declarations || [])
                     ];
 
-                    // Add special properties
+                    // First, update/add special properties
                     if (theme.isInitial) {
                         addOrUpdateDeclaration(declarations, SPECIAL_PROPERTIES.INITIAL_MARKER, 'initial');
                     }
@@ -416,11 +416,52 @@ function updateExistingAST(theme: WizardTheme): string {
                         addOrUpdateDeclaration(declarations, SPECIAL_PROPERTIES.SPACING_MULTIPLIER, theme.spacing);
                     }
 
-                    // Serialize all namespaces
+                    // Update/add all current namespace declarations (preserves existing positions)
                     serializeNamespaces(theme, declarations);
 
+                    // Collect all current theme properties for comparison
+                    const currentThemeProperties = new Set<string>();
+                    
+                    // Add special properties if they exist
+                    if (theme.isInitial) {
+                        currentThemeProperties.add(SPECIAL_PROPERTIES.INITIAL_MARKER);
+                    }
+                    if (theme.spacing) {
+                        currentThemeProperties.add(SPECIAL_PROPERTIES.SPACING_MULTIPLIER);
+                    }
+                    
+                    // Add all namespace properties from current theme
+                    Object.entries(theme.namespaces).forEach(([namespace, values]) => {
+                        if (values && Object.keys(values).length > 0) {
+                            const properties = flattenNestedObject(values, namespace);
+                            properties.forEach(({ property }) => {
+                                currentThemeProperties.add(property);
+                            });
+                        }
+                    });
+
+                    // Remove leftover namespace declarations that are no longer in the theme
+                    const filteredDeclarations = declarations.filter((decl: any) => {
+                        if (decl.type !== 'declaration' || !decl.property.startsWith('--')) {
+                            return true; // Keep non-CSS-custom-property declarations
+                        }
+
+                        // Check if this is a namespace property
+                        const match = decl.property.match(/^--([^-]+)-/);
+                        if (match) {
+                            const namespace = match[1];
+                            // If it's a known namespace property, only keep if it's in current theme
+                            if (namespace in THEME_NAMESPACES) {
+                                return currentThemeProperties.has(decl.property);
+                            }
+                        }
+
+                        // Keep special properties if they're in current theme, or unknown namespace properties
+                        return currentThemeProperties.has(decl.property) || !match;
+                    });
+
                     // Update the rule's declarations
-                    rule.declarations = declarations;
+                    rule.declarations = filteredDeclarations;
                     break;
                 }
             }

@@ -22,9 +22,9 @@ const pinia = createPinia()
 app.config.globalProperties.window = window;
 
 // Pinia plugin: Initialize the store with the data from the server.
-pinia.use(async ({ store }: PiniaPluginContext) => {
+pinia.use(({ store }: PiniaPluginContext) => {
     if (['volume', 'settings'].includes(store.$id)) {
-        await store.initPull();
+        store.initPull();
     }
 })
 
