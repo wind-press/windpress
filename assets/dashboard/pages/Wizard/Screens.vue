@@ -281,7 +281,7 @@ onBeforeRouteLeave((to, from, next) => {
             <!-- TreeItem -->
             <UTree :items :ui="{ link: 'py-4' }" :default-expanded="expandedTree">
                 <template #item="{ item }">
-                    <div class="bg-elevated rounded p-1 hover:bg-accented cursor-grab">
+                    <div class="drag-and-drop-handler bg-elevated rounded p-1 hover:bg-accented cursor-grab">
                         <UIcon name="lucide:grip-vertical" class="size-4 text-dimmed" />
                     </div>
                     <div>
