@@ -1,10 +1,41 @@
 <script setup lang="ts">
 import { onBeforeRouteLeave } from 'vue-router'
-import { inject, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
+import { inject, onBeforeMount, ref, watch, type Ref, watchEffect } from 'vue';
 import { nanoid, customAlphabet } from 'nanoid';
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
+import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine'
 
-import type { TreeItem, DropdownMenuItem } from '@nuxt/ui';
+import type { TreeItem } from '@nuxt/ui';
 import { type WizardTheme } from '@/dashboard/composables/useWizard';
+import DraggableTreeItem from './DraggableTreeItem.vue';
+
+// Define the Instruction type locally to avoid import issues
+type Instruction = {
+    type: 'reorder-above' | 'reorder-below' | 'make-child' | 'reparent'
+    currentLevel?: number
+    indentPerLevel?: number
+    desiredLevel?: number
+}
+
+// Function to extract instruction from drop target data
+function extractInstruction(data: any): Instruction | null {
+    // The instruction should be attached by the hitbox library
+    if (data.instruction) {
+        return data.instruction
+    }
+    
+    // Look for instruction in other possible properties
+    if (data.type) {
+        return {
+            type: data.type,
+            currentLevel: data.currentLevel,
+            indentPerLevel: data.indentPerLevel,
+            desiredLevel: data.desiredLevel
+        }
+    }
+    
+    return null
+}
 
 const theme = inject('theme') as Ref<WizardTheme>;
 
@@ -22,6 +53,8 @@ function generateId() {
 
 
 const expandedTree = ref<string[]>([]);
+const draggedItemId = ref<string | null>(null);
+const recentlyMovedItemId = ref<string | null>(null);
 
 console.log('Screens page loaded', theme.value);
 
@@ -78,32 +111,6 @@ function breakpointToTree(breakpoint: WizardTheme['namespaces']['breakpoint']): 
         ;
 }
 
-// Convert the tree items back to the breakpoint structure
-function treeToBreakpoint(items: TreeItem[]): WizardTheme['namespaces']['breakpoint'] {
-    const breakpoint: WizardTheme['namespaces']['breakpoint'] = {};
-
-    items.forEach(item => {
-        if (!item.var.key) return; // Skip items without labels
-
-        if (item.children && item.children.length > 0) {
-            breakpoint[item.var.key] = {
-                ...treeToBreakpoint(item.children),
-            };
-
-            // If the item has a value (including empty string), we can set it as $value
-            if (item.var.value !== undefined && item.var.value !== null) {
-                breakpoint[item.var.key].$value = item.var.value;
-            }
-        } else if (item.var.value !== undefined && item.var.value !== null) {
-            breakpoint[item.var.key] = item.var.value;
-        }
-    });
-
-    console.log('Converted tree to breakpoint:', breakpoint);
-
-    return breakpoint;
-}
-
 // Create a reactive ref for items
 const items = ref<TreeItem[]>([]);
 
@@ -120,16 +127,49 @@ watch(() => theme.value.namespaces.breakpoint, () => {
 
 // Function to manually update theme when items change
 function updateThemeFromItems() {
-    const newBreakpoint = treeToBreakpoint(items.value);
-    console.log('Setting new breakpoint:', newBreakpoint);
-    // theme.value.namespaces.breakpoint = newBreakpoint;
+    try {
+        // Simplified conversion to avoid type recursion issues
+        const convertItem = (item: any): any => {
+            if (!item.var?.key) return null;
+            
+            if (item.children && item.children.length > 0) {
+                const result: any = {};
+                item.children.forEach((child: any) => {
+                    const converted = convertItem(child);
+                    if (converted) {
+                        Object.assign(result, converted);
+                    }
+                });
+                
+                if (item.var.value !== undefined && item.var.value !== null) {
+                    result.$value = item.var.value;
+                }
+                
+                return { [item.var.key]: result };
+            } else if (item.var.value !== undefined && item.var.value !== null) {
+                return { [item.var.key]: item.var.value };
+            }
+            return null;
+        };
 
-    theme.value.namespaces.breakpoint = newBreakpoint;
-    console.log('Updated theme from items:', theme.value.namespaces.breakpoint);
+        const newBreakpoint: any = {};
+        items.value.forEach((item: any) => {
+            const converted = convertItem(item);
+            if (converted) {
+                Object.assign(newBreakpoint, converted);
+            }
+        });
+
+        console.log('Setting new breakpoint:', newBreakpoint);
+        theme.value.namespaces.breakpoint = newBreakpoint;
+        console.log('Updated theme from items:', theme.value.namespaces.breakpoint);
+    } catch (error) {
+        console.error('Error updating theme from items:', error);
+    }
 }
 
 // Find the current item by uid
-function findItemByUid(items: TreeItem[], targetUid: string): TreeItem | undefined {
+function findItemByUid(items: any[], targetUid: string): any {
     for (const item of items) {
         if (item.value === targetUid) {
             return item;
@@ -202,7 +242,7 @@ function addBreakpointNext(uid: string) {
     };
 
     // Helper function to find the parent of a given item
-    function findParentItem(items: TreeItem[], target: TreeItem): TreeItem | undefined {
+    function findParentItem(items: any[], target: any): any {
         for (const item of items) {
             if (item.children && item.children.includes(target)) {
                 return item;
@@ -225,7 +265,10 @@ function addBreakpointNext(uid: string) {
         }
     } else {
         // If no parent found, we can add the new item at the root level, next to the current item
-        items.value.splice(items.value.indexOf(currentItem) + 1, 0, newBreakpoint);
+        const currentIndex = (items.value as any[]).indexOf(currentItem);
+        if (currentIndex >= 0) {
+            (items.value as any[]).splice(currentIndex + 1, 0, newBreakpoint);
+        }
     }
 }
 
@@ -235,6 +278,34 @@ onBeforeMount(() => {
     console.log('Initialized items from theme:', items.value);
 });
 
+// Watch for drag and drop operations
+watchEffect((onCleanup) => {
+    const dndFunction = combine(
+        monitorForElements({
+            onDrop(args) {
+                const { location, source } = args
+                // didn't drop on anything
+                if (!location.current.dropTargets.length)
+                    return
+
+                const itemId = source.data.id as string
+                const target = location.current.dropTargets[0]
+                const targetId = target.data.id as string
+
+                const instruction: Instruction | null = extractInstruction(target.data)
+
+                if (instruction !== null) {
+                    handleDragAndDrop(itemId, targetId, instruction)
+                }
+            },
+        }),
+    )
+
+    onCleanup(() => {
+        dndFunction()
+    })
+})
+
 // onBeforeUnmount(() => {
 //     console.log('Before unmounting, updating theme from items...');
 //     // Save the theme when unmounting
@@ -242,18 +313,214 @@ onBeforeMount(() => {
 //     updateThemeFromItems();
 // });
 
-onBeforeRouteLeave((to, from, next) => {
+// Watch for drag and drop operations
+watchEffect((onCleanup) => {
+    console.log('Setting up drag and drop monitor')
+    const dndFunction = combine(
+        monitorForElements({
+            onDragStart({ source }) {
+                console.log('Global drag started:', source.data.id)
+                draggedItemId.value = source.data.id as string
+            },
+            onDrop(args) {
+                console.log('Global drop detected:', args)
+                const { location, source } = args
+                
+                // Reset dragged item
+                draggedItemId.value = null
+                
+                // didn't drop on anything
+                if (!location.current.dropTargets.length) {
+                    console.log('No drop targets found')
+                    return
+                }
+
+                const itemId = source.data.id as string
+                const target = location.current.dropTargets[0]
+                const targetId = target.data.id as string
+
+                console.log('Drop details:', { itemId, targetId, targetData: target.data })
+
+                const instruction = extractInstruction(target.data)
+                console.log('Extracted instruction:', instruction)
+
+                if (instruction !== null) {
+                    handleDragAndDrop(itemId, targetId, instruction)
+                } else {
+                    console.log('No instruction found, trying simple reorder')
+                    // Fallback to simple reorder
+                    handleDragAndDrop(itemId, targetId, { type: 'reorder-below' })
+                }
+            },
+        }),
+    )
+
+    onCleanup(() => {
+        console.log('Cleaning up drag and drop monitor')
+        draggedItemId.value = null
+        dndFunction()
+    })
+})
+
+// Handle drag and drop operations
+function handleDragAndDrop(itemId: string, targetId: string, instruction: Instruction) {
+    console.log('Drag and drop:', { itemId, targetId, instruction })
+
+    const sourceItem = findItemByUid(items.value, itemId)
+    const targetItem = findItemByUid(items.value, targetId)
+
+    if (!sourceItem || !targetItem) {
+        console.error('Source or target item not found')
+        return
+    }
+
+    // Remove the source item from its current location
+    removeItem(items.value, itemId)
+
+    // Insert the source item based on the instruction
+    if (instruction.type === 'reorder-above') {
+        insertBefore(items.value, targetId, sourceItem)
+    } else if (instruction.type === 'reorder-below') {
+        insertAfter(items.value, targetId, sourceItem)
+    } else if (instruction.type === 'make-child') {
+        insertChild(items.value, targetId, sourceItem)
+    } else if (instruction.type === 'reparent') {
+        const path = getPathToItem(items.value, targetId)
+        if (path && instruction.desiredLevel !== undefined && path.length > instruction.desiredLevel) {
+            const desiredParentId = path[instruction.desiredLevel]
+            insertAfter(items.value, desiredParentId, sourceItem)
+        }
+    }
+
+    // Update the theme after drag and drop
+    updateThemeFromItems()
+
+    // Show highlight effect for the moved item
+    recentlyMovedItemId.value = itemId
+    setTimeout(() => {
+        recentlyMovedItemId.value = null
+    }, 1000) // Remove highlight after 1 second
+}
+
+// Helper functions for tree manipulation
+function removeItem(data: any[], id: string): boolean {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].value === id) {
+            data.splice(i, 1)
+            return true
+        }
+        if (data[i].children && removeItem(data[i].children!, id)) {
+            return true
+        }
+    }
+    return false
+}
+
+function insertBefore(data: any[], targetId: string, newItem: any): boolean {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].value === targetId) {
+            data.splice(i, 0, newItem)
+            return true
+        }
+        if (data[i].children && insertBefore(data[i].children!, targetId, newItem)) {
+            return true
+        }
+    }
+    return false
+}
+
+function insertAfter(data: any[], targetId: string, newItem: any): boolean {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].value === targetId) {
+            data.splice(i + 1, 0, newItem)
+            return true
+        }
+        if (data[i].children && insertAfter(data[i].children!, targetId, newItem)) {
+            return true
+        }
+    }
+    return false
+}
+
+function insertChild(data: any[], targetId: string, newItem: any): boolean {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].value === targetId) {
+            if (!data[i].children) {
+                data[i].children = []
+            }
+            data[i].children!.unshift(newItem)
+            return true
+        }
+        if (data[i].children && insertChild(data[i].children!, targetId, newItem)) {
+            return true
+        }
+    }
+    return false
+}
+
+function getPathToItem(data: any[], targetId: string, parentIds: string[] = []): string[] | undefined {
+    for (const item of data) {
+        if (item.value === targetId) {
+            return parentIds
+        }
+        if (item.children) {
+            const result = getPathToItem(item.children, targetId, [...parentIds, item.value!])
+            if (result) return result
+        }
+    }
+    return undefined
+}
+
+// Helper function to check if targetId is a descendant of sourceId
+function isDescendantOf(sourceId: string, targetId: string): boolean {
+    const sourceItem = findItemByUid(items.value, sourceId)
+    if (!sourceItem) return false
+    
+    // Recursively check if targetId exists in sourceItem's children
+    function checkChildren(item: any): boolean {
+        if (!item.children) return false
+        
+        for (const child of item.children) {
+            if (child.value === targetId) {
+                return true
+            }
+            if (checkChildren(child)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    return checkChildren(sourceItem)
+}
+
+// Helper function to check if an item should be dimmed during drag
+function shouldBeDimmed(itemId: string): boolean {
+    if (!draggedItemId.value) return false
+    
+    // Dim the dragged item itself and all its descendants
+    return itemId === draggedItemId.value || isDescendantOf(draggedItemId.value, itemId)
+}
+
+// Helper function to check if an item was recently moved
+function wasRecentlyMoved(itemId: string): boolean {
+    return recentlyMovedItemId.value === itemId
+}
+
+onBeforeRouteLeave((_, __, next) => {
     console.log('Before route leave, updating theme from items...');
     // Save the theme when leaving the route
     updateThemeFromItems();
     next();
 });
 
-
-// watch(selected, (newSelected) => {
-//     console.log('Selected items changed:', newSelected);
-//     // You can handle selected items here if needed
-// }, { deep: true });
+// Handle right arrow key to ensure normal behavior in input fields
+function handleLeftRightArrowKey(event: KeyboardEvent) {
+    // Stop the event from bubbling up to parent elements
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    // Don't prevent default - allow normal cursor movement
+}
 </script>
 
 <template>
@@ -279,55 +546,70 @@ onBeforeRouteLeave((to, from, next) => {
 
         <div class="flex-1 overflow-y-auto p-4">
             <!-- TreeItem -->
-            <UTree :items :ui="{ link: 'py-4' }" :default-expanded="expandedTree">
-                <template #item="{ item }">
-                    <div class="drag-and-drop-handler bg-elevated rounded p-1 hover:bg-accented cursor-grab">
-                        <UIcon name="lucide:grip-vertical" class="size-4 text-dimmed" />
-                    </div>
-                    <div>
-                        <UInput v-model="item.var.key" @update:model-value="(val) => {
-                            // Only allow alphanumeric characters, hyphens, and underscores
-                            const sanitized = val.replace(/[^a-zA-Z0-9\-_]/g, '');
-                            item.var.key = sanitized;
-                        }" placeholder="" :ui="{ base: 'peer' }">
-                            <label class="pointer-events-none absolute left-0 -top-2.5 text-highlighted text-xs font-medium px-1.5 transition-all peer-focus:-top-2.5 peer-focus:text-highlighted peer-focus:text-xs peer-focus:font-medium peer-placeholder-shown:text-sm peer-placeholder-shown:text-dimmed peer-placeholder-shown:top-1.5 peer-placeholder-shown:font-normal">
-                                <span class="inline-flex bg-default px-1">{{ i18n.__('Name') }}</span>
-                            </label>
-                        </UInput>
-                    </div>
-                    <div class="w-full">
-                        <UInput v-model="item.var.value" @update:model-value="(value) => { item.var.value = value }" placeholder="" :ui="{ base: 'peer', root: 'block' }">
-                            <label class="pointer-events-none absolute left-0 -top-2.5 text-highlighted text-xs font-medium px-1.5 transition-all peer-focus:-top-2.5 peer-focus:text-highlighted peer-focus:text-xs peer-focus:font-medium peer-placeholder-shown:text-sm peer-placeholder-shown:text-dimmed peer-placeholder-shown:top-1.5 peer-placeholder-shown:font-normal">
-                                <span class="inline-flex bg-default px-1">{{ i18n.__('Value') }}</span>
-                            </label>
-                        </UInput>
-                    </div>
-                    <div>
-                        <UDropdownMenu :items="[
-                            {
-                                label: i18n.__('Add (next)', 'windpress'),
-                                icon: 'i-lucide-plus',
-                                onSelect() {
-                                    addBreakpointNext(item.value);
-                                },
-                            },
-                            {
-                                label: i18n.__('Add (child)', 'windpress'),
-                                icon: 'lucide:corner-down-right',
-                                onSelect() {
-                                    addBreakpointChild(item.value);
-                                },
-                            },
-                            {
-                                label: 'Delete',
-                                icon: 'i-lucide-trash-2',
-                            }
-                        ]" :ui="{
-                            content: 'w-48'
-                        }">
-                            <UButton icon="lucide:ellipsis" color="neutral" variant="ghost" />
-                        </UDropdownMenu>
-                    </div>
+            <UTree :items :ui="{ link: 'p-0' }" :default-expanded="expandedTree">
+                <template #item="{ item, level }">
+                    <DraggableTreeItem 
+                        :item="item" 
+                        :level="level || 0" 
+                        :has-children="!!(item.children && item.children.length > 0)"
+                        :is-last="false"
+                        :is-descendant-of="isDescendantOf"
+                        :class="{ 
+                            'opacity-30': shouldBeDimmed(item.value || ''),
+                            'ring-2 ring-primary ring-offset-2 bg-primary/5': wasRecentlyMoved(item.value || '')
+                        }"
+                        class="transition-all duration-300 ease-out rounded-lg"
+                    >
+                        <div class="flex items-center gap-2 w-full">
+                            <div class="drag-and-drop-handler bg-elevated rounded p-1 hover:bg-accented cursor-grab">
+                                <UIcon name="lucide:grip-vertical" class="size-4 text-dimmed" />
+                            </div>
+                            <div>
+                                <UInput v-model="item.var.key" @update:model-value="(val) => {
+                                    // Only allow alphanumeric characters, hyphens, and underscores
+                                    const sanitized = val.replace(/[^a-zA-Z0-9\-_]/g, '');
+                                    item.var.key = sanitized;
+                                }" @keydown.left="handleLeftRightArrowKey" @keydown.right="handleLeftRightArrowKey" placeholder="" :ui="{ base: 'peer' }">
+                                    <label class="pointer-events-none absolute left-0 -top-2.5 text-highlighted text-xs font-medium px-1.5 transition-all peer-focus:-top-2.5 peer-focus:text-highlighted peer-focus:text-xs peer-focus:font-medium peer-placeholder-shown:text-sm peer-placeholder-shown:text-dimmed peer-placeholder-shown:top-1.5 peer-placeholder-shown:font-normal">
+                                        <span class="inline-flex bg-default px-1">{{ i18n.__('Name') }}</span>
+                                    </label>
+                                </UInput>
+                            </div>
+                            <div class="w-full">
+                                <UInput v-model="item.var.value" @update:model-value="(value) => { item.var.value = value }" @keydown.left="handleLeftRightArrowKey" @keydown.right="handleLeftRightArrowKey" placeholder="" :ui="{ base: 'peer', root: 'block' }">
+                                    <label class="pointer-events-none absolute left-0 -top-2.5 text-highlighted text-xs font-medium px-1.5 transition-all peer-focus:-top-2.5 peer-focus:text-highlighted peer-focus:text-xs peer-focus:font-medium peer-placeholder-shown:text-sm peer-placeholder-shown:text-dimmed peer-placeholder-shown:top-1.5 peer-placeholder-shown:font-normal">
+                                        <span class="inline-flex bg-default px-1">{{ i18n.__('Value') }}</span>
+                                    </label>
+                                </UInput>
+                            </div>
+                            <div>
+                                <UDropdownMenu :items="[
+                                    {
+                                        label: i18n.__('Add (next)', 'windpress'),
+                                        icon: 'i-lucide-plus',
+                                        onSelect() {
+                                            addBreakpointNext(item.value || '');
+                                        },
+                                    },
+                                    {
+                                        label: i18n.__('Add (child)', 'windpress'),
+                                        icon: 'lucide:corner-down-right',
+                                        onSelect() {
+                                            addBreakpointChild(item.value || '');
+                                        },
+                                    },
+                                    {
+                                        label: 'Delete',
+                                        icon: 'i-lucide-trash-2',
+                                    }
+                                ]" :ui="{
+                                    content: 'w-48'
+                                }">
+                                    <UButton icon="lucide:ellipsis" color="neutral" variant="ghost" />
+                                </UDropdownMenu>
+                            </div>
+                        </div>
+                    </DraggableTreeItem>
                 </template>
             </UTree>
         </div>
