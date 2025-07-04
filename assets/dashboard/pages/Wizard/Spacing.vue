@@ -52,7 +52,7 @@ onBeforeRouteLeave((_, __, next) => {
 
             <template #right>
                 <UTooltip :text="i18n.__('Help', 'windpress')">
-                    <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/customizing-spacing" target="_blank" />
+                    <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/theme#theme-variable-namespaces" target="_blank" />
                 </UTooltip>
             </template>
         </UDashboardNavbar>

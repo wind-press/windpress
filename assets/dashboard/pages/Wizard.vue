@@ -4,12 +4,13 @@ import { ref, onBeforeMount, onBeforeUnmount, provide } from 'vue';
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { useWizard } from '@/dashboard/composables/useWizard';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useRouter } from 'vue-router';
 
 const volumeStore = useVolumeStore()
 const wizard = useWizard();
-const router = useRouter()
+const router = useRouter();
+const toast = useToast();
 
 const theme = ref(wizard.getDefaultTheme());
 provide('theme', theme);
@@ -17,7 +18,6 @@ provide('theme', theme);
 onBeforeMount(async () => {
     await volumeStore.initPull();
     theme.value = wizard.parseWizardFile(volumeStore.data.entries.find((entry: Entry) => entry.relative_path === 'wizard.css')?.content || '');
-    // console.log('Parsed theme:', theme.value);
 });
 
 function saveWizard() {
@@ -37,8 +37,14 @@ function saveWizard() {
             handler: 'internal',
         });
     }
-}
 
+    toast.add({
+        title: __('Wizard saved', 'windpress'),
+        icon: 'i-lucide-check',
+        description: sprintf(__('File "%s" is updated. Please save your changes.', 'windpress'), 'wizard.css'),
+        color: 'success',
+    })
+}
 
 const links = ref<NavigationMenuItem[][]>([
     [
@@ -52,11 +58,6 @@ const links = ref<NavigationMenuItem[][]>([
             to: router.resolve({ name: 'wizard.screens' }),
         },
         {
-            label: __('Colors', 'windpress'),
-            icon: 'lucide:swatch-book',
-            to: router.resolve({ name: 'wizard.colors' }),
-        },
-        {
             label: __('Spacing', 'windpress'),
             icon: 'lucide:align-horizontal-space-around',
             to: router.resolve({ name: 'wizard.spacing' }),
@@ -65,6 +66,11 @@ const links = ref<NavigationMenuItem[][]>([
             label: __('Typography', 'windpress'),
             icon: 'lucide:a-large-small',
             to: router.resolve({ name: 'wizard.typography' }),
+        },
+        {
+            label: __('Colors', 'windpress'),
+            icon: 'lucide:swatch-book',
+            to: router.resolve({ name: 'wizard.colors' }),
         },
     ],
     [
@@ -76,12 +82,6 @@ const links = ref<NavigationMenuItem[][]>([
         },
     ]
 ]);
-
-
-// onBeforeUnmount(() => {
-//     console.log('Before unmounting, saving wizard...');
-//     saveWizard();
-// });
 
 onBeforeRouteLeave((to, from, next) => {
     console.log('Before route leave, saving wizard...');
