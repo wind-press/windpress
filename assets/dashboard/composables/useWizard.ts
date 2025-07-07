@@ -158,14 +158,18 @@ function flattenNestedObject(obj: any, prefix: string): Array<{ property: string
 
     for (const [key, value] of Object.entries(obj)) {
         if (typeof value === 'string') {
-            // This is a leaf node, create the CSS custom property
-            result.push({ property: `--${prefix}-${key}`, value });
+            // This is a leaf node, create the CSS custom property only if value is not empty
+            if (value && value.trim() !== '') {
+                result.push({ property: `--${prefix}-${key}`, value });
+            }
         } else if (typeof value === 'object' && value !== null) {
             // Check if this object has a direct value (using $value key)
             const valueObj = value as any;
             if ('$value' in valueObj && typeof valueObj.$value === 'string') {
-                // Add the direct value for this level
-                result.push({ property: `--${prefix}-${key}`, value: valueObj.$value });
+                // Add the direct value for this level only if it's not empty
+                if (valueObj.$value && valueObj.$value.trim() !== '') {
+                    result.push({ property: `--${prefix}-${key}`, value: valueObj.$value });
+                }
 
                 // Process nested properties (excluding $value)
                 const nestedObj = { ...valueObj };
@@ -187,6 +191,7 @@ function flattenNestedObject(obj: any, prefix: string): Array<{ property: string
 
 /**
  * Adds or updates a CSS declaration in a declarations array
+ * If value is empty, removes the declaration instead
  * @param declarations - The declarations array to modify
  * @param property - The CSS property name
  * @param value - The CSS property value
@@ -197,6 +202,15 @@ function addOrUpdateDeclaration(
     value: string
 ): void {
     const existingIndex = declarations.findIndex(decl => decl.property === property);
+    
+    // If value is empty, null, or undefined, remove the declaration
+    if (!value || value.trim() === '') {
+        if (existingIndex !== -1) {
+            declarations.splice(existingIndex, 1);
+        }
+        return;
+    }
+    
     if (existingIndex !== -1) {
         // Update existing declaration
         declarations[existingIndex].value = value;
@@ -442,6 +456,11 @@ function updateExistingAST(theme: WizardTheme): string {
 
                     // Remove leftover namespace declarations that are no longer in the theme
                     const filteredDeclarations = declarations.filter((decl: any) => {
+                        // Skip declarations with empty, null, or undefined values
+                        if (decl.type === 'declaration' && (!decl.value || decl.value.trim() === '')) {
+                            return false;
+                        }
+                        
                         if (decl.type !== 'declaration' || !decl.property.startsWith('--')) {
                             return true; // Keep non-CSS-custom-property declarations
                         }
@@ -491,6 +510,11 @@ function createNewAST(theme: WizardTheme): string {
     // Serialize all namespaces
     serializeNamespaces(theme, declarations);
 
+    // Filter out any declarations with empty values
+    const filteredDeclarations = declarations.filter(decl => 
+        decl.value && decl.value.trim() !== ''
+    );
+
     // Determine the @theme selector based on flags
     const themeSelector = theme.isStatic ? '@theme static' : '@theme';
 
@@ -502,7 +526,7 @@ function createNewAST(theme: WizardTheme): string {
                 {
                     type: 'rule',
                     selectors: [themeSelector],
-                    declarations: declarations
+                    declarations: filteredDeclarations
                 }
             ]
         }

@@ -1,9 +1,23 @@
+<script lang="ts">
+export type FluidCalculatorData = {
+    minSize: number;
+    maxSize: number;
+    minScale: number;
+    maxScale: number;
+    minViewport: number;
+    maxViewport: number;
+    stepsSmaller: number;
+    stepsLarger: number;
+    miscPrefix: string;
+};
+</script>
+
 <script setup lang="ts">
 import { useStorage } from '@vueuse/core';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { ref, computed } from 'vue';
 
-const emit = defineEmits(['calculate']);
+const emit = defineEmits(['close']);
 
 const scales = ref([
     {
@@ -141,17 +155,17 @@ function submitForm() {
         return;
     }
 
-    emit('calculate', {
+    emit('close', {
         minSize: defaultFluid.value.minSize,
         maxSize: defaultFluid.value.maxSize,
-        minScale: defaultFluid.value.minScale.decimal ?? defaultFluid.value.minScale.label,
-        maxScale: defaultFluid.value.maxScale.decimal ?? defaultFluid.value.maxScale.label,
+        minScale: parseFloat(String(defaultFluid.value.minScale.decimal ?? defaultFluid.value.minScale.label)),
+        maxScale: parseFloat(String(defaultFluid.value.maxScale.decimal ?? defaultFluid.value.maxScale.label)),
         minViewport: defaultFluid.value.minViewport,
         maxViewport: defaultFluid.value.maxViewport,
         stepsSmaller: defaultFluid.value.stepsSmaller,
         stepsLarger: defaultFluid.value.stepsLarger,
         miscPrefix: defaultFluid.value.miscPrefix,
-    });
+    } as FluidCalculatorData);
 }
 </script>
 
@@ -262,13 +276,13 @@ function submitForm() {
                     <div @click="defaultFluid.stepsSmaller++" class="stripe-bg flex items-center border border-transparent hover:border-muted cursor-pointer font-semibold justify-center px-4 py-2.5 rounded-md">
                         <UIcon name="lucide:plus" class="text-tonned" />
                     </div>
-                    <div v-for="step in defaultFluid.stepsSmaller" :key="step" @click="defaultFluid.stepsSmaller -= (step === 1)" :class="step === 1 ? 'cursor-pointer hover:border-muted' : ''" class="flex items-center bg-elevated border border-transparent justify-center px-4 py-2.5 rounded-md">
+                    <div v-for="step in defaultFluid.stepsSmaller" :key="step" @click="defaultFluid.stepsSmaller -= (step === 1 ? 1 : 0)" :class="step === 1 ? 'cursor-pointer hover:border-muted' : ''" class="flex items-center bg-elevated border border-transparent justify-center px-4 py-2.5 rounded-md">
                         <span v-if="step === defaultFluid.stepsSmaller">sm</span>
                         <span v-else-if="step === defaultFluid.stepsSmaller - 1">xs</span>
                         <span v-else>{{ defaultFluid.stepsSmaller - step }}xs</span>
                     </div>
-                    <div class="flex items-center bg-primary font-semibold justify-center px-4 py-2.5 rounded-md">base</div>
-                    <div v-for="step in defaultFluid.stepsLarger" :key="step" @click="defaultFluid.stepsLarger -= (step === defaultFluid.stepsLarger)" :class="step === defaultFluid.stepsLarger ? 'cursor-pointer hover:border-muted' : ''" class="flex items-center bg-accented border border-transparent font-semibold justify-center px-4 py-2.5 rounded-md">
+                    <div class="flex items-center text-inverted bg-primary font-semibold justify-center px-4 py-2.5 rounded-md">base</div>
+                    <div v-for="step in defaultFluid.stepsLarger" :key="step" @click="defaultFluid.stepsLarger -= (step === defaultFluid.stepsLarger ? 1 : 0)" :class="step === defaultFluid.stepsLarger ? 'cursor-pointer hover:border-muted' : ''" class="flex items-center bg-accented border border-transparent font-semibold justify-center px-4 py-2.5 rounded-md">
                         <span v-if="step === 1">lg</span>
                         <span v-else-if="step === 2">xl</span>
                         <span v-else>{{ step - 1 }}xl</span>
@@ -290,16 +304,11 @@ function submitForm() {
                         </label>
                     </UInput>
                 </div>
-
-
             </div>
-
-
-
         </template>
 
         <template #footer="{ close }">
-            <UButton :label="i18n.__('Generate', 'windpress')" color="info" variant="soft" @click="close" leading-icon="lucide:sparkles" :ui="{ leadingIcon: 'opacity-60' }" />
+            <UButton :label="i18n.__('Generate', 'windpress')" color="info" variant="soft" @click="submitForm" leading-icon="lucide:sparkles" :ui="{ leadingIcon: 'opacity-60' }" />
         </template>
     </USlideover>
 </template>

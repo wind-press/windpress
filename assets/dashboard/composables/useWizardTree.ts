@@ -12,7 +12,7 @@ export interface WizardTreeItem extends TreeItem {
 
 const randomId = () => customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 6)()
 
-function generateId() {
+export function generateId() {
     let id = randomId()
     while (id.match(/^\d/)) {
         id = randomId()
@@ -130,6 +130,64 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         }
     }
 
+    function findOrCreateItemByKey(keyPath: string, createIfMissing: boolean = true): WizardTreeItem | null {
+        const keys = keyPath.split('-')
+        let currentItems: WizardTreeItem[] = items.value
+        let currentItem: WizardTreeItem | null = null
+
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i]
+            const isLastKey = i === keys.length - 1
+            
+            // Try to find existing item with this key
+            let foundItem = currentItems.find((item: WizardTreeItem) => item.var.key === key)
+            
+            if (!foundItem) {
+                if (!createIfMissing) {
+                    return null
+                }
+                
+                // Create new item
+                const newItem: WizardTreeItem = {
+                    value: nanoid(7),
+                    var: {
+                        key: key,
+                        value: isLastKey ? '' : undefined,
+                    },
+                    defaultExpanded: true,
+                    children: isLastKey ? [] : [],
+                    onSelect: (e: Event) => {
+                        e.preventDefault()
+                    },
+                    onToggle: (e: Event) => {
+                        e.preventDefault()
+                    },
+                }
+                
+                // Add to current level
+                currentItems.push(newItem)
+                foundItem = newItem
+                
+                // Expand the tree for the new item
+                if (foundItem.value) {
+                    expandedTree.value.push(foundItem.value)
+                }
+            }
+            
+            currentItem = foundItem
+            
+            // If not the last key, prepare for next level
+            if (!isLastKey) {
+                if (!currentItem.children) {
+                    currentItem.children = []
+                }
+                currentItems = currentItem.children as WizardTreeItem[]
+            }
+        }
+        
+        return currentItem
+    }
+
     function addChild(uid: string, prefix: string = '') {
         const currentItem = findItemByUid(items.value, uid)
         if (!currentItem) {
@@ -207,6 +265,7 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         namespaceToTree,
         updateThemeFromItems,
         findItemByUid,
+        findOrCreateItemByKey,
         addChild,
         addNext,
         initializeItems
