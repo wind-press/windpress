@@ -6,14 +6,19 @@ import { type WizardTheme } from '@/dashboard/composables/useWizard';
 import { useWizardTree } from '@/dashboard/composables/useWizardTree';
 import { useWizardDragDrop } from '@/dashboard/composables/useWizardDragDrop';
 import WizardTreeItem from '@/dashboard/components/Wizard/WizardTreeItem.vue';
+import { default as FluidCalculatorSlideover, calcFluid, type FluidCalculatorData } from '@/dashboard/components/Wizard/FluidCalculatorSlideover.vue';
 import { __ } from '@wordpress/i18n';
+import { nanoid } from 'nanoid';
+
+const overlay = useOverlay()
+const toast = useToast()
 
 const theme = inject('theme') as Ref<WizardTheme>;
 const activeTab = ref('text');
 
 // Text Tree
 const textTreeLogic = useWizardTree('text', theme);
-const { expandedTree: expandedTreeText, items: textItems, updateThemeFromItems: updateTextTheme, findItemByUid: findTextItem, addChild: addTextChild, addNext: addTextNext, initializeItems: initializeTextItems } = textTreeLogic;
+const { expandedTree: expandedTreeText, items: textItems, updateThemeFromItems: updateTextTheme, findItemByUid: findTextItem, addChild: addTextChild, addNext: addTextNext, initializeItems: initializeTextItems, findOrCreateItemByKey: findOrCreateItemByKeyText } = textTreeLogic;
 
 const textDragDropLogic = useWizardDragDrop(textItems, updateTextTheme, findTextItem);
 const { shouldBeDimmed: shouldBeDimmedText, wasRecentlyMoved: wasRecentlyMovedText, isDescendantOf: isDescendantOfText } = textDragDropLogic;
@@ -72,6 +77,137 @@ function addNext() {
     }
 }
 
+function generateFluid(fluidConfig: FluidCalculatorData) {
+    let parentItem = null;
+
+    let newItemPool = [];
+
+    const prefix = fluidConfig.miscPrefix
+        .trim()
+        .replace(/^[\s-]+|[\s-]+$/g, '')
+        .replace(/[^a-zA-Z0-9-]/g, '_');
+
+    if (prefix) {
+        parentItem = findOrCreateItemByKeyText(prefix);
+    }
+
+    for (let i = 1; i <= fluidConfig.stepsSmaller; i++) {
+        let key = '';
+        if (i === fluidConfig.stepsSmaller) {
+            key += 'sm';
+        } else if (i === fluidConfig.stepsSmaller - 1) {
+            key += 'xs';
+        } else {
+            key += `${fluidConfig.stepsSmaller - i}xs`;
+        }
+
+        let currentMinSize = fluidConfig.minSize;
+        let currentMaxSize = fluidConfig.maxSize;
+
+        for (let j = 0; j < fluidConfig.stepsSmaller + 1 - i; j++) {
+            currentMinSize /= fluidConfig.minScale;
+            currentMaxSize /= fluidConfig.maxScale;
+        }
+
+        newItemPool.push({
+            key: key,
+            value: calcFluid(currentMinSize, currentMaxSize, fluidConfig.minViewport, fluidConfig.maxViewport),
+        });
+    }
+
+    newItemPool.push({
+        key: 'base',
+        value: calcFluid(fluidConfig.minSize, fluidConfig.maxSize, fluidConfig.minViewport, fluidConfig.maxViewport),
+    });
+
+    for (let i = 1; i <= fluidConfig.stepsLarger; i++) {
+        let key = '';
+        if (i === 1) {
+            key += 'lg';
+        } else if (i === 2) {
+            key += 'xl';
+        } else {
+            key += `${i - 1}xl`;
+        }
+
+        let currentMinSize = fluidConfig.minSize;
+        let currentMaxSize = fluidConfig.maxSize;
+        for (let j = 0; j < i; j++) {
+            currentMinSize *= fluidConfig.minScale;
+            currentMaxSize *= fluidConfig.maxScale;
+        }
+
+        newItemPool.push({
+            key: key,
+            value: calcFluid(currentMinSize, currentMaxSize, fluidConfig.minViewport, fluidConfig.maxViewport),
+        });
+    }
+
+    let newItems = newItemPool.map(item => ({
+        value: nanoid(7),
+        var: {
+            key: item.key,
+            value: item.value,
+        },
+        defaultExpanded: true,
+        onSelect: (e: Event) => {
+            e.preventDefault()
+        },
+        onToggle: (e: Event) => {
+            e.preventDefault()
+        },
+    }));
+
+    if (parentItem) {
+        if (!parentItem.children) {
+            parentItem.children = [];
+        }
+        newItems.forEach(newItem => {
+            const existingItem = parentItem.children!.find(item => item.var.key === newItem.var.key);
+            if (existingItem) {
+                existingItem.var.value = newItem.var.value;
+            } else {
+                parentItem.children!.push(newItem);
+            }
+        });
+    } else {
+        newItems.forEach(newItem => {
+            const existingItem: any = textItems.value.find((item) => item.var.key === newItem.var.key);
+            if (existingItem) {
+                existingItem.var.value = newItem.var.value;
+            } else {
+                textItems.value.push(newItem);
+            }
+        });
+    }
+}
+
+async function openFluidCalculator() {
+    const slideover = overlay.create(FluidCalculatorSlideover, { destroyOnClose: true });
+    const instance = slideover.open();
+    const fluidData = await instance.result;
+
+    if (!fluidData) {
+        toast.add({
+            title: __('Cancelled', 'windpress'),
+            description: __('Fluid spacing generation was cancelled.', 'windpress'),
+            icon: 'lucide:wand-sparkles',
+            color: 'info',
+        });
+        return;
+    }
+
+    generateFluid(fluidData);
+
+    toast.add({
+        title: __('Generated', 'windpress'),
+        description: __('Fluid spacing have been generated successfully.', 'windpress'),
+        icon: 'lucide:wand-sparkles',
+        color: 'success',
+    });
+}
+
+
 onBeforeMount(() => {
     initializeTextItems();
     initializeFontItems();
@@ -99,6 +235,9 @@ onBeforeRouteLeave((_, __, next) => {
             </template>
 
             <template #right>
+                <UTooltip v-if="activeTab === 'text'" :text="i18n.__('Fluid generator', 'windpress')">
+                    <UButton icon="lucide:wand-sparkles" color="neutral" variant="subtle" @click="openFluidCalculator" />
+                </UTooltip>
                 <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
                     <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
                 </UTooltip>
@@ -108,11 +247,11 @@ onBeforeRouteLeave((_, __, next) => {
             </template>
         </UDashboardNavbar>
 
-        <UTabs variant="link" :content="false" v-model="activeTab" :items="links" class="" :ui="{list: 'px-4 sm:px-6  zzzzzzzzz'}" />
+        <UTabs variant="link" :content="false" v-model="activeTab" :items="links" class="" :ui="{ list: 'px-4 sm:px-6  zzzzzzzzz' }" />
 
         <div v-if="activeTab === 'text'" class="p-4">
             <!-- Text Size TreeItem -->
-            <UTree :items="textItems" :ui="{ link: 'p-0' }" :default-expanded="expandedTreeText">
+            <UTree :items="textItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeText">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedText" :was-recently-moved="wasRecentlyMovedText" :is-descendant-of="isDescendantOfText" :on-add-next="addTextNextHandler" :on-add-child="addTextChildHandler" />
                 </template>
@@ -121,7 +260,7 @@ onBeforeRouteLeave((_, __, next) => {
 
         <div v-if="activeTab === 'font'" class="p-4">
             <!-- Font Family TreeItem -->
-            <UTree :items="fontItems" :ui="{ link: 'p-0' }" :default-expanded="expandedTreeFont">
+            <UTree :items="fontItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeFont">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedFont" :was-recently-moved="wasRecentlyMovedFont" :is-descendant-of="isDescendantOfFont" :on-add-next="addFontNextHandler" :on-add-child="addFontChildHandler" />
                 </template>

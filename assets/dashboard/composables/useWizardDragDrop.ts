@@ -114,13 +114,6 @@ export function useWizardDragDrop(
                 targetId
             })
             return
-        } else {
-            // console.log('Handling drag and drop', {
-            //     sourceItem: !!sourceItem,
-            //     targetItem: !!targetItem,
-            //     itemId,
-            //     targetId
-            // })
         }
 
         removeItem(items.value, itemId)

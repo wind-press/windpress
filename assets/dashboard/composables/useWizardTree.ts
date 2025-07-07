@@ -1,4 +1,4 @@
-import { ref, type Ref } from 'vue'
+import { ref, computed, type Ref } from 'vue'
 import { nanoid, customAlphabet } from 'nanoid'
 import type { TreeItem } from '@nuxt/ui'
 import type { WizardTheme } from './useWizard'
@@ -21,8 +21,25 @@ export function generateId() {
 }
 
 export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme: Ref<WizardTheme>) {
-    const expandedTree = ref<string[]>([])
     const items = ref<WizardTreeItem[]>([])
+
+    const expandedTree = computed(() => {
+        const result: string[] = []
+        
+        function traverse(items: any[]): void {
+            for (const item of items) {
+                if (item.value) {
+                    result.push(item.value)
+                }
+                if (item.children && item.children.length > 0) {
+                    traverse(item.children)
+                }
+            }
+        }
+        
+        traverse(items.value)
+        return result
+    })
 
     function namespaceToTree(namespaceData: any): WizardTreeItem[] {
         return Object.entries(namespaceData || {})
@@ -58,10 +75,6 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
                     item.var.value = value
                 }
 
-                if (item.value !== undefined) {
-                    expandedTree.value.push(item.value)
-                }
-
                 return item
             })
             .filter((item): item is WizardTreeItem => item !== null)
@@ -71,7 +84,7 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         try {
             const convertItem = (item: any): any => {
                 if (!item.var?.key) return null
-                
+
                 if (item.children && item.children.length > 0) {
                     const result: any = {}
                     item.children.forEach((child: any) => {
@@ -80,11 +93,11 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
                             Object.assign(result, converted)
                         }
                     })
-                    
+
                     if (item.var.value !== undefined && item.var.value !== null) {
                         result.$value = item.var.value
                     }
-                    
+
                     return { [item.var.key]: result }
                 } else if (item.var.value !== undefined && item.var.value !== null) {
                     return { [item.var.key]: item.var.value }
@@ -132,30 +145,30 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
 
     function findOrCreateItemByKey(keyPath: string, createIfMissing: boolean = true): WizardTreeItem | null {
         const keys = keyPath.split('-')
-        let currentItems: WizardTreeItem[] = items.value
+        let currentItems = items.value as WizardTreeItem[]
         let currentItem: WizardTreeItem | null = null
 
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i]
             const isLastKey = i === keys.length - 1
-            
+
             // Try to find existing item with this key
             let foundItem = currentItems.find((item: WizardTreeItem) => item.var.key === key)
-            
+
             if (!foundItem) {
                 if (!createIfMissing) {
                     return null
                 }
-                
+
                 // Create new item
                 const newItem: WizardTreeItem = {
                     value: nanoid(7),
                     var: {
                         key: key,
-                        value: isLastKey ? '' : undefined,
+                        value: '',
                     },
                     defaultExpanded: true,
-                    children: isLastKey ? [] : [],
+                    children: [],
                     onSelect: (e: Event) => {
                         e.preventDefault()
                     },
@@ -163,19 +176,14 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
                         e.preventDefault()
                     },
                 }
-                
+
                 // Add to current level
                 currentItems.push(newItem)
                 foundItem = newItem
-                
-                // Expand the tree for the new item
-                if (foundItem.value) {
-                    expandedTree.value.push(foundItem.value)
-                }
             }
-            
+
             currentItem = foundItem
-            
+
             // If not the last key, prepare for next level
             if (!isLastKey) {
                 if (!currentItem.children) {
@@ -184,11 +192,11 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
                 currentItems = currentItem.children as WizardTreeItem[]
             }
         }
-        
+
         return currentItem
     }
 
-    function addChild(uid: string) {
+    function addChild(uid: string, customKey?: string, customValue?: string | any) {
         const currentItem = findItemByUid(items.value, uid)
         if (!currentItem) {
             console.error('Item not found for uid:', uid)
@@ -198,8 +206,8 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         const newItem: WizardTreeItem = {
             value: nanoid(7),
             var: {
-                key: '',
-                value: '',
+                key: customKey || '',
+                value: customValue !== undefined ? customValue : '',
             },
             defaultExpanded: true,
             children: [],
@@ -218,12 +226,12 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         }
     }
 
-    function addNext(uid?: string) {
+    function addNext(uid?: string, customKey?: string, customValue?: string | any) {
         const newItem: WizardTreeItem = {
             value: nanoid(7),
             var: {
-                key: '',
-                value: '',
+                key: customKey || '',
+                value: customValue !== undefined ? customValue : '',
             },
             defaultExpanded: true,
             children: [],

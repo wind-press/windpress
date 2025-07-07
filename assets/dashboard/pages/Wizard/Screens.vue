@@ -62,7 +62,7 @@ onBeforeRouteLeave((_, __, next) => {
 
         <div class="flex-1 overflow-y-auto p-4">
             <!-- TreeItem -->
-            <UTree :items :ui="{ link: 'p-0' }" :default-expanded="expandedTree">
+            <UTree :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addBreakpointNext" :on-add-child="addBreakpointChild" />
                 </template>

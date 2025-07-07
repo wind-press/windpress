@@ -10,6 +10,22 @@ export type FluidCalculatorData = {
     stepsLarger: number;
     miscPrefix: string;
 };
+
+export function calcFluid(
+    minSize: number,
+    maxSize: number,
+    minWidth: number,
+    maxWidth: number
+): string {
+    // Calculate the slope
+    const slope: number = (maxSize - minSize) / (maxWidth - minWidth);
+
+    // Calculate the y-intersection
+    const yIntersection: number = (-1 * minWidth) * slope + minSize;
+
+    // Return the clamp CSS
+    return `clamp(${parseFloat((minSize / 16).toFixed(4).toString())}rem, ${parseFloat((yIntersection / 16).toFixed(4).toString())}rem + ${parseFloat((slope * 100).toFixed(4).toString())}vw, ${parseFloat((maxSize / 16).toFixed(4).toString())}rem)`;
+}
 </script>
 
 <script setup lang="ts">

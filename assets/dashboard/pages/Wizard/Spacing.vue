@@ -7,7 +7,7 @@ import { type WizardTheme } from '@/dashboard/composables/useWizard';
 import { useWizardTree } from '@/dashboard/composables/useWizardTree';
 import { useWizardDragDrop } from '@/dashboard/composables/useWizardDragDrop';
 import WizardTreeItem from '@/dashboard/components/Wizard/WizardTreeItem.vue';
-import { default as FluidCalculatorSlideover, type FluidCalculatorData } from '@/dashboard/components/Wizard/FluidCalculatorSlideover.vue';
+import { default as FluidCalculatorSlideover, calcFluid, type FluidCalculatorData } from '@/dashboard/components/Wizard/FluidCalculatorSlideover.vue';
 
 const overlay = useOverlay()
 const toast = useToast()
@@ -25,30 +25,14 @@ watch(() => theme.value.namespaces.spacing, () => {
 }, { deep: true });
 
 function addSpacingChild(uid: string) {
-    addChild(uid);
+    addChild(uid, '', `calc(var(--spacing) * VALUE_HERE)`);
 }
 
-function addSpacingNext(uid: string) {
-    addNext(uid);
+function addSpacingNext(uid?: string) {
+    addNext(uid, '', `calc(var(--spacing) * VALUE_HERE)`);
 }
 
-function calcFluid(
-    minSize: number,
-    maxSize: number,
-    minWidth: number,
-    maxWidth: number
-): string {
-    // Calculate the slope
-    const slope: number = (maxSize - minSize) / (maxWidth - minWidth);
-
-    // Calculate the y-intersection
-    const yIntersection: number = (-1 * minWidth) * slope + minSize;
-
-    // Return the clamp CSS
-    return `clamp(${parseFloat((minSize / 16).toFixed(4).toString())}rem, ${parseFloat((yIntersection / 16).toFixed(4).toString())}rem + ${parseFloat((slope * 100).toFixed(4).toString())}vw, ${parseFloat((maxSize / 16).toFixed(4).toString())}rem)`;
-}
-
-function generateFluidSpacing(fluidConfig: FluidCalculatorData) {
+function generateFluid(fluidConfig: FluidCalculatorData) {
     let parentItem = null;
 
     let newItemPool = [];
@@ -168,11 +152,11 @@ async function openFluidCalculator() {
         return;
     }
 
-    generateFluidSpacing(fluidData);
+    generateFluid(fluidData);
 
     toast.add({
         title: __('Generated', 'windpress'),
-        description: __('Fluid spacing variables have been generated successfully.', 'windpress'),
+        description: __('Fluid spacing have been generated successfully.', 'windpress'),
         icon: 'lucide:wand-sparkles',
         color: 'success',
     });
@@ -207,7 +191,7 @@ onBeforeRouteLeave((_, __, next) => {
                     <UButton icon="lucide:wand-sparkles" color="neutral" variant="subtle" @click="openFluidCalculator" />
                 </UTooltip>
                 <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
-                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
+                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addSpacingNext()" />
                 </UTooltip>
                 <UTooltip :text="i18n.__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/theme#theme-variable-namespaces" target="_blank" />
@@ -217,7 +201,7 @@ onBeforeRouteLeave((_, __, next) => {
 
         <div class="flex-1 overflow-y-auto p-4">
             <!-- TreeItem -->
-            <UTree :items :ui="{ link: 'p-0' }" :default-expanded="expandedTree">
+            <UTree :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addSpacingNext" :on-add-child="addSpacingChild" />
                 </template>
