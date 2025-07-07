@@ -28,6 +28,7 @@ function handleLeftRightArrowKey(event: KeyboardEvent) {
         :has-children="!!(item.children && item.children.length > 0)"
         :is-last="false"
         :is-descendant-of="isDescendantOf"
+        :on-delete="onDelete"
         :class="{ 
             'opacity-30': shouldBeDimmed(item.value || ''),
             'ring-2 ring-primary ring-offset-2 bg-primary/5': wasRecentlyMoved(item.value || '')

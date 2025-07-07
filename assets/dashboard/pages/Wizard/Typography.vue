@@ -18,14 +18,14 @@ const activeTab = ref('text');
 
 // Text Tree
 const textTreeLogic = useWizardTree('text', theme);
-const { expandedTree: expandedTreeText, items: textItems, updateThemeFromItems: updateTextTheme, findItemByUid: findTextItem, addChild: addTextChild, addNext: addTextNext, initializeItems: initializeTextItems, findOrCreateItemByKey: findOrCreateItemByKeyText } = textTreeLogic;
+const { expandedTree: expandedTreeText, items: textItems, updateThemeFromItems: updateTextTheme, findItemByUid: findTextItem, addChild: addTextChild, addNext: addTextNext, deleteItem: deleteTextItem, initializeItems: initializeTextItems, findOrCreateItemByKey: findOrCreateItemByKeyText } = textTreeLogic;
 
 const textDragDropLogic = useWizardDragDrop(textItems, updateTextTheme, findTextItem);
 const { shouldBeDimmed: shouldBeDimmedText, wasRecentlyMoved: wasRecentlyMovedText, isDescendantOf: isDescendantOfText } = textDragDropLogic;
 
 // Font Tree
 const fontTreeLogic = useWizardTree('font', theme);
-const { expandedTree: expandedTreeFont, items: fontItems, updateThemeFromItems: updateFontTheme, findItemByUid: findFontItem, addChild: addFontChild, addNext: addFontNext, initializeItems: initializeFontItems } = fontTreeLogic;
+const { expandedTree: expandedTreeFont, items: fontItems, updateThemeFromItems: updateFontTheme, findItemByUid: findFontItem, addChild: addFontChild, addNext: addFontNext, deleteItem: deleteFontItem, initializeItems: initializeFontItems } = fontTreeLogic;
 
 const fontDragDropLogic = useWizardDragDrop(fontItems, updateFontTheme, findFontItem);
 const { shouldBeDimmed: shouldBeDimmedFont, wasRecentlyMoved: wasRecentlyMovedFont, isDescendantOf: isDescendantOfFont } = fontDragDropLogic;
@@ -67,6 +67,14 @@ function addFontChildHandler(uid: string) {
 
 function addFontNextHandler(uid: string) {
     addFontNext(uid);
+}
+
+function deleteText(uid: string) {
+    deleteTextItem(uid);
+}
+
+function deleteFont(uid: string) {
+    deleteFontItem(uid);
 }
 
 function addNext() {
@@ -150,9 +158,9 @@ function generateFluid(fluidConfig: FluidCalculatorData) {
             value: item.value,
         },
         defaultExpanded: true,
-        onSelect: (e: Event) => {
-            e.preventDefault()
-        },
+        // onSelect: (e: Event) => {
+        //     e.preventDefault()
+        // },
         onToggle: (e: Event) => {
             e.preventDefault()
         },
@@ -239,7 +247,7 @@ onBeforeRouteLeave((_, __, next) => {
                     <UButton icon="lucide:wand-sparkles" color="neutral" variant="subtle" @click="openFluidCalculator" />
                 </UTooltip>
                 <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
-                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
+                    <UButton color="neutral" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
                 </UTooltip>
                 <UTooltip :text="__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/theme#theme-variable-namespaces" target="_blank" />
@@ -253,7 +261,7 @@ onBeforeRouteLeave((_, __, next) => {
             <!-- Text Size TreeItem -->
             <UTree :items="textItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeText">
                 <template #item="{ item, level }">
-                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedText" :was-recently-moved="wasRecentlyMovedText" :is-descendant-of="isDescendantOfText" :on-add-next="addTextNextHandler" :on-add-child="addTextChildHandler" />
+                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedText" :was-recently-moved="wasRecentlyMovedText" :is-descendant-of="isDescendantOfText" :on-add-next="addTextNextHandler" :on-add-child="addTextChildHandler" :on-delete="deleteText" />
                 </template>
             </UTree>
         </div>
@@ -262,7 +270,7 @@ onBeforeRouteLeave((_, __, next) => {
             <!-- Font Family TreeItem -->
             <UTree :items="fontItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeFont">
                 <template #item="{ item, level }">
-                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedFont" :was-recently-moved="wasRecentlyMovedFont" :is-descendant-of="isDescendantOfFont" :on-add-next="addFontNextHandler" :on-add-child="addFontChildHandler" />
+                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedFont" :was-recently-moved="wasRecentlyMovedFont" :is-descendant-of="isDescendantOfFont" :on-add-next="addFontNextHandler" :on-add-child="addFontChildHandler" :on-delete="deleteFont" />
                 </template>
             </UTree>
         </div>

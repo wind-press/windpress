@@ -9,7 +9,7 @@ import WizardTreeItem from '@/dashboard/components/Wizard/WizardTreeItem.vue';
 const theme = inject('theme') as Ref<WizardTheme>;
 
 const treeLogic = useWizardTree('breakpoint', theme);
-const { expandedTree, items, updateThemeFromItems, findItemByUid, addChild, addNext, initializeItems } = treeLogic;
+const { expandedTree, items, updateThemeFromItems, findItemByUid, addChild, addNext, deleteItem, initializeItems } = treeLogic;
 
 const dragDropLogic = useWizardDragDrop(items, updateThemeFromItems, findItemByUid);
 const { shouldBeDimmed, wasRecentlyMoved, isDescendantOf } = dragDropLogic;
@@ -24,6 +24,10 @@ function addBreakpointChild(uid: string) {
 
 function addBreakpointNext(uid: string) {
     addNext(uid);
+}
+
+function deleteBreakpoint(uid: string) {
+    deleteItem(uid);
 }
 
 onBeforeMount(() => {
@@ -52,7 +56,7 @@ onBeforeRouteLeave((_, __, next) => {
 
             <template #right>
                 <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
-                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
+                    <UButton color="neutral" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
                 </UTooltip>
                 <UTooltip :text="i18n.__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/responsive-design#customizing-your-theme" target="_blank" />
@@ -64,7 +68,7 @@ onBeforeRouteLeave((_, __, next) => {
             <!-- TreeItem -->
             <UTree :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
-                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addBreakpointNext" :on-add-child="addBreakpointChild" />
+                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addBreakpointNext" :on-add-child="addBreakpointChild" :on-delete="deleteBreakpoint" />
                 </template>
             </UTree>
         </div>

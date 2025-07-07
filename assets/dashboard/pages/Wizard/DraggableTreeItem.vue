@@ -49,6 +49,7 @@ const props = defineProps<{
     hasChildren: boolean
     isLast: boolean
     isDescendantOf?: (sourceId: string, targetId: string) => boolean
+    onDelete?: (uid: string) => void
 }>()
 
 const outerDropZoneRef = ref<HTMLElement>()
@@ -57,6 +58,18 @@ const draggableRef = ref<HTMLElement>()
 const isDragging = ref(false)
 const isDraggedOver = ref(false)
 const instruction = ref<any>(null)
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Delete' && props.onDelete) {
+        // Don't trigger delete when user is focused on input fields
+        const target = event.target as HTMLElement
+        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+            return
+        }
+        event.preventDefault()
+        props.onDelete(props.item.value as string)
+    }
+}
 
 watchEffect((onCleanup) => {
     const outerDropZone = unrefElement(outerDropZoneRef)
@@ -186,7 +199,7 @@ watchEffect((onCleanup) => {
 <template>
     <div ref="outerDropZoneRef" class="relative w-full px-2.5 py-1.5 transition-all duration-200 ease-out" :class="{
         'bg-elevated': isDraggedOver
-    }">
+    }" @keydown="handleKeydown" tabindex="0">
         <div v-if="instruction" class="absolute pointer-events-none border-primary transition-all duration-150 ease-out" :class="{
             '!border-b-2 -bottom-px left-1 right-0': instruction.type === 'reorder-below',
             '!border-t-2 -top-px left-1 right-0': instruction.type === 'reorder-above',

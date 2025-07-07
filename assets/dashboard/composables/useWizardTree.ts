@@ -55,9 +55,9 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
                         value: value,
                     },
                     defaultExpanded: true,
-                    onSelect: (e: Event) => {
-                        e.preventDefault()
-                    },
+                    // onSelect: (e: Event) => {
+                    //     e.preventDefault()
+                    // },
                     onToggle: (e: Event) => {
                         e.preventDefault()
                     },
@@ -169,9 +169,9 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
                     },
                     defaultExpanded: true,
                     children: [],
-                    onSelect: (e: Event) => {
-                        e.preventDefault()
-                    },
+                    // onSelect: (e: Event) => {
+                    //     e.preventDefault()
+                    // },
                     onToggle: (e: Event) => {
                         e.preventDefault()
                     },
@@ -211,9 +211,9 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
             },
             defaultExpanded: true,
             children: [],
-            onSelect: (e: Event) => {
-                e.preventDefault()
-            },
+            // onSelect: (e: Event) => {
+            //     e.preventDefault()
+            // },
             onToggle: (e: Event) => {
                 e.preventDefault()
             },
@@ -235,9 +235,9 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
             },
             defaultExpanded: true,
             children: [],
-            onSelect: (e: Event) => {
-                e.preventDefault()
-            },
+            // onSelect: (e: Event) => {
+            //     e.preventDefault()
+            // },
             onToggle: (e: Event) => {
                 e.preventDefault()
             },
@@ -269,6 +269,28 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         }
     }
 
+    function deleteItem(uid: string) {
+        const currentItem = findItemByUid(items.value, uid)
+        if (!currentItem) {
+            console.error('Item not found for uid:', uid)
+            return
+        }
+
+        const parentItem = findParentItem(items.value, currentItem)
+
+        if (parentItem && parentItem.children) {
+            const index = parentItem.children.indexOf(currentItem)
+            if (index >= 0) {
+                parentItem.children.splice(index, 1)
+            }
+        } else {
+            const currentIndex = (items.value as any[]).indexOf(currentItem)
+            if (currentIndex >= 0) {
+                (items.value as any[]).splice(currentIndex, 1)
+            }
+        }
+    }
+
     function initializeItems() {
         items.value = namespaceToTree(theme.value.namespaces[namespace])
     }
@@ -282,6 +304,7 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         findOrCreateItemByKey,
         addChild,
         addNext,
+        deleteItem,
         initializeItems
     }
 }

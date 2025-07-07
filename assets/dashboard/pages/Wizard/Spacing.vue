@@ -15,7 +15,7 @@ const toast = useToast()
 const theme = inject('theme') as Ref<WizardTheme>;
 
 const treeLogic = useWizardTree('spacing', theme);
-const { expandedTree, items, updateThemeFromItems, findItemByUid, addChild, addNext, initializeItems, findOrCreateItemByKey } = treeLogic;
+const { expandedTree, items, updateThemeFromItems, findItemByUid, addChild, addNext, deleteItem, initializeItems, findOrCreateItemByKey } = treeLogic;
 
 const dragDropLogic = useWizardDragDrop(items, updateThemeFromItems, findItemByUid);
 const { shouldBeDimmed, wasRecentlyMoved, isDescendantOf } = dragDropLogic;
@@ -30,6 +30,10 @@ function addSpacingChild(uid: string) {
 
 function addSpacingNext(uid?: string) {
     addNext(uid, '', `calc(var(--spacing) * VALUE_HERE)`);
+}
+
+function deleteSpacing(uid: string) {
+    deleteItem(uid);
 }
 
 function generateFluid(fluidConfig: FluidCalculatorData) {
@@ -105,9 +109,9 @@ function generateFluid(fluidConfig: FluidCalculatorData) {
             value: item.value,
         },
         defaultExpanded: true,
-        onSelect: (e: Event) => {
-            e.preventDefault()
-        },
+        // onSelect: (e: Event) => {
+        //     e.preventDefault()
+        // },
         onToggle: (e: Event) => {
             e.preventDefault()
         },
@@ -191,7 +195,7 @@ onBeforeRouteLeave((_, __, next) => {
                     <UButton icon="lucide:wand-sparkles" color="neutral" variant="subtle" @click="openFluidCalculator" />
                 </UTooltip>
                 <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
-                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addSpacingNext()" />
+                    <UButton color="neutral" variant="subtle" icon="i-lucide-plus" @click="addSpacingNext()" />
                 </UTooltip>
                 <UTooltip :text="i18n.__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/theme#theme-variable-namespaces" target="_blank" />
@@ -203,7 +207,7 @@ onBeforeRouteLeave((_, __, next) => {
             <!-- TreeItem -->
             <UTree :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
-                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addSpacingNext" :on-add-child="addSpacingChild" />
+                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addSpacingNext" :on-add-child="addSpacingChild" :on-delete="deleteSpacing" />
                 </template>
             </UTree>
         </div>
