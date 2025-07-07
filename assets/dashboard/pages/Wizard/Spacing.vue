@@ -4,7 +4,21 @@ import { inject, onBeforeMount, watch, type Ref } from 'vue';
 import { type WizardTheme } from '@/dashboard/composables/useWizard';
 import { useWizardTree } from '@/dashboard/composables/useWizardTree';
 import { useWizardDragDrop } from '@/dashboard/composables/useWizardDragDrop';
-import WizardTreeItem from '@/dashboard/components/WizardTreeItem.vue';
+import WizardTreeItem from '@/dashboard/components/Wizard/WizardTreeItem.vue';
+import FluidCalculatorSlideover from '@/dashboard/components/Wizard/FluidCalculatorSlideover.vue';
+
+const overlay = useOverlay()
+
+
+
+
+async function openFluidCalculator() {
+    const slideover = overlay.create(FluidCalculatorSlideover, {destroyOnClose: true});
+    const instance = slideover.open();
+    const fluidData = await instance.result;
+
+    console.log('Fluid Calculator result:', fluidData);
+}
 
 const theme = inject('theme') as Ref<WizardTheme>;
 
@@ -51,6 +65,9 @@ onBeforeRouteLeave((_, __, next) => {
             </template>
 
             <template #right>
+                <UTooltip :text="i18n.__('Fluid generator', 'windpress')">
+                    <UButton icon="lucide:wand-sparkles" color="neutral" variant="soft" @click="openFluidCalculator" />
+                </UTooltip>
                 <UTooltip :text="i18n.__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/theme#theme-variable-namespaces" target="_blank" />
                 </UTooltip>

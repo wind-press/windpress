@@ -4,7 +4,7 @@ import { inject, onBeforeMount, watch, type Ref } from 'vue';
 import { type WizardTheme } from '@/dashboard/composables/useWizard';
 import { useWizardTree } from '@/dashboard/composables/useWizardTree';
 import { useWizardDragDrop } from '@/dashboard/composables/useWizardDragDrop';
-import WizardTreeItem from '@/dashboard/components/WizardTreeItem.vue';
+import WizardTreeItem from '@/dashboard/components/Wizard/WizardTreeItem.vue';
 
 const theme = inject('theme') as Ref<WizardTheme>;
 

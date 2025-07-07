@@ -5,7 +5,7 @@ import { inject, onBeforeMount, ref, watch, type Ref } from 'vue';
 import { type WizardTheme } from '@/dashboard/composables/useWizard';
 import { useWizardTree } from '@/dashboard/composables/useWizardTree';
 import { useWizardDragDrop } from '@/dashboard/composables/useWizardDragDrop';
-import WizardTreeItem from '@/dashboard/components/WizardTreeItem.vue';
+import WizardTreeItem from '@/dashboard/components/Wizard/WizardTreeItem.vue';
 import { __ } from '@wordpress/i18n';
 
 const theme = inject('theme') as Ref<WizardTheme>;
@@ -38,7 +38,7 @@ watch(() => theme.value.namespaces.font, () => {
 const links = ref<NavigationMenuItem[]>([
     {
         label: __('Text Size', 'windpress'),
-        icon: 'lucide:heading-1',
+        icon: 'lucide:a-large-small',
         value: 'text',
     },
     {
