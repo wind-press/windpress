@@ -1,23 +1,38 @@
 <script setup lang="ts">
 import { onBeforeRouteLeave } from 'vue-router'
-import { ref, onBeforeMount, onBeforeUnmount, provide } from 'vue';
+import { ref, onBeforeMount, onBeforeUnmount, provide, computed } from 'vue';
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { useWizard } from '@/dashboard/composables/useWizard';
 import { __, sprintf } from '@wordpress/i18n';
 import { useRouter } from 'vue-router';
+import { useSettingsStore } from '@/dashboard/stores/settings';
+import VersionRequirement from '@/dashboard/components/Wizard/VersionRequirement.vue';
 
 const volumeStore = useVolumeStore()
 const wizard = useWizard();
 const router = useRouter();
 const toast = useToast();
+const settingsStore = useSettingsStore();
 
 const theme = ref(wizard.getDefaultTheme());
 provide('theme', theme);
 
+// Check if Tailwind CSS v4 is active
+const isTailwindV4 = computed(() => {
+    return settingsStore.virtualOptions('general.tailwindcss.version', 4).value === 4;
+});
+
 onBeforeMount(async () => {
-    await volumeStore.initPull();
-    theme.value = wizard.parseWizardFile(volumeStore.data.entries.find((entry: Entry) => entry.relative_path === 'wizard.css')?.content || '');
+    await Promise.all([
+        volumeStore.initPull(),
+        settingsStore.initPull()
+    ]);
+    
+    // Only parse wizard.css when Tailwind CSS v4 is active
+    if (isTailwindV4.value) {
+        theme.value = wizard.parseWizardFile(volumeStore.data.entries.find((entry: Entry) => entry.relative_path === 'wizard.css')?.content || '');
+    }
 });
 
 function saveWizard() {
@@ -83,31 +98,39 @@ const links = ref<NavigationMenuItem[][]>([
     ]
 ]);
 
-onBeforeRouteLeave((to, from, next) => {
+onBeforeRouteLeave((_, __, next) => {
     console.log('Before route leave, saving wizard...');
 
-    // Save the theme when leaving the route
-    saveWizard();
+    // Save the theme when leaving the route if Tailwind v4 is active
+    if (isTailwindV4.value) {
+        saveWizard();
+    }
     next();
 });
 </script>
 
 <template>
-    <UDashboardPanel id="wizard-1" :default-size="20" :min-size="15" :max-size="30" resizable class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
-        <UDashboardNavbar :title="i18n.__('Wizard', 'windpress')" class="text-sm">
-            <template #leading>
-                <UDashboardSidebarCollapse />
-            </template>
-            <template #right>
-                <UTooltip :text="i18n.__('Save the changes to wizard.css file', 'windpress')">
-                    <UButton icon="i-lucide-save" color="primary" variant="subtle" @click="saveWizard" />
-                </UTooltip>
-            </template>
-        </UDashboardNavbar>
+    <!-- Show version requirement when Tailwind v3 is active -->
+    <VersionRequirement v-if="!isTailwindV4" />
+    
+    <!-- Show normal wizard interface when Tailwind v4 is active -->
+    <template v-else>
+        <UDashboardPanel id="wizard-1" :default-size="20" :min-size="15" :max-size="30" resizable class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
+            <UDashboardNavbar :title="i18n.__('Wizard', 'windpress')" class="text-sm">
+                <template #leading>
+                    <UDashboardSidebarCollapse />
+                </template>
+                <template #right>
+                    <UTooltip :text="i18n.__('Save the changes to wizard.css file', 'windpress')">
+                        <UButton icon="i-lucide-save" color="primary" variant="subtle" @click="saveWizard" />
+                    </UTooltip>
+                </template>
+            </UDashboardNavbar>
 
-        <UNavigationMenu :items="links[0]" orientation="vertical" />
-        <UNavigationMenu :items="links[1]" orientation="vertical" class="mt-auto" />
-    </UDashboardPanel>
+            <UNavigationMenu :items="links[0]" orientation="vertical" />
+            <UNavigationMenu :items="links[1]" orientation="vertical" class="mt-auto" />
+        </UDashboardPanel>
 
-    <RouterView />
+        <RouterView />
+    </template>
 </template>
