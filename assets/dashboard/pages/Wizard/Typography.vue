@@ -49,19 +49,27 @@ const links = ref<NavigationMenuItem[]>([
 ]);
 
 function addTextChildHandler(uid: string) {
-    addTextChild(uid, 'tx');
+    addTextChild(uid);
 }
 
 function addTextNextHandler(uid: string) {
-    addTextNext(uid, 'tx');
+    addTextNext(uid);
 }
 
 function addFontChildHandler(uid: string) {
-    addFontChild(uid, 'fn');
+    addFontChild(uid);
 }
 
 function addFontNextHandler(uid: string) {
-    addFontNext(uid, 'fn');
+    addFontNext(uid);
+}
+
+function addNext() {
+    if (activeTab.value === 'text') {
+        addTextNext();
+    } else if (activeTab.value === 'font') {
+        addFontNext();
+    }
 }
 
 onBeforeMount(() => {
@@ -91,6 +99,9 @@ onBeforeRouteLeave((_, __, next) => {
             </template>
 
             <template #right>
+                <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
+                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
+                </UTooltip>
                 <UTooltip :text="__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/theme#theme-variable-namespaces" target="_blank" />
                 </UTooltip>

@@ -198,7 +198,7 @@ watchEffect((onCleanup) => {
             '-top-1': instruction.type === 'reorder-above',
         }" />
 
-        <div v-if="instruction && instruction.type === 'make-child'" class="absolute text-primary pointer-events-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-medium whitespace-nowrap z-10 transition-all duration-150 ease-out">
+        <div v-if="instruction && instruction.type === 'make-child'" class="absolute text-primary bg-primary/30 backdrop-blur-md px-4 py-2 rounded-lg pointer-events-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-medium whitespace-nowrap z-10 transition-all duration-150 ease-out">
             Drop to nest inside
         </div>
 

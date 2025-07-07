@@ -188,7 +188,7 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         return currentItem
     }
 
-    function addChild(uid: string, prefix: string = '') {
+    function addChild(uid: string) {
         const currentItem = findItemByUid(items.value, uid)
         if (!currentItem) {
             console.error('Item not found for uid:', uid)
@@ -198,7 +198,7 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         const newItem: WizardTreeItem = {
             value: nanoid(7),
             var: {
-                key: `${prefix}${generateId()}`,
+                key: '',
                 value: '',
             },
             defaultExpanded: true,
@@ -218,16 +218,11 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
         }
     }
 
-    function addNext(uid: string, prefix: string = '') {
-        const currentItem = findItemByUid(items.value, uid)
-        if (!currentItem) {
-            return
-        }
-
+    function addNext(uid?: string) {
         const newItem: WizardTreeItem = {
             value: nanoid(7),
             var: {
-                key: `${prefix}${generateId()}`,
+                key: '',
                 value: '',
             },
             defaultExpanded: true,
@@ -238,6 +233,17 @@ export function useWizardTree(namespace: keyof WizardTheme['namespaces'], theme:
             onToggle: (e: Event) => {
                 e.preventDefault()
             },
+        }
+
+        // If no uid provided, add to root level
+        if (!uid) {
+            (items.value as any[]).push(newItem)
+            return
+        }
+
+        const currentItem = findItemByUid(items.value, uid)
+        if (!currentItem) {
+            return
         }
 
         const parentItem = findParentItem(items.value, currentItem)

@@ -25,11 +25,11 @@ watch(() => theme.value.namespaces.spacing, () => {
 }, { deep: true });
 
 function addSpacingChild(uid: string) {
-    addChild(uid, 'sp');
+    addChild(uid);
 }
 
 function addSpacingNext(uid: string) {
-    addNext(uid, 'sp');
+    addNext(uid);
 }
 
 function calcFluid(
@@ -133,9 +133,23 @@ function generateFluidSpacing(fluidConfig: FluidCalculatorData) {
         if (!parentItem.children) {
             parentItem.children = [];
         }
-        parentItem.children.push(...newItems);
+        newItems.forEach(newItem => {
+            const existingItem = parentItem.children!.find(item => item.var.key === newItem.var.key);
+            if (existingItem) {
+                existingItem.var.value = newItem.var.value;
+            } else {
+                parentItem.children!.push(newItem);
+            }
+        });
     } else {
-        items.value.push(...newItems);
+        newItems.forEach(newItem => {
+            const existingItem: any = items.value.find((item) => item.var.key === newItem.var.key);
+            if (existingItem) {
+                existingItem.var.value = newItem.var.value;
+            } else {
+                items.value.push(newItem);
+            }
+        });
     }
 }
 
@@ -145,7 +159,12 @@ async function openFluidCalculator() {
     const fluidData = await instance.result;
 
     if (!fluidData) {
-        console.warn('Fluid Calculator was closed without generating data.');
+        toast.add({
+            title: __('Cancelled', 'windpress'),
+            description: __('Fluid spacing generation was cancelled.', 'windpress'),
+            icon: 'lucide:wand-sparkles',
+            color: 'info',
+        });
         return;
     }
 
@@ -154,7 +173,7 @@ async function openFluidCalculator() {
     toast.add({
         title: __('Generated', 'windpress'),
         description: __('Fluid spacing variables have been generated successfully.', 'windpress'),
-        icon: 'i-lucide-check',
+        icon: 'lucide:wand-sparkles',
         color: 'success',
     });
 }
@@ -185,7 +204,10 @@ onBeforeRouteLeave((_, __, next) => {
 
             <template #right>
                 <UTooltip :text="i18n.__('Fluid generator', 'windpress')">
-                    <UButton icon="lucide:wand-sparkles" color="neutral" variant="soft" @click="openFluidCalculator" />
+                    <UButton icon="lucide:wand-sparkles" color="neutral" variant="subtle" @click="openFluidCalculator" />
+                </UTooltip>
+                <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
+                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
                 </UTooltip>
                 <UTooltip :text="i18n.__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/theme#theme-variable-namespaces" target="_blank" />

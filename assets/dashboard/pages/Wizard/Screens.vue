@@ -19,11 +19,11 @@ watch(() => theme.value.namespaces.breakpoint, () => {
 }, { deep: true });
 
 function addBreakpointChild(uid: string) {
-    addChild(uid, 'bp');
+    addChild(uid);
 }
 
 function addBreakpointNext(uid: string) {
-    addNext(uid, 'bp');
+    addNext(uid);
 }
 
 onBeforeMount(() => {
@@ -51,6 +51,9 @@ onBeforeRouteLeave((_, __, next) => {
             </template>
 
             <template #right>
+                <UTooltip :delay-duration="0" :text="i18n.__('Add new item', 'windpress')">
+                    <UButton color="primary" variant="subtle" icon="i-lucide-plus" @click="addNext()" />
+                </UTooltip>
                 <UTooltip :text="i18n.__('Help', 'windpress')">
                     <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://tailwindcss.com/docs/responsive-design#customizing-your-theme" target="_blank" />
                 </UTooltip>
@@ -61,15 +64,7 @@ onBeforeRouteLeave((_, __, next) => {
             <!-- TreeItem -->
             <UTree :items :ui="{ link: 'p-0' }" :default-expanded="expandedTree">
                 <template #item="{ item, level }">
-                    <WizardTreeItem
-                        :item="item"
-                        :level="level || 0"
-                        :should-be-dimmed="shouldBeDimmed"
-                        :was-recently-moved="wasRecentlyMoved"
-                        :is-descendant-of="isDescendantOf"
-                        :on-add-next="addBreakpointNext"
-                        :on-add-child="addBreakpointChild"
-                    />
+                    <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addBreakpointNext" :on-add-child="addBreakpointChild" />
                 </template>
             </UTree>
         </div>

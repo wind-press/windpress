@@ -99,7 +99,7 @@ onBeforeRouteLeave((to, from, next) => {
                 <UDashboardSidebarCollapse />
             </template>
             <template #right>
-                <UTooltip :text="i18n.__('Save', 'windpress')">
+                <UTooltip :text="i18n.__('Save the changes to wizard.css file', 'windpress')">
                     <UButton icon="i-lucide-save" color="primary" variant="subtle" @click="saveWizard" />
                 </UTooltip>
             </template>
