@@ -40,36 +40,36 @@ const colorPalettes = [
         name: __('Brand Colors', 'windpress'),
         description: __('Primary brand colors for your design system', 'windpress'),
         colors: {
-            'primary': '#3b82f6',
-            'secondary': '#64748b',
-            'accent': '#f59e0b',
-            'neutral': '#6b7280'
+            'primary': 'oklch(58.5% 0.233 277.117)',
+            'secondary': 'oklch(62.3% .214 259.815)',
+            'neutral': 'oklch(55.4% 0.046 257.417)'
         }
     },
     {
         name: __('Semantic Colors', 'windpress'),
         description: __('Status and feedback colors', 'windpress'),
         colors: {
-            'success': '#10b981',
-            'warning': '#f59e0b',
-            'error': '#ef4444',
-            'info': '#3b82f6'
+            'success': 'oklch(72.3% 0.219 149.579)',
+            'warning': 'oklch(79.5% 0.184 86.047)',
+            'error': 'oklch(63.7% 0.237 25.331)',
+            'info': 'oklch(62.3% 0.214 259.815)'
         }
     },
     {
-        name: __('Grayscale', 'windpress'),
-        description: __('Neutral grayscale palette', 'windpress'),
+        name: __('Neutral Grayscale', 'windpress'),
+        description: __('A neutral grayscale palette for backgrounds, text, etc', 'windpress'),
         colors: {
-            'gray-50': '#f9fafb',
-            'gray-100': '#f3f4f6',
-            'gray-200': '#e5e7eb',
-            'gray-300': '#d1d5db',
-            'gray-400': 'oklch(70.7% 0.022 261.325)',
-            'gray-500': '#6b7280',
-            'gray-600': '#4b5563',
-            'gray-700': '#374151',
-            'gray-800': '#1f2937',
-            'gray-900': '#111827'
+            'neutral-50': 'oklch(0.985 0 0)',
+            'neutral-100': 'oklch(0.97 0 0)',
+            'neutral-200': 'oklch(0.922 0 0)',
+            'neutral-300': 'oklch(0.87 0 0)',
+            'neutral-400': 'oklch(0.708 0 0)',
+            'neutral-500': 'oklch(0.556 0 0)',
+            'neutral-600': 'oklch(0.439 0 0)',
+            'neutral-700': 'oklch(0.371 0 0)',
+            'neutral-800': 'oklch(0.269 0 0)',
+            'neutral-900': 'oklch(0.205 0 0)',
+            'neutral-950': 'oklch(0.145 0 0)',
         }
     }
 ];
@@ -184,29 +184,26 @@ onBeforeRouteLeave((_, __, next) => {
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addColorNext" :on-add-child="addColorChild" :on-delete="deleteColor">
                         <template #before-value="{ item }">
                             <div>
-                                <UPopover>
-                                    <div :style="{ backgroundColor: item.var.value || 'var(--ui-bg-elevated)' }" :title="i18n.__('Open color picker', 'windpress')" class="h-8 w-8 rounded border border-gray-300 dark:border-gray-600">
-                                        <span class="sr-only">{{ i18n.__('Open color picker', 'windpress') }}</span>
-                                    </div>
-
-                                    <template #content>
-                                        <ChromePicker :value="item.var.value ? new Color(item.var.value).toString({format: 'hex'}) : ''" @input="(color: string) => {
-                                            const prevColor = new Color(item.var.value);
-                                            const nextColor = new Color(color).toString({format: prevColor.parseMeta.formatId});
-                                            item.var.value = nextColor;
-                                        }" />
-                                    </template>
-                                </UPopover>
-
+                                <UTooltip :text="item.var.value">
+                                    <div :style="{ backgroundColor: item.var.value || 'var(--ui-bg-elevated)' }" class="h-8 w-8 rounded border border-gray-300 dark:border-gray-600"></div>
+                                </UTooltip>
                             </div>
                         </template>
 
                         <template #value-leading="{ item }">
-                            <UTooltip :text="item.var.value">
-                                <div class="h-4 w-4 rounded border border-gray-300 dark:border-gray-600" :style="{ backgroundColor: item.var.value || 'var(--ui-bg-elevated)' }">
+                            <UPopover>
+                                <div class="h-4 w-4 rounded border border-gray-300 dark:border-gray-600" :style="{ backgroundColor: item.var.value || 'var(--ui-bg-elevated)' }" :title="i18n.__('Open color picker', 'windpress')">
                                     <span class="sr-only">{{ i18n.__('Open color picker', 'windpress') }}</span>
                                 </div>
-                            </UTooltip>
+
+                                <template #content>
+                                    <ChromePicker :value="item.var.value ? new Color(item.var.value).toString({ format: 'hex' }) : ''" @input="(color: string) => {
+                                        const prevColor = new Color(item.var.value);
+                                        const nextColor = new Color(color).toString({ format: prevColor.parseMeta.formatId });
+                                        item.var.value = nextColor;
+                                    }" />
+                                </template>
+                            </UPopover>
                         </template>
                     </WizardTreeItem>
                 </template>
