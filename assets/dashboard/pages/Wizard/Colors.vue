@@ -20,11 +20,11 @@ watch(() => theme.value.namespaces.color, () => {
 }, { deep: true });
 
 function addColorChild(uid: string) {
-    addChild(uid, '', '#000000');
+    addChild(uid);
 }
 
 function addColorNext(uid?: string) {
-    addNext(uid, '', '#000000');
+    addNext(uid);
 }
 
 function deleteColor(uid: string) {
@@ -88,75 +88,6 @@ onBeforeMount(() => {
 onBeforeRouteLeave((_, __, next) => {
     updateThemeFromItems();
     next();
-});
-
-// Define ColorPreviewGroup component inline
-const ColorPreviewGroup = defineComponent({
-    name: 'ColorPreviewGroup',
-    props: {
-        item: {
-            type: Object,
-            required: true
-        },
-        level: {
-            type: Number,
-            default: 0
-        }
-    },
-    setup(props) {
-        return () => h('div', { 
-            class: `pl-${props.level * 4}` 
-        }, [
-            // Render current color if it has a value
-            props.item.var.value ? h('div', { 
-                class: 'mb-3' 
-            }, [
-                h('div', { class: 'flex items-center gap-3' }, [
-                    // Color swatch
-                    props.item.var.value && props.item.var.value.startsWith('#') 
-                        ? h('div', {
-                            class: 'w-8 h-8 rounded-lg border border-default/50 shadow-sm flex-shrink-0',
-                            style: { backgroundColor: props.item.var.value }
-                        })
-                        : h('div', {
-                            class: 'w-8 h-8 rounded-lg border border-default/50 bg-elevated flex items-center justify-center flex-shrink-0'
-                        }, [
-                            h('UIcon', { name: 'lucide:help-circle', class: 'size-3 text-dimmed' })
-                        ]),
-                    // Color info
-                    h('div', { class: 'min-w-0 flex-1' }, [
-                        h('div', { class: 'font-medium text-highlighted text-sm truncate' }, props.item.var.key || 'Unnamed'),
-                        h('div', { class: 'text-dimmed text-xs truncate' }, props.item.var.value || 'No value')
-                    ])
-                ])
-            ]) : null,
-            
-            // Render children recursively
-            props.item.children && props.item.children.length > 0 ? [
-                // Group header for nested items
-                props.item.var.key && !props.item.var.value ? h('div', {
-                    class: 'mb-2 pb-1 border-b border-default/30'
-                }, [
-                    h('div', { class: 'font-medium text-highlighted text-sm flex items-center gap-2' }, [
-                        h('UIcon', { name: 'lucide:folder', class: 'size-4' }),
-                        props.item.var.key
-                    ])
-                ]) : null,
-                
-                // Render children
-                h('div', { 
-                    class: props.level === 0 ? 'ml-4 pl-4 border-l-2 border-default/20' : 'ml-2 pl-2 border-l border-default/20',
-                    style: 'margin-top: 0.5rem'
-                }, props.item.children.map((child: any) => 
-                    h(ColorPreviewGroup, {
-                        key: child.value,
-                        item: child,
-                        level: props.level + 1
-                    })
-                ))
-            ] : null
-        ])
-    }
 });
 </script>
 
@@ -252,27 +183,19 @@ const ColorPreviewGroup = defineComponent({
                         :on-add-next="addColorNext" 
                         :on-add-child="addColorChild" 
                         :on-delete="deleteColor" 
-                    />
+                    >
+                            <template #preview="{ item }">
+                                <div 
+                                    v-if="item.var?.value && item.var.value.startsWith('#')"
+                                    class="w-4 h-4 rounded border border-gray-300 dark:border-gray-600 ml-2 flex-shrink-0"
+                                    :style="{ backgroundColor: item.var.value }"
+                                    :title="item.var.value"
+                                ></div>
+                            </template>
+                        </WizardTreeItem>
                 </template>
             </UTree>
 
-            <!-- Color preview section -->
-            <div v-if="items.length > 0" class="mt-8 p-4 bg-elevated rounded-lg border border-default">
-                <h4 class="text-sm font-medium text-highlighted mb-3 flex items-center gap-2">
-                    <UIcon name="lucide:eye" class="size-4" />
-                    {{ i18n.__('Color Preview', 'windpress') }}
-                </h4>
-                
-                <!-- Recursive color preview component -->
-                <div class="space-y-4">
-                    <ColorPreviewGroup 
-                        v-for="item in items" 
-                        :key="item.value" 
-                        :item="item" 
-                        :level="0" 
-                    />
-                </div>
-            </div>
         </div>
     </UDashboardPanel>
 </template>
