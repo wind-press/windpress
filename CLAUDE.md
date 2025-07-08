@@ -15,13 +15,10 @@ WindPress is a WordPress plugin that integrates Tailwind CSS (v3 and v4) into Wo
 - `pnpm run format` - Auto-fix linting issues
 - `pnpm run test` - Run tests with vitest
 
+You are not allowed to run any command except `pnpm install` or `pnpm update` to install or update dependencies.
+
 ### Backend Development
 - `composer install` - Install PHP dependencies
-- `composer run phpstan` - Run PHPStan static analysis
-- `composer run check-ecs` - Check code style with ECS
-- `composer run fix-ecs` - Fix code style issues
-- `composer run rector` - Run Rector for code modernization
-- `composer run complete-check` - Run all checks (ECS, PHPStan, PHPUnit)
 
 ## Architecture
 
