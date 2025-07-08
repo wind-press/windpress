@@ -2,6 +2,7 @@
 import 'vue-color/style.css';
 import { ChromePicker } from 'vue-color'
 import Color from 'colorjs.io';
+import { nanoid } from 'nanoid';
 import { onBeforeRouteLeave } from 'vue-router'
 import { ref, inject, onBeforeMount, watch, type Ref, nextTick } from 'vue';
 import { type WizardTheme } from '@/dashboard/composables/useWizard';
@@ -9,11 +10,12 @@ import { useWizardTree } from '@/dashboard/composables/useWizardTree';
 import { useWizardDragDrop } from '@/dashboard/composables/useWizardDragDrop';
 import WizardTreeItem from '@/dashboard/components/Wizard/WizardTreeItem.vue';
 import { __ } from '@wordpress/i18n';
+import masterCSSColorPalettes from '@master/colors'
 
 const theme = inject('theme') as Ref<WizardTheme>;
 
 const treeLogic = useWizardTree('color', theme);
-const { expandedTree, items, updateThemeFromItems, findItemByUid, addChild, addNext, deleteItem, initializeItems } = treeLogic;
+const { expandedTree, items, updateThemeFromItems, findItemByUid, addChild, addNext, deleteItem, initializeItems, findOrCreateItemByKey } = treeLogic;
 
 const dragDropLogic = useWizardDragDrop(items, updateThemeFromItems, findItemByUid);
 const { shouldBeDimmed, wasRecentlyMoved, isDescendantOf } = dragDropLogic;
@@ -71,34 +73,154 @@ const colorPalettes = [
             'neutral-900': 'oklch(0.205 0 0)',
             'neutral-950': 'oklch(0.145 0 0)',
         }
-    }
+    },
+    {
+        name: __('Material Design 3', 'windpress'),
+        description: __('Material Design 3 color system', 'windpress'),
+        colors: {
+            'md3-primary': 'rgb(101 85 143)',
+            'md3-surface-tint': 'rgb(103 80 164)',
+            'md3-on_primary': 'rgb(255 255 255)',
+            'md3-primary-container': 'rgb(234 221 255)',
+            'md3-on_primary-container': 'rgb(79 55 139)',
+            'md3-secondary': 'rgb(98 91 113)',
+            'md3-on_secondary': 'rgb(255 255 255)',
+            'md3-secondary-container': 'rgb(232 222 248)',
+            'md3-on_secondary-container': 'rgb(74 68 88)',
+            'md3-tertiary': 'rgb(125 82 96)',
+            'md3-on_tertiary': 'rgb(255 255 255)',
+            'md3-tertiary-container': 'rgb(255 216 228)',
+            'md3-on_tertiary-container': 'rgb(99 59 72)',
+            'md3-error': 'rgb(179 38 30)',
+            'md3-on_error': 'rgb(255 255 255)',
+            'md3-error-container': 'rgb(249 222 220)',
+            'md3-on_error-container': 'rgb(140 29 24)',
+            'md3-background': 'rgb(254 247 255)',
+            'md3-on_background': 'rgb(29 27 32)',
+            'md3-surface': 'rgb(254 247 255)',
+            'md3-on_surface': 'rgb(29 27 32)',
+            'md3-surface-variant': 'rgb(231 224 236)',
+            'md3-on_surface-variant': 'rgb(73 69 79)',
+            'md3-outline': 'rgb(121 116 126)',
+            'md3-outline-variant': 'rgb(202 196 208)',
+            'md3-shadow': 'rgb(0 0 0)',
+            'md3-scrim': 'rgb(0 0 0)',
+            'md3-inverse-surface': 'rgb(50 47 53)',
+            'md3-inverse-on_surface': 'rgb(245 239 247)',
+            'md3-inverse-primary': 'rgb(208 188 255)',
+            'md3-primary-fixed': 'rgb(234 221 255)',
+            'md3-on_primary-fixed': 'rgb(33 0 93)',
+            'md3-primary-fixed-dim': 'rgb(208 188 255)',
+            'md3-on_primary-fixed-variant': 'rgb(79 55 139)',
+            'md3-secondary-fixed': 'rgb(232 222 248)',
+            'md3-on_secondary-fixed': 'rgb(29 25 43)',
+            'md3-secondary-fixed-dim': 'rgb(204 194 220)',
+            'md3-on_secondary-fixed-variant': 'rgb(74 68 88)',
+            'md3-tertiary-fixed': 'rgb(255 216 228)',
+            'md3-on_tertiary-fixed': 'rgb(49 17 29)',
+            'md3-tertiary-fixed-dim': 'rgb(239 184 200)',
+            'md3-on_tertiary-fixed-variant': 'rgb(99 59 72)',
+            'md3-surface-dim': 'rgb(222 216 225)',
+            'md3-surface-bright': 'rgb(254 247 255)',
+            'md3-surface-container-lowest': 'rgb(255 255 255)',
+            'md3-surface-container-low': 'rgb(247 242 250)',
+            'md3-surface-container': 'rgb(243 237 247)',
+            'md3-surface-container-high': 'rgb(236 230 240)',
+            'md3-surface-container-highest': 'rgb(230 224 233)',
+        }
+    },
+    ...Object.entries(masterCSSColorPalettes).map(([name, colors]: [string, any]) => ({
+        name: `${name} @ Master Colors v3`,
+        description: 'Master Colors v3 — A precision-crafted P3 color system designed for modern UIs', // Add description if available in your palette object
+        colors: Object.fromEntries(
+            Object.entries(colors).map(([key, value]) => [`${name}-${key}`, value])
+        )
+    })),
 ];
 
 function addPalette(palette: typeof colorPalettes[0]) {
+    let newItemPool = [];
+
     Object.entries(palette.colors).forEach(([key, value]) => {
-        // Check if this key contains a dash (e.g., gray-50)
+        let parentKey = '';
+        let childKey = key;
+
+        // Check if this key contains a dash (e.g., gray-50, neutral-100)
         if (key.includes('-')) {
-            const [parentKey, childKey] = key.split('-', 2);
-
-            // Find or create the parent item
-            let parentItem = items.value.find((item: any) => item.var.key === parentKey);
-            if (!parentItem) {
-                // Create parent item first
-                addNext(undefined, parentKey, '');
-                parentItem = items.value.find((item: any) => item.var.key === parentKey);
+            const parts = key.split('-');
+            if (parts.length >= 2) {
+                parentKey = parts.slice(0, -1).join('-');
+                childKey = parts[parts.length - 1];
             }
+        }
 
-            // Check if child already exists
-            const childExists = parentItem?.children?.find((child: any) => child.var.key === childKey);
-            if (!childExists && parentItem && parentItem.value) {
-                addChild(parentItem.value, childKey, value);
-            }
+        newItemPool.push({
+            parentKey: parentKey || null,
+            key: childKey,
+            value: value,
+        });
+    });
+
+    // Group items by parent
+    const groupedItems = new Map();
+    newItemPool.forEach(item => {
+        const key = item.parentKey || '__root__';
+        if (!groupedItems.has(key)) {
+            groupedItems.set(key, []);
+        }
+        groupedItems.get(key).push(item);
+    });
+
+    // Process each group
+    groupedItems.forEach((groupItems, groupKey) => {
+        if (groupKey === '__root__') {
+            // Add items directly to root
+            groupItems.forEach(item => {
+                const existingItem: any = items.value.find((existingItem) => existingItem.var.key === item.key);
+                if (existingItem) {
+                    existingItem.var.value = item.value;
+                } else {
+                    const newItem = {
+                        value: nanoid(7),
+                        var: {
+                            key: item.key,
+                            value: item.value,
+                        },
+                        defaultExpanded: true,
+                        onToggle: (e: Event) => {
+                            e.preventDefault()
+                        },
+                    };
+                    items.value.push(newItem);
+                }
+            });
         } else {
-            // Check if color already exists
-            const existingItem = items.value.find((item: any) => item.var.key === key);
-            if (!existingItem) {
-                addNext(undefined, key, value);
+            // Find or create parent item
+            const parentItem = findOrCreateItemByKey(groupKey);
+            
+            if (!parentItem.children) {
+                parentItem.children = [];
             }
+
+            groupItems.forEach(item => {
+                const existingItem = parentItem.children!.find(child => child.var.key === item.key);
+                if (existingItem) {
+                    existingItem.var.value = item.value;
+                } else {
+                    const newItem = {
+                        value: nanoid(7),
+                        var: {
+                            key: item.key,
+                            value: item.value,
+                        },
+                        defaultExpanded: true,
+                        onToggle: (e: Event) => {
+                            e.preventDefault()
+                        },
+                    };
+                    parentItem.children!.push(newItem);
+                }
+            });
         }
     });
 }
@@ -139,7 +261,7 @@ onBeforeRouteLeave((_, __, next) => {
                         icon: 'lucide:palette',
                         onSelect: () => addPalette(palette)
                     }))
-                ]" :ui="{ content: 'w-64' }">
+                ]" :ui="{ content: 'w-64 max-h-80' }">
                     <UTooltip :text="i18n.__('Add color palette', 'windpress')">
                         <UButton icon="lucide:palette" color="neutral" variant="subtle" />
                     </UTooltip>
@@ -172,7 +294,7 @@ onBeforeRouteLeave((_, __, next) => {
                         description: palette.description,
                         icon: 'lucide:palette',
                         onSelect: () => addPalette(palette)
-                    }))" :ui="{ content: 'w-64' }">
+                    }))" :ui="{ content: 'w-64 max-h-80' }">
                         <UButton :label="i18n.__('Choose Palette', 'windpress')" icon="lucide:palette" variant="outline" />
                     </UDropdownMenu>
                 </div>

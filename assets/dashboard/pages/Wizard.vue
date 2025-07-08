@@ -90,7 +90,7 @@ const links = ref<NavigationMenuItem[][]>([
     ],
     [
         {
-            label: __('Theme', 'windpress'),
+            label: __('Theme Configuration', 'windpress'),
             icon: 'i-lucide-cog',
             value: 'theme',
             description: __('You can customize components by using the `class` / `ui` props or in your app.config.ts.', 'windpress'),
@@ -127,8 +127,9 @@ onBeforeRouteLeave((_, __, next) => {
                 </template>
             </UDashboardNavbar>
 
+            <UNavigationMenu :items="links[1]" orientation="vertical" class="my-2"/>
             <UNavigationMenu :items="links[0]" orientation="vertical" />
-            <UNavigationMenu :items="links[1]" orientation="vertical" class="mt-auto" />
+            <!-- <UNavigationMenu :items="links[1]" orientation="vertical" class="mt-auto" /> -->
         </UDashboardPanel>
 
         <RouterView />
