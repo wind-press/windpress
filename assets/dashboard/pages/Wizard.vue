@@ -36,8 +36,6 @@ onBeforeMount(async () => {
 });
 
 function saveWizard() {
-    console.log('Saving wizard file...');
-
     const wizardFileContent = wizard.stringifyTheme(theme.value);
 
     // update or create the wizard.css entry in the volume store
@@ -102,8 +100,6 @@ const links = ref<NavigationMenuItem[][]>([
 ]);
 
 onBeforeRouteLeave((_, __, next) => {
-    console.log('Before route leave, saving wizard...');
-
     // Save the theme when leaving the route if Tailwind v4 is active
     if (isTailwindV4.value) {
         saveWizard();
