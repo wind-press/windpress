@@ -419,10 +419,16 @@ function updateExistingAST(theme: WizardTheme): string {
                     // First, update/add special properties
                     if (theme.isInitial) {
                         addOrUpdateDeclaration(declarations, SPECIAL_PROPERTIES.INITIAL_MARKER, 'initial');
+                    } else {
+                        // Remove isInitial property if it's disabled
+                        addOrUpdateDeclaration(declarations, SPECIAL_PROPERTIES.INITIAL_MARKER, '');
                     }
 
                     if (theme.spacing) {
                         addOrUpdateDeclaration(declarations, SPECIAL_PROPERTIES.SPACING_MULTIPLIER, theme.spacing);
+                    } else {
+                        // Remove spacing property if it's empty
+                        addOrUpdateDeclaration(declarations, SPECIAL_PROPERTIES.SPACING_MULTIPLIER, '');
                     }
 
                     // Update/add all current namespace declarations (preserves existing positions)

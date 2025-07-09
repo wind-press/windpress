@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeRouteLeave } from 'vue-router'
-import { ref, onBeforeMount, onBeforeUnmount, provide, computed } from 'vue';
+import { ref, onBeforeMount, provide, computed } from 'vue';
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { useWizard } from '@/dashboard/composables/useWizard';
