@@ -91,9 +91,12 @@ const links = ref<NavigationMenuItem[][]>([
     [
         {
             label: __('Theme Configuration', 'windpress'),
-            icon: 'i-lucide-cog',
-            value: 'theme',
-            description: __('You can customize components by using the `class` / `ui` props or in your app.config.ts.', 'windpress'),
+            type: 'label',
+        },
+        {
+            label: __('Theme Settings', 'windpress'),
+            icon: 'lucide:settings',
+            to: router.resolve({ name: 'wizard.theme' }),
         },
     ]
 ]);

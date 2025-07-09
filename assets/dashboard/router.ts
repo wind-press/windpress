@@ -46,8 +46,7 @@ const router = createRouter({
                 {
                     path: 'theme',
                     name: 'wizard.theme',
-                    // component: () => import('./pages/Wizard/Theme.vue'),
-                    component: () => null, // Placeholder for future implementation
+                    component: () => import('./pages/Wizard/Theme.vue'),
                 },
             ],
         },
