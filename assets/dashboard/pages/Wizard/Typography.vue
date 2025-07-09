@@ -257,18 +257,47 @@ onBeforeRouteLeave((_, __, next) => {
 
         <UTabs variant="link" :content="false" v-model="activeTab" :items="links" class="" :ui="{ list: 'px-4 sm:px-6  zzzzzzzzz' }" />
 
-        <div v-if="activeTab === 'text'" class="p-4">
-            <!-- Text Size TreeItem -->
-            <UTree :items="textItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeText">
+        <div v-if="activeTab === 'text'" class="flex-1 overflow-y-auto p-4">
+            <!-- Onboard / Empty state when no text items exist -->
+            <div v-if="textItems.length === 0" class="flex flex-col items-center justify-center h-full text-center">
+                <UIcon name="lucide:a-large-small" class="size-12 text-primary/50 mb-4" />
+                <h3 class="text-lg font-semibold text-highlighted mb-2">
+                    {{ __('No text sizes defined', 'windpress') }}
+                </h3>
+                <p class="text-dimmed mb-6 max-w-sm">
+                    {{ __('Start building your text size system by adding individual text sizes or generating fluid text scales.', 'windpress') }}
+                </p>
+                <div class="flex gap-2">
+                    <UButton :label="__('Add Text Size', 'windpress')" icon="lucide:plus" color="primary" variant="subtle" @click="addTextNext()" />
+                    <UButton :label="__('Generate Fluid', 'windpress')" icon="lucide:wand-sparkles" variant="ghost" @click="openFluidCalculator" />
+                </div>
+            </div>
+
+            <!-- Text Size TreeItem when items exist -->
+            <UTree v-else :items="textItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeText">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedText" :was-recently-moved="wasRecentlyMovedText" :is-descendant-of="isDescendantOfText" :on-add-next="addTextNextHandler" :on-add-child="addTextChildHandler" :on-delete="deleteText" />
                 </template>
             </UTree>
         </div>
 
-        <div v-if="activeTab === 'font'" class="p-4">
-            <!-- Font Family TreeItem -->
-            <UTree :items="fontItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeFont">
+        <div v-if="activeTab === 'font'" class="flex-1 overflow-y-auto p-4">
+            <!-- Onboard / Empty state when no font items exist -->
+            <div v-if="fontItems.length === 0" class="flex flex-col items-center justify-center h-full text-center">
+                <UIcon name="lucide:type" class="size-12 text-primary/50 mb-4" />
+                <h3 class="text-lg font-semibold text-highlighted mb-2">
+                    {{ __('No font families defined', 'windpress') }}
+                </h3>
+                <p class="text-dimmed mb-6 max-w-sm">
+                    {{ __('Start building your font family system by adding individual font families for your typography.', 'windpress') }}
+                </p>
+                <div class="flex gap-2">
+                    <UButton :label="__('Add Font Family', 'windpress')" icon="lucide:plus" color="primary" variant="subtle" @click="addFontNext()" />
+                </div>
+            </div>
+
+            <!-- Font Family TreeItem when items exist -->
+            <UTree v-else :items="fontItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeFont">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedFont" :was-recently-moved="wasRecentlyMovedFont" :is-descendant-of="isDescendantOfFont" :on-add-next="addFontNextHandler" :on-add-child="addFontChildHandler" :on-delete="deleteFont" />
                 </template>

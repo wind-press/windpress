@@ -204,8 +204,23 @@ onBeforeRouteLeave((_, __, next) => {
         </UDashboardNavbar>
 
         <div class="flex-1 overflow-y-auto p-4">
-            <!-- TreeItem -->
-            <UTree :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
+            <!-- Onboard / Empty state when no spacing is defined -->
+            <div v-if="items.length === 0" class="flex flex-col items-center justify-center h-full text-center">
+                <UIcon name="lucide:align-horizontal-space-around" class="size-12 text-primary/50 mb-4" />
+                <h3 class="text-lg font-semibold text-highlighted mb-2">
+                    {{ i18n.__('No spacing defined', 'windpress') }}
+                </h3>
+                <p class="text-dimmed mb-6 max-w-sm">
+                    {{ i18n.__('Start building your spacing system by adding individual spacing values or generating fluid spacing scales.', 'windpress') }}
+                </p>
+                <div class="flex gap-2">
+                    <UButton :label="i18n.__('Add Spacing', 'windpress')" icon="lucide:plus" color="primary" variant="subtle" @click="addSpacingNext()" />
+                    <UButton :label="i18n.__('Generate Fluid', 'windpress')" icon="lucide:wand-sparkles" variant="ghost" @click="openFluidCalculator" />
+                </div>
+            </div>
+
+            <!-- Spacing tree when spacing exists -->
+            <UTree v-else :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addSpacingNext" :on-add-child="addSpacingChild" :on-delete="deleteSpacing" />
                 </template>

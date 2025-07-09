@@ -278,8 +278,8 @@ onBeforeRouteLeave((_, __, next) => {
         </UDashboardNavbar>
 
         <div class="flex-1 overflow-y-auto p-4">
-            <!-- Empty state when no colors are defined -->
-            <div v-if="items.length === 0" class="flex flex-col items-center justify-center h-64 text-center">
+            <!-- Onboard / Empty state when no colors are defined -->
+            <div v-if="items.length === 0" class="flex flex-col items-center justify-center h-full text-center">
                 <UIcon name="lucide:palette" class="size-12 text-primary/50 mb-4" />
                 <h3 class="text-lg font-semibold text-highlighted mb-2">
                     {{ i18n.__('No colors defined', 'windpress') }}
@@ -288,14 +288,14 @@ onBeforeRouteLeave((_, __, next) => {
                     {{ i18n.__('Start building your color system by adding individual colors or choosing from predefined palettes.', 'windpress') }}
                 </p>
                 <div class="flex gap-2">
-                    <UButton :label="i18n.__('Add Color', 'windpress')" icon="lucide:plus" color="primary" @click="addColorNext()" />
+                    <UButton :label="i18n.__('Add Color', 'windpress')" icon="lucide:plus" color="primary" variant="subtle" @click="addColorNext()" />
                     <UDropdownMenu :items="colorPalettes.map(palette => ({
                         label: palette.name,
                         description: palette.description,
                         icon: 'lucide:palette',
                         onSelect: () => addPalette(palette)
                     }))" :ui="{ content: 'w-64 max-h-80' }">
-                        <UButton :label="i18n.__('Choose Palette', 'windpress')" icon="lucide:palette" variant="outline" />
+                        <UButton :label="i18n.__('Choose Palette', 'windpress')" icon="lucide:palette" variant="ghost" />
                     </UDropdownMenu>
                 </div>
             </div>

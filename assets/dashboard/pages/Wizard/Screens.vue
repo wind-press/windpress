@@ -65,8 +65,22 @@ onBeforeRouteLeave((_, __, next) => {
         </UDashboardNavbar>
 
         <div class="flex-1 overflow-y-auto p-4">
-            <!-- TreeItem -->
-            <UTree :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
+            <!-- Onboard / Empty state when no breakpoints are defined -->
+            <div v-if="items.length === 0" class="flex flex-col items-center justify-center h-full text-center">
+                <UIcon name="lucide:monitor-smartphone" class="size-12 text-primary/50 mb-4" />
+                <h3 class="text-lg font-semibold text-highlighted mb-2">
+                    {{ i18n.__('No breakpoints defined', 'windpress') }}
+                </h3>
+                <p class="text-dimmed mb-6 max-w-sm">
+                    {{ i18n.__('Start building your responsive design system by adding custom breakpoints for different screen sizes.', 'windpress') }}
+                </p>
+                <div class="flex gap-2">
+                    <UButton :label="i18n.__('Add Breakpoint', 'windpress')" icon="lucide:plus" color="primary" variant="subtle" @click="addNext()" />
+                </div>
+            </div>
+
+            <!-- Breakpoint tree when breakpoints exist -->
+            <UTree v-else :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addBreakpointNext" :on-add-child="addBreakpointChild" :on-delete="deleteBreakpoint" />
                 </template>

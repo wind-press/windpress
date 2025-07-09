@@ -59,7 +59,7 @@ function dontTouchMe(css: string) {
     return csstree.generate(ast);
 }
 
-document.body.classList.add('folded');
+// document.body.classList.add('folded');
 
 const wpbody = document.querySelector('#wpbody');
 if (wpbody) {
