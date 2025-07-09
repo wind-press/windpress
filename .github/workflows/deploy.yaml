@@ -31,6 +31,7 @@ jobs:
         # clean up the dev files
         - run: rm -rf tsconfig.json mago.toml eslint.config.js
         - run: rm -rf ecs.php rector.php
+        - run: rm -rf CLAUDE.md .agents
 
         - uses: actions/checkout@v4
           with:

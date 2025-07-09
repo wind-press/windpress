@@ -245,14 +245,16 @@ export const useVolumeStore = defineStore('volume', () => {
     /**
      * Pull the data from the server when the store is initialized.
      */
-    function initPull() {
+    async function initPull(): Promise<void> {
         if (data.entries.length === 0) {
-            doPull();
+            return doPull();
         }
+        return Promise.resolve();
     }
 
     return {
         data,
+        initData,
         activeViewEntryRelativePath,
         hasChanged,
         addNewEntry,

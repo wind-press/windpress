@@ -20,6 +20,7 @@ const links = [
             label: __('Wizard', 'windpress'),
             icon: 'lucide:zap',
             // to: '/wizard'
+            to: router.resolve({ name: 'wizard' }),
         },
         {
             label: __('Logs', 'windpress'),

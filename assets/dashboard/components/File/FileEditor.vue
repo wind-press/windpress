@@ -235,7 +235,7 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                     <UButton icon="i-lucide-trash" color="neutral" variant="ghost" @click="emit('delete', entry)" />
                 </UTooltip>
 
-                <UTooltip v-if="entry?.relative_path === 'main.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" :text="i18n.__('Reset to default', 'windpress')">
+                <UTooltip v-if="entry?.relative_path === 'main.css' || entry?.relative_path === 'wizard.css' || (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" :text="i18n.__('Reset to default', 'windpress')">
                     <UButton icon="lucide:file-minus-2" color="neutral" variant="ghost" @click="emit('reset', entry)" />
                 </UTooltip>
 

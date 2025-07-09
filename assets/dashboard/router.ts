@@ -18,23 +18,56 @@ const router = createRouter({
             component: () => import('./pages/Log.vue'),
         },
         {
+            path: '/wizard',
+            name: 'wizard',
+            // redirect: { name: 'wizard.theme' },
+            component: () => import('./pages/Wizard.vue'),
+            children: [
+                {
+                    path: 'screens',
+                    name: 'wizard.screens',
+                    component: () => import('./pages/Wizard/Screens.vue'),
+                },
+                {
+                    path: 'colors',
+                    name: 'wizard.colors',
+                    component: () => import('./pages/Wizard/Colors.vue'),
+                },
+                {
+                    path: 'typography',
+                    name: 'wizard.typography',
+                    component: () => import('./pages/Wizard/Typography.vue'),
+                },
+                {
+                    path: 'spacing',
+                    name: 'wizard.spacing',
+                    component: () => import('./pages/Wizard/Spacing.vue'),
+                },
+                {
+                    path: 'theme',
+                    name: 'wizard.theme',
+                    component: () => import('./pages/Wizard/Theme.vue'),
+                },
+            ],
+        },
+        {
             path: '/settings',
             name: 'settings',
             redirect: { name: 'settings.general' },
             component: () => import('./pages/Settings.vue'),
             children: [
                 {
-                    path: '/general',
+                    path: 'general',
                     name: 'settings.general',
                     component: () => import('./pages/Settings/General.vue')
                 },
                 {
-                    path: '/performance',
+                    path: 'performance',
                     name: 'settings.performance',
                     component: () => import('./pages/Settings/Performance.vue')
                 },
                 {
-                    path: '/integrations',
+                    path: 'integrations',
                     name: 'settings.integrations',
                     component: () => import('./pages/Settings/Integrations.vue')
                 },

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from 'vue'
 import { useVolumeStore } from '@/dashboard/stores/volume'
+import { useSettingsStore } from '@/dashboard/stores/settings';
 import path from 'path'
 
 import type { TreeItem } from '@nuxt/ui'
@@ -8,6 +9,7 @@ import type { TreeItem } from '@nuxt/ui'
 import type { Entry } from '@/dashboard/stores/volume'
 
 const volumeStore = useVolumeStore()
+const settingsStore = useSettingsStore()
 
 const emit = defineEmits<{
     delete: [entry: Entry];
@@ -47,7 +49,8 @@ function recursiveTreeNodeWalkAndInsert(trees: TreeItem[], entry: Entry, rootPat
             children: [],
             onSelect: (e: Event) => {
                 e.preventDefault()
-            }
+            },
+ 
         };
         trees.push(tree);
     }
@@ -132,7 +135,7 @@ onMounted(() => {
                     {
                         label: 'Reset',
                         icon: 'lucide:file-minus-2',
-                        disabled: item.entry.relative_path !== 'main.css',
+                        disabled: item.entry.relative_path !== 'main.css' && !((Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4 && item.entry.relative_path === 'wizard.css')),
                         onSelect: () => {
                             emit('reset', item.entry)
                         }

@@ -19,7 +19,7 @@ WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integr
 
 **Tailwind CSS version**:
 - 3.4.17
-- 4.1.10
+- 4.1.11
 
 ### Features
 
@@ -124,6 +124,10 @@ Note: The Pro version has a version number with one higher minor version than th
 For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
+
+= unreleased =
+* **New**: Upgraded to Tailwind CSS v4 (4.1.11 latest)
+* **New**: [TW4] The Wizard feature is now available on the Dashboard page
 
 = 3.3.43 =
 * **New**: Upgraded to Tailwind CSS v4 (4.1.10 latest)

@@ -112,6 +112,23 @@ class Volume
             } elseif (empty($entries[$wizard_js_key]['content'])) {
                 $entries[$wizard_js_key]['content'] = $stubs_wizard_js;
             }
+        } elseif ($tailwindcss_version === 4) {
+            $stubs_wizard_css = file_get_contents(dirname(WIND_PRESS::FILE) . '/stubs/tailwindcss-v4/wizard.css');
+
+            // check if 'wizard.css' already exists and content is not empty, else use the stubs
+            $wizard_css_key = array_search('wizard.css', array_column($entries, 'name'), true);
+
+            if ($wizard_css_key === false) {
+                $entries[] = [
+                    'name' => 'wizard.css',
+                    'relative_path' => 'wizard.css',
+                    'content' => $stubs_wizard_css,
+                    'handler' => 'internal',
+                    'signature' => wp_create_nonce(sprintf('%s:%s', WIND_PRESS::WP_OPTION, 'wizard.css')),
+                ];
+            } elseif (empty($entries[$wizard_css_key]['content'])) {
+                $entries[$wizard_css_key]['content'] = $stubs_wizard_css;
+            }
         }
 
         /**
