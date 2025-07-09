@@ -6,16 +6,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 WindPress is a WordPress plugin that integrates Tailwind CSS (v3 and v4) into WordPress without requiring a build step. It provides a browser-based compilation system and integrates with popular page builders and themes.
 
+## Standards
+
+- Patterns: ALWAYS use Composition API + `<script setup>`, NEVER use Options API
+- ALWAYS Keep types alongside your code, use TypeScript for type safety, prefer `interface` over `type` for defining types
+- ALWAYS use TailwindCSS classes rather than manual CSS
+- DO NOT hard code colors, use Tailwind's color system
+- ONLY add meaningful comments that explain why something is done, not what it does
+- Dev server is already running on `http://localhost:3000` with HMR enabled. NEVER launch it yourself
+- ALWAYS use named functions when declaring methods, use arrow functions only for callbacks
+
 ## Development Commands
 
 ### Frontend Development
-- `pnpm run dev` - Start development server with Vite (port 3000)
-- `pnpm run build` - Build production assets
-- `pnpm run lint` - Run linting with oxlint and eslint
-- `pnpm run format` - Auto-fix linting issues
-- `pnpm run test` - Run tests with vitest
 
 You are not allowed to run any command except `pnpm install` or `pnpm update` to install or update dependencies.
+
+### Stack
+- Vue.js
+- TypeScript
+- TailwindCSS v4
+- Vue Router
+- Pinia
+- Nuxt UI @.agents/rules/nuxt-ui.md
 
 ### Backend Development
 - `composer install` - Install PHP dependencies
@@ -37,8 +50,8 @@ You are not allowed to run any command except `pnpm install` or `pnpm update` to
 - **Api/**: REST API endpoints for dashboard functionality
 - **Admin/AdminPage.php**: WordPress admin page registration
 
-#### Frontend (Vue.js + TypeScript)
-- **Dashboard**: Vue 3 SPA with Vue Router and Pinia for state management
+#### Dashboard (Vue.js + TypeScript)
+- **Dashboard**: Vue 3 SPA with Vue Router and Pinia for state management, and Nuxt UI for UI components
 - **Main Entry**: `assets/dashboard/main.ts` - Vue app initialization
 - **Components**: `assets/dashboard/components/` - Reusable Vue components
 - **Pages**: `assets/dashboard/pages/` - Route-based page components
@@ -106,19 +119,6 @@ Each page builder integration follows a consistent pattern:
 └── stubs/                 # Template files for new projects
 ```
 
-## Testing
-
-### Frontend Testing
-- **Vitest**: Unit testing framework
-- **Vue Test Utils**: Component testing utilities
-- Run tests with `pnpm run test`
-
-### Backend Testing
-- **PHPUnit**: Unit and integration tests
-- **PHPStan**: Static analysis (level 8)
-- **ECS**: Code style enforcement
-- Run with `composer run complete-check`
-
 ## Common Development Tasks
 
 ### Adding New Page Builder Integration
@@ -141,12 +141,6 @@ Each page builder integration follows a consistent pattern:
 
 ## WordPress Integration
 
-### Plugin Lifecycle
-- **Activation**: Database setup, option initialization
-- **Deactivation**: Cleanup (minimal)
-- **Upgrade**: Version-specific migrations
-- **Uninstall**: Complete cleanup (if implemented)
-
 ### REST API
 - **Namespace**: `windpress/v1`
 - **Authentication**: WordPress nonce system
@@ -157,29 +151,17 @@ Each page builder integration follows a consistent pattern:
 - **Conditional Loading**: Assets loaded based on context
 - **Cache Busting**: Automatic versioning for cache invalidation
 
-## Performance Considerations
-
-### Frontend
-- **Code Splitting**: Automatic via Vite
-- **Lazy Loading**: Route-based component loading
-- **Asset Optimization**: Minification and compression
-- **Cache Strategy**: Browser caching for static assets
-
-### Backend
-- **Query Optimization**: Minimal database queries
-- **Caching**: File-based caching for compiled CSS
-- **Lazy Loading**: Classes loaded on demand
-- **Memory Management**: Efficient resource usage
-
 ## Security
 
 ### Input Validation
 - **Sanitization**: All user inputs sanitized
 - **Nonce Protection**: CSRF protection via WordPress nonces
-- **Permission Checks**: Capability-based access control
 - **Escape Output**: All output properly escaped
 
-### File Operations
-- **Restricted Paths**: File operations limited to plugin directory
-- **Validation**: File type and content validation
-- **Security Headers**: Appropriate headers for asset loading
+## Research & Documentation
+
+- **NEVER hallucinate or guess URLs**
+- ALWAYS try accessing the `llms.txt` file first to find relevant documentation. EXAMPLE: `https://pinia-colada.esm.dev/llms.txt`
+  - If it exists, it will contain other links to the documentation for the LLMs used in this project
+- ALWAYS follow existing links in table of contents or documentation indices
+- Verify examples and patterns from documentation before using
