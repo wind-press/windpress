@@ -70,7 +70,8 @@ async function step1(): Promise<void> {
       throw new Error('Version pattern not found in constant.php');
     }
     
-    const version = parseVersion(match[1]);
+    const fullVersion = `${match[1]}.${match[2]}.${match[3]}`;
+    const version = parseVersion(fullVersion);
     const newVersion = decreaseMinorVersion(version);
     
     const updatedContent = content.replace(
@@ -79,7 +80,7 @@ async function step1(): Promise<void> {
     );
     
     await Deno.writeTextFile(filePath, updatedContent);
-    console.log(`   ✓ Updated version: ${match[1]} → ${newVersion}`);
+    console.log(`   ✓ Updated version: ${fullVersion} → ${newVersion}`);
     
   } catch (error) {
     console.error(`   ❌ Error updating constant.php: ${error.message}`);
@@ -108,7 +109,8 @@ async function step2(): Promise<void> {
       throw new Error('Version pattern not found in windpress.php');
     }
     
-    const version = parseVersion(match[1]);
+    const fullVersion = `${match[1]}.${match[2]}.${match[3]}`;
+    const version = parseVersion(fullVersion);
     const newVersion = decreaseMinorVersion(version);
     
     const updatedContent = content.replace(
@@ -117,7 +119,7 @@ async function step2(): Promise<void> {
     );
     
     await Deno.writeTextFile(filePath, updatedContent);
-    console.log(`   ✓ Updated version: ${match[1]} → ${newVersion}`);
+    console.log(`   ✓ Updated version: ${fullVersion} → ${newVersion}`);
     
   } catch (error) {
     console.error(`   ❌ Error updating windpress.php: ${error.message}`);
@@ -146,7 +148,8 @@ async function step3(): Promise<void> {
       throw new Error('Stable tag pattern not found in readme.txt');
     }
     
-    const version = parseVersion(match[1]);
+    const fullVersion = `${match[1]}.${match[2]}.${match[3]}`;
+    const version = parseVersion(fullVersion);
     const newVersion = decreaseMinorVersion(version);
     
     const updatedContent = content.replace(
@@ -155,7 +158,7 @@ async function step3(): Promise<void> {
     );
     
     await Deno.writeTextFile(filePath, updatedContent);
-    console.log(`   ✓ Updated stable tag: ${match[1]} → ${newVersion}`);
+    console.log(`   ✓ Updated stable tag: ${fullVersion} → ${newVersion}`);
     
   } catch (error) {
     console.error(`   ❌ Error updating readme.txt stable tag: ${error.message}`);
