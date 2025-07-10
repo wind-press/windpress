@@ -230,10 +230,7 @@ jobs:
         - run: composer remove rosua/edd-sl-plugin-updater --ansi
 
         # decrease the version
-        - run: php ./deploy/decrease-version.php
-
-        # cleanup the decrease-version.php to avoid scanned by humbug/php-scoper
-        - run: rm deploy/decrease-version.php
+        - run: deno run --allow-read --allow-write deploy/decrease-version.ts
 
         # install only prod dependencies
         - run: composer install --no-dev --classmap-authoritative --ansi
@@ -275,7 +272,7 @@ jobs:
           uses: softprops/action-gh-release@v2
           if: "startsWith(github.ref, 'refs/tags/')"
           with:
-            name: "WindPress v${{ github.ref_name }}"
+            name: "${{ github.ref_name }}"
             body: ${{ steps.changelog.outputs.content }}
             files: |
               windpress-*.zip

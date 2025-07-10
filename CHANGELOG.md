@@ -13,7 +13,7 @@ For instance:
 
 ## [Unreleased]
 
-## [3.3.48] - 2025-07-10
+## [3.3.49] - 2025-07-10
 ### Fixed
 - The `wizard.css` file is not updated correctly on the syncing process
 
