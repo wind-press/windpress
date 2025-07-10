@@ -11,7 +11,7 @@ For instance:
 - Free version 1.**0**.4
 - Pro version 1.**1**.4
 
-## [3.3.45] - 2025-07-10
+## [Unreleased]
 ### Fixed
 - The `wizard.css` file is not updated correctly on the syncing process
 

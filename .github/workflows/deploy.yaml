@@ -28,11 +28,6 @@ jobs:
         #   if: "startsWith(github.ref, 'refs/tags/')"
         #   run: sleep 20
 
-        # clean up the dev files
-        - run: rm -rf tsconfig.json mago.toml eslint.config.js
-        - run: rm -rf ecs.php rector.php
-        - run: rm -rf CLAUDE.md .agents
-
         - uses: actions/checkout@v4
           with:
             fetch-depth: 0
@@ -108,6 +103,7 @@ jobs:
         # clean up the dev files
         - run: rm -rf assets node_modules deno.lock package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
         - run: rm -rf ecs.php rector.php
+        - run: rm -rf CLAUDE.md .agents
         - run: rm -rf CHANGELOG.md
 
         # install only prod dependencies

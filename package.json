@@ -11,7 +11,8 @@
     "build": "vite build",
     "lint": "oxlint ./assets && eslint ./assets",
     "format": "oxlint --fix ./assets && eslint --fix ./assets",
-    "test": "vitest"
+    "test": "vitest",
+    "release": "node deploy/release.js"
   },
   "devDependencies": {
     "@iconify-json/arcticons": "^1.2.29",
