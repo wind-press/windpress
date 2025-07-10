@@ -42,13 +42,13 @@ class Editor
 
         if (strpos($_SERVER['REQUEST_URI'], 'site-editor.php') !== false) {
             // handle the canvas
-            AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/site-editor.js', [
+            AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/site-editor.ts', [
                 'handle' => WIND_PRESS::WP_OPTION . ':integration-gutenberg-site-editor',
                 'in-footer' => true,
             ]);
         } else {
             // handle the canvas
-            AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/post-editor.js', [
+            AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/post-editor.ts', [
                 'handle' => WIND_PRESS::WP_OPTION . ':integration-gutenberg-post-editor',
                 'in-footer' => true,
             ]);
@@ -56,7 +56,7 @@ class Editor
 
         $handle = WIND_PRESS::WP_OPTION . ':integration-gutenberg-block-editor';
 
-        AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/block-editor.jsx', [
+        AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/block-editor.tsx', [
             'handle' => $handle,
             'in-footer' => true,
             'dependencies' => ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-hooks', 'wp-i18n', 'react', 'react-dom'],

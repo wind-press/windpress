@@ -4,8 +4,8 @@ import { debounce } from 'lodash-es';
 logger('Loading...');
 
 (async () => {
-    let rootContainer;
-    let scriptElements;
+    let rootContainer: HTMLElement | null = null;
+    let scriptElements: HTMLScriptElement[] = [];
 
     logger('waiting for the rootContainer...');
 
@@ -25,10 +25,10 @@ logger('Loading...');
 
     // wait for the script to be available
     while (!timeoutOccurred) {
-        scriptElements = document.querySelectorAll('script');
+        const allScripts = document.querySelectorAll('script');
 
         // filter the script elements. Search for the script with the id prefixed with 'windpress:' except 'windpress:integration-'
-        scriptElements = Array.from(scriptElements).filter(scriptElement => {
+        scriptElements = Array.from(allScripts).filter(scriptElement => {
             let id = scriptElement.getAttribute('id');
             return id && (id.startsWith('windpress:') || id.startsWith('vite-client')) && !id.startsWith('windpress:integration-');
         });
@@ -49,7 +49,7 @@ logger('Loading...');
     logger('found WindPress script');
 
     async function injectIntoEditorCanvas() {
-        let patternIframes = [];
+        let patternIframes: HTMLIFrameElement[] = [];
 
         let timeoutOccurred = false;
         let timeout = setTimeout(() => {
@@ -58,10 +58,10 @@ logger('Loading...');
 
         // wait for the editor canvas to be available
         while (!timeoutOccurred) {
-            let editorCanvas = document.querySelector('iframe.edit-site-visual-editor__editor-canvas');
+            let editorCanvas = document.querySelector('iframe.edit-site-visual-editor__editor-canvas') as HTMLIFrameElement;
             patternIframes = [
-                ...document.querySelectorAll('div.block-editor-block-preview__container > div > div > div.block-editor-iframe__scale-container > iframe')
-            ];
+                ...Array.from(document.querySelectorAll('div.block-editor-block-preview__container > div > div > div.block-editor-iframe__scale-container > iframe'))
+            ] as HTMLIFrameElement[];
 
             if (editorCanvas) {
                 patternIframes.push(editorCanvas);
@@ -90,30 +90,30 @@ logger('Loading...');
 
         logger('canvas loader removed');
 
-        patternIframes.forEach(async (patternIframe) => {
+        patternIframes.forEach(async (patternIframe: HTMLIFrameElement) => {
             let contentWindow = patternIframe.contentWindow || patternIframe;
-            let contentDocument = patternIframe.contentDocument || contentWindow.document;
+            let contentDocument = patternIframe.contentDocument || contentWindow?.document;
 
             // wait until contentDocument.head is available
-            while (!contentDocument.head) {
+            while (!contentDocument?.head) {
                 await new Promise(resolve => setTimeout(resolve, 300));
             }
 
             // Inject the script into the root iframe
             logger('injecting WindPress script into the root container');
 
-            let injectedScript = contentDocument.querySelectorAll('script');
+            let injectedScript = contentDocument?.querySelectorAll('script');
 
             // check if the script is already injected if it has any script's id that starts with 'windpress:'
-            let isScriptInjected = Array.from(injectedScript).some(script => {
+            let isScriptInjected = injectedScript ? Array.from(injectedScript).some((script: Element) => {
                 let id = script.getAttribute('id');
                 return id && id.startsWith('windpress:');
-            });
+            }) : false;
 
             if (!isScriptInjected) {
                 logger('starting the root injection process...');
                 scriptElements.forEach(scriptElement => {
-                    contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+                    contentDocument?.head?.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
                 });
             } else {
                 logger('WindPress script is already injected, skipping the injection process...');

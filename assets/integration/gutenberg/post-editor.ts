@@ -3,9 +3,9 @@ import { logger } from '@/integration/common/logger';
 logger('Loading...');
 
 (async () => {
-    let editorVisualEditor;
-    let iframeEl;
-    let scriptElements;
+    let editorVisualEditor: HTMLElement | null = null;
+    let iframeEl: HTMLIFrameElement | null = null;
+    let scriptElements: HTMLScriptElement[] = [];
     
     // wait for the editor-visual-editor
     logger('waiting for the editor-visual-editor...');
@@ -30,8 +30,8 @@ logger('Loading...');
     // if the editor-visual-editor is not iframed, we can start the observer immediately
     if (!editorVisualEditor.classList.contains('is-iframed')) {
         logger('editor-visual-editor is not iframed, starting the observer immediately...');
-        if (window.twPlayObserverStart) {
-            window.twPlayObserverStart();
+        if ((window as any).twPlayObserverStart) {
+            (window as any).twPlayObserverStart();
         }
 
         return;
@@ -56,10 +56,10 @@ logger('Loading...');
 
     // wait for the script to be available
     while (!timeoutOccurred) {
-        scriptElements = document.querySelectorAll('script');
+        const allScripts = document.querySelectorAll('script');
 
         // filter the script elements. Search for the script with the id prefixed with 'windpress:' except 'windpress:integration-'
-        scriptElements = Array.from(scriptElements).filter(scriptElement => {
+        scriptElements = Array.from(allScripts).filter(scriptElement => {
             let id = scriptElement.getAttribute('id');
             return id && (id.startsWith('windpress:') || id.startsWith('vite-client')) && !id.startsWith('windpress:integration-');
         });
@@ -79,40 +79,40 @@ logger('Loading...');
 
     logger('found WindPress script');
 
-    let contentWindow = iframeEl.contentWindow || iframeEl;
-    let contentDocument = iframeEl.contentDocument || contentWindow.document;
+    let contentWindow = iframeEl.contentWindow;
+    let contentDocument = iframeEl.contentDocument || contentWindow?.document;
 
     // wait until contentDocument.head is available
-    while (!contentDocument.head) {
+    while (!contentDocument?.head) {
         await new Promise(resolve => setTimeout(resolve, 300));
     }
 
     // Inject the script into the root iframe
     logger('injecting WindPress script into the root container');
 
-    let injectedScript = contentDocument.querySelectorAll('script');
+    let injectedScript = contentDocument?.querySelectorAll('script');
 
     // check if the script is already injected if it has any script's id that starts with 'windpress:'
-    let isScriptInjected = Array.from(injectedScript).some(script => {
+    let isScriptInjected = injectedScript ? Array.from(injectedScript).some((script: Element) => {
         let id = script.getAttribute('id');
         return id && id.startsWith('windpress:');
-    });
+    }) : false;
 
     if (!isScriptInjected) {
         logger('starting the root injection process...');
         scriptElements.forEach(scriptElement => {
-            contentDocument.head.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+            contentDocument?.head?.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
         });
     } else {
         logger('WindPress script is already injected, skipping the injection process...');
     }
 
-    let modalPatterPreviewOverlay = null;
+    let modalPatterPreviewOverlay: HTMLElement | null = null;
 
     // observe if 'body > div.components-modal__screen-overlay' is added or removed
-    const patterPreviewOverlayObserver = new MutationObserver(async (mutationsList) => {
+    const patterPreviewOverlayObserver = new MutationObserver(async (mutationsList: MutationRecord[]) => {
         let needInject = false;
-        let patternIframes = [];
+        let patternIframes: HTMLIFrameElement[] = [];
         let waitingTry = 2000;
 
         for (const mutation of mutationsList) {
@@ -122,14 +122,14 @@ logger('Loading...');
 
             if (mutation.type === 'childList') {
                 mutation.removedNodes.forEach(node => {
-                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('div.components-modal__screen-overlay')) {
+                    if (node.nodeType === Node.ELEMENT_NODE && (node as Element).matches('div.components-modal__screen-overlay')) {
                         modalPatterPreviewOverlay = null;
                     }
                 });
 
                 mutation.addedNodes.forEach(node => {
-                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('body > div.components-modal__screen-overlay')) {
-                        modalPatterPreviewOverlay = node;
+                    if (node.nodeType === Node.ELEMENT_NODE && (node as Element).matches('body > div.components-modal__screen-overlay')) {
+                        modalPatterPreviewOverlay = node as HTMLElement;
                         needInject = true;
                     }
                 });
@@ -141,7 +141,7 @@ logger('Loading...');
 
             // wait for the patternIframes greater than 0
             while (patternIframes.length === 0 && waitingTry > 0) {
-                patternIframes = modalPatterPreviewOverlay.querySelectorAll('div.block-editor-block-preview__container > div > div > div.block-editor-iframe__scale-container > iframe');
+                patternIframes = Array.from(modalPatterPreviewOverlay!.querySelectorAll('div.block-editor-block-preview__container > div > div > div.block-editor-iframe__scale-container > iframe'));
                 waitingTry -= 100;
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
@@ -152,18 +152,19 @@ logger('Loading...');
             }
 
             patternIframes.forEach(patternIframe => {
-                let patternIframeDocument = patternIframe.contentDocument || patternIframe.contentWindow.document;
+                let patternIframeDocument = patternIframe.contentDocument || patternIframe.contentWindow?.document;
 
-                let patternIframeHead = patternIframeDocument.head;
+                let patternIframeHead = patternIframeDocument?.head;
                 // check if the script is already injected if it has any script's id that starts with 'windpress:'
-                let isPatternIframeScriptInjected = Array.from(patternIframeHead.querySelectorAll('script')).some(script => {
+                let isPatternIframeScriptInjected = patternIframeHead ? Array.from(patternIframeHead.querySelectorAll('script')).some((script: Element) => {
                     let id = script.getAttribute('id');
                     return id && id.startsWith('windpress:');
-                });
-                if (!isPatternIframeScriptInjected) {
+                }) : false;
+                
+                if (!isPatternIframeScriptInjected && patternIframeHead) {
                     logger('injecting WindPress script into the pattern iframe');
                     scriptElements.forEach(scriptElement => {
-                        patternIframeHead.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+                        patternIframeHead!.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
                     });
                 } else {
                     logger('WindPress script is already injected into the pattern iframe, skipping the injection process...');
@@ -179,12 +180,12 @@ logger('Loading...');
         subtree: false
     });
 
-    let sidebarPatterPreviewPanel = null;
+    let sidebarPatterPreviewPanel: HTMLElement | null = null;
 
     // block-editor-inserter__block-patterns-tabs-container
-    const patternPreviewSidebarObserver = new MutationObserver(async (mutationsList) => {
+    const patternPreviewSidebarObserver = new MutationObserver(async (mutationsList: MutationRecord[]) => {
         let needInject = false;
-        let patternIframes = [];
+        let patternIframes: HTMLIFrameElement[] = [];
         let waitingTry = 20000;
 
         for (const mutation of mutationsList) {
@@ -194,14 +195,14 @@ logger('Loading...');
 
             if (mutation.type === 'childList') {
                 mutation.removedNodes.forEach(node => {
-                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('div.block-editor-inserter__category-panel')) {
+                    if (node.nodeType === Node.ELEMENT_NODE && (node as Element).matches('div.block-editor-inserter__category-panel')) {
                         sidebarPatterPreviewPanel = null;
                     }
                 });
 
                 mutation.addedNodes.forEach(node => {
-                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('div.block-editor-inserter__category-panel')) {
-                        sidebarPatterPreviewPanel = node;
+                    if (node.nodeType === Node.ELEMENT_NODE && (node as Element).matches('div.block-editor-inserter__category-panel')) {
+                        sidebarPatterPreviewPanel = node as HTMLElement;
                         needInject = true;
                     }
                 });
@@ -214,7 +215,7 @@ logger('Loading...');
 
             // wait for the patternIframes greater than 0
             while (patternIframes.length === 0 && waitingTry > 0) {
-                patternIframes = sidebarPatterPreviewPanel.querySelectorAll('div.block-editor-block-preview__container > div > div > div.block-editor-iframe__scale-container > iframe');
+                patternIframes = Array.from(sidebarPatterPreviewPanel!.querySelectorAll('div.block-editor-block-preview__container > div > div > div.block-editor-iframe__scale-container > iframe'));
                 waitingTry -= 100;
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
@@ -225,18 +226,19 @@ logger('Loading...');
             }
 
             patternIframes.forEach(patternIframe => {
-                let patternIframeDocument = patternIframe.contentDocument || patternIframe.contentWindow.document;
+                let patternIframeDocument = patternIframe.contentDocument || patternIframe.contentWindow?.document;
 
-                let patternIframeHead = patternIframeDocument.head;
+                let patternIframeHead = patternIframeDocument?.head;
                 // check if the script is already injected if it has any script's id that starts with 'windpress:'
-                let isPatternIframeScriptInjected = Array.from(patternIframeHead.querySelectorAll('script')).some(script => {
+                let isPatternIframeScriptInjected = patternIframeHead ? Array.from(patternIframeHead.querySelectorAll('script')).some((script: Element) => {
                     let id = script.getAttribute('id');
                     return id && id.startsWith('windpress:');
-                });
-                if (!isPatternIframeScriptInjected) {
+                }) : false;
+                
+                if (!isPatternIframeScriptInjected && patternIframeHead) {
                     logger('injecting WindPress script into the pattern iframe');
                     scriptElements.forEach(scriptElement => {
-                        patternIframeHead.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
+                        patternIframeHead!.appendChild(document.createRange().createContextualFragment(scriptElement.outerHTML));
                     });
                 } else {
                     logger('WindPress script is already injected into the pattern iframe, skipping the injection process...');

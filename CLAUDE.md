@@ -20,7 +20,9 @@ WindPress is a WordPress plugin that integrates Tailwind CSS (v3 and v4) into Wo
 
 ### Frontend Development
 
-You are not allowed to run any command except `pnpm install` or `pnpm update` to install or update dependencies.
+You are only allowed to run `pnpm install` or `pnpm update` to install or update dependencies.
+
+Any other commands such as `pnpm run dev`, `pnpm run build`, or `pnpm run preview` are managed by the build system and should not be run manually.
 
 ### Stack
 - Vue.js
