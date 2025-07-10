@@ -11,6 +11,10 @@ For instance:
 - Free version 1.**0**.4
 - Pro version 1.**1**.4
 
+## [3.3.45] - 2025-07-10
+### Fixed
+- The `wizard.css` file is not updated correctly on the syncing process
+
 ## [3.3.44] - 2025-07-09
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.11 latest)
