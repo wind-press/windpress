@@ -12,6 +12,8 @@ For instance:
 - Pro version 1.**1**.4
 
 ## [Unreleased]
+
+## [3.3.46] - 2025-07-10
 ### Fixed
 - The `wizard.css` file is not updated correctly on the syncing process
 
