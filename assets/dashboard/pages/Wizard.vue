@@ -31,7 +31,13 @@ onBeforeMount(async () => {
     
     // Only parse wizard.css when Tailwind CSS v4 is active
     if (isTailwindV4.value) {
-        theme.value = wizard.parseWizardFile(volumeStore.data.entries.find((entry: Entry) => entry.relative_path === 'wizard.css')?.content || '');
+        let wizardContent = volumeStore.data.entries.find((entry: Entry) => entry.relative_path === 'wizard.css')?.content || '';
+
+        if (!wizardContent.includes('@theme')) {
+            wizardContent += '\n@theme {\n\n}';
+        }
+
+        theme.value = wizard.parseWizardFile(wizardContent);
     }
 });
 
