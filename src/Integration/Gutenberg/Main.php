@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\Gutenberg;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
 
 /**
@@ -54,6 +55,14 @@ class Main implements IntegrationInterface
             'description' => __('Gutenberg/Block Editor integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
+            'type' => 'custom',
+            'homepage' => 'https://wordpress.org/gutenberg/?ref=windpress',
+            'is_installed_active' => static function () {
+                $is = -1;
+                $is += function_exists('register_block_type') ? 1 : 0;
+                $is += function_exists('register_block_type') ? 1 : 0;
+                return $is;
+            },
         ];
 
         return $providers;

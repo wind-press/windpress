@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\Breakdance;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
 
 /**
@@ -56,6 +57,14 @@ class Main implements IntegrationInterface
             'description' => __('Breakdance Builder integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
+            'type' => 'plugin',
+            'homepage' => 'https://breakdance.com/ref/165/',
+            'is_installed_active' => static function () {
+                $is = -1;
+                $is += Common::is_plugin_installed('Breakdance') ? 1 : 0;
+                $is += Common::is_plugin_active_by_name('Breakdance') ? 1 : 0;
+                return $is;
+            },
         ];
 
         return $providers;

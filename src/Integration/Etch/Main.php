@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\Etch;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
 
 /**
@@ -58,6 +59,14 @@ class Main implements IntegrationInterface
             'description' => __('Etch integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
+            'type' => 'plugin',
+            'homepage' => 'https://etchwp.com/?ref=windpress',
+            'is_installed_active' => static function () {
+                $is = -1;
+                $is += Common::is_plugin_installed('Etch') ? 1 : 0;
+                $is += Common::is_plugin_active_by_name('Etch') ? 1 : 0;
+                return $is;
+            },
         ];
 
         return $providers;

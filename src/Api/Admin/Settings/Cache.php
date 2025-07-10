@@ -135,8 +135,17 @@ class Cache extends AbstractApi implements ApiInterface
 
     public function providers(WP_REST_Request $wprestRequest): WP_REST_Response
     {
+        $providers = CoreCache::get_providers();
+        
+        // Add installation status to each provider
+        foreach ($providers as &$provider) {
+            if (isset($provider['is_installed_active']) && is_callable($provider['is_installed_active'])) {
+                $provider['is_installed_active'] = $provider['is_installed_active']();
+            }
+        }
+        
         return new WP_REST_Response([
-            'providers' => CoreCache::get_providers(),
+            'providers' => $providers,
         ]);
     }
 

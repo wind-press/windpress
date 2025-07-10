@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\GreenShift;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
 
 /**
@@ -51,6 +52,14 @@ class Main implements IntegrationInterface
             'description' => __('The GreenShift integration. It requires the Gutenberg/Block Editor integration enabled.', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
+            'type' => 'plugin',
+            'homepage' => 'https://shop.greenshiftwp.com/?from=3679',
+            'is_installed_active' => static function () {
+                $is = -1;
+                $is += Common::is_plugin_installed('GreenShift') ? 1 : 0;
+                $is += Common::is_plugin_active_by_name('GreenShift') ? 1 : 0;
+                return $is;
+            },
             'meta' => [
                 'experimental' => true,
             ],

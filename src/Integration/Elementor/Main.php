@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\Elementor;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
 
 /**
@@ -54,6 +55,14 @@ class Main implements IntegrationInterface
             'description' => __('Elementor integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
+            'type' => 'plugin',
+            'homepage' => 'https://be.elementor.com/visit/?bta=209150&brand=elementor',
+            'is_installed_active' => static function () {
+                $is = -1;
+                $is += Common::is_plugin_installed('Elementor') ? 1 : 0;
+                $is += Common::is_plugin_active_by_name('Elementor') ? 1 : 0;
+                return $is;
+            },
         ];
 
         return $providers;

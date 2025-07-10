@@ -173,4 +173,82 @@ class Common
             throw new Exception('Failed to delete the file.', 500);
         }
     }
+
+
+    /**
+     * Get all installed plugins
+     * 
+     * @return array Array of installed plugins
+     */
+    public static function get_all_plugins()
+    {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        return get_plugins();
+    }
+
+    /**
+     * Check if a plugin is installed by name
+     * 
+     * @param string $plugin_name The name of the plugin to check
+     * @return bool True if the plugin is installed, false otherwise
+     */
+    public static function is_plugin_installed($plugin_name)
+    {
+        $all_plugins = self::get_all_plugins();
+        foreach ($all_plugins as $plugin_data) {
+            if ($plugin_data['Name'] == $plugin_name) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if a plugin is active by name
+     * 
+     * @param string $plugin_name The name of the plugin to check
+     * @return bool True if the plugin is active, false otherwise
+     */
+    public static function is_plugin_active_by_name($plugin_name)
+    {
+        $all_plugins = self::get_all_plugins();
+        foreach ($all_plugins as $plugin_path => $plugin_data) {
+            if ($plugin_data['Name'] == $plugin_name && is_plugin_active($plugin_path)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if a theme is installed by name
+     * 
+     * @param string $theme_name The name of the theme to check
+     * @return bool True if the theme is installed, false otherwise
+     */
+    public static function is_theme_installed($theme_name)
+    {
+        $all_themes = wp_get_themes();
+        foreach ($all_themes as $theme) {
+            if ($theme->get('Name') == $theme_name) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if a theme is active by name
+     * 
+     * @param string $theme_name The name of the theme or parent theme to check
+     * @return bool True if the theme is active, false otherwise
+     */
+    public static function is_theme_active_by_name($theme_name)
+    {
+        $current_theme = wp_get_theme();
+
+        if ($current_theme->get('Name') == $theme_name) {
+            return true;
+        }
+
+        if ($current_theme->parent() && $current_theme->parent()->get('Name') == $theme_name) {
+            return true;
+        }
+
+        return false;
+    }
 }

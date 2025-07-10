@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WindPress\WindPress\Integration\Bricks;
 
 use WindPress\WindPress\Integration\IntegrationInterface;
+use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
 
 /**
@@ -60,6 +61,14 @@ class Main implements IntegrationInterface
             'description' => __('Bricks Builder integration', 'windpress'),
             'callback' => Compile::class,
             'enabled' => $this->is_enabled(),
+            'type' => 'theme',
+            'homepage' => 'https://bricksbuilder.io/?ref=windpress',
+            'is_installed_active' => static function () {
+                $is = -1;
+                $is += Common::is_theme_installed('Bricks') ? 1 : 0;
+                $is += Common::is_theme_active_by_name('Bricks') ? 1 : 0;
+                return $is;
+            },
         ];
 
         return $providers;
