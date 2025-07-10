@@ -80,6 +80,18 @@ jobs:
           with:
             deno-version: v2.x
 
+        # Extract changelog content before removing the file
+        - name: "Extract changelog for version"
+          id: changelog
+          run: |
+            VERSION=${GITHUB_REF#refs/tags/}
+            # Remove 'v' prefix if it exists
+            VERSION_NO_V=${VERSION#v}
+            CHANGELOG_CONTENT=$(node deploy/extract-changelog.js "$VERSION_NO_V")
+            echo "content<<EOF" >> $GITHUB_OUTPUT
+            echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+
         # Update readme.txt changelog from CHANGELOG.md
         - name: "Update readme.txt changelog"
           run: deno run --allow-read --allow-write deploy/update-readme-changelog.ts
@@ -249,17 +261,6 @@ jobs:
             VERSION: ${{ env.WP_ORG_VERSION }}
 
         # Create GitHub Release with changelog and zip file
-        - name: "Extract changelog for version"
-          id: changelog
-          run: |
-            VERSION=${GITHUB_REF#refs/tags/}
-            # Remove 'v' prefix if it exists
-            VERSION_NO_V=${VERSION#v}
-            CHANGELOG_CONTENT=$(node deploy/extract-changelog.js "$VERSION_NO_V")
-            echo "content<<EOF" >> $GITHUB_OUTPUT
-            echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-
         - name: "Create plugin zip file"
           run: |
             VERSION=${GITHUB_REF#refs/tags/}
