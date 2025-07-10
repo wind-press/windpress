@@ -85,6 +85,10 @@ jobs:
           with:
             deno-version: v2.x
 
+        # Update readme.txt changelog from CHANGELOG.md
+        - name: "Update readme.txt changelog"
+          run: deno run --allow-read --allow-write deploy/update-readme-changelog.ts
+
         # make pot file,
         - name: "Make pot file"
           run: php -d memory_limit=-1 /usr/local/bin/wp i18n make-pot ./ ./languages/windpress.pot
@@ -102,7 +106,7 @@ jobs:
         #     WP_I18N: 'false'
 
         # clean up the dev files
-        - run: rm -rf assets node_modules package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
+        - run: rm -rf assets node_modules deno.lock package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
         - run: rm -rf ecs.php rector.php
 
         # install only prod dependencies
