@@ -20,7 +20,7 @@ const router = createRouter({
         {
             path: '/wizard',
             name: 'wizard',
-            // redirect: { name: 'wizard.theme' },
+            redirect: { name: 'wizard.theme' },
             component: () => import('./pages/Wizard.vue'),
             children: [
                 {

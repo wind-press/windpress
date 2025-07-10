@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
-import { ref, computed, reactive } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useApi } from '@/dashboard/library/api';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { __ } from '@wordpress/i18n';
 import { useBusyStore } from './busy';
+import { useStorage } from '@vueuse/core';
 
 export type Entry = {
     // The name of the file.
@@ -49,6 +50,7 @@ export const useVolumeStore = defineStore('volume', () => {
     });
 
     const activeViewEntryRelativePath = ref<string | null>(null);
+    const _activeViewEntryRelativePath = useStorage<string | null>('windpress.dashboard.store.volume.activeViewEntryRelativePath', null);
 
     /**
      * Clean the file path before adding it to the volume of the Simple File System.
@@ -210,6 +212,10 @@ export const useVolumeStore = defineStore('volume', () => {
             });
     }
 
+    watch(activeViewEntryRelativePath, (val) => {
+        _activeViewEntryRelativePath.value = val;
+    });
+
     /**
      * Store the initial values.
      */
@@ -218,9 +224,9 @@ export const useVolumeStore = defineStore('volume', () => {
             return;
         }
 
-        if (activeViewEntryRelativePath.value === null) {
-            activeViewEntryRelativePath.value = 'main.css';
-        }
+        const pathExists = data.entries.some(entry => entry.relative_path === _activeViewEntryRelativePath.value);
+
+        activeViewEntryRelativePath.value = pathExists ? _activeViewEntryRelativePath.value : 'main.css';
 
         // Avoid unnecessary cloning if nothing has changed
         if (!hasChanged.value) return;
