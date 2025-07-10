@@ -1,0 +1,60 @@
+/**
+ * Shared SCSS variables for WindPress integrations
+ * @package WindPress
+ * @since 3.0.0
+ */
+
+// Colors
+:root {
+  --wp-gray-50: #f9fafb;
+  --wp-gray-100: #f3f4f6;
+  --wp-gray-150: #e5e7eb;
+  --wp-gray-200: #d1d5db;
+  --wp-gray-300: #9ca3af;
+  --wp-gray-400: #6b7280;
+  --wp-gray-500: #4b5563;
+  --wp-gray-600: #374151;
+  --wp-gray-700: #1f2937;
+  --wp-gray-800: #111827;
+  --wp-gray-900: #030712;
+  
+  --wp-blue-50: #eff6ff;
+  --wp-blue-100: #dbeafe;
+  --wp-blue-200: #bfdbfe;
+  --wp-blue-300: #93c5fd;
+  --wp-blue-400: #60a5fa;
+  --wp-blue-500: #3b82f6;
+  --wp-blue-600: #2563eb;
+  --wp-blue-700: #1d4ed8;
+  --wp-blue-800: #1e40af;
+  --wp-blue-900: #1e3a8a;
+  
+  // Semantic colors
+  --wp-primary: var(--wp-blue-600);
+  --wp-secondary: var(--wp-gray-600);
+  --wp-accent: var(--wp-blue-500);
+  --wp-accent-hover: var(--wp-blue-700);
+  --wp-text-dark: var(--wp-gray-900);
+  --wp-text-light: var(--wp-gray-100);
+  --wp-text-muted: var(--wp-gray-600);
+  --wp-border: var(--wp-gray-200);
+  --wp-bg-elevated: var(--wp-gray-50);
+}
+
+// Spacing
+$wp-spacing-xs: 4px;
+$wp-spacing-sm: 8px;
+$wp-spacing-md: 12px;
+$wp-spacing-lg: 16px;
+$wp-spacing-xl: 24px;
+$wp-spacing-2xl: 32px;
+
+// Border radius
+$wp-radius-sm: 4px;
+$wp-radius-md: 8px;
+$wp-radius-lg: 12px;
+
+// Transitions
+$wp-transition-fast: 150ms ease-out;
+$wp-transition-normal: 300ms ease-out;
+$wp-transition-slow: 500ms ease-out;

@@ -1,12 +1,18 @@
 <script setup>
 import { ref, onMounted, watch, inject } from 'vue';
-import { bdeIframe } from '@/integration/breakdance/constant.js';
 import { getVariableList, decodeVFSContainer, loadDesignSystem } from '@/packages/core/tailwindcss';
+import { set } from 'lodash-es';
 
 import ExpansionPanel from './ExpansionPanel.vue';
-import { set } from 'lodash-es';
 import CommonVariableItems from './CommonVariableItems.vue';
 import ColorVariableItems from './ColorVariableItems.vue';
+
+const props = defineProps({
+  builderConfig: {
+    type: Object,
+    required: true,
+  },
+});
 
 const commonVar = ref({
     colors: {},
@@ -22,21 +28,21 @@ const tempInputValue = inject('tempInputValue');
 const variableApp = inject('variableApp');
 
 async function constructVariableList() {
-    const vfsContainer = bdeIframe.contentWindow.document.querySelector('script#windpress\\:vfs[type="text/plain"]');
+    const vfsContainer = props.builderConfig.iframe.contentWindow.document.querySelector('script#windpress\\:vfs[type="text/plain"]');
     const volume = decodeVFSContainer(vfsContainer.textContent);
 
     // register variables
     const variableLists = await getVariableList(await loadDesignSystem({ volume }));
 
-    let styleElement = variableApp.querySelector('style#windpressbreakdance-variable-app-body-style');
+    let styleElement = variableApp.querySelector(`style#${props.builderConfig.appId}-variable-app-body-style`);
     if (!styleElement) {
         styleElement = document.createElement('style');
-        styleElement.id = 'windpressbreakdance-variable-app-body-style';
+        styleElement.id = `${props.builderConfig.appId}-variable-app-body-style`;
         variableApp.appendChild(styleElement);
     }
 
     styleElement.innerHTML = `
-        #windpressbreakdance-variable-app-body {
+        #${props.builderConfig.appId}-variable-app-body {
             ${variableLists.map((variable) => `${variable.key}:${variable.value};`).join('')}
         }
     `;
@@ -99,11 +105,7 @@ async function constructVariableList() {
     variableLists
         .filter((variable) => variable.key.startsWith('--leading-') || variable.key.endsWith('--leading'))
         .forEach((typo) => {
-            // const key = typo.key.startsWith('--leading-') ? typo.key.slice(10) : typo.key.slice(-9);
-
-            // if (typo.key.startsWith('--leading-')) {
             const key = typo.key.startsWith('--leading-') ? typo.key.slice(10) : typo.key.slice(2, -9);
-
 
             typography.line_height.push({
                 key: typo.key,
@@ -143,25 +145,9 @@ async function constructVariableList() {
      */
 
     const sizing = {
-        // spacing: [],
         container: [],
         breakpoint: [],
     };
-
-    // 1. find where the key prefixed with '--spacing-'
-    // 2. find where the key prefixed with '--container-'
-    // 3. find where the key prefixed with '--breakpoint-'
-
-    // variableLists
-    //     .filter((variable) => variable.key.startsWith('--spacing-'))
-    //     .forEach((size) => {
-    //         const key = size.key.slice(10);
-    //         sizing.spacing.push({
-    //             key: size.key,
-    //             label: key,
-    //             value: size.value,
-    //         });
-    //     });
 
     variableLists
         .filter((variable) => variable.key.startsWith('--container-'))
@@ -228,11 +214,15 @@ watch(focusedInput, (value) => {
         } else if (isFontSize) {
             sectionTypography.value.togglePanel(true);
             sectionTypography.value.scrollIntoView();
-            swithUnitCustom();
+            if (props.builderConfig.hasCustomUnit) {
+                swithUnitCustom();
+            }
         } else if (isSpacing) {
             sectionSpacing.value.togglePanel(true);
             sectionSpacing.value.scrollIntoView();
-            swithUnitCustom();
+            if (props.builderConfig.hasCustomUnit) {
+                swithUnitCustom();
+            }
         }
     }
 });
@@ -296,8 +286,8 @@ channel.addEventListener('message', async (e) => {
 </script>
 
 <template>
-    <div id="windpressbreakdance-variable-app-body" class="var-body rel w:full h:full overflow-y:scroll! bb:1|solid|$(gray200)>div:not(:last-child)">
-        <ExpansionPanel ref="sectionColor" namespace="variable" name="color">
+    <div :id="`${builderConfig.appId}-variable-app-body`" class="var-body rel w:full h:full overflow-y:scroll! bb:1|solid|$(gray200)>div:not(:last-child)">
+        <ExpansionPanel ref="sectionColor" namespace="variable" name="color" :storage-prefix="builderConfig.storagePrefix">
             <template #header>
                 <span class="var-body-title">Color</span>
             </template>
@@ -306,7 +296,7 @@ channel.addEventListener('message', async (e) => {
                 <ColorVariableItems :variable-items="commonVar.colors" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
             </template>
         </ExpansionPanel>
-        <ExpansionPanel ref="sectionTypography" namespace="variable" name="typography">
+        <ExpansionPanel ref="sectionTypography" namespace="variable" name="typography" :storage-prefix="builderConfig.storagePrefix">
             <template #header>
                 <span class="var-body-title">Typography</span>
             </template>
@@ -315,7 +305,7 @@ channel.addEventListener('message', async (e) => {
                 <CommonVariableItems :variable-items="commonVar.typography" @preview-enter="onMouseEnter" @preview-leave="onMouseLeave" @preview-chose="onClick" />
             </template>
         </ExpansionPanel>
-        <ExpansionPanel ref="sectionSpacing" namespace="variable" name="spacing" class="">
+        <ExpansionPanel ref="sectionSpacing" namespace="variable" name="spacing" :storage-prefix="builderConfig.storagePrefix" class="">
             <template #header>
                 <span class="var-body-title">Sizing</span>
             </template>

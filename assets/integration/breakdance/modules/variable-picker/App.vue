@@ -1,11 +1,23 @@
 <script setup>
 import { inject, onMounted, ref } from 'vue';
-import PanelHeader from './components/PanelHeader.vue';
-import PanelBody from './components/PanelBody.vue';
-import { bde } from '@/integration/breakdance/constant.js';
+import PanelHeader from '@/integration/shared/components/variable-picker/PanelHeader.vue';
+import PanelBody from '@/integration/shared/components/variable-picker/PanelBody.vue';
+import { bde, bdeIframe } from '@/integration/breakdance/constant.js';
+import { createBuilderConfig } from '@/integration/shared/utils/builder-configs';
 
 const isOpen = inject('isOpen');
 const containerRef = ref(null);
+
+const builderConfig = createBuilderConfig({
+  appId: 'windpressbreakdance-variable-app',
+  storagePrefix: 'windpressbreakdance-variable-app',
+  version: windpressbreakdance._version,
+  iframe: bdeIframe,
+  rootElement: bde,
+  hasCustomUnit: true,
+  hasThemeDetection: true,
+  themeDetectionTarget: 'bde',
+});
 
 function updateTheme() {
   if (bde.classList.contains('theme--light')) {
@@ -39,9 +51,9 @@ onMounted(() => {
 
 <template>
   <div v-show="isOpen" id="windpressbreakdance-variable-app-container" ref="containerRef" class="v-application flex flex:column w:full h:full">
-    <PanelHeader />
+    <PanelHeader :builder-config="builderConfig" />
     <Suspense>
-      <PanelBody />
+      <PanelBody :builder-config="builderConfig" />
     </Suspense>
   </div>
 </template>

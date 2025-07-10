@@ -11,12 +11,16 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  storagePrefix: {
+    type: String,
+    default: 'windpress-variable-app',
+  },
 });
 
 const sectionRef = ref(null);
 
 const expand = useStorage(
-  `windpressbreakdance-variable-app.ui.expansion-panels.${props.namespace}`,
+  `${props.storagePrefix}.ui.expansion-panels.${props.namespace}`,
   { [`${props.name}`]: false },
   undefined,
   { mergeDefaults: true }

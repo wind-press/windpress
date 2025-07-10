@@ -68,8 +68,16 @@ export async function getVariableList(design: DesignSystem) {
             const defaultValue = entry[1].value;
 
             if (typeof defaultValue === 'string' && defaultValue.includes('rem')) {
-                calculatedValue = `${parseFloat(defaultValue) * 16}px`;
-                isCalculated = true;
+                // Skip fluid values (clamp, min, max functions) as they can't be simply converted to px
+                if (defaultValue.includes('clamp(') || defaultValue.includes('min(') || defaultValue.includes('max(')) {
+                    // Keep the original fluid value
+                    calculatedValue = defaultValue;
+                    isCalculated = false;
+                } else {
+                    // Use the existing addPixelEquivalentsToValue function for robust rem conversion
+                    calculatedValue = addPixelEquivalentsToValue(defaultValue, 16);
+                    isCalculated = true;
+                }
             }
 
             return {

@@ -1,36 +1,36 @@
 import './style.scss';
-import { logger } from '@/integration/common/logger';
-
-logger('Loading...');
+import { createStandardLoader, waitForCondition } from '@/integration/shared/utils/module-loader';
 
 (async () => {
-    while (!document.querySelector('#app')?.__vue__) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    while (!document.querySelector('#app #iframe')?.contentDocument.querySelector('#breakdance_canvas')) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    const { bdeIframe } = await import('./constant');
-
-    logger('Loading modules...');
-
-    // TODO: dynamic import the features based on the enabled modules
-    await import('./modules/plain-classses/main');
-    // await import('./modules/html2breakdance/main');
-    await import('./modules/generate-cache/main');
-
-    // tailwindcss-v4
-    if (Number(bdeIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
-        await import('./modules/variables/main');
-        await import('./modules/variable-picker/main');
-    }
-
-    // if (bdeIframe.contentWindow.windpress?.is_ubiquitous) {
-    //     await import('./modules/settings/main');
-    // }
-
-    logger('Modules loaded!');
-
+    await createStandardLoader(
+        'breakdance',
+        async () => {
+            // Wait for Vue app to be ready
+            await waitForCondition(() => !!document.querySelector('#app')?.__vue__);
+            // Wait for iframe canvas to be ready
+            return await waitForCondition(() => 
+                !!document.querySelector('#app #iframe')?.contentDocument.querySelector('#breakdance_canvas')
+            );
+        },
+        {
+            core: [
+                () => import('./modules/plain-classes/main'),
+                () => import('./modules/generate-cache/main')
+            ],
+            tailwindV4: [
+                () => import('./modules/variables/main'),
+                () => import('./modules/variable-picker/main')
+            ],
+            conditional: [
+                // Uncomment when needed
+                // {
+                //     condition: () => {
+                //         const { bdeIframe } = require('./constant');
+                //         return bdeIframe.contentWindow.windpress?.is_ubiquitous;
+                //     },
+                //     modules: [() => import('./modules/settings/main')]
+                // }
+            ]
+        }
+    );
 })();

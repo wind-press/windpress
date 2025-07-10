@@ -1,0 +1,178 @@
+/**
+ * Shared SCSS mixins for WindPress integrations
+ * @package WindPress
+ * @since 3.0.0
+ */
+
+@import 'variables';
+
+// Flexbox helpers
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Button styles
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $wp-spacing-sm $wp-spacing-md;
+  border-radius: $wp-radius-sm;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all $wp-transition-fast;
+  text-decoration: none;
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--wp-primary);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background-color: var(--wp-primary);
+  color: white;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--wp-accent-hover);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background-color: var(--wp-gray-100);
+  color: var(--wp-text-dark);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--wp-gray-200);
+  }
+}
+
+@mixin button-ghost {
+  @include button-base;
+  background-color: transparent;
+  color: var(--wp-text-dark);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--wp-gray-100);
+  }
+}
+
+// Form elements
+@mixin input-base {
+  display: block;
+  width: 100%;
+  padding: $wp-spacing-sm $wp-spacing-md;
+  border: 1px solid var(--wp-border);
+  border-radius: $wp-radius-sm;
+  font-size: 14px;
+  transition: border-color $wp-transition-fast;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--wp-primary);
+    box-shadow: 0 0 0 1px var(--wp-primary);
+  }
+}
+
+// Panel styles
+@mixin panel-base {
+  background-color: white;
+  border: 1px solid var(--wp-border);
+  border-radius: $wp-radius-md;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@mixin panel-header {
+  padding: $wp-spacing-md;
+  border-bottom: 1px solid var(--wp-border);
+  font-weight: 600;
+  color: var(--wp-text-dark);
+}
+
+@mixin panel-body {
+  padding: $wp-spacing-md;
+}
+
+// Scrollbar styles
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--wp-gray-100);
+    border-radius: $wp-radius-sm;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--wp-gray-300);
+    border-radius: $wp-radius-sm;
+    
+    &:hover {
+      background: var(--wp-gray-400);
+    }
+  }
+}
+
+// Elevation/shadow
+@mixin elevation($level: 1) {
+  @if $level == 1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  } @else if $level == 2 {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  } @else if $level == 3 {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  } @else if $level == 4 {
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Animations
+@mixin fade-in($duration: $wp-transition-normal) {
+  opacity: 0;
+  animation: fadeIn $duration ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@mixin slide-up($duration: $wp-transition-normal) {
+  transform: translateY(10px);
+  opacity: 0;
+  animation: slideUp $duration ease-out forwards;
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

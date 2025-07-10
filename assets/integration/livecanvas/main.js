@@ -1,17 +1,18 @@
-import { logger } from '@/integration/common/logger';
-
-logger('Loading...');
+import { createStandardLoader, waitForCondition } from '@/integration/shared/utils/module-loader';
 
 (async () => {
-    while (!document.getElementById('previewiframe')?.contentDocument.querySelector('#theme-main')) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    logger('Loading modules...');
-
-    // TODO: dynamic import the features based on the enabled modules
-    // await import('./modules/settings/main');
-    await import('./modules/generate-cache/main');
-
-    logger('Modules loaded!');
+    await createStandardLoader(
+        'livecanvas',
+        async () => {
+            // Wait for theme main element to be ready
+            return await waitForCondition(() => 
+                !!document.getElementById('previewiframe')?.contentDocument.querySelector('#theme-main')
+            );
+        },
+        {
+            core: [
+                () => import('./modules/generate-cache/main')
+            ]
+        }
+    );
 })();

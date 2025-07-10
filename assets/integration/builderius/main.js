@@ -1,28 +1,24 @@
-import { logger } from '@/integration/common/logger';
-
-logger('Loading...');
+import { createStandardLoader, waitForCondition } from '@/integration/shared/utils/module-loader';
 
 (async () => {
-    while (!document.getElementById('builderInner')?.contentDocument.querySelector('#builderiusBuilder')) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    const { uniIframe } = await import('./constant');
-
-    logger('Loading modules...');
-
-    // TODO: dynamic import the features based on the enabled modules
-    await import('./modules/settings/main');
-    // await import('./modules/plain-classses/main');
-    // await import('./modules/html2builderius/main');
-    await import('./modules/generate-cache/main');
-
-    // tailwindcss-v4
-    if (Number(uniIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
-        await import('./modules/variables/main');
-        await import('./modules/monaco/main');
-        await import('./modules/variable-picker/main');
-    }
-
-    logger('Modules loaded!');
+    await createStandardLoader(
+        'builderius',
+        async () => {
+            // Wait for builderius builder to be ready
+            return await waitForCondition(() => 
+                !!document.getElementById('builderInner')?.contentDocument.querySelector('#builderiusBuilder')
+            );
+        },
+        {
+            core: [
+                () => import('./modules/settings/main'),
+                () => import('./modules/generate-cache/main')
+            ],
+            tailwindV4: [
+                () => import('./modules/variables/main'),
+                () => import('./modules/monaco/main'),
+                () => import('./modules/variable-picker/main')
+            ]
+        }
+    );
 })();

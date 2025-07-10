@@ -1,42 +1,39 @@
-import { logger } from '@/integration/common/logger';
-
-logger('Loading...');
+import { createStandardLoader, waitForCondition } from '@/integration/shared/utils/module-loader';
 
 (async () => {
-    while (!document.querySelector('.brx-body')?.__vue_app__) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    while (document.getElementById('bricks-preloader')) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    while (!document.getElementById('bricks-builder-iframe')?.contentDocument.querySelector('.brx-body')?.__vue_app__) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    const { brxIframe } = await import('./constant');
-
-    logger('Loading modules...');
-
-    // TODO: dynamic import the features based on the enabled modules
-    await import('./modules/settings/main');
-
-    if (window.bricksData.version.startsWith('1')) {
-        await import('./modules/plain-classses/main-1.x');
-    } else {
-        await import('./modules/plain-classses/main');
-    }
-
-    await import('./modules/html2bricks/main');
-    await import('./modules/generate-cache/main');
-
-    // tailwindcss-v4
-    if (Number(brxIframe.contentWindow.windpress?._tailwindcss_version) === 4) {
-        await import('./modules/color-palette/main');
-        await import('./modules/variables/main');
-        await import('./modules/variable-picker/main');
-    }
-
-    logger('Modules loaded!');
+    await createStandardLoader(
+        'bricks',
+        async () => {
+            // Wait for Vue app to be ready
+            await waitForCondition(() => !!document.querySelector('.brx-body')?.__vue_app__);
+            // Wait for preloader to be removed
+            await waitForCondition(() => !document.getElementById('bricks-preloader'));
+            // Wait for iframe Vue app to be ready
+            return await waitForCondition(() => 
+                !!document.getElementById('bricks-builder-iframe')?.contentDocument.querySelector('.brx-body')?.__vue_app__
+            );
+        },
+        {
+            core: [
+                () => import('./modules/settings/main'),
+                () => import('./modules/html2bricks/main'),
+                () => import('./modules/generate-cache/main')
+            ],
+            tailwindV4: [
+                () => import('./modules/color-palette/main'),
+                () => import('./modules/variables/main'),
+                () => import('./modules/variable-picker/main')
+            ],
+            conditional: [
+                {
+                    condition: () => window.bricksData.version.startsWith('1'),
+                    modules: [() => import('./modules/plain-classes/main-1.x')]
+                },
+                {
+                    condition: () => !window.bricksData.version.startsWith('1'),
+                    modules: [() => import('./modules/plain-classes/main')]
+                }
+            ]
+        }
+    );
 })();

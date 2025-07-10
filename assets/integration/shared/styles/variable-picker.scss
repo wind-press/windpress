@@ -1,0 +1,195 @@
+/**
+ * Shared styles for variable picker components
+ * @package WindPress
+ * @since 3.0.0
+ */
+
+@import 'variables';
+@import 'mixins';
+
+.variable-picker-app {
+  @include panel-base;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-height: 600px;
+  z-index: 9999;
+  background: white;
+  
+  .variable-picker-header {
+    @include panel-header;
+    @include flex-between;
+    cursor: grab;
+    
+    &:active {
+      cursor: grabbing;
+    }
+    
+    .header-logo {
+      @include flex-center;
+      gap: $wp-spacing-sm;
+      
+      .logo-icon {
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+      }
+    }
+    
+    .header-title {
+      flex: 1;
+      text-align: center;
+      font-weight: 600;
+      color: var(--wp-text-dark);
+    }
+    
+    .header-close {
+      @include button-ghost;
+      padding: $wp-spacing-sm;
+      
+      .close-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  
+  .variable-picker-body {
+    @include panel-body;
+    padding: 0;
+    max-height: 500px;
+    overflow-y: auto;
+    @include scrollbar;
+    
+    .expansion-panel {
+      border-bottom: 1px solid var(--wp-border);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .panel-header {
+        @include flex-between;
+        padding: $wp-spacing-md;
+        cursor: pointer;
+        transition: background-color $wp-transition-fast;
+        
+        &:hover {
+          background-color: var(--wp-bg-elevated);
+        }
+        
+        .panel-title {
+          font-weight: 600;
+          color: var(--wp-text-dark);
+        }
+        
+        .panel-chevron {
+          transition: transform $wp-transition-normal;
+          
+          &.expanded {
+            transform: rotate(90deg);
+          }
+        }
+      }
+      
+      .panel-content {
+        padding: $wp-spacing-md;
+        
+        .variable-section {
+          margin-bottom: $wp-spacing-lg;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+          
+          .variable-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--wp-text-dark);
+            margin-bottom: $wp-spacing-sm;
+          }
+          
+          .variable-section-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $wp-spacing-sm;
+            
+            .variable-item {
+              @include button-base;
+              padding: $wp-spacing-sm $wp-spacing-md;
+              background-color: var(--wp-gray-100);
+              color: var(--wp-text-dark);
+              border: 1px solid transparent;
+              font-size: 14px;
+              
+              &:hover {
+                background-color: var(--wp-gray-200);
+                border-color: var(--wp-primary);
+              }
+              
+              &.color-item {
+                width: 100%;
+                height: 32px;
+                border-radius: $wp-radius-sm;
+                background-color: var(--item-color);
+                color: transparent;
+                
+                &:hover {
+                  border-color: white;
+                  box-shadow: 0 0 0 2px var(--wp-primary);
+                }
+              }
+            }
+            
+            &.color-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+              gap: 2px;
+              border-radius: $wp-radius-sm;
+              overflow: hidden;
+              
+              .variable-item {
+                border-radius: 0;
+                margin: 0;
+                
+                &:first-child {
+                  border-top-left-radius: $wp-radius-sm;
+                  border-bottom-left-radius: $wp-radius-sm;
+                }
+                
+                &:last-child {
+                  border-top-right-radius: $wp-radius-sm;
+                  border-bottom-right-radius: $wp-radius-sm;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Transitions
+.variable-picker-enter-active,
+.variable-picker-leave-active {
+  transition: opacity $wp-transition-normal;
+}
+
+.variable-picker-enter-from,
+.variable-picker-leave-to {
+  opacity: 0;
+}
+
+.panel-content-enter-active,
+.panel-content-leave-active {
+  transition: all $wp-transition-normal;
+}
+
+.panel-content-enter-from,
+.panel-content-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
