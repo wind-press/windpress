@@ -76,7 +76,7 @@ function executeGitCommands(version) {
     execSync(`git commit -m "${commitMessage}"`, { stdio: 'inherit', cwd: rootDir });
     
     // Create tag
-    const tagName = `${version}`;
+    const tagName = `v${version}`;
     console.log(`Creating tag: ${tagName}`);
     execSync(`git tag ${tagName}`, { stdio: 'inherit', cwd: rootDir });
     
