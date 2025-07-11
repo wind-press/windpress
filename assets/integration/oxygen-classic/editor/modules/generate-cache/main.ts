@@ -13,6 +13,7 @@ import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
 
 const channel = new BroadcastChannel('windpress');
 
+// Custom hook for Oxygen Classic's save mechanism
 const originalAllSaved = iframeScope.allSaved;
 
 iframeScope.allSaved = function () {
@@ -33,4 +34,4 @@ iframeScope.allSaved = function () {
     });
 };
 
-logger('Module loaded!', { module: 'generate-cache' });
+logger('Module loaded!', { module: 'generate-cache', builder: 'oxygen-classic' });

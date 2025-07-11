@@ -31,37 +31,3 @@ export function createBuilderConfig(config: Partial<BuilderConfig>): BuilderConf
   };
 }
 
-export function getSaveActionDetector(builderName: string): (url: string, payload: any) => boolean {
-  const detectors: Record<string, (url: string, payload: any) => boolean> = {
-    breakdance: (url: string, payload: any) => {
-      return new URL(url).searchParams.get('_breakdance_doing_ajax') === 'yes' && payload.action === 'breakdance_save';
-    },
-    bricks: (_url: string, payload: any) => {
-      // For Bricks, payload comes from response.data in XMLHttpRequest
-      return payload && payload.action === 'bricks_save_post';
-    },
-    builderius: (url: string, payload: any) => {
-      return url.includes('wp-admin/admin-ajax.php') && payload.action === 'builderius_save_post';
-    },
-    oxygen: (url: string, payload: any) => {
-      return url.includes('wp-admin/admin-ajax.php') && payload.action === 'ct_save_post';
-    },
-    livecanvas: (url: string, payload: any) => {
-      return url.includes('wp-admin/admin-ajax.php') && payload.action === 'livecanvas_save_post';
-    },
-  };
-
-  return detectors[builderName] || (() => false);
-}
-
-export function getBuilderSpecificConfig(builderName: string): { usesXMLHttpRequest?: boolean } {
-  const configs: Record<string, { usesXMLHttpRequest?: boolean }> = {
-    breakdance: { usesXMLHttpRequest: false },
-    bricks: { usesXMLHttpRequest: true },
-    builderius: { usesXMLHttpRequest: false },
-    oxygen: { usesXMLHttpRequest: false },
-    livecanvas: { usesXMLHttpRequest: false },
-  };
-
-  return configs[builderName] || { usesXMLHttpRequest: false };
-}

@@ -12,7 +12,7 @@ import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
 
 interface GenerateCacheConfig {
   builderName: string;
-  saveActionDetector: (url: string, payload: any) => boolean;
+  saveActionDetector: (url: string, payload: any, response?: any) => boolean;
   usesXMLHttpRequest?: boolean;
   settingsCheck?: () => boolean;
 }
@@ -56,11 +56,14 @@ export function createGenerateCacheModule(config: GenerateCacheConfig) {
               if (xhr.readyState === 4 && xhr.status === 200) {
                 try {
                   const response = JSON.parse(xhr.responseText);
-                  if (config.saveActionDetector(String(url), response.data || {})) {
+                  if (config.saveActionDetector(String(url), response.data || {}, xhr)) {
                     sendCacheGenerationMessage();
                   }
                 } catch (e) {
-                  // Ignore JSON parse errors
+                  // For builders that don't use JSON response (e.g., LiveCanvas)
+                  if (config.saveActionDetector(String(url), {}, xhr)) {
+                    sendCacheGenerationMessage();
+                  }
                 }
               }
 

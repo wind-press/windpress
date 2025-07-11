@@ -8,9 +8,9 @@
  */
 
 import { createGenerateCacheModule } from '@/integration/shared/modules/generate-cache';
-import { getSaveActionDetector } from '@/integration/shared/utils/builder-configs';
+import { getSaveActionDetector } from '@/integration/breakdance/utils/builder-config.js';
 
 createGenerateCacheModule({
   builderName: 'breakdance',
-  saveActionDetector: getSaveActionDetector('breakdance'),
+  saveActionDetector: getSaveActionDetector(),
 });

@@ -8,14 +8,14 @@
  */
 
 import { createGenerateCacheModule } from '@/integration/shared/modules/generate-cache';
-import { getSaveActionDetector, getBuilderSpecificConfig } from '@/integration/shared/utils/builder-configs';
+import { getSaveActionDetector, getBuilderSpecificConfig } from '@/integration/bricks/utils/builder-config.js';
 import { settingsState } from '@/integration/bricks/constant';
 
-const builderConfig = getBuilderSpecificConfig('bricks');
+const builderConfig = getBuilderSpecificConfig();
 
 createGenerateCacheModule({
   builderName: 'bricks',
-  saveActionDetector: getSaveActionDetector('bricks'),
+  saveActionDetector: getSaveActionDetector(),
   usesXMLHttpRequest: builderConfig.usesXMLHttpRequest,
   settingsCheck: () => settingsState('module.generate-cache.on-save', true).value,
 });

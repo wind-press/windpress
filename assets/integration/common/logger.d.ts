@@ -1,0 +1,1 @@
+export declare function logger(message: string, ...args: any[]): void;

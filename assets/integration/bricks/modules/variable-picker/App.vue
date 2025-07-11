@@ -1,9 +1,21 @@
 <script setup>
 import { inject } from 'vue';
-import PanelHeader from './components/PanelHeader.vue';
-import PanelBody from './components/PanelBody.vue';
+import PanelHeader from '@/integration/shared/components/variable-picker/PanelHeader.vue';
+import PanelBody from '@/integration/shared/components/variable-picker/PanelBody.vue';
+import { brx, brxIframe } from '@/integration/bricks/constant.js';
+import { createBuilderConfig } from '@/integration/shared/utils/builder-configs';
 
 const isOpen = inject('isOpen');
+
+const builderConfig = createBuilderConfig({
+  appId: 'windpressbricks-variable-app',
+  storagePrefix: 'windpressbricks-variable-app',
+  version: windpressbricks._version,
+  iframe: brxIframe,
+  rootElement: brx,
+  hasCustomUnit: false,
+  hasThemeDetection: false,
+});
 </script>
 
 <template>
@@ -12,16 +24,15 @@ const isOpen = inject('isOpen');
     id="windpressbricks-variable-app-container"
     class="wp-b-var-container"
   >
-    <PanelHeader />
+    <PanelHeader :builder-config="builderConfig" />
     <Suspense>
-      <PanelBody />
+      <PanelBody :builder-config="builderConfig" />
     </Suspense>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .wp-b-var-container {
-    // font-size: 16px;
     display: flex;
     flex-direction: column;
     width: 100%;

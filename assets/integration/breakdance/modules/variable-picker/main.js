@@ -1,11 +1,11 @@
-import './style.scss';
+import '@/integration/shared/styles/variable-picker.scss';
 
 import { createApp, ref, watch } from 'vue';
 import { logger } from '@/integration/common/logger';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
 import App from './App.vue';
-import { observe } from './utility.js';
+import { observe } from '@/integration/shared/utils/variable-picker-utils';
 import { bde } from '@/integration/breakdance/constant.js';
 
 const variableApp = document.createElement('windpressbreakdance-variable-app');

@@ -7,56 +7,18 @@
  * Generate cache when post saved
  */
 
-import { logger } from '@/integration/common/logger';
-import { previewIframe } from '@/integration/livecanvas/constant.js';
-import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
+import { createGenerateCacheModule } from '@/integration/shared/modules/generate-cache';
 
-const channel = new BroadcastChannel('windpress');
+// Custom save detector for LiveCanvas
+function livecanvasSaveActionDetector(url: string, payload: any, response?: any) {
+  if (url.includes('admin-ajax.php') && response?.responseText === 'Save') {
+    return true;
+  }
+  return false;
+}
 
-(function () {
-    const __xhr = window.XMLHttpRequest;
-    function XMLHttpRequest() {
-
-        const xhr = new __xhr();
-
-        const open = xhr.open;
-
-        xhr.open = function (method, url) {
-            if (method === 'POST' && url.includes('admin-ajax.php')) {
-                const onreadystatechange = xhr.onreadystatechange;
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        if (xhr.responseText === 'Save') {
-                            channel.postMessage({
-                                task: 'generate-cache',
-                                source: 'windpress/integration',
-                                target: 'windpress/compiler',
-                                data: {
-                                    kind: 'incremental',
-                                    incremental: {
-                                        providers: [
-                                            'livecanvas',
-                                        ]
-                                    }
-                                } as BuildCacheOptions
-                            });
-                        }
-                    }
-
-                    if (onreadystatechange) {
-                        onreadystatechange.apply(this, arguments);
-                    }
-                };
-            }
-
-            open.apply(this, arguments);
-        }
-
-        return xhr;
-    }
-
-    window.XMLHttpRequest = XMLHttpRequest;
-}());
-
-logger('Module loaded!', { module: 'generate-cache' });
+createGenerateCacheModule({
+  builderName: 'livecanvas',
+  saveActionDetector: livecanvasSaveActionDetector,
+  usesXMLHttpRequest: true,
+});
