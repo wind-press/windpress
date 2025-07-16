@@ -13,7 +13,7 @@ For instance:
 
 ## [Unreleased]
 
-## [3.3.52] - 2025-07-16
+## [3.3.53] - 2025-07-16
 ### Added
 - [Bricks] Added compatibility with Bricks 2.0
 

@@ -260,11 +260,10 @@ jobs:
         # Create GitHub Release with changelog and zip file
         - name: "Create plugin zip file"
           run: |
-            VERSION=${GITHUB_REF#refs/tags/}
-            # Remove 'v' prefix if it exists
-            VERSION_NO_V=${VERSION#v}
-            cd windpress-prefixed
-            zip -r "../windpress-$VERSION_NO_V.zip" . -x "*.git*" "*.DS_Store*"
+            mkdir -p windpress-zip/windpress
+            cp -r windpress-prefixed/* windpress-zip/windpress/
+            cd windpress-zip
+            zip -r "../windpress-${{ env.WP_ORG_VERSION }}-free.zip" . -x "*.git*" "*.DS_Store*"
             cd ..
             ls -la windpress-*.zip
 
@@ -275,7 +274,7 @@ jobs:
             name: "${{ github.ref_name }}"
             body: ${{ steps.changelog.outputs.content }}
             files: |
-              windpress-*.zip
+              windpress-${{ env.WP_ORG_VERSION }}-free.zip
             draft: false
             prerelease: false
           env:
