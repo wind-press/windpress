@@ -30,9 +30,9 @@
     </picture>
   </a>
   <br />
-  <a href="https://github.com/wind-press/windpress/tags">
+  <a href="https://github.com/wind-press/windpress/releases">
     <picture>
-    <img src="https://img.shields.io/github/v/tag/wind-press/windpress.svg" alt="GitHub Release" />
+    <img src="https://img.shields.io/github/v/release/wind-press/windpress.svg?logo=github" alt="GitHub Release" />
     </picture>
   </a>
   <a href="https://github.com/wind-press/windpress/blob/master/LICENSE">
