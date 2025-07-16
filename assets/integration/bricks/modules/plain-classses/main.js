@@ -237,7 +237,11 @@ watch([activeElementIds, visibleElementPanel, historyIndex], (newVal, oldVal) =>
         nextTick(() => {
             if (newVal[0].length > 0) {
                 const cssClassesList = newVal[0].map(id => {
-                    return brxGlobalProp.$_state.content.find(el => el.id === id)?.settings?._cssClasses || '';
+                    if (brxGlobalProp.$_state.activeComponent) {
+                        return brxGlobalProp.$_state.components.find(comps => comps.id === brxGlobalProp.$_state.activeComponent.id)?.elements.find(el => el.id === id)?.settings?._cssClasses || '';
+                    } else {
+                        return brxGlobalProp.$_state.content.find(el => el.id === id)?.settings?._cssClasses || '';
+                    }
                 });
 
                 // if all cssClasses are the same, set the textInput value to that value
@@ -255,7 +259,7 @@ watch([activeElementIds, visibleElementPanel, historyIndex], (newVal, oldVal) =>
         nextTick(() => {
             const panelElementEl = document.querySelector('#bricks-panel-sticky');
 
-            if (settingsState('module.plain-classes.input-field', true).value) {
+            if (settingsState('module.plain-classes.input-field', true).value && panelElementEl) {
                 if (panelElementEl.querySelector('.windpressbricks-plc-input') === null) {
                     const containerEl = document.createElement('div');
                     containerEl.style.padding = '0 var(--builder-spacing)';
@@ -297,9 +301,19 @@ watch([activeElementIds, visibleElementPanel, historyIndex], (newVal, oldVal) =>
 textInput.addEventListener('input', function (e) {
     // loop the activeElementIds and set the _cssClasses to the value of textInput
     activeElementIds.value.forEach((id) => {
-        const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
-        if (activeElement) {
-            activeElement.settings._cssClasses = e.target.value;
+        if (brxGlobalProp.$_state.activeComponent) {
+            const activeComponent = brxGlobalProp.$_state.components.find(comps => comps.id === brxGlobalProp.$_state.activeComponent.id);
+            if (activeComponent) {
+                const activeElement = activeComponent.elements.find(el => el.id === id);
+                if (activeElement) {
+                    activeElement.settings._cssClasses = e.target.value;
+                }
+            }
+        } else {
+            const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
+            if (activeElement) {
+                activeElement.settings._cssClasses = e.target.value;
+            }
         }
     });
 });
@@ -434,8 +448,6 @@ textInput.addEventListener('tribute-active-true', function (e) {
 
 classSortAction.addEventListener('click', async function (e) {
     textInput.value = await brxIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
-    
-    // brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
     activeElementIds.value.forEach((id) => {
         const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
         if (activeElement) {

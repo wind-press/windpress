@@ -12,6 +12,11 @@ For instance:
 - Pro version 1.**1**.4
 
 ## [Unreleased]
+### Added
+- [Bricks] Added compatibility with Bricks 2.0
+
+### Fixed
+- [Bricks] Plain Classes feature now works correctly with the Components feature
 
 ## [3.3.51] - 2025-07-10
 ### Fixed
@@ -37,7 +42,7 @@ For instance:
 
 ## [3.3.40] - 2025-06-01
 ### Changed
-- [Bricks] The Plain Classes and Variables feature compat for version 2.0-beta
+- [Bricks] The Plain Classes and Variables feature compatibility for version 2.0-beta
 - Optimize the bundle (Zip) size of the plugin
 
 ## [3.3.39] - 2025-05-29
@@ -81,7 +86,7 @@ For instance:
 ## [3.3.30] - 2025-04-29
 ### Changed
 - [Gutenberg] Load the The Play Observer / Compiler to the Pattern preview [#40](https://github.com/wind-press/windpress/issues/40)
-- [Bricks] The Plain Classes feature compat for version 2.0-alpha [#42](https://github.com/wind-press/windpress/issues/42)
+- [Bricks] The Plain Classes feature compatibility for version 2.0-alpha [#42](https://github.com/wind-press/windpress/issues/42)
 
 ### Fixed
 - [Bricks] The Plain Classes field is not synchronized with the history (undo/redo) actions [#44](https://github.com/wind-press/windpress/issues/44)

@@ -69,6 +69,11 @@ class Compile
             $contents = [...$contents, ...$this->get_post_metas($post_id)];
         }
 
+        array_push($contents, [
+            'name' => 'bricks_components',
+            'content' => $this->get_components(),
+        ]);
+
         return $contents;
     }
 
@@ -111,5 +116,16 @@ class Compile
         }
 
         return $meta_value;
+    }
+
+    public function get_components(): array
+    {
+        $components = get_option('bricks_components', []);
+        
+        foreach ($components as $key => $value) {
+            $components[$key]['elements'] = $this->transform_meta_value($components[$key]['elements'] ?? []);
+        }
+
+        return $components;
     }
 }
