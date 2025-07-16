@@ -12,6 +12,8 @@ For instance:
 - Pro version 1.**1**.4
 
 ## [Unreleased]
+
+## [3.3.52] - 2025-07-16
 ### Added
 - [Bricks] Added compatibility with Bricks 2.0
 
