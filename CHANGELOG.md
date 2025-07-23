@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Fixed
+- [Bricks] Variables value now registered correctly to the Bricks Global Variables system
+
 ## [3.3.53] - 2025-07-16
 
 ### Added

@@ -68,8 +68,13 @@ export async function getVariableList(design: DesignSystem) {
             const defaultValue = entry[1].value;
 
             if (typeof defaultValue === 'string' && defaultValue.includes('rem')) {
-                calculatedValue = `${parseFloat(defaultValue) * 16}px`;
-                isCalculated = true;
+                // convert rem to px, assuming root font size is 16px
+                let floatValue = parseFloat(defaultValue);
+
+                if (!isNaN(floatValue)) {
+                    calculatedValue = `${floatValue * 16}px`;
+                    isCalculated = true;
+                }
             }
 
             return {
