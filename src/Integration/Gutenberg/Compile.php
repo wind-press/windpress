@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Integration\Gutenberg;
 
+use Symfony\Component\Yaml\Yaml;
 use WP_Query;
 
 /**
@@ -81,6 +82,10 @@ class Compile
             }
 
             $post_content = apply_filters('f!windpress/integration/gutenberg/compile:get_contents.post_content', $post_content, $post);
+
+            if (apply_filters('f!windpress/integration/gutenberg/compile:get_contents.dump_parsed_block', true, $post)) {
+                $post_content .= PHP_EOL . Yaml::dump(parse_blocks($post->post_content));
+            }
 
             $contents[] = [
                 'id' => $post->ID,

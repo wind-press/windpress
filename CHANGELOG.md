@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Changed
+- [Gutenberg] Compiler: The raw block data is now appended on the scanner data to improve the class name detection [#53](https://github.com/wind-press/windpress/issues/53)
+
 ### Fixed
 - [Bricks] Variables value now registered correctly to the Bricks Global Variables system
 

@@ -40,7 +40,8 @@
         "rosua/edd-sl-plugin-updater": "@dev",
         "symfony/finder": "^5.4",
         "symfony/property-access": "^5.4",
-        "symfony/stopwatch": "^5.4"
+        "symfony/stopwatch": "^5.4",
+        "symfony/yaml": "^5.4"
     },
     "require-dev": {
         "rector/rector": "^1.2",
