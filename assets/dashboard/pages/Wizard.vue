@@ -4,15 +4,16 @@ import { ref, onBeforeMount, provide, computed } from 'vue';
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { useWizard } from '@/dashboard/composables/useWizard';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { useRouter } from 'vue-router';
 import { useSettingsStore } from '@/dashboard/stores/settings';
+import { useFileAction } from '@/dashboard/composables/useFileAction'
 import VersionRequirement from '@/dashboard/components/Wizard/VersionRequirement.vue';
 
 const volumeStore = useVolumeStore()
+const fileAction = useFileAction()
 const wizard = useWizard();
 const router = useRouter();
-const toast = useToast();
 const settingsStore = useSettingsStore();
 
 const theme = ref(wizard.getDefaultTheme());
@@ -56,13 +57,7 @@ function saveWizard() {
             handler: 'internal',
         });
     }
-
-    toast.add({
-        title: __('Wizard saved', 'windpress'),
-        icon: 'i-lucide-check',
-        description: sprintf(__('File "%s" is updated. Please save your changes.', 'windpress'), 'wizard.css'),
-        color: 'success',
-    })
+    fileAction.save();
 }
 
 const links = ref<NavigationMenuItem[][]>([
@@ -105,7 +100,7 @@ const links = ref<NavigationMenuItem[][]>([
     ]
 ]);
 
-onBeforeRouteLeave((_, __, next) => {
+onBeforeRouteLeave((_1, _2, next) => {
     // Save the theme when leaving the route if Tailwind v4 is active
     if (isTailwindV4.value) {
         saveWizard();
