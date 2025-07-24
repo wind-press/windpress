@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.54] - 2025-07-24
+
 ### Changed
 - [Gutenberg] Compiler: The raw block data is now appended on the scanner data to improve the class name detection [#53](https://github.com/wind-press/windpress/issues/53)
 - [Wizard] The Wizard's data is now can saved directly without the need to switch the Files tab first.
