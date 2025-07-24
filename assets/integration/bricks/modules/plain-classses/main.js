@@ -240,7 +240,8 @@ watch([activeElementIds, visibleElementPanel, historyIndex], (newVal, oldVal) =>
                     if (brxGlobalProp.$_state.activeComponent) {
                         return brxGlobalProp.$_state.components.find(comps => comps.id === brxGlobalProp.$_state.activeComponent.id)?.elements.find(el => el.id === id)?.settings?._cssClasses || '';
                     } else {
-                        return brxGlobalProp.$_state.content.find(el => el.id === id)?.settings?._cssClasses || '';
+                        // return brxGlobalProp.$_state.content.find(el => el.id === id)?.settings?._cssClasses || '';
+                        return brxGlobalProp.$_state[brxGlobalProp.$_state.templateType].find(el => el.id === id)?.settings?._cssClasses || '';
                     }
                 });
 
@@ -310,7 +311,8 @@ textInput.addEventListener('input', function (e) {
                 }
             }
         } else {
-            const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
+            // const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
+            const activeElement = brxGlobalProp.$_state[brxGlobalProp.$_state.templateType].find(el => el.id === id);
             if (activeElement) {
                 activeElement.settings._cssClasses = e.target.value;
             }
@@ -449,7 +451,8 @@ textInput.addEventListener('tribute-active-true', function (e) {
 classSortAction.addEventListener('click', async function (e) {
     textInput.value = await brxIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
     activeElementIds.value.forEach((id) => {
-        const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
+        // const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
+        const activeElement = brxGlobalProp.$_state[brxGlobalProp.$_state.templateType].find(el => el.id === id);
         if (activeElement) {
             activeElement.settings._cssClasses = e.target.value;
         }

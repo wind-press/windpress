@@ -17,7 +17,8 @@ For instance:
 - [Gutenberg] Compiler: The raw block data is now appended on the scanner data to improve the class name detection [#53](https://github.com/wind-press/windpress/issues/53)
 
 ### Fixed
-- [Bricks] Variables value now registered correctly to the Bricks Global Variables system
+- [Bricks] Plain Classes feature doesn't work correctly with Bricks' templates
+- [Bricks] Variables value not registered correctly to the Bricks Global Variables system
 
 ## [3.3.53] - 2025-07-16
 
@@ -25,7 +26,7 @@ For instance:
 - [Bricks] Added compatibility with Bricks 2.0
 
 ### Fixed
-- [Bricks] Plain Classes feature now works correctly with the Components feature
+- [Bricks] Plain Classes feature not works correctly with the Components feature
 
 ## [3.3.51] - 2025-07-10
 
