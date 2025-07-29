@@ -55,8 +55,31 @@ function updateChangelog(version) {
   
   content = content.replace(unreleasedPattern, replacement);
   
+  // Update the links section at the bottom
+  // First, find the current latest version from the unreleased link
+  const unreleasedLinkPattern = /\[unreleased\]: https:\/\/github\.com\/wind-press\/windpress\/compare\/v?([0-9]+\.[0-9]+\.[0-9]+)\.\.\.HEAD/;
+  const match = content.match(unreleasedLinkPattern);
+  
+  if (match) {
+    const previousVersion = match[1];
+    
+    // Update the unreleased link to point to the new version
+    content = content.replace(
+      unreleasedLinkPattern,
+      `[unreleased]: https://github.com/wind-press/windpress/compare/v${version}...HEAD`
+    );
+    
+    // Add the new version comparison link after the unreleased link
+    const linksSection = content.match(/(\[unreleased\]: .+)$/m);
+    if (linksSection) {
+      const insertPosition = content.indexOf(linksSection[0]) + linksSection[0].length;
+      const newVersionLink = `\n[${version}]: https://github.com/wind-press/windpress/compare/v${previousVersion}...v${version}`;
+      content = content.slice(0, insertPosition) + newVersionLink + content.slice(insertPosition);
+    }
+  }
+  
   writeFileSync(changelogPath, content, 'utf8');
-  console.log(`✓ Updated CHANGELOG.md`);
+  console.log(`✓ Updated CHANGELOG.md with version header and comparison links`);
 }
 
 /**
