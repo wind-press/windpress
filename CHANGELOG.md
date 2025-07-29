@@ -13,11 +13,14 @@ For instance:
 
 ## [Unreleased]
 
+### Added
+- WP-Rocket exclusion for the WindPress CSS and JavaScript files [#54](https://github.com/wind-press/windpress/issues/54)
+
 ## [3.3.54] - 2025-07-24
 
 ### Changed
 - [Gutenberg] Compiler: The raw block data is now appended on the scanner data to improve the class name detection [#53](https://github.com/wind-press/windpress/issues/53)
-- [Wizard] The Wizard's data is now can saved directly without the need to switch the Files tab first.
+- [Wizard] The Wizard's data is now can saved directly without the need to switch the Files tab first
 
 ### Fixed
 - [Bricks] Plain Classes feature doesn't work correctly with Bricks' templates
@@ -139,7 +142,7 @@ For instance:
 - Upgraded to Tailwind CSS v4 (4.1.3 latest)
 
 ### Changed
-- [TW4] Autocompletion feature now supports user-defined classes from the Simple File System data.
+- [TW4] Autocompletion feature now supports user-defined classes from the Simple File System data
 - Exclude the WindPress files from being processed by the SiteGround Speed Optimizer plugin
 
 ### Fixed

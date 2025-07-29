@@ -13,6 +13,14 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Utils;
 
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use RegexIterator;
+use WIND_PRESS;
+use WindPress\WindPress\Core\Cache as CoreCache;
+use WindPress\WindPress\Core\Runtime as CoreRuntime;
+use WindPress\WindPress\Core\Volume as CoreVolume;
+
 /**
  * Cache utility functions for the plugin.
  *
@@ -83,6 +91,7 @@ class Cache
     public static function exclude_optimization()
     {
         self::sgoptimizer_exclude();
+        self::wprocket_exclude();
     }
 
     /**
@@ -100,7 +109,7 @@ class Cache
             $handles = [];
 
             /** @var \WP_Scripts $scripts */
-            $scripts = wp_clone($wp_scripts);
+            $scripts = clone $wp_scripts;
             $scripts->all_deps($scripts->queue);
 
             foreach ($scripts->to_do as $handle) {
@@ -110,9 +119,81 @@ class Cache
                 }
             }
 
-            add_filter('sgo_js_minify_exclude', fn ($exclude_list) => array_merge($exclude_list, $handles));
-            add_filter('sgo_javascript_combine_exclude', fn ($exclude_list) => array_merge($exclude_list, $handles));
-            add_filter('sgo_js_async_exclude', fn ($exclude_list) => array_merge($exclude_list, $handles));
+            add_filter('sgo_js_minify_exclude', fn($exclude_list) => array_merge($exclude_list, $handles));
+            add_filter('sgo_javascript_combine_exclude', fn($exclude_list) => array_merge($exclude_list, $handles));
+            add_filter('sgo_js_async_exclude', fn($exclude_list) => array_merge($exclude_list, $handles));
         }, 19);
+    }
+
+    /**
+     * WP Rocket
+     * 
+     * @see https://docs.wp-rocket.me/article/976-exclude-files-from-defer-js#exclude-inline-scripts
+     * @see https://github.com/wp-media/wp-rocket-helpers
+     */
+    private static function wprocket_exclude()
+    {
+        $wp_root = strval(substr(ABSPATH, 0, -1));
+
+        $cache_dir = CoreCache::get_cache_path();
+        $data_dir = CoreVolume::data_dir_path();
+        $plugin_asset_dir = dirname(WIND_PRESS::FILE) . '/build';
+
+        $excluded_folders = [
+            $cache_dir,
+            $data_dir,
+            $plugin_asset_dir,
+        ];
+
+        $excluded_files = [];
+
+        $inline_patterns = [
+            'windpress',
+            substr(CoreRuntime::get_instance()->getVFSHtml(), 45, 7),
+        ];
+
+        foreach ($excluded_folders as $folder) {
+            if (file_exists($folder)) {
+                $allFiles = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder));
+                $staticFiles = new RegexIterator($allFiles, '/\.(css|js)$/i');
+
+                foreach ($staticFiles as $staticFile) {
+                    $file = str_replace($wp_root, '', $staticFile->getPathname());
+                    array_push($excluded_files, $file);
+                }
+            }
+        }
+
+        add_filter('rocket_exclude_async_css', function ($exclude_list) use ($excluded_files) {
+            $css_files = array_filter($excluded_files, function ($file) {
+                return str_ends_with($file, '.css');
+            });
+
+            return array_merge($exclude_list, $css_files);
+        });
+
+        add_filter('rocket_delay_js_exclusions', function ($exclude_list) use ($excluded_files) {
+            $js_files = array_filter($excluded_files, function ($file) {
+                return str_ends_with($file, '.js');
+            });
+
+            return array_merge($exclude_list, $js_files);
+        });
+
+        add_filter('rocket_exclude_defer_js', function ($exclude_list) use ($excluded_files) {
+            $js_files = array_filter($excluded_files, function ($file) {
+                return str_ends_with($file, '.js');
+            });
+
+            return array_merge($exclude_list, $js_files);
+        });
+
+        add_filter('rocket_defer_inline_exclusions', function ($exclude_list) use ($inline_patterns) {
+            return array_merge($exclude_list, $inline_patterns); 
+        });
+
+        add_filter('rocket_excluded_inline_js_content', function ($exclude_list) use ($inline_patterns) {
+            return array_merge($exclude_list, $inline_patterns);
+        });
     }
 }
