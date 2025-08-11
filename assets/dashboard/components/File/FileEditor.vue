@@ -5,7 +5,7 @@ import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useColorMode } from '@vueuse/core';
 import path from 'path';
 import { shallowRef } from 'vue';
-import { getVariableList, loadDesignSystem, naturalExpand } from '@/packages/core/tailwindcss';
+import { getVariableList, loadDesignSystem, naturalExpand, getClassList, candidatesToCss } from '@/packages/core/tailwindcss';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import Color from 'colorjs.io';
@@ -38,7 +38,88 @@ const MONACO_EDITOR_OPTIONS = {
 
 const editorElementRef = shallowRef();
 
-function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: MonacoEditor) {
+async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: MonacoEditor) {
+
+    let designSystemCache: {
+        designSystem: any;
+        variablesList: any[];
+        classList: any[];
+    } | null = null;
+    
+    const getDesignSystemData = async () => {
+        if (!designSystemCache) {
+            try {
+                // Remove ALL @apply directives from volume before loading design system
+                const originalVolume = volumeStore.getKVEntries();
+                const filteredVolume = { ...originalVolume };
+                
+                Object.keys(filteredVolume).forEach(key => {
+                    if (key.endsWith('.css')) {
+                        filteredVolume[key] = filteredVolume[key]
+                            .replace(/@apply\s+[^;}]*[;}]/g, '') // Remove complete @apply
+                            .replace(/@apply\s+[^;}]*$/gm, ''); // Remove incomplete @apply
+                    }
+                });
+                
+                const designSystem = await loadDesignSystem({ volume: filteredVolume });
+                const variablesList = await getVariableList(designSystem);
+                const classList = getClassList(designSystem);
+                
+                designSystemCache = { designSystem, variablesList, classList };
+            } catch (error) {
+                console.warn('Failed to load design system:', error);
+                designSystemCache = {
+                    designSystem: null,
+                    variablesList: [],
+                    classList: []
+                };
+            }
+        }
+        return designSystemCache;
+    };
+    
+    const autocompleteCache = new Map<string, { items: any[]; timestamp: number }>();
+    const CACHE_DURATION = 5000; // 5 seconds
+    
+    const getCachedAutocompleteItems = (cacheKey: string, generator: () => Promise<any[]>): Promise<any[]> => {
+        return new Promise((resolve) => {
+            const cached = autocompleteCache.get(cacheKey);
+            const now = Date.now();
+            
+            if (cached && (now - cached.timestamp) < CACHE_DURATION) {
+                resolve(cached.items);
+                return;
+            }
+            
+            if (cached) {
+                resolve(cached.items);
+                
+                generator().then(items => {
+                    autocompleteCache.set(cacheKey, { items, timestamp: now });
+                }).catch(error => {
+                    console.warn('Failed to refresh cached autocomplete items:', error);
+                });
+                return;
+            }
+            
+            generator().then(items => {
+                autocompleteCache.set(cacheKey, { items, timestamp: now });
+                resolve(items);
+            }).catch(error => {
+                console.warn('Failed to generate autocomplete items:', error);
+                resolve([]);
+            });
+        });
+    };
+    
+    const clearDesignSystemCache = () => {
+        designSystemCache = null;
+        autocompleteCache.clear();
+    };
+    
+    editor.onDidChangeModelContent(() => {
+        clearDesignSystemCache();
+    });
     editorElementRef.value = editor;
 
     if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
@@ -171,38 +252,478 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
 
         monaco.languages.registerCompletionItemProvider('css', {
             async provideCompletionItems(model, position) {
-                const wordInfo = model.getWordUntilPosition(position);
+                try {
+                    const wordInfo = model.getWordUntilPosition(position);
+                    
+                    // Use Tailwind IntelliSense approach for @apply detection
+                    // Look back up to 30 lines for @apply context (supports multiline)
+                    const searchStartLine = Math.max(position.lineNumber - 30, 1);
+                    const searchText = model.getValueInRange({
+                        startLineNumber: searchStartLine,
+                        startColumn: 1,
+                        endLineNumber: position.lineNumber,
+                        endColumn: position.column
+                    });
+                    
+                    // Use regex pattern from tailwindlabs/tailwindcss-intellisense
+                    const applyMatches = [...searchText.matchAll(/@apply\s+(?<classList>[^;}]*)$/gi)];
+                    const lastApplyMatch = applyMatches[applyMatches.length - 1];
+                    
+                    if (lastApplyMatch && lastApplyMatch.groups) {
+                        const currentClassList = lastApplyMatch.groups.classList || '';
+                        const words = currentClassList.split(/\s+/);
+                        const currentWord = words[words.length - 1] || '';
+                        const cacheKey = `apply_${currentWord}_${currentClassList.length}`;
+                        
+                        try {
+                            const suggestions = await getCachedAutocompleteItems(cacheKey, async () => {
+                                const { classList, variablesList } = await getDesignSystemData();
+                                
+                                if (!classList || classList.length === 0) {
+                                    return [];
+                                }
+                                
+                                const getColor = (declarations: any[] | undefined) => {
+                                    const color = declarations?.find((declaration) =>
+                                        declaration.property && declaration.property.includes('color')
+                                    );
+                                    return color?.value || null;
+                                };
+                                
+                                const utilityClasses = classList.filter((classEntity) => {
+                                    if (classEntity.kind !== 'utility') return false;
+                                    if (classEntity.selector.includes(':')) return false;
+                                    return true;
+                                });
+                                
+                                return utilityClasses.map((classEntity, index) => {
+                                const color = getColor(classEntity.declarations);
+                                let kind = monaco.languages.CompletionItemKind.Property;
+                                if (color) {
+                                    kind = monaco.languages.CompletionItemKind.Color;
+                                }
+                                
+                                const suggestion: any = {
+                                    label: classEntity.selector,
+                                    kind,
+                                    insertText: classEntity.selector,
+                                    range: {
+                                        startLineNumber: position.lineNumber,
+                                        startColumn: Math.max(1, position.column - currentWord.length),
+                                        endLineNumber: position.lineNumber,
+                                        endColumn: position.column
+                                    },
+                                    sortText: naturalExpand(index),
+                                    documentation: color ? `Color: ${color}` : classEntity.css || undefined,
+                                    detail: classEntity.css || undefined
+                                };
 
-                let variables: any[] = [];
+                                if (color) {
+                                    try {
+                                        let actualColorValue = color;
+                                        
+                                        // If color is a CSS variable (var(--color-name)), resolve it
+                                        const cssVarMatch = color.match(/var\((--[^)]+)\)/);
+                                        if (cssVarMatch) {
+                                            const varName = cssVarMatch[1];
+                                            const variable = variablesList.find(v => v.key === varName);
+                                            if (variable && variable.value) {
+                                                actualColorValue = variable.value;
+                                            } else {
+                                                return suggestion;
+                                            }
+                                        }
+                                        
+                                        const colorObj = new Color(actualColorValue);
+                                        
+                                        let monacoDetectableColor;
+                                        if (colorObj.alpha < 1) {
+                                            const srgb = colorObj.to('srgb');
+                                            const [red, green, blue] = srgb.coords;
+                                            const r = Math.round((red ?? 0) * 255);
+                                            const g = Math.round((green ?? 0) * 255);
+                                            const b = Math.round((blue ?? 0) * 255);
+                                            const a = srgb.alpha ?? 1;
+                                            monacoDetectableColor = `rgba(${r}, ${g}, ${b}, ${a})`;
+                                        } else {
+                                            monacoDetectableColor = colorObj.toString({ format: 'hex' });
+                                        }
+                                        
+                                        suggestion.documentation = `${monacoDetectableColor}\n\n${classEntity.css || ''}`;
+                                        
+                                    } catch (e) {}
+                                }
 
-                variables = (await getVariableList(await loadDesignSystem({ volume: volumeStore.getKVEntries() }))).map((entry) => {
-                    return {
-                        kind: entry.key.includes('--color') ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
-                        label: entry.key,
-                        insertText: entry.key,
-                        detail: entry.value,
-                        range: {
-                            startLineNumber: position.lineNumber,
-                            startColumn: wordInfo.startColumn,
-                            endLineNumber: position.lineNumber,
-                            endColumn: wordInfo.endColumn
-                        },
-                        sortText: naturalExpand(entry.index)
+                                return suggestion;
+                                });
+                            });
+                            
+                            return {
+                                suggestions
+                            };
+                        } catch (error) {
+                            console.warn('Error fetching @apply autocomplete suggestions:', error);
+                            return { suggestions: [] };
+                        }
+                    } else {
+                        try {
+                            const { variablesList } = await getDesignSystemData();
+                            
+                            if (!variablesList || variablesList.length === 0) {
+                                return { suggestions: [] };
+                            }
+                            
+                            const mappedVariables = variablesList.map((entry, index) => {
+                                const isColor = entry.key.includes('--color');
+                                return {
+                                    kind: isColor ? monaco.languages.CompletionItemKind.Color : monaco.languages.CompletionItemKind.Variable,
+                                    label: entry.key,
+                                    insertText: entry.key,
+                                    detail: entry.value,
+                                    range: {
+                                        startLineNumber: position.lineNumber,
+                                        startColumn: wordInfo.startColumn,
+                                        endLineNumber: position.lineNumber,
+                                        endColumn: wordInfo.endColumn
+                                    },
+                                    sortText: naturalExpand(index)
+                                };
+                            });
+
+                            return {
+                                suggestions: mappedVariables
+                            };
+                        } catch (error) {
+                            console.warn('Error fetching CSS variable suggestions:', error);
+                            return { suggestions: [] };
+                        }
                     }
-                });
+                } catch (error) {
+                    console.warn('Error in completion provider:', error);
+                    return { suggestions: [] };
+                }
+            }
+        });
 
-                return {
-                    suggestions: variables
-                };
+        monaco.languages.registerHoverProvider('css', {
+            async provideHover(model, position) {
+                // Get cached design system
+                const { designSystem } = await getDesignSystemData();
+                if (!designSystem) {
+                    return null;
+                }
+                
+                const searchStartLine = Math.max(position.lineNumber - 30, 1);
+                const searchEndLine = Math.min(position.lineNumber + 30, model.getLineCount());
+                const searchText = model.getValueInRange({
+                    startLineNumber: searchStartLine,
+                    startColumn: 1,
+                    endLineNumber: searchEndLine,
+                    endColumn: model.getLineMaxColumn(searchEndLine)
+                });
+                
+                const allApplyMatches = [...searchText.matchAll(/@apply\s+([\s\S]*?)(?=\s*[;}]|@apply|\s*$)/g)];
+                
+                if (allApplyMatches.length === 0) {
+                    return null;
+                }
+                
+                let relevantMatch = null;
+                const linesBeforePosition = position.lineNumber - searchStartLine;
+                
+                for (const match of allApplyMatches) {
+                    const matchIndex = match.index!;
+                    const textBeforeMatch = searchText.substring(0, matchIndex);
+                    const linesBeforeMatch = textBeforeMatch.split('\n').length - 1;
+                    
+                    const fullMatchText = match[0];
+                    const matchLines = fullMatchText.split('\n').length;
+                    const matchEndLine = linesBeforeMatch + matchLines - 1;
+                    
+                    if (linesBeforePosition >= linesBeforeMatch && linesBeforePosition <= matchEndLine) {
+                        relevantMatch = match;
+                        break;
+                    }
+                }
+                
+                if (!relevantMatch || !relevantMatch[1]) {
+                    return null;
+                }
+                
+                const classList = relevantMatch[1];
+                const classNames = classList.split(/\s+/).filter(Boolean);
+                
+                if (classNames.length === 0) {
+                    return null;
+                }
+                
+                // Find which specific class the cursor is hovering over
+                const currentLine = model.getLineContent(position.lineNumber);
+                
+                // Check if @apply is on current line (single-line case) 
+                // For multiple @apply on same line, find the one that contains cursor
+                const allSingleLineMatches = [...currentLine.matchAll(/@apply\s+([^;}@]+)/g)];
+                let singleLineMatch = null;
+                let applyStartIndex = -1;
+                
+                for (const match of allSingleLineMatches) {
+                    const matchStart = match.index!;
+                    const matchEnd = matchStart + match[0].length;
+                    
+                    // Check if cursor is within this @apply statement
+                    if (position.column >= matchStart + 1 && position.column <= matchEnd + 1) {
+                        singleLineMatch = match;
+                        applyStartIndex = matchStart;
+                        break;
+                    }
+                }
+                
+                if (applyStartIndex !== -1 && singleLineMatch) {
+                    // Single-line @apply case
+                    const classList = singleLineMatch[1];
+                    const classNames = classList.split(/\s+/).filter(Boolean);
+                    const classListStartInLine = applyStartIndex + '@apply'.length;
+                    let currentIndex = classListStartInLine;
+                    let hoveredClass = null;
+                    let hoveredClassRange = null;
+                    
+                    for (const className of classNames) {
+                        // Skip whitespace
+                        while (currentIndex < currentLine.length && /\s/.test(currentLine[currentIndex])) {
+                            currentIndex++;
+                        }
+                        
+                        const classStart = currentIndex;
+                        const classEnd = currentIndex + className.length;
+                        
+                        // Check if cursor is within this class
+                        if (position.column >= classStart + 1 && position.column <= classEnd + 1) {
+                            hoveredClass = className;
+                            hoveredClassRange = {
+                                startLineNumber: position.lineNumber,
+                                startColumn: classStart + 1,
+                                endLineNumber: position.lineNumber,
+                                endColumn: classEnd + 1
+                            };
+                            break;
+                        }
+                        
+                        currentIndex = classEnd;
+                    }
+                    
+                    if (hoveredClass && hoveredClassRange) {
+                        try {
+                            const cssResult = await candidatesToCss(designSystem, [hoveredClass]);
+                            
+                            if (cssResult && cssResult.length > 0 && cssResult[0]) {
+                                const cssString = cssResult[0];
+                                
+                                return {
+                                    range: hoveredClassRange,
+                                    contents: [
+                                        {
+                                            value: `\`\`\`css\n${cssString}\n\`\`\``
+                                        }
+                                    ]
+                                };
+                            }
+                        } catch (error) {
+                            console.warn('Error generating hover information for class:', hoveredClass, error);
+                        }
+                    }
+                    
+                    return null;
+                } else {
+                    // Multiline @apply case - find class on current line
+                    const currentLineClasses = currentLine.trim().split(/\s+/).filter(Boolean).map(cls => cls.replace(/[;}]+$/, ''));
+                    let hoveredClass = null;
+                    let hoveredClassRange = null;
+                    
+                    for (const className of currentLineClasses) {
+                        if (!classNames.includes(className)) continue;
+                        
+                        const classStart = currentLine.indexOf(className);
+                        if (classStart === -1) continue;
+                        
+                        const classEnd = classStart + className.length;
+                        
+                        if (position.column >= classStart + 1 && position.column <= classEnd + 1) {
+                            hoveredClass = className;
+                            hoveredClassRange = {
+                                startLineNumber: position.lineNumber,
+                                startColumn: classStart + 1,
+                                endLineNumber: position.lineNumber,
+                                endColumn: classEnd + 1
+                            };
+                            break;
+                        }
+                    }
+                    
+                    if (hoveredClass && hoveredClassRange) {
+                        try {
+                            const cssResult = await candidatesToCss(designSystem, [hoveredClass]);
+                            
+                            if (cssResult && cssResult.length > 0 && cssResult[0]) {
+                                const cssString = cssResult[0];
+                                
+                                return {
+                                    range: hoveredClassRange,
+                                    contents: [
+                                        {
+                                            value: `\`\`\`css\n${cssString}\n\`\`\``
+                                        }
+                                    ]
+                                };
+                            }
+                        } catch (error) {
+                            console.warn('Error generating hover information for class:', hoveredClass, error);
+                        }
+                    }
+                    
+                    return null;
+                }
             }
         });
 
         // Register color provider for modern CSS color functions
         monaco.languages.registerColorProvider('css', {
-            provideColorPresentations(_model, colorInfo) {
+            provideColorPresentations(model, colorInfo) {
                 const { red, green, blue, alpha } = colorInfo.color;
                 const color = new Color('srgb', [red, green, blue], alpha);
+                
+                // Get the line content to determine context
+                const lineContent = model.getLineContent(colorInfo.range.startLineNumber);
+                
+                // Check if we're in an @apply directive with an arbitrary color class
+                const applyMatch = lineContent.match(/@apply\s+([^;}]+)/);
+                if (applyMatch) {
+                    const classList = applyMatch[1];
+                    
+                    // Parse class names, handling brackets that may contain spaces
+                    const classNames = [];
+                    let current = '';
+                    let bracketDepth = 0;
+                    
+                    for (let i = 0; i < classList.length; i++) {
+                        const char = classList[i];
+                        
+                        if (char === '[') {
+                            bracketDepth++;
+                            current += char;
+                        } else if (char === ']') {
+                            bracketDepth--;
+                            current += char;
+                        } else if (char === ' ' && bracketDepth === 0) {
+                            if (current.trim()) {
+                                classNames.push(current.trim());
+                                current = '';
+                            }
+                        } else {
+                            current += char;
+                        }
+                    }
+                    
+                    if (current.trim()) {
+                        classNames.push(current.trim());
+                    }
+                    
+                    // Find the class that contains this color range
+                    for (const className of classNames) {
+                        // Calculate exact position of this class in the line
+                        const applyStart = lineContent.indexOf('@apply');
+                        const classListStart = applyStart + '@apply'.length;
+                        
+                        // Skip whitespace after @apply
+                        let currentPos = classListStart;
+                        while (currentPos < lineContent.length && /\s/.test(lineContent[currentPos])) {
+                            currentPos++;
+                        }
+                        
+                        // Find position of this specific class
+                        let classStartPos = -1;
+                        for (const name of classNames) {
+                            if (name === className) {
+                                classStartPos = currentPos;
+                                break;
+                            }
+                            currentPos += name.length;
+                            // Skip whitespace to next class
+                            while (currentPos < lineContent.length && /\s/.test(lineContent[currentPos])) {
+                                currentPos++;
+                            }
+                        }
+                        
+                        if (classStartPos === -1) continue;
+                        
+                        const classStartColumn = classStartPos + 1; // Monaco is 1-indexed
+                        const classEndColumn = classStartColumn + className.length;
+                        
+                        // Check if the color range matches this class exactly and it's an arbitrary color
+                        if (colorInfo.range.startColumn === classStartColumn && 
+                            colorInfo.range.endColumn === classEndColumn &&
+                            /\[([#].+|rgb.+|rgba.+|hsl.+|hsla.+|lch.+|oklch.+|lab.+|oklab.+|hwb.+|color-mix.+)\]/.test(className)) {
+                            
+                            // Extract the prefix (e.g., "bg-" from "bg-[#ff0000]")
+                            const bracketMatch = className.match(/^([^[]+)\[([^\]]+)\]$/);
+                            if (bracketMatch) {
+                                const prefix = bracketMatch[1]; // e.g., "bg-"
+                                
+                                // Helper function to convert Color.js format to Tailwind arbitrary value format
+                                const toTailwindFormat = (colorStr: string) => {
+                                    // First, remove spaces around commas
+                                    let result = colorStr.replace(/\s*,\s*/g, ',');
+                                    // Then, replace remaining spaces with underscores
+                                    result = result.replace(/\s+/g, '_');
+                                    return result;
+                                };
+                                
+                                // Create color presentations with proper range that covers the entire class
+                                const presentations = [
+                                    {
+                                        label: `${prefix}[${color.toString({ format: 'hex' })}]`
+                                    },
+                                    {
+                                        label: `${prefix}[rgb(${Math.round(red * 255)},${Math.round(green * 255)},${Math.round(blue * 255)})]`
+                                    },
+                                    {
+                                        label: `${prefix}[rgba(${Math.round(red * 255)},${Math.round(green * 255)},${Math.round(blue * 255)},${alpha})]`
+                                    },
+                                    {
+                                        label: `${prefix}[${toTailwindFormat(color.to('hsl').toString({ format: 'hsl' }))}]`
+                                    },
+                                    {
+                                        label: `${prefix}[${toTailwindFormat(color.to('hwb').toString({ format: 'hwb' }))}]`
+                                    },
+                                    {
+                                        label: `${prefix}[${toTailwindFormat(color.to('lch').toString({ format: 'lch' }))}]`
+                                    },
+                                    {
+                                        label: `${prefix}[${toTailwindFormat(color.to('oklch').toString({ format: 'oklch' }))}]`
+                                    },
+                                    {
+                                        label: `${prefix}[${toTailwindFormat(color.to('lab').toString({ format: 'lab' }))}]`
+                                    },
+                                    {
+                                        label: `${prefix}[${toTailwindFormat(color.to('oklab').toString({ format: 'oklab' }))}]`
+                                    }
+                                ];
+                                
+                                // Override the range to cover the entire class name for proper replacement
+                                return presentations.map(presentation => ({
+                                    ...presentation,
+                                    range: {
+                                        startLineNumber: colorInfo.range.startLineNumber,
+                                        startColumn: classStartColumn,
+                                        endLineNumber: colorInfo.range.endLineNumber,
+                                        endColumn: classEndColumn
+                                    }
+                                }));
+                            }
+                        }
+                    }
+                }
 
+                // Default color presentations for other contexts (@theme blocks, standalone color functions)
                 return [
                     {
                         label: color.toString({ format: 'hex' })
@@ -234,13 +755,23 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                 ];
             },
 
-            provideDocumentColors(model) {
-                const colors: monacoEditor.languages.IColorInformation[] = [];
+            async provideDocumentColors(model) {
+                const editableColors: monacoEditor.languages.IColorInformation[] = [];
+                const nonEditableDecorations: monacoEditor.editor.IModelDeltaDecoration[] = [];
                 const text = model.getValue();
-                const processedRanges = new Set<string>(); // Track processed ranges to avoid duplicates
+                const processedRanges = new Set<string>();
+                const isEditableColor = (className: string): boolean => {
+                    return /\[([#].+|rgb.+|rgba.+|hsl.+|hsla.+|lch.+|oklch.+|lab.+|oklab.+|hwb.+|color-mix.+)\]/.test(className);
+                };
 
-                // Helper function to parse and add color to the list
-                const parseAndAddColor = (colorText: string, startIndex: number, endIndex: number) => {
+                const createColorDecorationClass = (color: monacoEditor.languages.IColor): string => {
+                    const colorJs = new Color('srgb', [color.red, color.green, color.blue], color.alpha);
+                    const hex = colorJs.toString({ format: 'hex' }).replace('#', '');
+                    return `windpress-color-decoration-${hex}`;
+                };
+
+                // Helper function to parse and add color (separating editable vs non-editable)
+                const parseAndAddColor = (colorText: string, startIndex: number, endIndex: number, isEditable: boolean) => {
                     // Create a unique key for this range
                     const rangeKey = `${startIndex}-${endIndex}`;
                     if (processedRanges.has(rangeKey)) {
@@ -248,8 +779,16 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                     }
 
                     try {
+                        // Remove CSS comments before parsing color
+                        const cleanColorText = colorText.replace(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//g, '').trim();
+                        
+                        // Skip color-mix functions as they're not parseable by Color.js
+                        if (cleanColorText.startsWith('color-mix(')) {
+                            return;
+                        }
+                        
                         // Let Color.js handle all the parsing
-                        const color = new Color(colorText.trim());
+                        const color = new Color(cleanColorText);
 
                         // Convert to sRGB for Monaco Editor
                         const srgb = color.to('srgb');
@@ -258,20 +797,52 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                         const startPosition = model.getPositionAt(startIndex);
                         const endPosition = model.getPositionAt(endIndex);
 
-                        colors.push({
-                            color: {
-                                red: Math.max(0, Math.min(1, red ?? 0)),
-                                green: Math.max(0, Math.min(1, green ?? 0)),
-                                blue: Math.max(0, Math.min(1, blue ?? 0)),
-                                alpha: srgb.alpha ?? 1
-                            },
-                            range: {
-                                startLineNumber: startPosition.lineNumber,
-                                startColumn: startPosition.column,
-                                endLineNumber: endPosition.lineNumber,
-                                endColumn: endPosition.column
+                        const colorInfo = {
+                            red: Math.max(0, Math.min(1, red ?? 0)),
+                            green: Math.max(0, Math.min(1, green ?? 0)),
+                            blue: Math.max(0, Math.min(1, blue ?? 0)),
+                            alpha: srgb.alpha ?? 1
+                        };
+
+                        const range = {
+                            startLineNumber: startPosition.lineNumber,
+                            startColumn: startPosition.column,
+                            endLineNumber: endPosition.lineNumber,
+                            endColumn: endPosition.column
+                        };
+
+                        if (isEditable) {
+                            // Editable colors: returned by provideDocumentColors (Monaco shows color picker)
+                            editableColors.push({
+                                color: colorInfo,
+                                range: range
+                            });
+                        } else {
+                            const decorationClassName = createColorDecorationClass(colorInfo);
+                            
+                            const colorJs = new Color('srgb', [colorInfo.red, colorInfo.green, colorInfo.blue], colorInfo.alpha);
+                            const hex = colorJs.toString({ format: 'hex' });
+                            
+                            if (!document.querySelector(`style[data-class="${decorationClassName}"]`)) {
+                                const style = document.createElement('style');
+                                style.setAttribute('data-class', decorationClassName);
+                                style.textContent = `.${decorationClassName} {
+                                     background-color: ${hex};
+                                }`;
+                                document.head.appendChild(style);
                             }
-                        });
+
+                            nonEditableDecorations.push({
+                                range: range,
+                                options: {
+                                    before: {
+                                        content: '\u00A0',
+                                        inlineClassName: `${decorationClassName} colorpicker-color-decoration`,
+                                        inlineClassNameAffectsLetterSpacing: true
+                                    }
+                                }
+                            });
+                        }
 
                         processedRanges.add(rangeKey); // Mark this range as processed
                     } catch (error) {
@@ -280,7 +851,102 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                     }
                 };
 
-                // 1. Find colors in @theme blocks
+                // Get shared design system and variables list for color resolution
+                const { designSystem, variablesList } = await getDesignSystemData();
+                
+                // If design system failed to load, return empty results
+                if (!designSystem || !variablesList) {
+                    return editableColors;
+                }
+                
+                // 1. Find colors in @apply directives using the WindPress process
+                const applyRegex = /@apply\s+([^;}]+)/g;
+                let applyMatch: RegExpExecArray | null;
+                
+                while ((applyMatch = applyRegex.exec(text)) !== null) {
+                    const classList = applyMatch[1];
+                    const classNames = classList.split(/\s+/).filter(Boolean);
+                    
+                    for (const className of classNames) {
+                        try {
+                            // Determine if this class is editable based on the class name itself
+                            const isEditable = isEditableColor(className);
+                            
+                            // 1. Generate CSS for the class using candidatesToCss
+                            const cssResult = await candidatesToCss(designSystem, [className]);
+                            
+                            if (cssResult && cssResult.length > 0) {
+                                const cssString = cssResult.join('\n');
+                                let colorValue = null;
+                                
+                                if (isEditable) {
+                                    // For arbitrary/editable classes, extract color from generated CSS
+                                    // This handles all color formats consistently via candidatesToCss
+                                    const directColorMatch = cssString.match(/(background-color|color|border-color|fill|stroke|border-top-color|border-right-color|border-bottom-color|border-left-color):\s*([^;]+)/);
+                                    
+                                    if (directColorMatch) {
+                                        const cssColorValue = directColorMatch[2].trim();
+                                        // Skip CSS variables and transparent values
+                                        if (!cssColorValue.startsWith('var(') && !cssColorValue.includes('transparent') && cssColorValue !== 'currentColor') {
+                                            colorValue = cssColorValue;
+                                        }
+                                    }
+                                } else {
+                                    // For standard classes, find CSS color variables in the generated CSS
+                                    const colorVarMatch = cssString.match(/var\((--[^)]*color[^)]*)\)/);
+                                    
+                                    if (colorVarMatch) {
+                                        const colorVarName = colorVarMatch[1]; // e.g., "--color-red-500"
+                                        
+                                        // Search for the variable in the variables list
+                                        const colorVariable = variablesList.find(v => v.key === colorVarName);
+                                        
+                                        if (colorVariable && colorVariable.value) {
+                                            colorValue = colorVariable.value;
+                                        }
+                                    }
+                                }
+                                
+                                // If we found a color value, add it to the color preview
+                                if (colorValue) {
+                                    // Calculate the correct position of the class name in the @apply directive
+                                    const applyStart = applyMatch!.index;
+                                    const classListStart = applyStart + applyMatch![0].indexOf(classList);
+                                    
+                                    // Find the exact position of this class within the class list
+                                    let currentPos = 0;
+                                    let classStartInList = -1;
+                                    
+                                    for (const name of classNames) {
+                                        // Skip whitespace
+                                        while (currentPos < classList.length && /\s/.test(classList[currentPos])) {
+                                            currentPos++;
+                                        }
+                                        
+                                        if (name === className) {
+                                            classStartInList = currentPos;
+                                            break;
+                                        }
+                                        
+                                        currentPos += name.length;
+                                    }
+                                    
+                                    if (classStartInList !== -1) {
+                                        const colorStartIndex = classListStart + classStartInList;
+                                        const colorEndIndex = colorStartIndex + className.length;
+                                        
+                                        parseAndAddColor(colorValue, colorStartIndex, colorEndIndex, isEditable);
+                                    }
+                                }
+                            }
+                        } catch (error) {
+                            // Skip classes that can't be processed
+                            console.warn('Error processing class for color preview:', className, error);
+                        }
+                    }
+                }
+
+                // 2. Find colors in @theme blocks
                 const themeBlockRegex = /@theme\s*\{([^}]*)\}/gs;
                 let themeMatch;
 
@@ -304,27 +970,36 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                         const valueStart = themeStartIndex + valueStartInTheme;
                         const valueEnd = valueStart + value.length;
 
-                        // Handle all colors in @theme blocks since Monaco's built-in provider 
-                        // doesn't specifically look inside @theme blocks
-                        parseAndAddColor(value, valueStart, valueEnd);
+                        // Handle all colors in @theme blocks - these are always editable since they're custom values
+                        parseAndAddColor(value, valueStart, valueEnd, true);
                     }
                 }
 
-                // 2. Find modern color functions outside @theme blocks that Monaco doesn't support by default
+                // 3. Find modern color functions outside @theme blocks and @apply directives that Monaco doesn't support by default
                 // Only handle modern CSS color functions, let Monaco handle standard ones (rgb, hsl, hex, etc.)
                 const colorPatterns = [
                     /\b(oklch|oklab|lch|lab)\(([^)]*(?!\bvar\b|\benv\b|\bcalc\b)[^)]*)\)/gi
                 ];
 
-                // Create a set of ranges that are inside @theme blocks to avoid duplicates
-                const themeRanges: Array<{ start: number, end: number }> = [];
+                // Create a set of ranges that are inside @theme blocks and @apply directives to avoid duplicates
+                const excludedRanges: Array<{ start: number, end: number }> = [];
+                
+                // Add @theme block ranges
                 const themeBlockRegexForRanges = /@theme\s*\{([^}]*)\}/gs;
                 let themeRangeMatch;
-
                 while ((themeRangeMatch = themeBlockRegexForRanges.exec(text)) !== null) {
                     const blockStart = themeRangeMatch.index;
                     const blockEnd = themeRangeMatch.index + themeRangeMatch[0].length;
-                    themeRanges.push({ start: blockStart, end: blockEnd });
+                    excludedRanges.push({ start: blockStart, end: blockEnd });
+                }
+                
+                // Add @apply directive ranges
+                const applyRegexForRanges = /@apply\s+([^;}]+)/g;
+                let applyRangeMatch;
+                while ((applyRangeMatch = applyRegexForRanges.exec(text)) !== null) {
+                    const blockStart = applyRangeMatch.index;
+                    const blockEnd = applyRangeMatch.index + applyRangeMatch[0].length;
+                    excludedRanges.push({ start: blockStart, end: blockEnd });
                 }
 
                 colorPatterns.forEach((pattern) => {
@@ -335,26 +1010,34 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
                             continue;
                         }
 
-                        // Check if this color is inside any @theme block
-                        const isInsideThemeBlock = themeRanges.some(range =>
+                        // Check if this color is inside any excluded range (@theme blocks or @apply directives)
+                        const isInsideExcludedRange = excludedRanges.some(range =>
                             match!.index >= range.start && match!.index + match![0].length <= range.end
                         );
 
-                        if (!isInsideThemeBlock) {
-                            parseAndAddColor(match[0], match.index, match.index + match[0].length);
+                        if (!isInsideExcludedRange) {
+                            // Modern CSS color functions outside @theme/@apply are always editable since they're custom values
+                            parseAndAddColor(match[0], match.index, match.index + match[0].length, true);
                         }
                     }
                     pattern.lastIndex = 0; // Reset regex state
                 });
 
-                return colors;
+                // Apply non-editable color decorations to the model
+                if (nonEditableDecorations.length > 0) {
+                    // Store current decorations to clean up later
+                    const currentDecorations = (model as any).__windpressColorDecorations || [];
+                    (model as any).__windpressColorDecorations = model.deltaDecorations(currentDecorations, nonEditableDecorations);
+                }
+
+                // Return only editable colors (Monaco will show color picker for these)
+                return editableColors;
             }
         });
 
     }
 
 
-    // add key binding command to monaco.editor to save all changes
     monaco.editor.addEditorAction({
         id: 'save',
         label: __('Save', 'windpress'),
@@ -363,6 +1046,7 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
             emit('save');
         }
     });
+    
 }
 </script>
 

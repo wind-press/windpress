@@ -1,8 +1,11 @@
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
 import { compileCandidates } from '@tailwindcss/root/packages/tailwindcss/src/compile';
 import parseValue from 'postcss-value-parser';
+import { addThemeValues } from 'tailwindcss-intellisense/packages/tailwindcss-language-service/src/util/rewriting';
+import { addEquivalents } from 'tailwindcss-intellisense/packages/tailwindcss-language-service/src/util/equivalents';
 
 import type { DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/design-system';
+import type { State, TailwindCssSettings } from 'tailwindcss-intellisense/packages/tailwindcss-language-service/src/util/state';
 
 export type ClassEntity = {
     kind: 'utility' | 'variant' | 'user';
@@ -128,10 +131,76 @@ export function addPixelEquivalentsToValue(value: string, rootFontSize: number) 
     return value;
 }
 
+// Helper to create minimal State object for official functions
+function createMinimalState(design: DesignSystem): State {
+    return {
+        enabled: true,
+        v4: true,
+        designSystem: design,
+        features: []
+    } as State;
+}
+
+// Helper to create TailwindCSS settings
+function createTailwindSettings(options: {
+    showPixelEquivalents?: boolean;
+    rootFontSize?: number;
+} = {}): TailwindCssSettings {
+    return {
+        showPixelEquivalents: options.showPixelEquivalents ?? true,
+        rootFontSize: options.rootFontSize ?? 16,
+        // Default settings for other required fields
+        inspectPort: null,
+        emmetCompletions: true,
+        includeLanguages: {},
+        classAttributes: ['class'],
+        classFunctions: [],
+        suggestions: true,
+        hovers: true,
+        codeLens: true,
+        codeActions: true,
+        validate: true,
+        colorDecorators: true,
+        lint: {
+            cssConflict: 'warning',
+            invalidApply: 'error',
+            invalidScreen: 'error',
+            invalidVariant: 'error',
+            invalidConfigPath: 'error',
+            invalidTailwindDirective: 'error',
+            invalidSourceDirective: 'error',
+            recommendedVariantOrder: 'warning',
+            usedBlocklistedClass: 'warning'
+        },
+        experimental: {
+            classRegex: [],
+            configFile: null
+        },
+        files: {
+            exclude: []
+        }
+    } as TailwindCssSettings;
+}
+
 export async function candidatesToCss(design: DesignSystem, classes: string[]) {
     let css = design.candidatesToCss(classes);
 
-    css = css.map((value: string | null) => value ? addPixelEquivalentsToValue(value, 16) : value);
+    // Create state and settings for official functions
+    const state = createMinimalState(design);
+    const settings = createTailwindSettings({
+        showPixelEquivalents: true,
+        rootFontSize: 16
+    });
+
+    css = css.map((value: string | null) => {
+        if (!value) return value;
+        
+        // Use official tailwindcss-intellisense functions
+        let processed = addThemeValues(value, state, settings);
+        processed = addEquivalents(processed, settings);
+        
+        return processed;
+    });
 
     return css;
 }

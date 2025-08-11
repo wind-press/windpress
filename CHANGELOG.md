@@ -14,13 +14,14 @@ For instance:
 ## [Unreleased]
 
 ### Added
+- [TW4] Intellisense on the Files tab for the CSS file
 - WP-Rocket exclusion for the WindPress CSS and JavaScript files [#54](https://github.com/wind-press/windpress/issues/54)
 
 ### Changed
 - [TW4] Autocompletion feature searches now is faster
 
 ### Fixed
-- [Bricks] Plain Classes: Sort Classes glitch on used
+- [Bricks] Plain Classes: Sort Classes glitch on the style
 
 ## [3.3.54] - 2025-07-24
 
