@@ -8,6 +8,7 @@ import { shallowRef } from 'vue';
 import { getVariableList, loadDesignSystem, naturalExpand } from '@/packages/core/tailwindcss';
 
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
+import Color from 'colorjs.io';
 
 // TODO: monaco autocomplete, broadcast event with channel on save
 
@@ -192,6 +193,160 @@ function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, mo
             return {
                 suggestions: variables
             };
+        }
+    });
+
+    // Register color provider for modern CSS color functions
+    monaco.languages.registerColorProvider('css', {
+        provideColorPresentations(_model, colorInfo) {
+            const { red, green, blue, alpha } = colorInfo.color;
+            const color = new Color('srgb', [red, green, blue], alpha);
+            
+            return [
+                {
+                    label: color.toString({ format: 'hex' })
+                },
+                {
+                    label: `rgb(${Math.round(red * 255)}, ${Math.round(green * 255)}, ${Math.round(blue * 255)})`
+                },
+                {
+                    label: `rgba(${Math.round(red * 255)}, ${Math.round(green * 255)}, ${Math.round(blue * 255)}, ${alpha})`
+                },
+                {
+                    label: color.to('hsl').toString({ format: 'hsl' })
+                },
+                {
+                    label: color.to('hwb').toString({ format: 'hwb' })
+                },
+                {
+                    label: color.to('lch').toString({ format: 'lch' })
+                },
+                {
+                    label: color.to('oklch').toString({ format: 'oklch' })
+                },
+                {
+                    label: color.to('lab').toString({ format: 'lab' })
+                },
+                {
+                    label: color.to('oklab').toString({ format: 'oklab' })
+                }
+            ];
+        },
+        
+        provideDocumentColors(model) {
+            const colors: monacoEditor.languages.IColorInformation[] = [];
+            const text = model.getValue();
+            const processedRanges = new Set<string>(); // Track processed ranges to avoid duplicates
+            
+            // Helper function to parse and add color to the list
+            const parseAndAddColor = (colorText: string, startIndex: number, endIndex: number) => {
+                // Create a unique key for this range
+                const rangeKey = `${startIndex}-${endIndex}`;
+                if (processedRanges.has(rangeKey)) {
+                    return; // Already processed this exact range
+                }
+                
+                try {
+                    // Let Color.js handle all the parsing
+                    const color = new Color(colorText.trim());
+                    
+                    // Convert to sRGB for Monaco Editor
+                    const srgb = color.to('srgb');
+                    const [red, green, blue] = srgb.coords;
+                    
+                    const startPosition = model.getPositionAt(startIndex);
+                    const endPosition = model.getPositionAt(endIndex);
+                    
+                    colors.push({
+                        color: {
+                            red: Math.max(0, Math.min(1, red ?? 0)),
+                            green: Math.max(0, Math.min(1, green ?? 0)),
+                            blue: Math.max(0, Math.min(1, blue ?? 0)),
+                            alpha: srgb.alpha ?? 1
+                        },
+                        range: {
+                            startLineNumber: startPosition.lineNumber,
+                            startColumn: startPosition.column,
+                            endLineNumber: endPosition.lineNumber,
+                            endColumn: endPosition.column
+                        }
+                    });
+                    
+                    processedRanges.add(rangeKey); // Mark this range as processed
+                } catch (error) {
+                    // Skip invalid color values
+                    console.warn('Invalid color format:', colorText, error);
+                }
+            };
+            
+            // 1. Find colors in @theme blocks
+            const themeBlockRegex = /@theme\s*\{([^}]*)\}/gs;
+            let themeMatch;
+            
+            while ((themeMatch = themeBlockRegex.exec(text)) !== null) {
+                const themeContent = themeMatch[1];
+                const themeStartIndex = themeMatch.index + themeMatch[0].indexOf('{') + 1;
+                
+                // Find all property values in the theme block that could be colors
+                const propertyRegex = /--[^:]+:\s*([^;]+);/g;
+                let propertyMatch;
+                
+                while ((propertyMatch = propertyRegex.exec(themeContent)) !== null) {
+                    const fullMatch = propertyMatch[0]; // e.g., "--color-primary: #007bff;"
+                    const value = propertyMatch[1].trim(); // e.g., "#007bff"
+                    
+                    // Find the actual position of the value in the original text
+                    const propertyStartInTheme = propertyMatch.index;
+                    const colonIndex = fullMatch.indexOf(':');
+                    const valueStartInProperty = fullMatch.substring(colonIndex + 1).search(/\S/); // Find first non-whitespace after colon
+                    const valueStartInTheme = propertyStartInTheme + colonIndex + 1 + valueStartInProperty;
+                    const valueStart = themeStartIndex + valueStartInTheme;
+                    const valueEnd = valueStart + value.length;
+                    
+                    // Handle all colors in @theme blocks since Monaco's built-in provider 
+                    // doesn't specifically look inside @theme blocks
+                    parseAndAddColor(value, valueStart, valueEnd);
+                }
+            }
+            
+            // 2. Find modern color functions outside @theme blocks that Monaco doesn't support by default
+            // Only handle modern CSS color functions, let Monaco handle standard ones (rgb, hsl, hex, etc.)
+            const colorPatterns = [
+                /\b(oklch|oklab|lch|lab)\(([^)]*(?!\bvar\b|\benv\b|\bcalc\b)[^)]*)\)/gi
+            ];
+            
+            // Create a set of ranges that are inside @theme blocks to avoid duplicates
+            const themeRanges: Array<{start: number, end: number}> = [];
+            const themeBlockRegexForRanges = /@theme\s*\{([^}]*)\}/gs;
+            let themeRangeMatch;
+            
+            while ((themeRangeMatch = themeBlockRegexForRanges.exec(text)) !== null) {
+                const blockStart = themeRangeMatch.index;
+                const blockEnd = themeRangeMatch.index + themeRangeMatch[0].length;
+                themeRanges.push({ start: blockStart, end: blockEnd });
+            }
+            
+            colorPatterns.forEach((pattern) => {
+                let match: RegExpExecArray | null;
+                while ((match = pattern.exec(text)) !== null) {
+                    // Skip if contains variables or functions we don't want to process
+                    if (match[0].includes('var(') || match[0].includes('env(') || match[0].includes('calc(')) {
+                        continue;
+                    }
+                    
+                    // Check if this color is inside any @theme block
+                    const isInsideThemeBlock = themeRanges.some(range => 
+                        match!.index >= range.start && match!.index + match![0].length <= range.end
+                    );
+                    
+                    if (!isInsideThemeBlock) {
+                        parseAndAddColor(match[0], match.index, match.index + match[0].length);
+                    }
+                }
+                pattern.lastIndex = 0; // Reset regex state
+            });
+            
+            return colors;
         }
     });
 
