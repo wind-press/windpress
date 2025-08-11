@@ -4,7 +4,7 @@ import { decodeVFSContainer, type VFSContainer } from '../vfs';
 
 import { classnameToCss } from './classname-to-css';
 import { classSorter } from './sort';
-import { searchClassList } from './autocomplete';
+import { searchClassList, invalidateCache } from './autocomplete';
 
 import type { DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/design-system';
 
@@ -14,16 +14,16 @@ const vfsContainer = document.querySelector('script#windpress\\:vfs[type="text/p
 let design: DesignSystem;
 let volume: VFSContainer;
 
-let previousTimestamp = 0;
-let lastTimestamp = 0;
-
 async function updateDesign() {
-    volume = decodeVFSContainer(vfsContainer?.textContent || 'e30=');
+    const newVolume = decodeVFSContainer(vfsContainer?.textContent || 'e30=');
+    const volumeChanged = JSON.stringify(volume) !== JSON.stringify(newVolume);
+    
+    if (volumeChanged) {
+        invalidateCache();
+    }
+    
+    volume = newVolume;
     design = await loadDesignSystem({ volume });
-
-    const currTimestamp = Date.now();
-    previousTimestamp = lastTimestamp;
-    lastTimestamp = currTimestamp;
 
     channel.postMessage({
         source: 'windpress/intellisense',
@@ -46,6 +46,6 @@ channel.addEventListener('message', async (e) => {
     }
 });
 
-set(window, 'windpress.module.autocomplete.query', (q: string) => searchClassList(volume, design, q, lastTimestamp));
+set(window, 'windpress.module.autocomplete.query', (q: string) => searchClassList(volume, design, q));
 set(window, 'windpress.module.classnameToCss.generate', async (input: string) => classnameToCss(design, input));
 set(window, 'windpress.module.classSorter.sort', async (input: string) => classSorter(design, input));

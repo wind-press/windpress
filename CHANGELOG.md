@@ -16,6 +16,9 @@ For instance:
 ### Added
 - WP-Rocket exclusion for the WindPress CSS and JavaScript files [#54](https://github.com/wind-press/windpress/issues/54)
 
+### Changed
+- [TW4] Autocompletion feature searches now is faster
+
 ### Fixed
 - [Bricks] Plain Classes: Sort Classes glitch on used
 

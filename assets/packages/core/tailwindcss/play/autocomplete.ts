@@ -6,8 +6,37 @@ import type { DesignSystem } from '@tailwindcss/root/packages/tailwindcss/src/de
 import type { ClassEntity } from '../intellisense';
 import { type VFSContainer } from '../vfs';
 
-let classLists: ClassEntity[] = [];
-let previousTimestamp = 0;
+interface CacheEntry {
+    classLists: ClassEntity[];
+    volumeHash: string;
+    timestamp: number;
+    queryCache: Map<string, any[]>;
+}
+
+let cache: CacheEntry | null = null;
+
+function generateVolumeHash(volume: VFSContainer): string {
+    return btoa(JSON.stringify(Object.keys(volume).sort().map(key => `${key}:${volume[key].length}`)));
+}
+
+export function invalidateCache(): void {
+    cache = null;
+}
+
+export function clearQueryCache(): void {
+    if (cache) {
+        cache.queryCache.clear();
+    }
+}
+
+export function getCacheInfo(): { isValid: boolean; timestamp: number | null; volumeHash: string | null; queryCacheSize: number } {
+    return {
+        isValid: cache !== null,
+        timestamp: cache?.timestamp || null,
+        volumeHash: cache?.volumeHash || null,
+        queryCacheSize: cache?.queryCache.size || 0
+    };
+}
 
 export function getColor(declarations: any[] | undefined) {
     const color = declarations?.find((declaration) =>
@@ -53,29 +82,46 @@ function getUserClassList(volume: VFSContainer): ClassEntity[] {
     });
 }
 
-export function searchClassList(volume: VFSContainer, design: DesignSystem, query: string, lastTimestamp: number = 0){
-    let forceReload = false;
-    // if the last timestamp is greater than the previous timestamp, reload the classLists
-    if (lastTimestamp > previousTimestamp) {
-        previousTimestamp = lastTimestamp;
-        forceReload = true;
-    }
-
-    if (classLists.length === 0 || forceReload) {
-        classLists = [
+export function searchClassList(volume: VFSContainer, design: DesignSystem, query: string, shouldFullReload: boolean = false) {
+    const currentVolumeHash = generateVolumeHash(volume);
+    const currentTimestamp = Date.now();
+    
+    // Check if we need to rebuild the cache
+    const needsRebuild = shouldFullReload || 
+                        !cache || 
+                        cache.volumeHash !== currentVolumeHash;
+    
+    if (needsRebuild) {
+        const classLists = [
             ...getClassList(design),
             ...getUserClassList(volume),
         ];
+        
+        cache = {
+            classLists,
+            volumeHash: currentVolumeHash,
+            timestamp: currentTimestamp,
+            queryCache: new Map()
+        };
+    }
+    
+    const { classLists, queryCache } = cache!;
+    
+    // Check if we have a cached result for this query
+    if (queryCache.has(query)) {
+        return queryCache.get(query)!;
     }
 
     // if the query is empty, return all classList
     if (query === '') {
-        return classLists.map((classList) => {
+        const result = classLists.map((classList: ClassEntity) => {
             return {
                 value: classList.selector,
                 color: getColor(classList.declarations)
             }
         });
+        queryCache.set(query, result);
+        return result;
     }
 
     // split query by `:` and search for each subquery
@@ -116,7 +162,7 @@ export function searchClassList(volume: VFSContainer, design: DesignSystem, quer
         const loopStart = opacityModifier === '' || Number(opacityModifier) > 9 ? 0 : Math.floor((Number(opacityModifier) * 10 + 1) / 10) * 10;
         const loopEnd = opacityModifier === '' || Number(opacityModifier) > 9 ? 100 : Math.ceil((Number(opacityModifier) * 10 + 1) / 10) * 10;
 
-        filteredClassList.forEach((classList) => {
+        filteredClassList.forEach((classList: ClassEntity) => {
             for (let i = loopStart; i <= loopEnd; i += loopIncrement) {
                 tempFilteredClassList.push({
                     ...classList,
@@ -133,10 +179,16 @@ export function searchClassList(volume: VFSContainer, design: DesignSystem, quer
         threshold: 0.4,
     });
 
-    return fuse.search(q).map(({ item }) => {
+    const result = fuse.search(q).map((result) => {
+        const item = result.item as ClassEntity;
         return {
             value: [prefix, (importantModifier ? '!' : '') + item.selector].filter(Boolean).join(':'),
             color: getColor(item.declarations)
         }
     });
+    
+    // Cache the result for future queries
+    queryCache.set(query, result);
+    
+    return result;
 }
