@@ -450,13 +450,10 @@ textInput.addEventListener('tribute-active-true', function (e) {
 
 classSortAction.addEventListener('click', async function (e) {
     textInput.value = await brxIframe.contentWindow.windpress.module.classSorter.sort(textInput.value);
-    activeElementIds.value.forEach((id) => {
-        // const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
-        const activeElement = brxGlobalProp.$_state[brxGlobalProp.$_state.templateType].find(el => el.id === id);
-        if (activeElement) {
-            activeElement.settings._cssClasses = e.target.value;
-        }
-    });
+
+    // trigger the input event to update the textInput value
+    const inputEvent = new Event('input', { bubbles: true });
+    textInput.dispatchEvent(inputEvent);
 
     onTextInputChanges();
 });
@@ -475,8 +472,13 @@ classToPlainClassesAction.addEventListener('click', async function (e) {
     });
 
     textInput.value = currPlainClasses.join(' ');
-    brxGlobalProp.$_activeElement.value.settings._cssClasses = textInput.value;
-    brxGlobalProp.$_activeElement.value.settings._cssGlobalClasses = [];
+
+    // trigger the input event to update the textInput value
+    const inputEvent = new Event('input', { bubbles: true });
+    textInput.dispatchEvent(inputEvent);
+
+    activeEl.settings._cssGlobalClasses = [];
+
     onTextInputChanges();
 });
 

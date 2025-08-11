@@ -16,6 +16,9 @@ For instance:
 ### Added
 - WP-Rocket exclusion for the WindPress CSS and JavaScript files [#54](https://github.com/wind-press/windpress/issues/54)
 
+### Fixed
+- [Bricks] Plain Classes: Sort Classes glitch on used
+
 ## [3.3.54] - 2025-07-24
 
 ### Changed
