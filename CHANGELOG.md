@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.55] - 2025-08-13
+
 ### Added
 - [TW4] Intellisense on the Files tab for the CSS file
 - WP-Rocket exclusion for the WindPress CSS and JavaScript files [#54](https://github.com/wind-press/windpress/issues/54)
@@ -530,7 +532,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.54...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.55...HEAD
+[3.3.55]: https://github.com/wind-press/windpress/compare/v3.3.54...v3.3.55
 [3.3.54]: https://github.com/wind-press/windpress/compare/v3.3.53...v3.3.54
 [3.3.53]: https://github.com/wind-press/windpress/compare/v3.3.51...v3.3.53
 [3.3.51]: https://github.com/wind-press/windpress/compare/3.3.44...v3.3.51
