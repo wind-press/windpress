@@ -7,7 +7,8 @@ import { getTextDocument, stateFromConfig } from '../intellisense';
 import { resolveConfig } from '../resolve-config';
 import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils';
 import evaluateTailwindFunctions from 'https://esm.sh/tailwindcss@3/src/lib/evaluateTailwindFunctions';
-import { addPixelEquivalentsToValue, bigSign } from '@/packages/core/tailwindcss/intellisense';
+import {  bigSign } from '@/packages/core/tailwindcss/intellisense';
+import { addPixelEquivalentsToValue, } from '@/packages/core/tailwindcss-v3/intellisense';
 import { generateRules as twGenerateRules } from 'https://esm.sh/tailwindcss@3/src/lib/generateRules';
 
 let classLists = [];
@@ -157,7 +158,7 @@ async function classnameToCss(input) {
 
     let css = classes
         .map((className) => generate(className, context)).filter((x) => x !== null)
-        // .map((value) => addPixelEquivalentsToValue(value, 16))
+        .map((value) => addPixelEquivalentsToValue(value, 16))
         ;
 
     return Array.isArray(css) ? css.join(" ") : css;

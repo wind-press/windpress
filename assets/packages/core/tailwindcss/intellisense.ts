@@ -1,6 +1,5 @@
 import { compare } from '@tailwindcss/root/packages/tailwindcss/src/utils/compare';
 import { compileCandidates } from '@tailwindcss/root/packages/tailwindcss/src/compile';
-import parseValue from 'postcss-value-parser';
 import { addThemeValues } from 'tailwindcss-intellisense/packages/tailwindcss-language-service/src/util/rewriting';
 import { addEquivalents } from 'tailwindcss-intellisense/packages/tailwindcss-language-service/src/util/equivalents';
 
@@ -95,48 +94,12 @@ export async function sortClasses(design: DesignSystem, classList: string[]) {
     return defaultSort(design.getClassOrder(classList));
 }
 
-export function addPixelEquivalentsToValue(value: string, rootFontSize: number) {
-    if (!value?.includes('rem')) {
-        return value;
-    }
-
-    const commentPool: { content: string; sourceEndIndex: number }[] = [];
-
-    parseValue(value).walk((node) => {
-        if (node.type !== 'word') {
-            return true;
-        }
-
-        const unit = parseValue.unit(node.value);
-        if (!unit || (unit.unit !== 'rem' && unit.unit !== 'rem;')) {
-            return false;
-        }
-
-        const commentStr = ` /* ${parseFloat(unit.number) * rootFontSize}px */`;
-
-        commentPool.push({
-            content: commentStr,
-            sourceEndIndex: node.sourceEndIndex
-        });
-
-        return false;
-    });
-
-    let offset = 0;
-    commentPool.forEach((comment) => {
-        value = value.slice(0, comment.sourceEndIndex + offset) + comment.content + value.slice(comment.sourceEndIndex + offset)
-        offset += comment.content.length
-    });
-
-    return value;
-}
-
 // Helper to create minimal State object for official functions
 function createMinimalState(design: DesignSystem): State {
     return {
         enabled: true,
         v4: true,
-        designSystem: design,
+        designSystem: design as unknown as State['designSystem'],
         features: []
     } as State;
 }

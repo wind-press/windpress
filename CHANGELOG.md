@@ -16,15 +16,18 @@ For instance:
 ### Changed
 - Restricted the IntelliSense on the Files tab feature to work exclusively with Tailwind CSS v4
 
+### Fixed
+- [TW3] Tailwind hover tooltips no longer show px equivalents [#58](https://github.com/wind-press/windpress/issues/58)
+
 ## [3.3.56] - 2025-08-13
 
 ### Fixed
-- [TW4] Intellisense performance issue on the Files tab for the CSS file
+- [TW4] IntelliSense performance issue on the Files tab for the CSS file
 
 ## [3.3.55] - 2025-08-13
 
 ### Added
-- [TW4] Intellisense on the Files tab for the CSS file
+- [TW4] IntelliSense on the Files tab for the CSS file
 - WP-Rocket exclusion for the WindPress CSS and JavaScript files [#54](https://github.com/wind-press/windpress/issues/54)
 
 ### Changed

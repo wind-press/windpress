@@ -1,5 +1,6 @@
 import postcss from 'postcss';
 import postcssSelectorParser from 'postcss-selector-parser';
+import parseValue from 'postcss-value-parser';
 import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils.js';
 import { getColor } from 'https://esm.sh/tailwindcss-language-service';
 import expandApplyAtRules from 'tailwindcss3/src/lib/expandApplyAtRules.js';
@@ -122,4 +123,40 @@ export function stateFromConfig(resolvedConfig, version = '3.0.0') {
         .map((className) => [className, { color: getColor(state, className) }]);
 
     return state;
+}
+
+export function addPixelEquivalentsToValue(value: string, rootFontSize: number) {
+    if (!value?.includes('rem')) {
+        return value;
+    }
+
+    const commentPool: { content: string; sourceEndIndex: number }[] = [];
+
+    parseValue(value).walk((node) => {
+        if (node.type !== 'word') {
+            return true;
+        }
+
+        const unit = parseValue.unit(node.value);
+        if (!unit || (unit.unit !== 'rem' && unit.unit !== 'rem;')) {
+            return false;
+        }
+
+        const commentStr = ` /* ${parseFloat(unit.number) * rootFontSize}px */`;
+
+        commentPool.push({
+            content: commentStr,
+            sourceEndIndex: node.sourceEndIndex
+        });
+
+        return false;
+    });
+
+    let offset = 0;
+    commentPool.forEach((comment) => {
+        value = value.slice(0, comment.sourceEndIndex + offset) + comment.content + value.slice(comment.sourceEndIndex + offset)
+        offset += comment.content.length
+    });
+
+    return value;
 }
