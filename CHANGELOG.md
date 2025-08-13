@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.56] - 2025-08-13
+
 ### Fixed
 - [TW4] Intellisense performance issue on the Files tab for the CSS file
 
@@ -535,7 +537,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.55...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.56...HEAD
+[3.3.56]: https://github.com/wind-press/windpress/compare/v3.3.55...v3.3.56
 [3.3.55]: https://github.com/wind-press/windpress/compare/v3.3.54...v3.3.55
 [3.3.54]: https://github.com/wind-press/windpress/compare/v3.3.53...v3.3.54
 [3.3.53]: https://github.com/wind-press/windpress/compare/v3.3.51...v3.3.53
