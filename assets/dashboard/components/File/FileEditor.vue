@@ -49,131 +49,130 @@ const cssErrors = ref<{
 const errorPanelExpanded = ref(false)
 
 async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: MonacoEditor) {
-
-    let designSystemCache: {
-        designSystem: any;
-        variablesList: any[];
-        classList: any[];
-    } | null = null;
-
-    // Throttle mechanism to prevent multiple concurrent calls
-    let designSystemPromise: Promise<any> | null = null;
-
-    const getDesignSystemData = async () => {
-        // If already cached, return immediately
-        if (designSystemCache) {
-            return designSystemCache;
-        }
-
-        // If already loading, return the existing promise
-        if (designSystemPromise) {
-            return designSystemPromise;
-        }
-
-        // Start loading and cache the promise
-        designSystemPromise = (async () => {
-            try {
-                const volume = volumeStore.getKVEntries();
-
-                const designSystem = await loadDesignSystem({ volume });
-                const variablesList = await getVariableList(designSystem);
-                const classList = getClassList(designSystem);
-
-                designSystemCache = { designSystem, variablesList, classList };
-            } catch (error) {
-                console.warn('Failed to load design system:', error);
-                designSystemCache = {
-                    designSystem: null,
-                    variablesList: [],
-                    classList: []
-                };
-            } finally {
-                // Clear the promise since we're done loading
-                designSystemPromise = null;
-            }
-
-            return designSystemCache;
-        })();
-
-        return designSystemPromise;
-    };
-
-    // Debounced health check for CSS validation
-    const performHealthCheck = debounce(async () => {
-        try {
-            const volume = volumeStore.getKVEntries();
-
-            // Try loading with strict validation to catch errors
-            await loadDesignSystem({ volume, strict: true });
-
-            // If we get here, no errors
-            cssErrors.value = {
-                hasErrors: false,
-                errors: []
-            };
-        } catch (error: any) {
-            // Parse the error to extract useful information
-            const errorInfo = {
-                message: error.message || 'Unknown CSS error',
-                line: error.line,
-                column: error.column,
-                file: error.input?.from || 'main.css'
-            };
-
-            cssErrors.value = {
-                hasErrors: true,
-                errors: [errorInfo]
-            };
-        }
-    }, 1000); // Check 1 second after user stops typing
-
-    const autocompleteCache = new Map<string, { items: any[]; timestamp: number }>();
-    const CACHE_DURATION = 5000; // 5 seconds
-
-    const getCachedAutocompleteItems = (cacheKey: string, generator: () => Promise<any[]>): Promise<any[]> => {
-        return new Promise((resolve) => {
-            const cached = autocompleteCache.get(cacheKey);
-            const now = Date.now();
-
-            if (cached && (now - cached.timestamp) < CACHE_DURATION) {
-                resolve(cached.items);
-                return;
-            }
-
-            if (cached) {
-                resolve(cached.items);
-
-                generator().then(items => {
-                    autocompleteCache.set(cacheKey, { items, timestamp: now });
-                }).catch(error => {
-                    console.warn('Failed to refresh cached autocomplete items:', error);
-                });
-                return;
-            }
-
-            generator().then(items => {
-                autocompleteCache.set(cacheKey, { items, timestamp: now });
-                resolve(items);
-            }).catch(error => {
-                console.warn('Failed to generate autocomplete items:', error);
-                resolve([]);
-            });
-        });
-    };
-
-    const clearDesignSystemCache = debounce(() => {
-        designSystemCache = null;
-        autocompleteCache.clear();
-        // Also trigger health check for validation
-        performHealthCheck();
-    }, 500); // Wait 500ms after user stops typing before clearing cache
-
-    editor.onDidChangeModelContent(() => {
-        clearDesignSystemCache();
-    });
     editorElementRef.value = editor;
 
     if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
+        let designSystemCache: {
+            designSystem: any;
+            variablesList: any[];
+            classList: any[];
+        } | null = null;
+
+        // Throttle mechanism to prevent multiple concurrent calls
+        let designSystemPromise: Promise<any> | null = null;
+
+        const getDesignSystemData = async () => {
+            // If already cached, return immediately
+            if (designSystemCache) {
+                return designSystemCache;
+            }
+
+            // If already loading, return the existing promise
+            if (designSystemPromise) {
+                return designSystemPromise;
+            }
+
+            // Start loading and cache the promise
+            designSystemPromise = (async () => {
+                try {
+                    const volume = volumeStore.getKVEntries();
+
+                    const designSystem = await loadDesignSystem({ volume });
+                    const variablesList = await getVariableList(designSystem);
+                    const classList = getClassList(designSystem);
+
+                    designSystemCache = { designSystem, variablesList, classList };
+                } catch (error) {
+                    console.warn('Failed to load design system:', error);
+                    designSystemCache = {
+                        designSystem: null,
+                        variablesList: [],
+                        classList: []
+                    };
+                } finally {
+                    // Clear the promise since we're done loading
+                    designSystemPromise = null;
+                }
+
+                return designSystemCache;
+            })();
+
+            return designSystemPromise;
+        };
+
+        // Debounced health check for CSS validation
+        const performHealthCheck = debounce(async () => {
+            try {
+                const volume = volumeStore.getKVEntries();
+
+                // Try loading with strict validation to catch errors
+                await loadDesignSystem({ volume, strict: true });
+
+                // If we get here, no errors
+                cssErrors.value = {
+                    hasErrors: false,
+                    errors: []
+                };
+            } catch (error: any) {
+                // Parse the error to extract useful information
+                const errorInfo = {
+                    message: error.message || 'Unknown CSS error',
+                    line: error.line,
+                    column: error.column,
+                    file: error.input?.from || 'main.css'
+                };
+
+                cssErrors.value = {
+                    hasErrors: true,
+                    errors: [errorInfo]
+                };
+            }
+        }, 1000); // Check 1 second after user stops typing
+
+        const autocompleteCache = new Map<string, { items: any[]; timestamp: number }>();
+        const CACHE_DURATION = 5000; // 5 seconds
+
+        const getCachedAutocompleteItems = (cacheKey: string, generator: () => Promise<any[]>): Promise<any[]> => {
+            return new Promise((resolve) => {
+                const cached = autocompleteCache.get(cacheKey);
+                const now = Date.now();
+
+                if (cached && (now - cached.timestamp) < CACHE_DURATION) {
+                    resolve(cached.items);
+                    return;
+                }
+
+                if (cached) {
+                    resolve(cached.items);
+
+                    generator().then(items => {
+                        autocompleteCache.set(cacheKey, { items, timestamp: now });
+                    }).catch(error => {
+                        console.warn('Failed to refresh cached autocomplete items:', error);
+                    });
+                    return;
+                }
+
+                generator().then(items => {
+                    autocompleteCache.set(cacheKey, { items, timestamp: now });
+                    resolve(items);
+                }).catch(error => {
+                    console.warn('Failed to generate autocomplete items:', error);
+                    resolve([]);
+                });
+            });
+        };
+
+        const clearDesignSystemCache = debounce(() => {
+            designSystemCache = null;
+            autocompleteCache.clear();
+            // Also trigger health check for validation
+            performHealthCheck();
+        }, 500); // Wait 500ms after user stops typing before clearing cache
+
+        editor.onDidChangeModelContent(() => {
+            clearDesignSystemCache();
+        });
 
         monaco.languages.css.cssDefaults.setOptions(
             Object.assign(
@@ -1086,6 +1085,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             }
         });
 
+        clearDesignSystemCache();
     }
 
     monaco.editor.addEditorAction({
@@ -1097,7 +1097,6 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
         }
     });
 
-    clearDesignSystemCache();
 }
 </script>
 
@@ -1141,60 +1140,30 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
 
         <div class="flex-1 overflow-y-auto relative">
             <!-- Floating Error Icon/Panel -->
-            <Transition
-                enter-active-class="transition-all duration-500 ease-out"
-                leave-active-class="transition-all duration-300 ease-in"
-                enter-from-class="scale-50 opacity-0 translate-y-4"
-                enter-to-class="scale-100 opacity-100 translate-y-0"
-                leave-from-class="scale-100 opacity-100 translate-y-0"
-                leave-to-class="scale-50 opacity-0 translate-y-4"
-            >
+            <Transition enter-active-class="transition-all duration-500 ease-out" leave-active-class="transition-all duration-300 ease-in" enter-from-class="scale-50 opacity-0 translate-y-4" enter-to-class="scale-100 opacity-100 translate-y-0" leave-from-class="scale-100 opacity-100 translate-y-0" leave-to-class="scale-50 opacity-0 translate-y-4">
                 <div v-if="cssErrors.hasErrors" class="absolute bottom-5 left-5 z-50">
-                    <Transition
-                        enter-active-class="transition-all duration-300 ease-out"
-                        leave-active-class="transition-all duration-200 ease-in"
-                        enter-from-class="scale-75 opacity-0"
-                        enter-to-class="scale-100 opacity-100"
-                        leave-from-class="scale-100 opacity-100" 
-                        leave-to-class="scale-75 opacity-0"
-                        mode="out-in"
-                    >
-                    <!-- Collapsed state: floating icon -->
-                    <div 
-                        v-if="!errorPanelExpanded"
-                        key="icon"
-                        class="bg-(--ui-bg)/30 backdrop-blur-md border border-error/20 rounded-lg p-3 shadow-xl hover:scale-110 transition-transform origin-bottom-left cursor-pointer"
-                        @click="errorPanelExpanded = true"
-                    >
-                        <UIcon name="lucide:alert-triangle" class="size-4 text-error flex-shrink-0" />
-                    </div>
-                    
-                    <!-- Expanded state: error panel -->
-                    <div 
-                        v-else
-                        key="panel"
-                        class="bg-(--ui-bg)/30 backdrop-blur-md border border-error/20 rounded-lg p-4 shadow-xl min-w-80 max-w-96 origin-bottom-left"
-                    >
-                        <div class="flex items-start gap-3">
-                            <UIcon name="lucide:alert-triangle" class="size-4 text-error mt-0.5 flex-shrink-0" />
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between mb-2">
-                                    <p class="font-medium text-error text-sm">{{ i18n.__('CSS Validation Error', 'windpress') }}</p>
-                                    <UButton 
-                                        variant="ghost" 
-                                        size="xs" 
-                                        icon="i-lucide-x" 
-                                        color="neutral"
-                                        @click="errorPanelExpanded = false"
-                                    />
-                                </div>
-                                <p class="text-sm mb-2">{{ cssErrors.errors[0]?.message }}</p>
-                                <div v-if="cssErrors.errors[0]?.line" class="text-xs text-muted">
-                                    {{ i18n.__('Line', 'windpress') }} {{ cssErrors.errors[0].line }}{{ cssErrors.errors[0]?.column ? `, ${i18n.__('Column', 'windpress')} ${cssErrors.errors[0].column}` : '' }}
+                    <Transition enter-active-class="transition-all duration-300 ease-out" leave-active-class="transition-all duration-200 ease-in" enter-from-class="scale-75 opacity-0" enter-to-class="scale-100 opacity-100" leave-from-class="scale-100 opacity-100" leave-to-class="scale-75 opacity-0" mode="out-in">
+                        <!-- Collapsed state: floating icon -->
+                        <div v-if="!errorPanelExpanded" key="icon" class="bg-(--ui-bg)/30 backdrop-blur-md border border-error/20 rounded-lg p-3 shadow-xl hover:scale-110 transition-transform origin-bottom-left cursor-pointer" @click="errorPanelExpanded = true">
+                            <UIcon name="lucide:alert-triangle" class="size-4 text-error flex-shrink-0" />
+                        </div>
+
+                        <!-- Expanded state: error panel -->
+                        <div v-else key="panel" class="bg-(--ui-bg)/30 backdrop-blur-md border border-error/20 rounded-lg p-4 shadow-xl min-w-80 max-w-96 origin-bottom-left">
+                            <div class="flex items-start gap-3">
+                                <UIcon name="lucide:alert-triangle" class="size-4 text-error mt-0.5 flex-shrink-0" />
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="font-medium text-error text-sm">{{ i18n.__('CSS Validation Error', 'windpress') }}</p>
+                                        <UButton variant="ghost" size="xs" icon="i-lucide-x" color="neutral" @click="errorPanelExpanded = false" />
+                                    </div>
+                                    <p class="text-sm mb-2">{{ cssErrors.errors[0]?.message }}</p>
+                                    <div v-if="cssErrors.errors[0]?.line" class="text-xs text-muted">
+                                        {{ i18n.__('Line', 'windpress') }} {{ cssErrors.errors[0].line }}{{ cssErrors.errors[0]?.column ? `, ${i18n.__('Column', 'windpress')} ${cssErrors.errors[0].column}` : '' }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </Transition>
                 </div>
             </Transition>
