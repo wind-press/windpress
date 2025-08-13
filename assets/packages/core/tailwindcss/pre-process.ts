@@ -11,7 +11,8 @@ export async function preprocess({ entrypoint = '/main.css', volume = {} as VFSC
         .use(postcssNested());
 
     const result = await processor.process(opts.volume[opts.entrypoint], {
-        from: opts.entrypoint
+        from: opts.entrypoint,
+        parser: opts.parser || null,
     });
 
     return {

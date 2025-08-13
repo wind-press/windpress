@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Fixed
+- [TW4] Intellisense performance issue on the Files tab for the CSS file
+
 ## [3.3.55] - 2025-08-13
 
 ### Added

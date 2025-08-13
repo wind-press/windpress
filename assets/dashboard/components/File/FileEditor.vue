@@ -4,13 +4,11 @@ import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useColorMode } from '@vueuse/core';
 import path from 'path';
-import { shallowRef } from 'vue';
+import { shallowRef, ref } from 'vue';
 import { getVariableList, loadDesignSystem, naturalExpand, getClassList, candidatesToCss } from '@/packages/core/tailwindcss';
-
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import Color from 'colorjs.io';
-
-// TODO: monaco autocomplete, broadcast event with channel on save
+import { debounce } from 'lodash-es';
 
 type MonacoEditor = typeof monacoEditor;
 
@@ -38,6 +36,18 @@ const MONACO_EDITOR_OPTIONS = {
 
 const editorElementRef = shallowRef();
 
+// Error state for CSS validation
+const cssErrors = ref<{
+    hasErrors: boolean;
+    errors: Array<{ message: string; line?: number; column?: number; file?: string }>;
+}>({
+    hasErrors: false,
+    errors: []
+})
+
+// Error panel expanded state
+const errorPanelExpanded = ref(false)
+
 async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: MonacoEditor) {
 
     let designSystemCache: {
@@ -45,26 +55,30 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
         variablesList: any[];
         classList: any[];
     } | null = null;
-    
+
+    // Throttle mechanism to prevent multiple concurrent calls
+    let designSystemPromise: Promise<any> | null = null;
+
     const getDesignSystemData = async () => {
-        if (!designSystemCache) {
+        // If already cached, return immediately
+        if (designSystemCache) {
+            return designSystemCache;
+        }
+
+        // If already loading, return the existing promise
+        if (designSystemPromise) {
+            return designSystemPromise;
+        }
+
+        // Start loading and cache the promise
+        designSystemPromise = (async () => {
             try {
-                // Remove ALL @apply directives from volume before loading design system
-                const originalVolume = volumeStore.getKVEntries();
-                const filteredVolume = { ...originalVolume };
-                
-                Object.keys(filteredVolume).forEach(key => {
-                    if (key.endsWith('.css')) {
-                        filteredVolume[key] = filteredVolume[key]
-                            .replace(/@apply\s+[^;}]*[;}]/g, '') // Remove complete @apply
-                            .replace(/@apply\s+[^;}]*$/gm, ''); // Remove incomplete @apply
-                    }
-                });
-                
-                const designSystem = await loadDesignSystem({ volume: filteredVolume });
+                const volume = volumeStore.getKVEntries();
+
+                const designSystem = await loadDesignSystem({ volume });
                 const variablesList = await getVariableList(designSystem);
                 const classList = getClassList(designSystem);
-                
+
                 designSystemCache = { designSystem, variablesList, classList };
             } catch (error) {
                 console.warn('Failed to load design system:', error);
@@ -73,27 +87,62 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                     variablesList: [],
                     classList: []
                 };
+            } finally {
+                // Clear the promise since we're done loading
+                designSystemPromise = null;
             }
-        }
-        return designSystemCache;
+
+            return designSystemCache;
+        })();
+
+        return designSystemPromise;
     };
-    
+
+    // Debounced health check for CSS validation
+    const performHealthCheck = debounce(async () => {
+        try {
+            const volume = volumeStore.getKVEntries();
+
+            // Try loading with strict validation to catch errors
+            await loadDesignSystem({ volume, strict: true });
+
+            // If we get here, no errors
+            cssErrors.value = {
+                hasErrors: false,
+                errors: []
+            };
+        } catch (error: any) {
+            // Parse the error to extract useful information
+            const errorInfo = {
+                message: error.message || 'Unknown CSS error',
+                line: error.line,
+                column: error.column,
+                file: error.input?.from || 'main.css'
+            };
+
+            cssErrors.value = {
+                hasErrors: true,
+                errors: [errorInfo]
+            };
+        }
+    }, 1000); // Check 1 second after user stops typing
+
     const autocompleteCache = new Map<string, { items: any[]; timestamp: number }>();
     const CACHE_DURATION = 5000; // 5 seconds
-    
+
     const getCachedAutocompleteItems = (cacheKey: string, generator: () => Promise<any[]>): Promise<any[]> => {
         return new Promise((resolve) => {
             const cached = autocompleteCache.get(cacheKey);
             const now = Date.now();
-            
+
             if (cached && (now - cached.timestamp) < CACHE_DURATION) {
                 resolve(cached.items);
                 return;
             }
-            
+
             if (cached) {
                 resolve(cached.items);
-                
+
                 generator().then(items => {
                     autocompleteCache.set(cacheKey, { items, timestamp: now });
                 }).catch(error => {
@@ -101,7 +150,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                 });
                 return;
             }
-            
+
             generator().then(items => {
                 autocompleteCache.set(cacheKey, { items, timestamp: now });
                 resolve(items);
@@ -111,12 +160,14 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             });
         });
     };
-    
-    const clearDesignSystemCache = () => {
+
+    const clearDesignSystemCache = debounce(() => {
         designSystemCache = null;
         autocompleteCache.clear();
-    };
-    
+        // Also trigger health check for validation
+        performHealthCheck();
+    }, 500); // Wait 500ms after user stops typing before clearing cache
+
     editor.onDidChangeModelContent(() => {
         clearDesignSystemCache();
     });
@@ -254,7 +305,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             async provideCompletionItems(model, position) {
                 try {
                     const wordInfo = model.getWordUntilPosition(position);
-                    
+
                     // Use Tailwind IntelliSense approach for @apply detection
                     // Look back up to 30 lines for @apply context (supports multiline)
                     const searchStartLine = Math.max(position.lineNumber - 30, 1);
@@ -264,100 +315,100 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                         endLineNumber: position.lineNumber,
                         endColumn: position.column
                     });
-                    
+
                     // Use regex pattern from tailwindlabs/tailwindcss-intellisense
                     const applyMatches = [...searchText.matchAll(/@apply\s+(?<classList>[^;}]*)$/gi)];
                     const lastApplyMatch = applyMatches[applyMatches.length - 1];
-                    
+
                     if (lastApplyMatch && lastApplyMatch.groups) {
                         const currentClassList = lastApplyMatch.groups.classList || '';
                         const words = currentClassList.split(/\s+/);
                         const currentWord = words[words.length - 1] || '';
                         const cacheKey = `apply_${currentWord}_${currentClassList.length}`;
-                        
+
                         try {
                             const suggestions = await getCachedAutocompleteItems(cacheKey, async () => {
                                 const { classList, variablesList } = await getDesignSystemData();
-                                
+
                                 if (!classList || classList.length === 0) {
                                     return [];
                                 }
-                                
+
                                 const getColor = (declarations: any[] | undefined) => {
                                     const color = declarations?.find((declaration) =>
                                         declaration.property && declaration.property.includes('color')
                                     );
                                     return color?.value || null;
                                 };
-                                
+
                                 const utilityClasses = classList.filter((classEntity) => {
                                     if (classEntity.kind !== 'utility') return false;
                                     if (classEntity.selector.includes(':')) return false;
                                     return true;
                                 });
-                                
+
                                 return utilityClasses.map((classEntity, index) => {
-                                const color = getColor(classEntity.declarations);
-                                let kind = monaco.languages.CompletionItemKind.Property;
-                                if (color) {
-                                    kind = monaco.languages.CompletionItemKind.Color;
-                                }
-                                
-                                const suggestion: any = {
-                                    label: classEntity.selector,
-                                    kind,
-                                    insertText: classEntity.selector,
-                                    range: {
-                                        startLineNumber: position.lineNumber,
-                                        startColumn: Math.max(1, position.column - currentWord.length),
-                                        endLineNumber: position.lineNumber,
-                                        endColumn: position.column
-                                    },
-                                    sortText: naturalExpand(index),
-                                    documentation: color ? `Color: ${color}` : classEntity.css || undefined,
-                                    detail: classEntity.css || undefined
-                                };
+                                    const color = getColor(classEntity.declarations);
+                                    let kind = monaco.languages.CompletionItemKind.Property;
+                                    if (color) {
+                                        kind = monaco.languages.CompletionItemKind.Color;
+                                    }
 
-                                if (color) {
-                                    try {
-                                        let actualColorValue = color;
-                                        
-                                        // If color is a CSS variable (var(--color-name)), resolve it
-                                        const cssVarMatch = color.match(/var\((--[^)]+)\)/);
-                                        if (cssVarMatch) {
-                                            const varName = cssVarMatch[1];
-                                            const variable = variablesList.find(v => v.key === varName);
-                                            if (variable && variable.value) {
-                                                actualColorValue = variable.value;
-                                            } else {
-                                                return suggestion;
+                                    const suggestion: any = {
+                                        label: classEntity.selector,
+                                        kind,
+                                        insertText: classEntity.selector,
+                                        range: {
+                                            startLineNumber: position.lineNumber,
+                                            startColumn: Math.max(1, position.column - currentWord.length),
+                                            endLineNumber: position.lineNumber,
+                                            endColumn: position.column
+                                        },
+                                        sortText: naturalExpand(index),
+                                        documentation: color ? `Color: ${color}` : classEntity.css || undefined,
+                                        detail: classEntity.css || undefined
+                                    };
+
+                                    if (color) {
+                                        try {
+                                            let actualColorValue = color;
+
+                                            // If color is a CSS variable (var(--color-name)), resolve it
+                                            const cssVarMatch = color.match(/var\((--[^)]+)\)/);
+                                            if (cssVarMatch) {
+                                                const varName = cssVarMatch[1];
+                                                const variable = variablesList.find(v => v.key === varName);
+                                                if (variable && variable.value) {
+                                                    actualColorValue = variable.value;
+                                                } else {
+                                                    return suggestion;
+                                                }
                                             }
-                                        }
-                                        
-                                        const colorObj = new Color(actualColorValue);
-                                        
-                                        let monacoDetectableColor;
-                                        if (colorObj.alpha < 1) {
-                                            const srgb = colorObj.to('srgb');
-                                            const [red, green, blue] = srgb.coords;
-                                            const r = Math.round((red ?? 0) * 255);
-                                            const g = Math.round((green ?? 0) * 255);
-                                            const b = Math.round((blue ?? 0) * 255);
-                                            const a = srgb.alpha ?? 1;
-                                            monacoDetectableColor = `rgba(${r}, ${g}, ${b}, ${a})`;
-                                        } else {
-                                            monacoDetectableColor = colorObj.toString({ format: 'hex' });
-                                        }
-                                        
-                                        suggestion.documentation = `${monacoDetectableColor}\n\n${classEntity.css || ''}`;
-                                        
-                                    } catch (e) {}
-                                }
 
-                                return suggestion;
+                                            const colorObj = new Color(actualColorValue);
+
+                                            let monacoDetectableColor;
+                                            if (colorObj.alpha < 1) {
+                                                const srgb = colorObj.to('srgb');
+                                                const [red, green, blue] = srgb.coords;
+                                                const r = Math.round((red ?? 0) * 255);
+                                                const g = Math.round((green ?? 0) * 255);
+                                                const b = Math.round((blue ?? 0) * 255);
+                                                const a = srgb.alpha ?? 1;
+                                                monacoDetectableColor = `rgba(${r}, ${g}, ${b}, ${a})`;
+                                            } else {
+                                                monacoDetectableColor = colorObj.toString({ format: 'hex' });
+                                            }
+
+                                            suggestion.documentation = `${monacoDetectableColor}\n\n${classEntity.css || ''}`;
+
+                                        } catch (e) { }
+                                    }
+
+                                    return suggestion;
                                 });
                             });
-                            
+
                             return {
                                 suggestions
                             };
@@ -368,11 +419,11 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                     } else {
                         try {
                             const { variablesList } = await getDesignSystemData();
-                            
+
                             if (!variablesList || variablesList.length === 0) {
                                 return { suggestions: [] };
                             }
-                            
+
                             const mappedVariables = variablesList.map((entry, index) => {
                                 const isColor = entry.key.includes('--color');
                                 return {
@@ -412,7 +463,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                 if (!designSystem) {
                     return null;
                 }
-                
+
                 const searchStartLine = Math.max(position.lineNumber - 30, 1);
                 const searchEndLine = Math.min(position.lineNumber + 30, model.getLineCount());
                 const searchText = model.getValueInRange({
@@ -421,55 +472,55 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                     endLineNumber: searchEndLine,
                     endColumn: model.getLineMaxColumn(searchEndLine)
                 });
-                
+
                 const allApplyMatches = [...searchText.matchAll(/@apply\s+([\s\S]*?)(?=\s*[;}]|@apply|\s*$)/g)];
-                
+
                 if (allApplyMatches.length === 0) {
                     return null;
                 }
-                
+
                 let relevantMatch = null;
                 const linesBeforePosition = position.lineNumber - searchStartLine;
-                
+
                 for (const match of allApplyMatches) {
                     const matchIndex = match.index!;
                     const textBeforeMatch = searchText.substring(0, matchIndex);
                     const linesBeforeMatch = textBeforeMatch.split('\n').length - 1;
-                    
+
                     const fullMatchText = match[0];
                     const matchLines = fullMatchText.split('\n').length;
                     const matchEndLine = linesBeforeMatch + matchLines - 1;
-                    
+
                     if (linesBeforePosition >= linesBeforeMatch && linesBeforePosition <= matchEndLine) {
                         relevantMatch = match;
                         break;
                     }
                 }
-                
+
                 if (!relevantMatch || !relevantMatch[1]) {
                     return null;
                 }
-                
+
                 const classList = relevantMatch[1];
                 const classNames = classList.split(/\s+/).filter(Boolean);
-                
+
                 if (classNames.length === 0) {
                     return null;
                 }
-                
+
                 // Find which specific class the cursor is hovering over
                 const currentLine = model.getLineContent(position.lineNumber);
-                
+
                 // Check if @apply is on current line (single-line case) 
                 // For multiple @apply on same line, find the one that contains cursor
                 const allSingleLineMatches = [...currentLine.matchAll(/@apply\s+([^;}@]+)/g)];
                 let singleLineMatch = null;
                 let applyStartIndex = -1;
-                
+
                 for (const match of allSingleLineMatches) {
                     const matchStart = match.index!;
                     const matchEnd = matchStart + match[0].length;
-                    
+
                     // Check if cursor is within this @apply statement
                     if (position.column >= matchStart + 1 && position.column <= matchEnd + 1) {
                         singleLineMatch = match;
@@ -477,7 +528,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                         break;
                     }
                 }
-                
+
                 if (applyStartIndex !== -1 && singleLineMatch) {
                     // Single-line @apply case
                     const classList = singleLineMatch[1];
@@ -486,16 +537,16 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                     let currentIndex = classListStartInLine;
                     let hoveredClass = null;
                     let hoveredClassRange = null;
-                    
+
                     for (const className of classNames) {
                         // Skip whitespace
                         while (currentIndex < currentLine.length && /\s/.test(currentLine[currentIndex])) {
                             currentIndex++;
                         }
-                        
+
                         const classStart = currentIndex;
                         const classEnd = currentIndex + className.length;
-                        
+
                         // Check if cursor is within this class
                         if (position.column >= classStart + 1 && position.column <= classEnd + 1) {
                             hoveredClass = className;
@@ -507,17 +558,17 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                             };
                             break;
                         }
-                        
+
                         currentIndex = classEnd;
                     }
-                    
+
                     if (hoveredClass && hoveredClassRange) {
                         try {
                             const cssResult = await candidatesToCss(designSystem, [hoveredClass]);
-                            
+
                             if (cssResult && cssResult.length > 0 && cssResult[0]) {
                                 const cssString = cssResult[0];
-                                
+
                                 return {
                                     range: hoveredClassRange,
                                     contents: [
@@ -531,22 +582,22 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                             console.warn('Error generating hover information for class:', hoveredClass, error);
                         }
                     }
-                    
+
                     return null;
                 } else {
                     // Multiline @apply case - find class on current line
                     const currentLineClasses = currentLine.trim().split(/\s+/).filter(Boolean).map(cls => cls.replace(/[;}]+$/, ''));
                     let hoveredClass = null;
                     let hoveredClassRange = null;
-                    
+
                     for (const className of currentLineClasses) {
                         if (!classNames.includes(className)) continue;
-                        
+
                         const classStart = currentLine.indexOf(className);
                         if (classStart === -1) continue;
-                        
+
                         const classEnd = classStart + className.length;
-                        
+
                         if (position.column >= classStart + 1 && position.column <= classEnd + 1) {
                             hoveredClass = className;
                             hoveredClassRange = {
@@ -558,14 +609,14 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                             break;
                         }
                     }
-                    
+
                     if (hoveredClass && hoveredClassRange) {
                         try {
                             const cssResult = await candidatesToCss(designSystem, [hoveredClass]);
-                            
+
                             if (cssResult && cssResult.length > 0 && cssResult[0]) {
                                 const cssString = cssResult[0];
-                                
+
                                 return {
                                     range: hoveredClassRange,
                                     contents: [
@@ -579,7 +630,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                             console.warn('Error generating hover information for class:', hoveredClass, error);
                         }
                     }
-                    
+
                     return null;
                 }
             }
@@ -590,23 +641,23 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             provideColorPresentations(model, colorInfo) {
                 const { red, green, blue, alpha } = colorInfo.color;
                 const color = new Color('srgb', [red, green, blue], alpha);
-                
+
                 // Get the line content to determine context
                 const lineContent = model.getLineContent(colorInfo.range.startLineNumber);
-                
+
                 // Check if we're in an @apply directive with an arbitrary color class
                 const applyMatch = lineContent.match(/@apply\s+([^;}]+)/);
                 if (applyMatch) {
                     const classList = applyMatch[1];
-                    
+
                     // Parse class names, handling brackets that may contain spaces
                     const classNames = [];
                     let current = '';
                     let bracketDepth = 0;
-                    
+
                     for (let i = 0; i < classList.length; i++) {
                         const char = classList[i];
-                        
+
                         if (char === '[') {
                             bracketDepth++;
                             current += char;
@@ -622,23 +673,23 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                             current += char;
                         }
                     }
-                    
+
                     if (current.trim()) {
                         classNames.push(current.trim());
                     }
-                    
+
                     // Find the class that contains this color range
                     for (const className of classNames) {
                         // Calculate exact position of this class in the line
                         const applyStart = lineContent.indexOf('@apply');
                         const classListStart = applyStart + '@apply'.length;
-                        
+
                         // Skip whitespace after @apply
                         let currentPos = classListStart;
                         while (currentPos < lineContent.length && /\s/.test(lineContent[currentPos])) {
                             currentPos++;
                         }
-                        
+
                         // Find position of this specific class
                         let classStartPos = -1;
                         for (const name of classNames) {
@@ -652,22 +703,22 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                                 currentPos++;
                             }
                         }
-                        
+
                         if (classStartPos === -1) continue;
-                        
+
                         const classStartColumn = classStartPos + 1; // Monaco is 1-indexed
                         const classEndColumn = classStartColumn + className.length;
-                        
+
                         // Check if the color range matches this class exactly and it's an arbitrary color
-                        if (colorInfo.range.startColumn === classStartColumn && 
+                        if (colorInfo.range.startColumn === classStartColumn &&
                             colorInfo.range.endColumn === classEndColumn &&
                             /\[([#].+|rgb.+|rgba.+|hsl.+|hsla.+|lch.+|oklch.+|lab.+|oklab.+|hwb.+|color-mix.+)\]/.test(className)) {
-                            
+
                             // Extract the prefix (e.g., "bg-" from "bg-[#ff0000]")
                             const bracketMatch = className.match(/^([^[]+)\[([^\]]+)\]$/);
                             if (bracketMatch) {
                                 const prefix = bracketMatch[1]; // e.g., "bg-"
-                                
+
                                 // Helper function to convert Color.js format to Tailwind arbitrary value format
                                 const toTailwindFormat = (colorStr: string) => {
                                     // First, remove spaces around commas
@@ -676,7 +727,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                                     result = result.replace(/\s+/g, '_');
                                     return result;
                                 };
-                                
+
                                 // Create color presentations with proper range that covers the entire class
                                 const presentations = [
                                     {
@@ -707,7 +758,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                                         label: `${prefix}[${toTailwindFormat(color.to('oklab').toString({ format: 'oklab' }))}]`
                                     }
                                 ];
-                                
+
                                 // Override the range to cover the entire class name for proper replacement
                                 return presentations.map(presentation => ({
                                     ...presentation,
@@ -781,12 +832,12 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                     try {
                         // Remove CSS comments before parsing color
                         const cleanColorText = colorText.replace(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//g, '').trim();
-                        
+
                         // Skip color-mix functions as they're not parseable by Color.js
                         if (cleanColorText.startsWith('color-mix(')) {
                             return;
                         }
-                        
+
                         // Let Color.js handle all the parsing
                         const color = new Color(cleanColorText);
 
@@ -819,10 +870,10 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                             });
                         } else {
                             const decorationClassName = createColorDecorationClass(colorInfo);
-                            
+
                             const colorJs = new Color('srgb', [colorInfo.red, colorInfo.green, colorInfo.blue], colorInfo.alpha);
                             const hex = colorJs.toString({ format: 'hex' });
-                            
+
                             if (!document.querySelector(`style[data-class="${decorationClassName}"]`)) {
                                 const style = document.createElement('style');
                                 style.setAttribute('data-class', decorationClassName);
@@ -853,37 +904,37 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
 
                 // Get shared design system and variables list for color resolution
                 const { designSystem, variablesList } = await getDesignSystemData();
-                
+
                 // If design system failed to load, return empty results
                 if (!designSystem || !variablesList) {
                     return editableColors;
                 }
-                
+
                 // 1. Find colors in @apply directives using the WindPress process
                 const applyRegex = /@apply\s+([^;}]+)/g;
                 let applyMatch: RegExpExecArray | null;
-                
+
                 while ((applyMatch = applyRegex.exec(text)) !== null) {
                     const classList = applyMatch[1];
                     const classNames = classList.split(/\s+/).filter(Boolean);
-                    
+
                     for (const className of classNames) {
                         try {
                             // Determine if this class is editable based on the class name itself
                             const isEditable = isEditableColor(className);
-                            
+
                             // 1. Generate CSS for the class using candidatesToCss
                             const cssResult = await candidatesToCss(designSystem, [className]);
-                            
+
                             if (cssResult && cssResult.length > 0) {
                                 const cssString = cssResult.join('\n');
                                 let colorValue = null;
-                                
+
                                 if (isEditable) {
                                     // For arbitrary/editable classes, extract color from generated CSS
                                     // This handles all color formats consistently via candidatesToCss
                                     const directColorMatch = cssString.match(/(background-color|color|border-color|fill|stroke|border-top-color|border-right-color|border-bottom-color|border-left-color):\s*([^;]+)/);
-                                    
+
                                     if (directColorMatch) {
                                         const cssColorValue = directColorMatch[2].trim();
                                         // Skip CSS variables and transparent values
@@ -894,47 +945,47 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                                 } else {
                                     // For standard classes, find CSS color variables in the generated CSS
                                     const colorVarMatch = cssString.match(/var\((--[^)]*color[^)]*)\)/);
-                                    
+
                                     if (colorVarMatch) {
                                         const colorVarName = colorVarMatch[1]; // e.g., "--color-red-500"
-                                        
+
                                         // Search for the variable in the variables list
                                         const colorVariable = variablesList.find(v => v.key === colorVarName);
-                                        
+
                                         if (colorVariable && colorVariable.value) {
                                             colorValue = colorVariable.value;
                                         }
                                     }
                                 }
-                                
+
                                 // If we found a color value, add it to the color preview
                                 if (colorValue) {
                                     // Calculate the correct position of the class name in the @apply directive
                                     const applyStart = applyMatch!.index;
                                     const classListStart = applyStart + applyMatch![0].indexOf(classList);
-                                    
+
                                     // Find the exact position of this class within the class list
                                     let currentPos = 0;
                                     let classStartInList = -1;
-                                    
+
                                     for (const name of classNames) {
                                         // Skip whitespace
                                         while (currentPos < classList.length && /\s/.test(classList[currentPos])) {
                                             currentPos++;
                                         }
-                                        
+
                                         if (name === className) {
                                             classStartInList = currentPos;
                                             break;
                                         }
-                                        
+
                                         currentPos += name.length;
                                     }
-                                    
+
                                     if (classStartInList !== -1) {
                                         const colorStartIndex = classListStart + classStartInList;
                                         const colorEndIndex = colorStartIndex + className.length;
-                                        
+
                                         parseAndAddColor(colorValue, colorStartIndex, colorEndIndex, isEditable);
                                     }
                                 }
@@ -983,7 +1034,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
 
                 // Create a set of ranges that are inside @theme blocks and @apply directives to avoid duplicates
                 const excludedRanges: Array<{ start: number, end: number }> = [];
-                
+
                 // Add @theme block ranges
                 const themeBlockRegexForRanges = /@theme\s*\{([^}]*)\}/gs;
                 let themeRangeMatch;
@@ -992,7 +1043,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                     const blockEnd = themeRangeMatch.index + themeRangeMatch[0].length;
                     excludedRanges.push({ start: blockStart, end: blockEnd });
                 }
-                
+
                 // Add @apply directive ranges
                 const applyRegexForRanges = /@apply\s+([^;}]+)/g;
                 let applyRangeMatch;
@@ -1037,7 +1088,6 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
 
     }
 
-
     monaco.editor.addEditorAction({
         id: 'save',
         label: __('Save', 'windpress'),
@@ -1046,7 +1096,8 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             emit('save');
         }
     });
-    
+
+    clearDesignSystemCache();
 }
 </script>
 
@@ -1088,7 +1139,66 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             </template>
         </UDashboardNavbar>
 
-        <div class="flex-1 overflow-y-auto">
+        <div class="flex-1 overflow-y-auto relative">
+            <!-- Floating Error Icon/Panel -->
+            <Transition
+                enter-active-class="transition-all duration-500 ease-out"
+                leave-active-class="transition-all duration-300 ease-in"
+                enter-from-class="scale-50 opacity-0 translate-y-4"
+                enter-to-class="scale-100 opacity-100 translate-y-0"
+                leave-from-class="scale-100 opacity-100 translate-y-0"
+                leave-to-class="scale-50 opacity-0 translate-y-4"
+            >
+                <div v-if="cssErrors.hasErrors" class="absolute bottom-5 left-5 z-50">
+                    <Transition
+                        enter-active-class="transition-all duration-300 ease-out"
+                        leave-active-class="transition-all duration-200 ease-in"
+                        enter-from-class="scale-75 opacity-0"
+                        enter-to-class="scale-100 opacity-100"
+                        leave-from-class="scale-100 opacity-100" 
+                        leave-to-class="scale-75 opacity-0"
+                        mode="out-in"
+                    >
+                    <!-- Collapsed state: floating icon -->
+                    <div 
+                        v-if="!errorPanelExpanded"
+                        key="icon"
+                        class="bg-(--ui-bg)/30 backdrop-blur-md border border-error/20 rounded-lg p-3 shadow-xl hover:scale-110 transition-transform origin-bottom-left cursor-pointer"
+                        @click="errorPanelExpanded = true"
+                    >
+                        <UIcon name="lucide:alert-triangle" class="size-4 text-error flex-shrink-0" />
+                    </div>
+                    
+                    <!-- Expanded state: error panel -->
+                    <div 
+                        v-else
+                        key="panel"
+                        class="bg-(--ui-bg)/30 backdrop-blur-md border border-error/20 rounded-lg p-4 shadow-xl min-w-80 max-w-96 origin-bottom-left"
+                    >
+                        <div class="flex items-start gap-3">
+                            <UIcon name="lucide:alert-triangle" class="size-4 text-error mt-0.5 flex-shrink-0" />
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <p class="font-medium text-error text-sm">{{ i18n.__('CSS Validation Error', 'windpress') }}</p>
+                                    <UButton 
+                                        variant="ghost" 
+                                        size="xs" 
+                                        icon="i-lucide-x" 
+                                        color="neutral"
+                                        @click="errorPanelExpanded = false"
+                                    />
+                                </div>
+                                <p class="text-sm mb-2">{{ cssErrors.errors[0]?.message }}</p>
+                                <div v-if="cssErrors.errors[0]?.line" class="text-xs text-muted">
+                                    {{ i18n.__('Line', 'windpress') }} {{ cssErrors.errors[0].line }}{{ cssErrors.errors[0]?.column ? `, ${i18n.__('Column', 'windpress')} ${cssErrors.errors[0].column}` : '' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </Transition>
+                </div>
+            </Transition>
+
             <vue-monaco-editor v-model:value="props.entry.content" :language="props.entry.relative_path.endsWith('.css') ? 'css' : 'javascript'" :saveViewState="false" :options="{ ...MONACO_EDITOR_OPTIONS, readOnly: props.entry.readonly }" @mount="handleEditorMount" :theme="colorMode === 'dark' ? 'vs-dark' : 'vs'" />
         </div>
 
