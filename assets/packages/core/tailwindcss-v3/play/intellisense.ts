@@ -1,15 +1,15 @@
 import { set } from 'lodash-es';
 import Fuse from 'fuse.js';
 import postcss from 'postcss';
-import { doComplete } from 'https://esm.sh/tailwindcss-language-service';
+import { doComplete } from 'tailwindcss-language-service';
 import { decodeVFSContainer } from '@/packages/core/tailwindcss';
 import { getTextDocument, stateFromConfig } from '../intellisense';
 import { resolveConfig } from '../resolve-config';
-import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils';
-import evaluateTailwindFunctions from 'https://esm.sh/tailwindcss@3/src/lib/evaluateTailwindFunctions';
+import { createContext } from 'tailwindcss3/src/lib/setupContextUtils';
+import evaluateTailwindFunctions from 'tailwindcss3/src/lib/evaluateTailwindFunctions';
 import {  bigSign } from '@/packages/core/tailwindcss/intellisense';
 import { addPixelEquivalentsToValue, } from '@/packages/core/tailwindcss-v3/intellisense';
-import { generateRules as twGenerateRules } from 'https://esm.sh/tailwindcss@3/src/lib/generateRules';
+import { generateRules as twGenerateRules } from 'tailwindcss3/src/lib/generateRules';
 
 let classLists = [];
 

@@ -1,4 +1,4 @@
-import processTailwindFeatures from 'https://esm.sh/tailwindcss@3/src/processTailwindFeatures';
+import processTailwindFeatures from 'tailwindcss3/src/processTailwindFeatures';
 
 export default Object.assign(
     function (config, contents) {

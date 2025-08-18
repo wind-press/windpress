@@ -166,6 +166,9 @@ importers:
       tailwindcss-intellisense:
         specifier: github:tailwindlabs/tailwindcss-intellisense
         version: https://codeload.github.com/tailwindlabs/tailwindcss-intellisense/tar.gz/816a175fa499281aee5de1a24d000a676f1b99a6
+      tailwindcss-language-service:
+        specifier: ^0.0.28
+        version: 0.0.28
       tailwindcss3:
         specifier: npm:tailwindcss@3
         version: tailwindcss@3.4.17
@@ -2501,6 +2504,9 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
+  becke-ch--regex--s0-0-v1--base--pl--lib@1.4.0:
+    resolution: {integrity: sha512-FnWonOyaw7Vivg5nIkrUll9HSS5TjFbyuURAiDssuL6VxrBe3ERzudRxOcWRhZYlP89UArMDikz7SapRPQpmZQ==}
+
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
@@ -2862,6 +2868,9 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
+  culori@0.20.1:
+    resolution: {integrity: sha512-jNZDmufWx4vCHW2fTb62sarHEeIF3WWrUYIv4ZpoQnN2vQU6IRPz1Ra9QnsHUKzdb5lppSuLsdB72rMmBMAd+A==}
+
   culori@4.0.2:
     resolution: {integrity: sha512-1+BhOB8ahCn4O0cep0Sh2l9KCOfOdY+BXJnKMHFFzDEouSr/el18QwXEMRlOj9UY5nCeA8UN3a/82rUWRBeyBw==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -2982,6 +2991,10 @@ packages:
   dotenv@17.2.1:
     resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
     engines: {node: '>=12'}
+
+  dset@3.1.2:
+    resolution: {integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==}
+    engines: {node: '>=4'}
 
   dset@3.1.4:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
@@ -3853,6 +3866,10 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
+  lru-cache@6.0.0:
+    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
+    engines: {node: '>=10'}
+
   lz-string@https://pkg.pr.new/wind-press/lz-string@2c61edc:
     resolution: {tarball: https://pkg.pr.new/wind-press/lz-string@2c61edc}
     version: 2.0.0-rc.3
@@ -4292,6 +4309,9 @@ packages:
   perfect-debounce@1.0.0:
     resolution: {integrity: sha512-xCy9V055GLEqoFaHoC1SoLIaLmWctgCUaBaWxDZ7/Zx4CTyX7cJQLJOok/orfjZAh9kEYpjJa4d0KcJmCbctZA==}
 
+  picocolors@0.2.1:
+    resolution: {integrity: sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -4410,6 +4430,10 @@ packages:
 
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
+
+  postcss@8.3.9:
+    resolution: {integrity: sha512-f/ZFyAKh9Dnqytx5X62jgjhhzttjZS7hMsohcI7HEI5tjELX/HxCy3EFhsRxyzGvrzFF+82XPvCS8T9TFleVJw==}
+    engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.4:
     resolution: {integrity: sha512-QSa9EBe+uwlGTFmHsPKokv3B/oEMQZxfqW0QqNCyhpa6mB1afzulwn8hihglqAb2pOw+BJgNlmXQ8la2VeHB7w==}
@@ -4845,6 +4869,11 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
+  semver@7.3.7:
+    resolution: {integrity: sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   semver@7.7.1:
     resolution: {integrity: sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==}
     engines: {node: '>=10'}
@@ -4926,6 +4955,10 @@ packages:
 
   snake-case@3.0.4:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
+
+  source-map-js@0.6.2:
+    resolution: {integrity: sha512-/3GptzWzu0+0MBQFrDKzw/DvvMTUORvgY6k6jd/VS6iCR4RDTKWH6v6WPwQoUO8667uQEf9Oe38DxAYWY5F/Ug==}
+    engines: {node: '>=0.10.0'}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -5084,6 +5117,9 @@ packages:
   tailwindcss-intellisense@https://codeload.github.com/tailwindlabs/tailwindcss-intellisense/tar.gz/816a175fa499281aee5de1a24d000a676f1b99a6:
     resolution: {tarball: https://codeload.github.com/tailwindlabs/tailwindcss-intellisense/tar.gz/816a175fa499281aee5de1a24d000a676f1b99a6}
     version: 0.0.0
+
+  tailwindcss-language-service@0.0.28:
+    resolution: {integrity: sha512-qbyZxX+6pR8a6m7w9Z8KSW3Wzz5oD/IVmmD1tnywP2K8SfDwrMHcs+/067m1w38iRp6+XyNRTxBMA+nPeKQCmA==}
 
   tailwindcss@3.4.17:
     resolution: {integrity: sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==}
@@ -5614,9 +5650,16 @@ packages:
   vscode-emmet-helper-bundled@0.0.1:
     resolution: {integrity: sha512-EhZ0Wt8MbdrKF3NUMfaUDhFPTdRnl1tyqYS7KOcNtsSNTV285IV+XPDtNQyw5rwYsULEfb6n+fK1DRufJQlPYw==}
 
+  vscode-jsonrpc@8.0.2:
+    resolution: {integrity: sha512-RY7HwI/ydoC1Wwg4gJ3y6LpU9FJRZAUnTYMXthqhFXXu77ErDd/xkREpGuk4MyYkk4a+XDWAMqe0S3KkelYQEQ==}
+    engines: {node: '>=14.0.0'}
+
   vscode-jsonrpc@8.1.0:
     resolution: {integrity: sha512-6TDy/abTQk+zDGYazgbIPc+4JoXdwC8NHU9Pbn4UJP1fehUyZmM4RHp5IthX7A6L5KS30PRui+j+tbbMMMafdw==}
     engines: {node: '>=14.0.0'}
+
+  vscode-languageserver-protocol@3.17.2:
+    resolution: {integrity: sha512-8kYisQ3z/SQ2kyjlNeQxbkkTNmVFoQCqkmGrzLH6A9ecPlgTbp3wDTnUNqaUxYr4vlAcloxx8zwy7G5WdguYNg==}
 
   vscode-languageserver-protocol@3.17.3:
     resolution: {integrity: sha512-924/h0AqsMtA5yK22GgMtCYiMdCOtWTSGgUOkgEDX+wk2b0x4sAfLiO4NxBxqbiVtz7K7/1/RgVrVI0NClZwqA==}
@@ -5624,8 +5667,18 @@ packages:
   vscode-languageserver-textdocument@1.0.12:
     resolution: {integrity: sha512-cxWNPesCnQCcMPeenjKKsOCKQZ/L6Tv19DTRIGuLWe32lyzWhihGVJ/rcckZXJxfdKCFvRLS3fpBIsV/ZGX4zA==}
 
+  vscode-languageserver-textdocument@1.0.7:
+    resolution: {integrity: sha512-bFJH7UQxlXT8kKeyiyu41r22jCZXG8kuuVVA33OEJn1diWOZK5n8zBSPZFHVBOu8kXZ6h0LIRhf5UnCo61J4Hg==}
+
+  vscode-languageserver-types@3.17.2:
+    resolution: {integrity: sha512-zHhCWatviizPIq9B7Vh9uvrH6x3sK8itC84HkamnBWoDFJtzBf7SWlpLCZUit72b3os45h6RWQNC9xHRDF8dRA==}
+
   vscode-languageserver-types@3.17.3:
     resolution: {integrity: sha512-SYU4z1dL0PyIMd4Vj8YOqFvHu7Hz/enbWtpfnVbJHU4Nd1YNYx8u0ennumc6h48GQNeOLxmwySmnADouT/AuZA==}
+
+  vscode-languageserver@8.0.2:
+    resolution: {integrity: sha512-bpEt2ggPxKzsAOZlXmCJ50bV7VrxwCS5BI4+egUmure/oI/t4OlFzi/YNtVvY24A2UDOZAgwFGgnZPwqSJubkA==}
+    hasBin: true
 
   vscode-languageserver@8.1.0:
     resolution: {integrity: sha512-eUt8f1z2N2IEUDBsKaNapkz7jl5QpskN2Y0G01T/ItMxBxw1fJwvtySGB9QMecatne8jFIWJGWI61dWjyTLQsw==}
@@ -5741,6 +5794,9 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
+
+  yallist@4.0.0:
+    resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
 
   yallist@5.0.0:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==}
@@ -8372,6 +8428,8 @@ snapshots:
 
   base64-js@1.5.1: {}
 
+  becke-ch--regex--s0-0-v1--base--pl--lib@1.4.0: {}
+
   binary-extensions@2.3.0: {}
 
   bind-event-listener@3.0.0: {}
@@ -8815,6 +8873,8 @@ snapshots:
 
   csstype@3.1.3: {}
 
+  culori@0.20.1: {}
+
   culori@4.0.2: {}
 
   date-fns-jalali@4.1.0-0: {}
@@ -8903,6 +8963,8 @@ snapshots:
   dotenv@16.6.1: {}
 
   dotenv@17.2.1: {}
+
+  dset@3.1.2: {}
 
   dset@3.1.4: {}
 
@@ -9790,6 +9852,10 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  lru-cache@6.0.0:
+    dependencies:
+      yallist: 4.0.0
+
   lz-string@https://pkg.pr.new/wind-press/lz-string@2c61edc: {}
 
   magic-regexp@0.10.0:
@@ -10274,6 +10340,8 @@ snapshots:
 
   perfect-debounce@1.0.0: {}
 
+  picocolors@0.2.1: {}
+
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -10378,6 +10446,12 @@ snapshots:
       postcss-value-parser: 4.2.0
 
   postcss-value-parser@4.2.0: {}
+
+  postcss@8.3.9:
+    dependencies:
+      nanoid: 3.3.11
+      picocolors: 0.2.1
+      source-map-js: 0.6.2
 
   postcss@8.5.4:
     dependencies:
@@ -10817,6 +10891,10 @@ snapshots:
 
   semver@6.3.1: {}
 
+  semver@7.3.7:
+    dependencies:
+      lru-cache: 6.0.0
+
   semver@7.7.1: {}
 
   semver@7.7.2: {}
@@ -10915,6 +10993,8 @@ snapshots:
     dependencies:
       dot-case: 3.0.4
       tslib: 2.8.1
+
+  source-map-js@0.6.2: {}
 
   source-map-js@1.2.1: {}
 
@@ -11079,6 +11159,29 @@ snapshots:
       tailwind-merge: 3.3.1
 
   tailwindcss-intellisense@https://codeload.github.com/tailwindlabs/tailwindcss-intellisense/tar.gz/816a175fa499281aee5de1a24d000a676f1b99a6: {}
+
+  tailwindcss-language-service@0.0.28:
+    dependencies:
+      '@types/moo': 0.5.3
+      '@types/semver': 7.3.10
+      becke-ch--regex--s0-0-v1--base--pl--lib: 1.4.0
+      color-name: 1.1.4
+      css.escape: 1.5.1
+      culori: 0.20.1
+      detect-indent: 6.0.0
+      dlv: 1.1.3
+      dset: 3.1.2
+      line-column: 1.0.2
+      moo: 0.5.1
+      postcss: 8.3.9
+      postcss-selector-parser: 6.0.2
+      semver: 7.3.7
+      sift-string: 0.0.2
+      stringify-object: 3.3.0
+      tmp-cache: 1.1.0
+      vscode-emmet-helper-bundled: 0.0.1
+      vscode-languageserver: 8.0.2
+      vscode-languageserver-textdocument: 1.0.7
 
   tailwindcss@3.4.17:
     dependencies:
@@ -11659,7 +11762,14 @@ snapshots:
 
   vscode-emmet-helper-bundled@0.0.1: {}
 
+  vscode-jsonrpc@8.0.2: {}
+
   vscode-jsonrpc@8.1.0: {}
+
+  vscode-languageserver-protocol@3.17.2:
+    dependencies:
+      vscode-jsonrpc: 8.0.2
+      vscode-languageserver-types: 3.17.2
 
   vscode-languageserver-protocol@3.17.3:
     dependencies:
@@ -11668,7 +11778,15 @@ snapshots:
 
   vscode-languageserver-textdocument@1.0.12: {}
 
+  vscode-languageserver-textdocument@1.0.7: {}
+
+  vscode-languageserver-types@3.17.2: {}
+
   vscode-languageserver-types@3.17.3: {}
+
+  vscode-languageserver@8.0.2:
+    dependencies:
+      vscode-languageserver-protocol: 3.17.2
 
   vscode-languageserver@8.1.0:
     dependencies:
@@ -11784,6 +11902,8 @@ snapshots:
   y18n@4.0.3: {}
 
   yallist@3.1.1: {}
+
+  yallist@4.0.0: {}
 
   yallist@5.0.0: {}
 

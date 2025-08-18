@@ -1,8 +1,8 @@
 import postcss from 'postcss';
 import postcssSelectorParser from 'postcss-selector-parser';
 import parseValue from 'postcss-value-parser';
-import { createContext } from 'https://esm.sh/tailwindcss@3/src/lib/setupContextUtils.js';
-import { getColor } from 'https://esm.sh/tailwindcss-language-service';
+import { createContext } from 'tailwindcss3/src/lib/setupContextUtils.js';
+import { getColor } from 'tailwindcss-language-service';
 import expandApplyAtRules from 'tailwindcss3/src/lib/expandApplyAtRules.js';
 import { generateRules } from 'tailwindcss3/src/lib/generateRules.js';
 import { TextDocument } from 'vscode-languageserver-textdocument';

@@ -13,7 +13,7 @@ For instance:
 
 ## [Unreleased]
 
-## [3.3.57] - 2025-08-19
+## [3.3.58] - 2025-08-19
 
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.12 latest)
@@ -548,7 +548,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.57...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.58...HEAD
+[3.3.58]: https://github.com/wind-press/windpress/compare/v3.3.57...v3.3.58
 [3.3.57]: https://github.com/wind-press/windpress/compare/v3.3.56...v3.3.57
 [3.3.56]: https://github.com/wind-press/windpress/compare/v3.3.55...v3.3.56
 [3.3.55]: https://github.com/wind-press/windpress/compare/v3.3.54...v3.3.55

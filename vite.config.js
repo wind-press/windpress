@@ -15,6 +15,9 @@ import viteUiPro from '@nuxt/ui-pro/vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
+    define: {
+        __dirname: JSON.stringify('/'),
+    },
     plugins: [
         wasm(),
         topLevelAwait(),
