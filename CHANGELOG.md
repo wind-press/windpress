@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Added
+- Upgraded to Tailwind CSS v4 (4.1.12 latest)
+
 ### Changed
 - Restricted the IntelliSense on the Files tab feature to work exclusively with Tailwind CSS v4
 

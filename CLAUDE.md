@@ -104,7 +104,7 @@ Each page builder integration follows a consistent pattern:
 
 ### Directory Structure
 ```
-├── src/                    # PHP source code
+├── src/                   # PHP source code
 │   ├── Core/              # Core plugin functionality
 │   ├── Integration/       # Page builder integrations
 │   ├── Admin/             # WordPress admin functionality
@@ -116,7 +116,7 @@ Each page builder integration follows a consistent pattern:
 │   └── packages/          # Shared frontend packages
 ├── build/                 # Compiled assets (generated)
 ├── languages/             # Translation files
-└── stubs/                 # Template files for new projects
+└── stubs/                 # Default WindPress data
 ```
 
 ## Common Development Tasks
