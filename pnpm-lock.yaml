@@ -8,6 +8,9 @@ patchedDependencies:
   is-core-module@2.16.1:
     hash: a92ab83aa36d5d798517eb8253b61f384f42d6e7927f87ae71983ebf201a343d
     path: assets/patches/is-core-module@2.16.1.patch
+  tailwindcss@3.4.17:
+    hash: f3e1012251cbf62bd8df3cb56bc9e8c454af8c5dd404a1c865e5686cfa53f7a1
+    path: assets/patches/tailwindcss@3.4.17.patch
 
 importers:
 
@@ -171,7 +174,7 @@ importers:
         version: 0.0.28
       tailwindcss3:
         specifier: npm:tailwindcss@3
-        version: tailwindcss@3.4.17
+        version: tailwindcss@3.4.17(patch_hash=f3e1012251cbf62bd8df3cb56bc9e8c454af8c5dd404a1c865e5686cfa53f7a1)
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -11183,7 +11186,7 @@ snapshots:
       vscode-languageserver: 8.0.2
       vscode-languageserver-textdocument: 1.0.7
 
-  tailwindcss@3.4.17:
+  tailwindcss@3.4.17(patch_hash=f3e1012251cbf62bd8df3cb56bc9e8c454af8c5dd404a1c865e5686cfa53f7a1):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2

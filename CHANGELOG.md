@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Fixed
+- [TW3] Missing `/css/preflight.css` file where the Preflight styles are enabled
+
 ## [3.3.58] - 2025-08-19
 
 ### Added

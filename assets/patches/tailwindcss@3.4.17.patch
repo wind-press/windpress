@@ -1,0 +1,23 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+deleted file mode 100644
+index 2547f13b8ee2d53c8a804cdd2bbb5df892db1a29..0000000000000000000000000000000000000000
+diff --git a/src/corePlugins.js b/src/corePlugins.js
+index 8f274153879ecb6ea93e4324cdc8793ed542c3df..3674c62e754e7bd972a408dc7de974bbf29020b6 100644
+--- a/src/corePlugins.js
++++ b/src/corePlugins.js
+@@ -1,4 +1,5 @@
+-import fs from 'fs'
++// import fs from 'fs'
++import { createFsFromVolume, Volume } from 'memfs';
+ import * as path from 'path'
+ import postcss from 'postcss'
+ import createUtilityPlugin from './util/createUtilityPlugin'
+@@ -565,6 +566,8 @@ let cssBackdropFilterValue = [
+ 
+ export let corePlugins = {
+   preflight: ({ addBase }) => {
++    let fs = createFsFromVolume(window.windpress.__MEMFS_VOLUME__ || new Volume());
++
+     let preflightStyles = postcss.parse(
+       fs.readFileSync(path.join(__dirname, './css/preflight.css'), 'utf8')
+     )
