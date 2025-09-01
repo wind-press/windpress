@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.59] - 2025-09-01
+
 ### Fixed
 - [TW3] Missing `/css/preflight.css` file where the Preflight styles are enabled
 
@@ -551,7 +553,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.58...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.59...HEAD
+[3.3.59]: https://github.com/wind-press/windpress/compare/v3.3.58...v3.3.59
 [3.3.58]: https://github.com/wind-press/windpress/compare/v3.3.57...v3.3.58
 [3.3.57]: https://github.com/wind-press/windpress/compare/v3.3.56...v3.3.57
 [3.3.56]: https://github.com/wind-press/windpress/compare/v3.3.55...v3.3.56
