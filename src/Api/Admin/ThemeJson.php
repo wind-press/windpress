@@ -15,12 +15,12 @@ namespace WindPress\WindPress\Api\Admin;
 
 use WindPress\WindPress\Api\AbstractApi;
 use WindPress\WindPress\Api\ApiInterface;
-use WindPress\WindPress\Core\Volume as CoreVolume;
+use WindPress\WindPress\Core\Cache as CoreCache;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 
-class Volume extends AbstractApi implements ApiInterface
+class ThemeJson extends AbstractApi implements ApiInterface
 {
     public function __construct()
     {
@@ -28,21 +28,11 @@ class Volume extends AbstractApi implements ApiInterface
 
     public function get_prefix(): string
     {
-        return 'admin/volume';
+        return 'admin/theme-json';
     }
 
     public function register_custom_endpoints(): void
     {
-        register_rest_route(
-            self::API_NAMESPACE,
-            $this->get_prefix() . '/index',
-            [
-                'methods' => WP_REST_Server::READABLE,
-                'callback' => fn (WP_REST_Request $wprestRequest): WP_REST_Response => $this->index($wprestRequest),
-                'permission_callback' => fn (WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
-            ]
-        );
-
         register_rest_route(
             self::API_NAMESPACE,
             $this->get_prefix() . '/store',
@@ -54,20 +44,13 @@ class Volume extends AbstractApi implements ApiInterface
         );
     }
 
-    public function index(WP_REST_Request $wprestRequest): WP_REST_Response
-    {
-        return new WP_REST_Response([
-            'entries' => CoreVolume::get_entries(),
-        ]);
-    }
-
     public function store(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         $payload = $wprestRequest->get_json_params();
 
-        $entries = $payload['volume']['entries'];
+        $themeJsonBlob = base64_decode($payload['data'] ?? '');
 
-        CoreVolume::save_entries($entries);
+        CoreCache::save_theme_json($themeJsonBlob);
 
         return new WP_REST_Response([
             'message' => __('data stored successfully', 'windpress'),

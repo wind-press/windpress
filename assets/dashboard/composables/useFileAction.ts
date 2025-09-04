@@ -1,4 +1,6 @@
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
+import { useSettingsStore } from '@/dashboard/stores/settings';
+import { useThemeJsonStore } from '@/dashboard/stores/themeJson';
 import { encodeVFSContainer } from '@/packages/core/tailwindcss/vfs';
 import { nanoid } from 'nanoid'
 import lzString from 'lz-string';
@@ -10,6 +12,8 @@ import NewFileFormModal from '@/dashboard/components/File/Explorer/NewFileFormMo
 import RenameFileFormModal from '@/dashboard/components/File/Explorer/RenameFileFormModal.vue'
 
 const volumeStore = useVolumeStore()
+const settingsStore = useSettingsStore()
+const themeJsonStore = useThemeJsonStore()
 const toast = useToast()
 const overlay = useOverlay()
 
@@ -149,6 +153,10 @@ async function save() {
                     icon: undefined,
                 }
             });
+
+            if (Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 4) {
+                themeJsonStore.doPush();
+            }
         })
         .catch((err) => {
             toast.update('file-editor.doSave', {

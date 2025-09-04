@@ -37,8 +37,8 @@ class Tailwind extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/index',
             [
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->index($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn (WP_REST_Request $wprestRequest): WP_REST_Response => $this->index($wprestRequest),
+                'permission_callback' => fn (WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
     }

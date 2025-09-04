@@ -27,6 +27,8 @@ class Cache
      */
     public const CSS_CACHE_FILE = 'tailwind.css';
 
+    public const THEME_JSON_FILE = 'theme.json';
+
     public static function get_providers(): array
     {
         /**
@@ -55,6 +57,19 @@ class Cache
         }
 
         do_action('a!windpress/core/cache:save_cache.after', $payload);
+
+        UtilsCache::flush_cache_plugin();
+    }
+
+    public static function save_theme_json(string $payload)
+    {
+        try {
+            Common::save_file($payload, self::get_cache_path(self::THEME_JSON_FILE));
+        } catch (\Throwable $throwable) {
+            throw $throwable;
+        }
+
+        do_action('a!windpress/core/cache:save_theme_json.after', $payload);
 
         UtilsCache::flush_cache_plugin();
     }

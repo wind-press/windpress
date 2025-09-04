@@ -9,12 +9,15 @@ import { getVariableList, loadDesignSystem, naturalExpand, getClassList, candida
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import Color from 'colorjs.io';
 import { debounce, throttle } from 'lodash-es';
+import { useThemeJsonStore } from '@/dashboard/stores/themeJson';
+import { twToWp } from '@/dashboard/composables/useThemeJson';
 
 type MonacoEditor = typeof monacoEditor;
 
 const volumeStore = useVolumeStore()
 const settingsStore = useSettingsStore()
 const colorMode = useColorMode()
+const themeJsonStore = useThemeJsonStore()
 
 const props = defineProps<{
     entry: Entry;
@@ -105,6 +108,12 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                 const classList = getClassList(designSystem);
 
                 designSystemCache = { designSystem, variablesList, classList };
+
+                /* TODO: theme.json */
+
+                const themeJson = twToWp(variablesList);
+                themeJsonStore.themeJson = themeJson;
+
                 lastCacheUpdate = Date.now();
             } catch (error) {
                 console.warn('Failed to load design system:', error);
