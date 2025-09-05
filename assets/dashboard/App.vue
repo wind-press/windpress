@@ -46,7 +46,7 @@ const links = [
                 {
                     label: __('Integrations', 'windpress'),
                     to: router.resolve({ name: 'settings.integrations' }),
-                    exact: true,
+                    // exact: true,
                 }
             ]
         },

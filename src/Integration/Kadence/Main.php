@@ -51,7 +51,10 @@ class Main implements IntegrationInterface
             'name' => __('Kadence WP', 'windpress'),
             'description' => __('The Kadence WP integration. It requires the Gutenberg/Block Editor integration enabled.', 'windpress'),
             'enabled' => $this->is_enabled(),
-            'callback' => Compile::class,
+            'callback' => Config::get(sprintf('integration.%s.compile.enabled', $this->get_name()), true)
+                    ? Compile::class
+                    : static fn() => []
+            ,
             'type' => 'theme',
             'homepage' => 'https://kadencewp.com/?ref=windpress',
             'is_installed_active' => static function () {

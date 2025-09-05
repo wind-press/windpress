@@ -24,9 +24,9 @@ class Main implements IntegrationInterface
 {
     public function __construct()
     {
-        add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
+        add_filter('f!windpress/core/cache:compile.providers', fn(array $providers): array => $this->register_provider($providers));
 
-        if ($this->is_enabled()) {
+        if ($this->is_enabled() && Config::get(sprintf('integration.%s.editor.enabled', $this->get_name()), true)) {
             new Editor();
         }
     }
@@ -53,7 +53,10 @@ class Main implements IntegrationInterface
             'id' => $this->get_name(),
             'name' => __('Gutenberg', 'windpress'),
             'description' => __('Gutenberg/Block Editor integration', 'windpress'),
-            'callback' => Compile::class,
+            'callback' => Config::get(sprintf('integration.%s.compile.enabled', $this->get_name()), true)
+                    ? Compile::class
+                    : static fn() => []
+            ,
             'enabled' => $this->is_enabled(),
             'type' => 'custom',
             'homepage' => 'https://wordpress.org/gutenberg/?ref=windpress',

@@ -50,7 +50,10 @@ class Main implements IntegrationInterface
             'id' => $this->get_name(),
             'name' => __('GreenShift', 'windpress'),
             'description' => __('The GreenShift integration. It requires the Gutenberg/Block Editor integration enabled.', 'windpress'),
-            'callback' => Compile::class,
+            'callback' => Config::get(sprintf('integration.%s.compile.enabled', $this->get_name()), true)
+                    ? Compile::class
+                    : static fn() => []
+            ,
             'enabled' => $this->is_enabled(),
             'type' => 'plugin',
             'homepage' => 'https://shop.greenshiftwp.com/?from=3679',

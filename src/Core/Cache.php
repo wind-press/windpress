@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Core;
 
+use Exception;
 use WIND_PRESS;
 use WindPress\WindPress\Utils\Cache as UtilsCache;
 use WindPress\WindPress\Utils\Common;
@@ -85,7 +86,7 @@ class Cache
             $result = call_user_func($callback, $metadata);
 
             if (! is_array($result)) {
-                throw new \Exception(__('The callback should return an array', 'windpress'));
+                throw new Exception(__('The callback should return an array', 'windpress'));
             }
 
             $_metadata = array_key_exists('metadata', $result) ? $result['metadata'] : [];

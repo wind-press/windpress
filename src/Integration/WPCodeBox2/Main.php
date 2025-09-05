@@ -26,7 +26,7 @@ class Main implements IntegrationInterface
     {
         add_filter('f!windpress/core/cache:compile.providers', fn (array $providers): array => $this->register_provider($providers));
 
-        if ($this->is_enabled()) {
+        if ($this->is_enabled() && Config::get(sprintf('integration.%s.editor.enabled', $this->get_name()), true)) {
             new Editor();
         }
     }
@@ -53,7 +53,10 @@ class Main implements IntegrationInterface
             'id' => $this->get_name(),
             'name' => __('WPCodeBox 2', 'windpress'),
             'description' => __('WPCodeBox 2 integration', 'windpress'),
-            'callback' => Compile::class,
+            'callback' => Config::get(sprintf('integration.%s.compile.enabled', $this->get_name()), true)
+                    ? Compile::class
+                    : static fn() => []
+            ,
             'enabled' => $this->is_enabled(),
             'type' => 'plugin',
             'homepage' => 'https://wpcodebox.com/?ref=185',

@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Added
+- Added integrations settings page to manage the integrations features
+
 ## [3.3.59] - 2025-09-01
 
 ### Fixed

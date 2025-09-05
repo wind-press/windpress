@@ -87,7 +87,6 @@ const links = [
       label: __('Integrations', 'windpress'),
       to: router.resolve({ name: 'settings.integrations' }),
       icon: 'lucide:package',
-      exact: true,
     },
   ],
   [

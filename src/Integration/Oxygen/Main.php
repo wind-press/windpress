@@ -29,7 +29,10 @@ class Main implements IntegrationInterface
         if ($this->is_enabled()) {
             add_filter('f!windpress/core/runtime:is_prevent_load', fn (bool $is_prevent_load): bool => $this->is_prevent_load($is_prevent_load));
             add_filter('f!windpress/core/runtime:append_header.exclude_admin', fn (bool $is_exclude_admin): bool => $this->is_exclude_admin($is_exclude_admin));
-            // new Editor();
+            
+            if (Config::get(sprintf('integration.%s.editor.enabled', $this->get_name()), true)) {
+                new Editor();
+            }
         }
     }
 
@@ -55,7 +58,10 @@ class Main implements IntegrationInterface
             'id' => $this->get_name(),
             'name' => __('Oxygen Builder', 'windpress'),
             'description' => __('Oxygen Builder integration', 'windpress'),
-            'callback' => Compile::class,
+            'callback' => Config::get(sprintf('integration.%s.compile.enabled', $this->get_name()), true)
+                    ? Compile::class
+                    : static fn() => []
+            ,
             'enabled' => $this->is_enabled(),
             'type' => 'plugin',
             'homepage' => 'https://oxygenbuilder.com/ref/12/',

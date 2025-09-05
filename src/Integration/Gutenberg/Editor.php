@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Integration\Gutenberg;
 
+use Exception;
 use WIND_PRESS;
 use WindPress\WindPress\Core\Runtime;
 use WindPress\WindPress\Utils\AssetVite;
 use WP_Theme_JSON_Data;
 use WindPress\WindPress\Core\Cache as CoreCache;
+use WindPress\WindPress\Utils\Config;
 
 /**
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
@@ -27,7 +29,9 @@ class Editor
     public function __construct()
     {
         add_action('enqueue_block_editor_assets', fn() => $this->enqueue_block_editor_assets());
-        add_filter('wp_theme_json_data_user', fn($theme_json) => $this->filter_theme_json_data_user($theme_json), 1_000_001);
+        if (Config::get('integration.gutenberg.settings.theme_json', true)) {
+            add_filter('wp_theme_json_data_user', fn($theme_json) => $this->filter_theme_json_data_user($theme_json), 1_000_001);
+        }
     }
 
     public function enqueue_block_editor_assets()
@@ -123,7 +127,7 @@ class Editor
             // Return updated theme.json data
             return $theme_json->update_with($merged_data);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (WP_DEBUG) {
                 error_log('WindPress theme.json integration error: ' . $e->getMessage());
             }

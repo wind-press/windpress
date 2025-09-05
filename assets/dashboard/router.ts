@@ -68,8 +68,19 @@ const router = createRouter({
                 },
                 {
                     path: 'integrations',
-                    name: 'settings.integrations',
-                    component: () => import('./pages/Settings/Integrations.vue')
+                    component: () => import('./pages/Settings/Integrations.vue'),
+                    children: [
+                        {
+                            path: '',
+                            name: 'settings.integrations',
+                            component: { template: '<div />' } // Empty component for the index route
+                        },
+                        {
+                            path: ':integration',
+                            name: 'settings.integrations.detail',
+                            component: () => import('./pages/Settings/Integrations/[integration].vue')
+                        }
+                    ]
                 },
             ],
         },
