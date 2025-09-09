@@ -13,7 +13,7 @@ logger('Loading...');
 
     // TODO: dynamic import the features based on the enabled modules
     await import('./modules/settings/main');
-    await import('./modules/plain-classses/main');
+    await import('./modules/plain-classes/main');
     await import('./modules/generate-cache/main');
 
     // tailwindcss-v4

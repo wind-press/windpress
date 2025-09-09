@@ -15,6 +15,7 @@ For instance:
 
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.13 latest)
+- [LiveCanvas] Added compatibility with LiveCanvas 4.7
 - Added integrations settings page to manage the integrations features
 
 ## [3.3.59] - 2025-09-01

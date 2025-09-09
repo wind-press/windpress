@@ -8,7 +8,6 @@
  */
 
 import { logger } from '@/integration/common/logger';
-import { previewIframe } from '@/integration/livecanvas/constant.js';
 import type { BuildCacheOptions } from '@/packages/core/windpress/compiler';
 
 const channel = new BroadcastChannel('windpress');

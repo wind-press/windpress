@@ -34,6 +34,7 @@ class Editor
         AssetVite::get_instance()->enqueue_asset('assets/integration/livecanvas/main.js', [
             'handle' => $handle,
             'in_footer' => true,
+            'dependencies' => ['wp-hooks']
         ]);
 
         wp_localize_script($handle, 'windpresslivecanvas', [
@@ -48,52 +49,16 @@ class Editor
             ],
         ]);
 
-        echo <<<HTML
-            <script>
-                document.addEventListener('DOMContentLoaded', async function () {
-                    let iframeWindow = document.getElementById('previewiframe');
-                    
-                    // wait for the iframe to be ready
-                    while (
-                        (iframeWindow.contentDocument?.body?.innerHTML === '' || iframeWindow.contentDocument?.body?.innerHTML === undefined)
-                        || (iframeWindow.contentWindow?.document?.body?.innerHTML === '' || iframeWindow.contentWindow?.document?.body?.innerHTML === undefined)
-                    ) {
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                    }
+        $wp_scripts = wp_scripts();
 
-                    async function searchQuery(query) {
-                        const suggestions = (await iframeWindow.contentWindow.windpress.module.autocomplete.query(query)).map((s) => {
-                            return {
-                                // color: s.color,
-                                value: s.value,
-                                meta: 'TW',
-                                caption: s.value,
-                                score: 1000, // Custom score for sorting (optional)
-                            };
-                        });
+        $queue = $wp_scripts->queue;
 
-                        return suggestions;
-                    }
+        foreach ($queue as $handle) {
+            if (strpos($handle, WIND_PRESS::WP_OPTION . ':') !== 0) {
+                continue;
+            }
 
-                    const langTools = ace.require('ace/ext/language_tools');
-
-                    langTools.addCompleter({
-                        getCompletions: function(editor, session, pos, prefix, callback) {
-                            let lineTillCursor = session.getDocument().getLine(pos.row).substring(0, pos.column);
-                            if (/class=["|'][^"']*$/i.test(lineTillCursor) || /@apply\s+[^;]*$/i.test(lineTillCursor)) {
-                                searchQuery(prefix).then((suggestions) => {
-                                    callback(null, suggestions);
-                                }).catch(error => {
-                                    console.error('Error fetching autocomplete suggestions:', error);
-                                    callback(error, []);
-                                });
-                            } else {
-                                callback(null, []); // No suggestions if the context is not matched
-                            }
-                        }
-                    });
-                });
-            </script>
-        HTML;
+            $wp_scripts->do_items($handle);
+        }
     }
 }

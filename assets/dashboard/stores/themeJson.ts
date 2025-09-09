@@ -27,7 +27,7 @@ export const useThemeJsonStore = defineStore('themeJson', () => {
             .request('/admin/theme-json/store', {
                 method: 'POST',
                 data: {
-                    data: btoa(JSON.stringify(themeJson.value, null, 2)),
+                    data: btoa(JSON.stringify(themeJson.value, null, window.windpress.is_debug ? 2 : undefined)),
                 },
             })
             .then(response => {

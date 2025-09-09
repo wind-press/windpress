@@ -23,9 +23,9 @@ logger('Loading...');
     await import('./modules/settings/main');
 
     if (window.bricksData.version.startsWith('1')) {
-        await import('./modules/plain-classses/main-1.x');
+        await import('./modules/plain-classes/main-1.x');
     } else {
-        await import('./modules/plain-classses/main');
+        await import('./modules/plain-classes/main');
     }
 
     await import('./modules/html2bricks/main');

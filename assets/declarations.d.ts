@@ -70,5 +70,7 @@ interface Window {
 
             role: string;
         };
+
+        is_debug: boolean;
     };
 }

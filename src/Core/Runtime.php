@@ -305,6 +305,8 @@ class Runtime
                 'site_url' => get_site_url(),
                 'web_history' => AdminPage::get_page_url(),
             ];
+
+            $metadata['is_debug'] = defined('WP_DEBUG') && WP_DEBUG;
         }
 
         return $metadata;

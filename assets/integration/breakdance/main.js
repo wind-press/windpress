@@ -17,7 +17,7 @@ logger('Loading...');
     logger('Loading modules...');
 
     // TODO: dynamic import the features based on the enabled modules
-    await import('./modules/plain-classses/main');
+    await import('./modules/plain-classes/main');
     // await import('./modules/html2breakdance/main');
     await import('./modules/generate-cache/main');
 
