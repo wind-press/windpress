@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Fixed
+- [Bricks] Plain Classes: Doesn't work on some Bricks templates types like Archive, Search, Section, etc
+
 ## [3.3.60] - 2025-09-09
 
 ### Added

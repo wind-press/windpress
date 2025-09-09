@@ -241,7 +241,7 @@ watch([activeElementIds, visibleElementPanel, historyIndex], (newVal, oldVal) =>
                         return brxGlobalProp.$_state.components.find(comps => comps.id === brxGlobalProp.$_state.activeComponent.id)?.elements.find(el => el.id === id)?.settings?._cssClasses || '';
                     } else {
                         // return brxGlobalProp.$_state.content.find(el => el.id === id)?.settings?._cssClasses || '';
-                        return brxGlobalProp.$_state[brxGlobalProp.$_state.templateType].find(el => el.id === id)?.settings?._cssClasses || '';
+                        return brxGlobalProp.$_state[getTemplateType()].find(el => el.id === id)?.settings?._cssClasses || '';
                     }
                 });
 
@@ -312,7 +312,7 @@ textInput.addEventListener('input', function (e) {
             }
         } else {
             // const activeElement = brxGlobalProp.$_state.content.find(el => el.id === id);
-            const activeElement = brxGlobalProp.$_state[brxGlobalProp.$_state.templateType].find(el => el.id === id);
+            const activeElement = brxGlobalProp.$_state[getTemplateType()].find(el => el.id === id);
             if (activeElement) {
                 activeElement.settings._cssClasses = e.target.value;
             }
@@ -500,6 +500,24 @@ function previewTributeEventCallbackUpDown() {
     const elementNode = brxIframeGlobalProp.$_getElementNode(activeEl);
     const elementClasses = brxIframeGlobalProp.$_getElementClasses(activeEl);
     elementNode.classList.value = elementClasses.join(' ') + ' ' + li.dataset.tributeClassName;
+}
+
+function getTemplateType() {
+    let templateType = brxGlobalProp.$_state.templateType;
+
+    switch (brxGlobalProp.$_state.templateType) {
+        case 'popup':
+        case 'error':
+        case 'section':
+        case 'archive':
+        case 'search':
+            templateType = 'content';
+            break;
+        default:
+            break;
+        }
+
+    return templateType;
 }
 
 logger('Module loaded!', { module: 'plain-classes' });
