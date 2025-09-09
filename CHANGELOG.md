@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.61] - 2025-09-10
+
 ### Fixed
 - [Bricks] Plain Classes: Doesn't work on some Bricks templates types like Archive, Search, Section, etc
 
@@ -563,7 +565,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.60...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.61...HEAD
+[3.3.61]: https://github.com/wind-press/windpress/compare/v3.3.60...v3.3.61
 [3.3.60]: https://github.com/wind-press/windpress/compare/v3.3.59...v3.3.60
 [3.3.59]: https://github.com/wind-press/windpress/compare/v3.3.58...v3.3.59
 [3.3.58]: https://github.com/wind-press/windpress/compare/v3.3.57...v3.3.58
