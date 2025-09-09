@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.60] - 2025-09-09
+
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.13 latest)
 - [LiveCanvas] Added compatibility with LiveCanvas 4.7
@@ -558,7 +560,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.59...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.60...HEAD
+[3.3.60]: https://github.com/wind-press/windpress/compare/v3.3.59...v3.3.60
 [3.3.59]: https://github.com/wind-press/windpress/compare/v3.3.58...v3.3.59
 [3.3.58]: https://github.com/wind-press/windpress/compare/v3.3.57...v3.3.58
 [3.3.57]: https://github.com/wind-press/windpress/compare/v3.3.56...v3.3.57

@@ -104,8 +104,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       lz-string:
-        specifier: https://pkg.pr.new/wind-press/lz-string@2c61edc
-        version: https://pkg.pr.new/wind-press/lz-string@2c61edc
+        specifier: https://pkg.pr.new/wind-press/lz-string@68d6fca
+        version: https://pkg.pr.new/wind-press/lz-string@68d6fca
       magic-string:
         specifier: ^0.30.18
         version: 0.30.18
@@ -3850,8 +3850,8 @@ packages:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
 
-  lz-string@https://pkg.pr.new/wind-press/lz-string@2c61edc:
-    resolution: {tarball: https://pkg.pr.new/wind-press/lz-string@2c61edc}
+  lz-string@https://pkg.pr.new/wind-press/lz-string@68d6fca:
+    resolution: {tarball: https://pkg.pr.new/wind-press/lz-string@68d6fca}
     version: 2.0.0-rc.3
     hasBin: true
 
@@ -9833,7 +9833,7 @@ snapshots:
     dependencies:
       yallist: 4.0.0
 
-  lz-string@https://pkg.pr.new/wind-press/lz-string@2c61edc: {}
+  lz-string@https://pkg.pr.new/wind-press/lz-string@68d6fca: {}
 
   magic-regexp@0.10.0:
     dependencies:
