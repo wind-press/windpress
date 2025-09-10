@@ -503,21 +503,10 @@ function previewTributeEventCallbackUpDown() {
 }
 
 function getTemplateType() {
+    // Known types: header, footer, popup, error, section, archive, search, content
     let templateType = brxGlobalProp.$_state.templateType;
 
-    switch (brxGlobalProp.$_state.templateType) {
-        case 'popup':
-        case 'error':
-        case 'section':
-        case 'archive':
-        case 'search':
-            templateType = 'content';
-            break;
-        default:
-            break;
-        }
-
-    return templateType;
+    return !['header', 'footer'].includes(templateType) ? 'content' : templateType;
 }
 
 logger('Module loaded!', { module: 'plain-classes' });
