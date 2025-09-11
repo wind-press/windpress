@@ -1073,7 +1073,7 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                         const themeStartIndex = themeMatch.index + themeMatch[0].indexOf('{') + 1;
 
                         // Find all property values in the theme block that could be colors
-                        const propertyRegex = /--[^:]+:\s*([^;]+);/g;
+                        const propertyRegex = /--color-(?!\*)[^:]+:\s*([^;]+);/g;
                         let propertyMatch;
 
                         while ((propertyMatch = propertyRegex.exec(themeContent)) !== null) {
