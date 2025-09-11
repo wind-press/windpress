@@ -11,7 +11,7 @@ import svgr from 'vite-plugin-svgr';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import httpsImports from 'vite-plugin-https-imports';
-import viteUiPro from '@nuxt/ui-pro/vite';
+import nuxtUi from '@nuxt/ui/vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
@@ -59,8 +59,7 @@ export default defineConfig({
             jsxRuntime: 'classic',
         }),
         wp_scripts(),
-        viteUiPro({
-            // license: process.env.NUXT_UI_PRO_LICENSE,
+        nuxtUi({
             components: {
                 resolvers: [
                     IconsResolver(),
