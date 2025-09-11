@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Changed
+- Improve the File editor performance by register the IntelliSense only once after the editor is initialized
+
 ## [3.3.61] - 2025-09-10
 
 ### Fixed
