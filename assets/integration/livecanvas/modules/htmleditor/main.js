@@ -10,13 +10,42 @@
 import './style.scss';
 
 import { logger } from '@/integration/common/logger';
-import { debounce } from 'lodash-es';
 import { previewIframe } from '@/integration/livecanvas/constant.js';
 
 import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 
 let shikiHighlighter = null;
+
+// CSS generation cache
+const cssCache = new Map();
+const CACHE_TTL = 300000; // 5 minutes
+const CACHE_MAX_SIZE = 500;
+
+function getCachedCssCode(className) {
+    const cached = cssCache.get(className);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return cached.value;
+    }
+    return null;
+}
+
+function setCachedCssCode(className, cssCode) {
+    // Clean up cache if it's getting too large
+    if (cssCache.size >= CACHE_MAX_SIZE) {
+        const entries = Array.from(cssCache.entries());
+        entries.sort((a, b) => a[1].timestamp - b[1].timestamp);
+        const cutoff = Math.floor(CACHE_MAX_SIZE * 0.7);
+        for (let i = 0; i < entries.length - cutoff; i++) {
+            cssCache.delete(entries[i][0]);
+        }
+    }
+    
+    cssCache.set(className, {
+        value: cssCode,
+        timestamp: Date.now()
+    });
+}
 
 (async () => {
     shikiHighlighter = await createHighlighterCore({
@@ -71,7 +100,7 @@ const hoverTooltip = new tooltip(document.body);
 hoverTooltip.setText('');
 hoverTooltip.hide();
 
-const debouncedMousemoveHandler = debounce(async function (e) {
+async function mousemoveHandler(e) {
     const pos = e.getDocumentPosition();
     const session = lc_html_editor.getSession();
     const token = session.getTokenAt(pos.row, pos.column);
@@ -113,7 +142,14 @@ const debouncedMousemoveHandler = debounce(async function (e) {
         idx = end + 1; // +1 for the space
     }
 
-    const generatedCssCode = await previewIframe.contentWindow.windpress.module.classnameToCss.generate(classname);
+    // Check cache first
+    let generatedCssCode = getCachedCssCode(classname);
+    if (generatedCssCode === null) {
+        // Generate and cache the CSS code
+        generatedCssCode = await previewIframe.contentWindow.windpress.module.classnameToCss.generate(classname);
+        setCachedCssCode(classname, generatedCssCode);
+    }
+
     if (generatedCssCode === null || generatedCssCode.trim() === '') {
         hoverTooltip.hide();
     } else {
@@ -124,11 +160,11 @@ const debouncedMousemoveHandler = debounce(async function (e) {
         hoverTooltip.setPosition(e.domEvent.clientX + 10, e.domEvent.clientY + 10);
         hoverTooltip.show();
     }
-}, 10);
+}
 
-lc_html_editor.addEventListener('mousemove', debouncedMousemoveHandler);
-lc_html_editor.addEventListener('mouseleave', function (event) {
-    debouncedMousemoveHandler.cancel();
+lc_html_editor.addEventListener('mousemove', mousemoveHandler);
+lc_html_editor.container.addEventListener('mouseleave', function () {
+    hoverTooltip.hide();
 });
 
 logger('Module loaded!', { module: 'htmleditor' });

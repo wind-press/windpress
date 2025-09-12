@@ -92,8 +92,9 @@
 
     .hit-backdrop,
     textarea.class-livedit {
-        border: 1px solid var(--color-accents);
-        border-radius: 2px;
+        // border: 1px solid var(--color-accents);
+        // border-radius: 2px;
+        color: var(--color-grey-2) !important;
         font-size: 12px;
         font-family: Consolas, monaco, Courier New, monospace !important;
         word-spacing: 8px !important;
@@ -103,6 +104,7 @@
         line-height: 30px !important;
         margin-bottom: 0 !important;
         min-height: 35px !important;
+        overflow: hidden !important;
     }
 
     textarea.class-livedit {
@@ -111,7 +113,6 @@
 
     .hit-backdrop {
         position: absolute !important;
-        overflow: hidden !important;
     }
 
     .hit-highlights {
