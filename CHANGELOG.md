@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.62] - 2025-09-13
+
 ### Changed
 - Improve the File editor performance by register the IntelliSense only once after the editor is initialized
 
@@ -568,7 +570,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.61...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.62...HEAD
+[3.3.62]: https://github.com/wind-press/windpress/compare/v3.3.61...v3.3.62
 [3.3.61]: https://github.com/wind-press/windpress/compare/v3.3.60...v3.3.61
 [3.3.60]: https://github.com/wind-press/windpress/compare/v3.3.59...v3.3.60
 [3.3.59]: https://github.com/wind-press/windpress/compare/v3.3.58...v3.3.59
