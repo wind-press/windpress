@@ -38,4 +38,8 @@ html:has(.folded) {
     .update-nag {
         display: none;
     }
+
+    #adminmenumain #adminmenu li img {
+        display: inline;
+    }
 }
