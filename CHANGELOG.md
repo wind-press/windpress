@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Fixed
+- [TW4] IntelliSense was failing to correctly clean up `@apply` directives
+
 ## [3.3.62] - 2025-09-13
 
 ### Changed
