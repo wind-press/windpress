@@ -36,6 +36,7 @@ class Compile
         $contents = [];
 
         $paths = LocationManager::get_locations();
+        $paths = array_unique(array_filter(array_merge(...array_values($paths)), fn ($path) => $path !== '/'));
 
         $finder = new Finder();
 
