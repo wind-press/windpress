@@ -25,7 +25,7 @@ class Editor
 {
     public function __construct()
     {
-        if (! defined('__BREAKDANCE_VERSION') || defined('BREAKDANCE_MODE')) {
+        if (! defined('__BREAKDANCE_VERSION') || (defined('BREAKDANCE_MODE') && BREAKDANCE_MODE !== 'breakdance')) {
             return;
         }
 

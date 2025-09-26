@@ -27,7 +27,7 @@ class Compile
 
     public function __invoke(): array
     {
-        if (! defined('__BREAKDANCE_VERSION') || defined('BREAKDANCE_MODE')) {
+        if (! defined('__BREAKDANCE_VERSION') || (defined('BREAKDANCE_MODE') && BREAKDANCE_MODE !== 'breakdance')) {
             return [];
         }
 

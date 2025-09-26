@@ -14,6 +14,7 @@ For instance:
 ## [Unreleased]
 
 ### Fixed
+- [Breakdance] Integration doesn't load on the recent version of Breakdance (v2.5.1)
 - [TW4] IntelliSense was failing to correctly clean up `@apply` directives
 
 ## [3.3.62] - 2025-09-13
