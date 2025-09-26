@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.63] - 2025-09-27
+
 ### Fixed
 - [Breakdance] Integration doesn't load on the recent version of Breakdance (v2.5.1)
 - [TW4] IntelliSense was failing to correctly clean up `@apply` directives
@@ -574,7 +576,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.62...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.63...HEAD
+[3.3.63]: https://github.com/wind-press/windpress/compare/v3.3.62...v3.3.63
 [3.3.62]: https://github.com/wind-press/windpress/compare/v3.3.61...v3.3.62
 [3.3.61]: https://github.com/wind-press/windpress/compare/v3.3.60...v3.3.61
 [3.3.60]: https://github.com/wind-press/windpress/compare/v3.3.59...v3.3.60
