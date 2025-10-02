@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Added
+- Upgraded to Tailwind CSS v4 (4.1.14 latest)
+
 ## [3.3.63] - 2025-09-27
 
 ### Fixed
