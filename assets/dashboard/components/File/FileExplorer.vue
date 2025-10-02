@@ -50,7 +50,7 @@ function recursiveTreeNodeWalkAndInsert(trees: TreeItem[], entry: Entry, rootPat
             onSelect: (e: Event) => {
                 e.preventDefault()
             },
- 
+
         };
         trees.push(tree);
     }
@@ -129,7 +129,7 @@ onMounted(() => {
 <template>
     <div class="overflow-y-auto divide-y divide-(--ui-border)">
         <!-- <UTree :items="files" v-model="selectedFilePath" /> -->
-        <UTree :items="files" v-model="selectedFilePath">
+        <UTree :items="files" v-model="selectedFilePath" :get-key="(item) => item.value ?? item.label">
             <template #tree-file="{ item }: { item: TreeItem }">
                 <UContextMenu :items="[
                     {
