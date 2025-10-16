@@ -64,6 +64,12 @@ onBeforeMount(() => {
         <USwitch v-model="settingsStore.virtualOptions('performance.cache.inline_load', false).value" :label="i18n.__('Inline Cached CSS', 'windpress')" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
       </UFormField>
       <USeparator />
+      <template v-if="settingsStore.virtualOptions('general.tailwindcss.version', 4).value === 4">
+        <UFormField :label="i18n.__('Generate source map', 'windpress')" :description="i18n.__('Generate the source map for the cached CSS file.', 'windpress')" class="flex items-center justify-between gap-4">
+          <USwitch v-model="settingsStore.virtualOptions('performance.cache.source_map', false).value" :label="i18n.__('Enable Source Map', 'windpress')" :ui="{ label: 'whitespace-nowrap' }" class="flex-row-reverse gap-2" />
+        </UFormField>
+        <USeparator />
+      </template>
       <UFormField :label="i18n.__('Generate the cached CSS', 'windpress')" class="flex items-center justify-between gap-4">
         <template #description v-if="css_cache.last_generated">
           <div class="flex gap-2 items-center">

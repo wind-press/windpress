@@ -109,14 +109,23 @@ class Cache extends AbstractApi implements ApiInterface
         $payload = $wprestRequest->get_json_params();
 
         try {
-            $content = sprintf(
-                "/*! %s v%s | %s | %s */\n%s",
-                strtolower(Common::plugin_data('Name')),
-                WIND_PRESS::VERSION,
-                gmdate('Y-m-d H:i:s', time()),
-                strtolower(Common::plugin_data('PluginURI')),
-                base64_decode($payload['content'])
-            );
+            $content = base64_decode($payload['content']);
+
+            if (isset($payload['sourcemap']) && $payload['sourcemap']) {
+                $sourcemapContent = base64_decode($payload['sourcemap']);
+                CoreCache::save_sourcemap($sourcemapContent);
+                $content .= "\n/*# sourceMappingURL=" . CoreCache::CSS_SOURCEMAP_FILE . " */";
+            } else {
+                // add a comment at the top of the file
+                $comment = sprintf(
+                    "/*! %s v%s | %s | %s */\n",
+                    strtolower(Common::plugin_data('Name')),
+                    WIND_PRESS::VERSION,
+                    gmdate('Y-m-d H:i:s', time()),
+                    strtolower(Common::plugin_data('PluginURI')),
+                );
+                $content = $comment . $content;
+            }
 
             CoreCache::save_cache($content);
         } catch (\Throwable $throwable) {

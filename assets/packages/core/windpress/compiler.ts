@@ -43,6 +43,9 @@ export type BuildCacheOptions = {
         // The sources to use for the incremental cache build. Use this to include extra sources that are not part of the providers
         sources?: string[];
     };
+
+    // Should the sourcemap be generated?
+    sourcemap?: boolean;
 }
 
 export async function buildCache(opts: BuildCacheOptions = {}) {
@@ -90,16 +93,19 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             }, {});
         })
 
-    // if version is not set, get the setting from the server
-    if (!options.tailwindcss_version) {
+    // if the version or the sourcemap is not set, then get the setting from the server
+    if (!options.tailwindcss_version || typeof options.sourcemap !== 'boolean') {
         await api
             .request('/admin/settings/options/index', { method: 'GET', })
             .then((response) => {
                 const version = Number(get(response.data.options, 'general.tailwindcss.version', 4));
+                const sourcemap = Boolean(get(response.data.options, 'performance.cache.source_map', false));
                 if (version === 3 || version === 4) {
                     options.tailwindcss_version = version;
+                    options.sourcemap = sourcemap;
                 } else {
                     options.tailwindcss_version = 4;
+                    options.sourcemap = false;
                 }
             })
     }
@@ -196,6 +202,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
 
     let normal = null;
     let minified = null;
+    let sourcemap = null;
 
     if (options.tailwindcss_version === 4) {
         // import the modules dynamically to avoid bundling them in the main bundle
@@ -225,8 +232,17 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
 
         const result = compiled.build(candidates);
 
-        normal = (await optimizeV4({ css: result })).css;
-        minified = (await optimizeV4({ css: result, minify: true })).css;
+        let map = null;
+        if (options.sourcemap === true) {
+            map = compiled.buildSourceMap();
+        }
+
+        let optimized = await optimizeV4(result, { file: 'main.css', map: map ?? undefined });
+        let optimizedMin = await optimizeV4(result, { file: 'main.css', map: map ?? undefined, minify: true });
+
+        normal = optimized.code;
+        sourcemap = optimized.map;
+        minified = optimizedMin.code;
     } else if (options.tailwindcss_version === 3) {
         // import the modules dynamically to avoid bundling them in the main bundle
         const { build: buildV3, optimize: optimizeV3 } = await import('@/packages/core/tailwindcss-v3');
@@ -257,7 +273,8 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         await api
             .post('admin/settings/cache/store', {
                 // @see https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
-                content: encodeBase64(minified || ''),
+                content: encodeBase64((sourcemap ? normal : minified) || ''),
+                sourcemap: sourcemap ? encodeBase64(sourcemap) : null,
                 full_build: options.kind === 'full' ? css_cache.last_full_build : null,
             })
             .then((resp) => {
@@ -268,6 +285,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
 
     return {
         normal: normal,
+        sourcemap: sourcemap,
         minified: minified,
         css_cache: css_cache,
     };

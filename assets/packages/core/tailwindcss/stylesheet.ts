@@ -19,7 +19,7 @@ async function httpsProvider(url: string): Promise<string> {
     return await fetch(url).then((res) => res.text());
 }
 
-export async function loadStylesheet(id: string, base = '/', volume = {} as VFSContainer): Promise<{ base: string, content: string }> {
+export async function loadStylesheet(id: string, base = '/', volume = {} as VFSContainer): Promise<{ base: string, content: string, path?: string }> {
     base = base || '/';
 
     const _id = id;
@@ -27,7 +27,8 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
     if (id.startsWith('fetch:') && isValidUrl(id.substring(6))) {
         return {
             base: path.dirname(id),
-            content: await httpsProvider(new URL(id.substring(6)).toString())
+            content: await httpsProvider(new URL(id.substring(6)).toString()),
+            path: id
         }
     } else {
         // if the twVolume is not existing in the volume, add it
@@ -81,7 +82,8 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
         if (volume[_path]) {
             return {
                 base: path.dirname(id),
-                content: volume[_path]
+                content: volume[_path],
+                path: id,
             }
         }
 
@@ -155,7 +157,8 @@ export async function loadStylesheet(id: string, base = '/', volume = {} as VFSC
 
         return {
             base: path.dirname(id),
-            content: volume[_path]
+            content: volume[_path],
+            path: id,
         }
     }
 }

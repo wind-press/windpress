@@ -15,6 +15,7 @@ For instance:
 
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.14 latest)
+- [TW4] Source Map support for easier debugging in the browser DevTools (experimental)
 
 ## [3.3.63] - 2025-09-27
 

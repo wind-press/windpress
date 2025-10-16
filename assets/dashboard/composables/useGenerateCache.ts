@@ -45,6 +45,7 @@ async function generateCache(cb?: (status: boolean) => void) {
         target: 'windpress/compiler',
         data: {
             tailwindcss_version: Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value),
+            sourcemap: Boolean(settingsStore.virtualOptions('performance.cache.source_map', false).value),
         } as BuildCacheOptions
     });
 

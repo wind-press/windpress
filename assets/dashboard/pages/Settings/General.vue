@@ -147,10 +147,10 @@ onBeforeMount(() => {
           </label>
         </div>
       </UFormField>
-      <USeparator />
+      <!-- <USeparator />
       <UFormField :label="i18n.__('Ubiquitous panel', 'windpress')" :description="i18n.__('Access the WindPress dashboard panel right from the front page and made adjustment as it is on the wp-admin page.', 'windpress')" class="flex items-center justify-between not-last:pb-4 gap-4">
         <USwitch v-model="settingsStore.virtualOptions('general.ubiquitous-panel.enabled', false).value" disabled />
-      </UFormField>
+      </UFormField> -->
     </UPageCard>
   </UForm>
 </template>
