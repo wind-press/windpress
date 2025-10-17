@@ -301,7 +301,7 @@ onBeforeRouteLeave((_, __, next) => {
             </div>
 
             <!-- Color tree when colors exist -->
-            <UTree v-else :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
+            <UTree v-else :items :get-key="(item) => String(item.value)" :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addColorNext" :on-add-child="addColorChild" :on-delete="deleteColor">
                         <template #before-value="{ item }">

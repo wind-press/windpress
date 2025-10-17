@@ -17,6 +17,9 @@ For instance:
 - Upgraded to Tailwind CSS v4 (4.1.14 latest)
 - [TW4] Source Map support for easier debugging in the browser DevTools (experimental)
 
+### Fixed
+- Wizard tree doesn't show the children nodes correctly [#66](https://github.com/wind-press/windpress/issues/66)
+
 ## [3.3.63] - 2025-09-27
 
 ### Fixed

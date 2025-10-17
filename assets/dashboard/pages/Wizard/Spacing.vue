@@ -220,7 +220,7 @@ onBeforeRouteLeave((_, __, next) => {
             </div>
 
             <!-- Spacing tree when spacing exists -->
-            <UTree v-else :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
+            <UTree v-else :items :get-key="(item) => String(item.value)" :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addSpacingNext" :on-add-child="addSpacingChild" :on-delete="deleteSpacing" />
                 </template>

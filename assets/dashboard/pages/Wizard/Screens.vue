@@ -80,7 +80,7 @@ onBeforeRouteLeave((_, __, next) => {
             </div>
 
             <!-- Breakpoint tree when breakpoints exist -->
-            <UTree v-else :items :ui="{ link: 'p-0' }" :expanded="expandedTree">
+            <UTree v-else :items :get-key="(item) => String(item.value)" :ui="{ link: 'p-0' }" :expanded="expandedTree">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmed" :was-recently-moved="wasRecentlyMoved" :is-descendant-of="isDescendantOf" :on-add-next="addBreakpointNext" :on-add-child="addBreakpointChild" :on-delete="deleteBreakpoint" />
                 </template>

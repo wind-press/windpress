@@ -274,7 +274,7 @@ onBeforeRouteLeave((_, __, next) => {
             </div>
 
             <!-- Text Size TreeItem when items exist -->
-            <UTree v-else :items="textItems" :ui="{ link: 'p-0' }" :expanded="expandedTreeText">
+            <UTree v-else :items="textItems" :get-key="(item) => String(item.value)" :ui="{ link: 'p-0' }" :expanded="expandedTreeText">
                 <template #item="{ item, level }">
                     <WizardTreeItem :item="item" :level="level || 0" :should-be-dimmed="shouldBeDimmedText" :was-recently-moved="wasRecentlyMovedText" :is-descendant-of="isDescendantOfText" :on-add-next="addTextNextHandler" :on-add-child="addTextChildHandler" :on-delete="deleteText" />
                 </template>
