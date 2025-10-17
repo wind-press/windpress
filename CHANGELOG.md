@@ -19,6 +19,7 @@ For instance:
 
 ### Fixed
 - Wizard tree doesn't show the children nodes correctly [#66](https://github.com/wind-press/windpress/issues/66)
+- [Bricks] Paste HTML feature keyboard shortcut not working correctly [#64](https://github.com/wind-press/windpress/issues/64) [#67](https://github.com/wind-press/windpress/issues/67) [#68](https://github.com/wind-press/windpress/issues/68)
 
 ## [3.3.63] - 2025-09-27
 

@@ -96,7 +96,7 @@ async function htmlPasteHandler() {
     brxGlobalProp.$_showMessage('[WindPress] HTML pasted');
 
     // restore clipboard content
-    await navigator.clipboard.writeText(clipboardText);
+    // await navigator.clipboard.writeText(clipboardText);
 }
 
 /**
@@ -118,8 +118,11 @@ document.addEventListener('keydown', (event) => {
         return;
     }
 
+    event.stopPropagation();
+
     htmlPasteHandler();
-});
+
+}, true);
 
 // insert "Paste HTML" menu item after "Paste" menu item
 const pasteItemContextMenu = document.querySelector('#bricks-builder-context-menu li:nth-child(2)');
