@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.64] - 2025-10-18
+
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.14 latest)
 - [TW4] Source Map support for easier debugging in the browser DevTools (experimental)
@@ -584,7 +586,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.63...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.64...HEAD
+[3.3.64]: https://github.com/wind-press/windpress/compare/v3.3.63...v3.3.64
 [3.3.63]: https://github.com/wind-press/windpress/compare/v3.3.62...v3.3.63
 [3.3.62]: https://github.com/wind-press/windpress/compare/v3.3.61...v3.3.62
 [3.3.61]: https://github.com/wind-press/windpress/compare/v3.3.60...v3.3.61
