@@ -51,7 +51,6 @@
     "unplugin-vue-components": "^29.1.0",
     "vite": "npm:rolldown-vite@^7.1.17",
     "vite-plugin-external": "^6.2.2",
-    "vite-plugin-https-imports": "https://pkg.pr.new/wind-press/vite-plugin-https-imports@28e1201",
     "vite-plugin-node-polyfills": "^0.24.0",
     "vite-plugin-static-copy": "^3.1.4",
     "vite-plugin-svgr": "^4.5.0",

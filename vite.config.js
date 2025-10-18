@@ -10,7 +10,7 @@ import path from 'path';
 import svgr from 'vite-plugin-svgr';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
-import httpsImports from 'vite-plugin-https-imports';
+// import httpsImports from 'vite-plugin-https-imports'; // 
 import nuxtUi from '@nuxt/ui/vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
@@ -94,17 +94,17 @@ export default defineConfig({
                 dimensions: false,
             }
         }),
-        httpsImports.default({}, function resolver(matcher) {
-            return (id, importer) => {
-                if (matcher(id)) {
-                    return id;
-                }
-                else if (matcher(importer) && !id.includes('vite-plugin-node-polyfills')) {
-                    return new URL(id, importer).toString();
-                }
-                return undefined;
-            };
-        }),
+        // httpsImports.default({}, function resolver(matcher) {
+        //     return (id, importer) => {
+        //         if (matcher(id)) {
+        //             return id;
+        //         }
+        //         else if (matcher(importer) && !id.includes('vite-plugin-node-polyfills')) {
+        //             return new URL(id, importer).toString();
+        //         }
+        //         return undefined;
+        //     };
+        // }),
         viteStaticCopy({
             targets: [
                 {
