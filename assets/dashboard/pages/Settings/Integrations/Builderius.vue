@@ -5,73 +5,66 @@ const settingsStore = useSettingsStore();
 </script>
 
 <template>
-  <UDashboardPanel id="integration-builderius-settings" class="min-h-[calc(100svh-var(--wp-admin--admin-bar--height))]">
-    <UDashboardNavbar :title="i18n.__('Builderius Settings', 'windpress')" :toggle="false" :ui="{ title: 'text-sm', root: 'border-none' }">
-      <template #leading>
+  <div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
         <UTooltip :text="i18n.__('Back to Integrations', 'windpress')">
-          <UButton icon="i-lucide-arrow-left" color="neutral" variant="ghost" :to="{ name: 'settings.integrations' }" />
+          <UButton icon="i-lucide-arrow-left" color="neutral" variant="ghost" size="sm" :to="{ name: 'settings.integrations' }" />
         </UTooltip>
-      </template>
-
-      <template #title>
-        <UIcon name="i-lucide-package" class="size-5" />
-        {{ i18n.__('Builderius Settings', 'windpress') }}
-        <UBadge variant="soft" color="primary">@builderius</UBadge>
-      </template>
-
-      <template #right>
-        <UTooltip :text="i18n.__('Help', 'windpress')">
-          <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://wind.press/docs/guide/integrations/builderius" target="_blank" />
-        </UTooltip>
-      </template>
-    </UDashboardNavbar>
-
-    <div class="flex-1 overflow-y-auto p-4">
-      <div class="max-w-2xl mx-auto space-y-6">
-        <!-- Compile Integration -->
-        <UCard>
-          <template #header>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <UIcon name="i-lucide-cpu" class="size-5 text-primary" />
-                <h3 class="text-sm font-medium">{{ i18n.__('Compile Integration', 'windpress') }}</h3>
-                <UTooltip :text="i18n.__('Help', 'windpress')">
-                  <UButton icon="i-lucide-circle-help" color="neutral" size="sm" variant="soft" to="https://wind.press/docs/guide/integrations/builderius" target="_blank" />
-                </UTooltip>
-              </div>
-              <USwitch v-model="settingsStore.virtualOptions(`integration.builderius.compile.enabled`, true).value" />
-            </div>
-          </template>
-
-          <div class="space-y-3">
-            <p class="text-sm text-muted">
-              {{ i18n.__('Enable CSS compilation for Builderius elements and templates. This processes Tailwind classes found in Builderius content and generates the necessary CSS.', 'windpress') }}
-            </p>
-          </div>
-        </UCard>
-
-        <!-- Editor Integration -->
-        <UCard>
-          <template #header>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <UIcon name="i-lucide-edit-3" class="size-5 text-primary" />
-                <h3 class="text-sm font-medium">{{ i18n.__('Editor Integration', 'windpress') }}</h3>
-                <UTooltip :text="i18n.__('Help', 'windpress')">
-                  <UButton icon="i-lucide-circle-help" color="neutral" size="sm" variant="soft" to="https://wind.press/docs/guide/integrations/builderius" target="_blank" />
-                </UTooltip>
-              </div>
-              <USwitch v-model="settingsStore.virtualOptions(`integration.builderius.editor.enabled`, true).value" />
-            </div>
-          </template>
-
-          <div class="space-y-3">
-            <p class="text-sm text-muted">
-              {{ i18n.__('Enable enhanced Builderius editor features including real-time Tailwind CSS preview, autocomplete, and editor enhancements.', 'windpress') }}
-            </p>
-          </div>
-        </UCard>
+        <div class="flex items-center gap-2">
+          <UIcon name="i-lucide-package" class="size-5" />
+          <h2 class="text-xl font-semibold">{{ i18n.__('Builderius Settings', 'windpress') }}</h2>
+          <UBadge variant="soft" color="primary">@builderius</UBadge>
+        </div>
       </div>
+      <UTooltip :text="i18n.__('Help', 'windpress')">
+        <UButton icon="i-lucide-circle-help" color="neutral" variant="soft" to="https://wind.press/docs/guide/integrations/builderius" target="_blank" />
+      </UTooltip>
     </div>
-  </UDashboardPanel>
+
+    <!-- Compile Integration -->
+    <UCard>
+      <template #header>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <UIcon name="i-lucide-cpu" class="size-5 text-primary" />
+            <h3 class="text-sm font-medium">{{ i18n.__('Compile Integration', 'windpress') }}</h3>
+            <UTooltip :text="i18n.__('Help', 'windpress')">
+              <UButton icon="i-lucide-circle-help" color="neutral" size="sm" variant="soft" to="https://wind.press/docs/guide/integrations/builderius" target="_blank" />
+            </UTooltip>
+          </div>
+          <USwitch v-model="settingsStore.virtualOptions(`integration.builderius.compile.enabled`, true).value" />
+        </div>
+      </template>
+
+      <div class="space-y-3">
+        <p class="text-sm text-muted">
+          {{ i18n.__('Enable CSS compilation for Builderius elements and templates. This processes Tailwind classes found in Builderius content and generates the necessary CSS.', 'windpress') }}
+        </p>
+      </div>
+    </UCard>
+
+    <!-- Editor Integration -->
+    <UCard>
+      <template #header>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <UIcon name="i-lucide-edit-3" class="size-5 text-primary" />
+            <h3 class="text-sm font-medium">{{ i18n.__('Editor Integration', 'windpress') }}</h3>
+            <UTooltip :text="i18n.__('Help', 'windpress')">
+              <UButton icon="i-lucide-circle-help" color="neutral" size="sm" variant="soft" to="https://wind.press/docs/guide/integrations/builderius" target="_blank" />
+            </UTooltip>
+          </div>
+          <USwitch v-model="settingsStore.virtualOptions(`integration.builderius.editor.enabled`, true).value" />
+        </div>
+      </template>
+
+      <div class="space-y-3">
+        <p class="text-sm text-muted">
+          {{ i18n.__('Enable enhanced Builderius editor features including real-time Tailwind CSS preview, autocomplete, and editor enhancements.', 'windpress') }}
+        </p>
+      </div>
+    </UCard>
+  </div>
 </template>

@@ -67,7 +67,6 @@ onBeforeMount(() => {
                     </ULink>
                   </div>
 
-                  
               <UTooltip :text="i18n.__('Integration Settings', 'windpress')">
                 <UButton 
                   icon="i-lucide-settings" 

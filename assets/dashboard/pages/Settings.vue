@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useSettingsStore } from '@/dashboard/stores/settings';
 import { useRouter } from 'vue-router';
 import { useBusyStore } from '@/dashboard/stores/busy';
@@ -69,7 +70,7 @@ async function saveSetting() {
     });
 }
 
-const links = [
+const links = computed(() => [
   [
     {
       label: __('General', 'windpress'),
@@ -108,9 +109,10 @@ const links = [
       color: 'primary',
       onSelect: saveSetting,
       disabled: busyStore.isBusy,
+      badge: settingsStore.hasChanged ? { color: 'warning', variant: 'solid' } : undefined,
     }
   ]
-]
+])
 </script>
 
 <template>
@@ -131,6 +133,15 @@ const links = [
     <template #body>
       <div class="flex flex-col gap-4 sm:gap-6 lg:gap-12 w-full lg:max-w-2xl mx-auto">
         <RouterView />
+
+        <div class="flex justify-end">
+          <UTooltip :text="i18n.__('Save', 'windpress')">
+            <UChip v-if="settingsStore.hasChanged" color="warning" size="md">
+              <UButton icon="i-lucide-save" color="primary" :label="i18n.__('Save', 'windpress')" @click="saveSetting" :disabled="busyStore.isBusy" />
+            </UChip>
+            <UButton v-else icon="i-lucide-save" color="primary" :label="i18n.__('Save', 'windpress')" @click="saveSetting" :disabled="busyStore.isBusy" />
+          </UTooltip>
+        </div>
       </div>
     </template>
   </UDashboardPanel>

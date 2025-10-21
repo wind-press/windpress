@@ -1233,7 +1233,10 @@ onBeforeUnmount(() => {
                 </UTooltip>
 
                 <UTooltip :text="i18n.__('Save', 'windpress')">
-                    <UButton icon="i-lucide-save" color="primary" variant="subtle" @click="emit('save')" />
+                    <UChip v-if="volumeStore.entryHasChanged(entry?.relative_path)" color="warning" size="md">
+                        <UButton icon="i-lucide-save" color="primary" variant="subtle" @click="emit('save')" />
+                    </UChip>
+                    <UButton v-else icon="i-lucide-save" color="primary" variant="subtle" @click="emit('save')" />
                 </UTooltip>
             </template>
         </UDashboardNavbar>
