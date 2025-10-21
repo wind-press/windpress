@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace WindPress\WindPress\Core;
 
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use WIND_PRESS;
 use WindPress\WindPress\Utils\Common;
@@ -157,18 +158,15 @@ class Volume
             }
 
             if ($entry['handler'] !== 'internal') {
-                // only if the signature is set
-                if (isset($entry['signature'])) {
-                    // the handler only accept alphanumeric, hyphens, and underscores
-                    if (! preg_match('/^[a-zA-Z0-9_-]+$/', $entry['handler'])) {
-                        continue;
-                    }
-
-                    do_action('a!windpress/core/volume:save_entries.entry', $entry);
-
-                    // use specific handler instead for efficient handling
-                    do_action('a!windpress/core/volume:save_entries.entry.' . $entry['handler'], $entry);
+                // the handler only accept alphanumeric, hyphens, and underscores
+                if (! preg_match('/^[a-zA-Z0-9_-]+$/', $entry['handler'])) {
+                    continue;
                 }
+
+                do_action('a!windpress/core/volume:save_entries.entry', $entry);
+
+                // use specific handler instead for efficient handling
+                do_action('a!windpress/core/volume:save_entries.entry.' . $entry['handler'], $entry);
 
                 continue;
             }
@@ -198,11 +196,14 @@ class Volume
             }
 
             try {
+                // Sanitize and validate the path to prevent directory traversal
+                $safe_file_path = static::sanitize_relative_path($entry['relative_path'], $data_dir);
+
                 // if the content is empty, delete the file.
                 if (empty($entry['content'])) {
-                    Common::delete_file($data_dir . $entry['relative_path']);
+                    Common::delete_file($safe_file_path);
                 } else {
-                    Common::save_file($entry['content'], $data_dir . $entry['relative_path']);
+                    Common::save_file($entry['content'], $safe_file_path);
                 }
             } catch (\Throwable $th) {
                 if (WP_DEBUG_LOG) {
@@ -218,6 +219,37 @@ class Volume
         return array_diff($special_chars, ['/']);
     }
 
+    /**
+     * Sanitize and validate a relative path to prevent directory traversal attacks.
+     *
+     * @param string $relative_path The relative path to sanitize
+     * @param string $base_dir The base directory that the path should be contained within
+     * @return string The sanitized and validated absolute path
+     * @throws \InvalidArgumentException If the path attempts to escape the base directory
+     * @since 3.3.65
+     */
+    private static function sanitize_relative_path(string $relative_path, string $base_dir): string
+    {
+        // Remove any null bytes
+        $relative_path = str_replace("\0", '', $relative_path);
+
+        // Canonicalize the base directory path
+        $base_dir = Path::canonicalize($base_dir);
+
+        // Canonicalize the relative path to resolve .. and normalize separators
+        $canonical_path = Path::canonicalize($relative_path);
+
+        // Build the full path
+        $full_path = Path::join($base_dir, $canonical_path);
+
+        // Validate that the resolved path doesn't escape the base directory
+        if (! str_starts_with($full_path, $base_dir . DIRECTORY_SEPARATOR)) {
+            throw new \InvalidArgumentException('Path traversal attempt detected: ' . $relative_path);
+        }
+
+        return $full_path;
+    }
+
     public static function data_dir_url(): string
     {
         return wp_upload_dir()['baseurl'] . WIND_PRESS::DATA_DIR;
@@ -226,5 +258,10 @@ class Volume
     public static function data_dir_path(): string
     {
         return wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR;
+    }
+
+    public static function get_available_handlers(): array
+    {
+        return apply_filters('f!windpress/core/volume:get_available_handlers', []);
     }
 }

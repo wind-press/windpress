@@ -38,6 +38,7 @@
         "hidehalo/nanoid-php": "^2.0",
         "masterminds/html5": "^2.9",
         "rosua/edd-sl-plugin-updater": "@dev",
+        "symfony/filesystem": "^5.4",
         "symfony/finder": "^5.4",
         "symfony/property-access": "^5.4",
         "symfony/stopwatch": "^5.4",

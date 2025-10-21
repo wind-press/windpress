@@ -67,6 +67,7 @@ rm -f "$RESULT_DIRECTORY/composer.lock"
 rm -f "$RESULT_DIRECTORY/.gitattributes"
 rm -f "$RESULT_DIRECTORY/.gitignore"
 rm -f "$RESULT_DIRECTORY/.phpcs.xml"
+rm -f "$RESULT_DIRECTORY/.php-version"
 
 # WordPress new plugin submission review
 rm -f "$RESULT_DIRECTORY/vendor/paragonie/random_compat/build-phar.sh"

@@ -355,9 +355,9 @@ async function addNewFile() {
         destroyOnClose: true,
     })
 
-    const newFileName = await newFileModal.open().result
+    const result = await newFileModal.open().result
 
-    if (!newFileName) {
+    if (!result) {
         toast.add({
             title: __('Canceled', 'windpress'),
             description: __('New file creation canceled', 'windpress'),
@@ -369,10 +369,10 @@ async function addNewFile() {
     }
 
     try {
-        volumeStore.addNewEntry(newFileName);
+        volumeStore.addNewEntry(result.filePath, result.handler);
         toast.add({
             title: __('Success', 'windpress'),
-            description: sprintf(__('File "%s" created', 'windpress'), newFileName),
+            description: sprintf(__('File "%s" created', 'windpress'), result.filePath),
             color: 'success',
             icon: 'i-lucide-plus'
         });

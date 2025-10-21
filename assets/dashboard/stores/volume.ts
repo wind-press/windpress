@@ -71,10 +71,16 @@ export const useVolumeStore = defineStore('volume', () => {
         return path;
     }
 
-    function addNewEntry(filePath: string) {
+    function addNewEntry(filePath: string, handler: undefined|string = 'internal') {
         // Split the file path and directory path and remove any unwanted characters
-        let filePathParts = filePath.split('/').map(cleanPath).join('/');
-        filePathParts = cleanPath(filePathParts);
+        let filePathParts: string|string[] = filePath.split('/');
+
+        if (handler === undefined || handler === 'internal') {
+            filePathParts = filePathParts.map(part => cleanPath(part)).join('/');
+            filePathParts = cleanPath(filePathParts);
+        } else {
+            filePathParts = filePathParts.join('/');
+        }
 
         // Check if the file path exists
         const existingEntryIndex = data.entries.findIndex(entry => entry.relative_path === filePathParts);
@@ -88,12 +94,13 @@ export const useVolumeStore = defineStore('volume', () => {
             // If hidden, unhide it, and set the content
             data.entries[existingEntryIndex].hidden = false;
             data.entries[existingEntryIndex].content = `/* file: ${filePathParts} */\n\n`;
+            data.entries[existingEntryIndex].handler = handler;
         } else {
             data.entries.push({
                 name: filePathParts.split('/').pop() || '',
                 content: `/* file: ${filePathParts} */\n\n`,
                 relative_path: `${filePathParts}`,
-                handler: 'internal',
+                handler: handler || 'internal',
             });
         }
 

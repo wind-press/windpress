@@ -52,6 +52,16 @@ class Volume extends AbstractApi implements ApiInterface
                 'permission_callback' => fn (WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/handlers',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => fn (WP_REST_Request $wprestRequest): WP_REST_Response => $this->handlers($wprestRequest),
+                'permission_callback' => fn (WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+            ]
+        );
     }
 
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
@@ -71,6 +81,13 @@ class Volume extends AbstractApi implements ApiInterface
 
         return new WP_REST_Response([
             'message' => __('data stored successfully', 'windpress'),
+        ]);
+    }
+
+    public function handlers(WP_REST_Request $wprestRequest): WP_REST_Response
+    {
+        return new WP_REST_Response([
+            'handlers' => CoreVolume::get_available_handlers(),
         ]);
     }
 }
