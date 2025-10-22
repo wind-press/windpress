@@ -15,6 +15,7 @@ For instance:
 
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.15 latest)
+- Added file version history feature to the Simple File System (experimental)
 
 ## [3.3.64] - 2025-10-18
 

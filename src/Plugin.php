@@ -111,6 +111,9 @@ final class Plugin
         add_action('plugins_loaded', fn() => $this->plugins_loaded(), 9);
         add_action('init', fn() => $this->init_plugin());
 
+        // Schedule cron jobs
+        $this->setup_cron_jobs();
+
         do_action('a!windpress/plugin:boot.end');
     }
 
@@ -136,6 +139,11 @@ final class Plugin
     private function deactivate_plugin(): void
     {
         do_action('a!windpress/plugin:deactivate_plugin.start');
+
+        // Clear scheduled cron jobs
+        wp_clear_scheduled_hook('windpress_cleanup_orphaned_metadata');
+        wp_clear_scheduled_hook('windpress_cleanup_old_transactions');
+
         do_action('a!windpress/plugin:deactivate_plugin.end');
     }
 
@@ -304,5 +312,63 @@ final class Plugin
 
         // activate the license.
         $this->maybe_update_plugin()->activate($license_key);
+    }
+
+    /**
+     * Setup cron jobs for maintenance tasks.
+     *
+     * @since 3.4.0
+     */
+    private function setup_cron_jobs(): void
+    {
+        // Schedule daily cleanup of orphaned metadata
+        if (!wp_next_scheduled('windpress_cleanup_orphaned_metadata')) {
+            wp_schedule_event(time(), 'daily', 'windpress_cleanup_orphaned_metadata');
+        }
+
+        // Schedule hourly cleanup of old transaction directories
+        if (!wp_next_scheduled('windpress_cleanup_old_transactions')) {
+            wp_schedule_event(time(), 'hourly', 'windpress_cleanup_old_transactions');
+        }
+
+        // Hook the cleanup functions
+        add_action('windpress_cleanup_orphaned_metadata', [$this, 'cleanup_orphaned_metadata_task']);
+        add_action('windpress_cleanup_old_transactions', [$this, 'cleanup_old_transactions_task']);
+    }
+
+    /**
+     * Cleanup orphaned metadata (files deleted outside dashboard).
+     *
+     * @since 3.4.0
+     */
+    public function cleanup_orphaned_metadata_task(): void
+    {
+        $result = Core\Volume::cleanup_orphaned_metadata();
+
+        if (WP_DEBUG_LOG && ($result['cleaned_meta'] > 0 || $result['cleaned_versions'] > 0)) {
+            error_log(sprintf(
+                'WindPress: Cleaned up %d orphaned metadata entries and %d version directories',
+                $result['cleaned_meta'],
+                $result['cleaned_versions']
+            ));
+        }
+    }
+
+    /**
+     * Cleanup old transaction directories (abandoned transactions).
+     *
+     * @since 3.4.0
+     */
+    public function cleanup_old_transactions_task(): void
+    {
+        $volume_dir = Core\Volume::volume_dir_path();
+        $cleaned = Core\FileSystemTransaction::cleanup_old_transactions($volume_dir, 3600); // 1 hour
+
+        if (WP_DEBUG_LOG && $cleaned > 0) {
+            error_log(sprintf(
+                'WindPress: Cleaned up %d abandoned transaction directories',
+                $cleaned
+            ));
+        }
     }
 }

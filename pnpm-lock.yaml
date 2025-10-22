@@ -248,6 +248,9 @@ importers:
       '@kucrut/vite-for-wp':
         specifier: ^0.12.0
         version: 0.12.0(rolldown-vite@7.1.19(@types/node@24.9.1)(esbuild@0.25.11)(jiti@2.6.1)(less@4.2.0)(sass-embedded@1.93.2)(sass-embedded@1.93.2)(stylus@0.63.0)(terser@5.34.1)(yaml@2.8.1))(rollup-plugin-external-globals@0.13.0(rollup@4.52.5))(vite-plugin-external@6.2.2)
+      '@shikijs/transformers':
+        specifier: ^3.13.0
+        version: 3.13.0
       '@types/css-tree':
         specifier: ^2.3.11
         version: 2.3.11
@@ -1651,6 +1654,9 @@ packages:
 
   '@shikijs/themes@3.13.0':
     resolution: {integrity: sha512-Vxw1Nm1/Od8jyA7QuAenaV78BG2nSr3/gCGdBkLpfLscddCkzkL36Q5b67SrLLfvAJTOUzW39x4FHVCFriPVgg==}
+
+  '@shikijs/transformers@3.13.0':
+    resolution: {integrity: sha512-833lcuVzcRiG+fXvgslWsM2f4gHpjEgui1ipIknSizRuTgMkNZupiXE5/TVJ6eSYfhNBFhBZKkReKWO2GgYmqA==}
 
   '@shikijs/types@3.13.0':
     resolution: {integrity: sha512-oM9P+NCFri/mmQ8LoFGVfVyemm5Hi27330zuOBp0annwJdKH1kOLndw3zCtAVDehPLg9fKqoEx3Ht/wNZxolfw==}
@@ -7256,6 +7262,11 @@ snapshots:
 
   '@shikijs/themes@3.13.0':
     dependencies:
+      '@shikijs/types': 3.13.0
+
+  '@shikijs/transformers@3.13.0':
+    dependencies:
+      '@shikijs/core': 3.13.0
       '@shikijs/types': 3.13.0
 
   '@shikijs/types@3.13.0':

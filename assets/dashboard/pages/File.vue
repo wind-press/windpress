@@ -5,6 +5,7 @@ import { useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import { type Entry, useVolumeStore } from '@/dashboard/stores/volume'
 import FileExplorer from '@/dashboard/components/File/FileExplorer.vue'
 import FileEditor from '@/dashboard/components/File/FileEditor.vue'
+import FileConflictResolutionModal from '@/dashboard/components/File/ConflictResolutionModal.vue'
 import { useFileAction } from '@/dashboard/composables/useFileAction'
 
 const volumeStore = useVolumeStore()
@@ -77,4 +78,7 @@ const isMobile = breakpoints.smaller('lg')
             <FileExplorer />
         </template>
     </USlideover>
+
+    <!-- Global Conflict Resolution Modal -->
+    <FileConflictResolutionModal />
 </template>
