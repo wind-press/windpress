@@ -17,6 +17,7 @@ use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use WIND_PRESS;
 use WindPress\WindPress\Utils\Common;
+use WindPress\WindPress\Utils\Config;
 
 /**
  * @since 3.1.11
@@ -60,6 +61,18 @@ class Volume
         return self::$meta_manager;
     }
 
+    /**
+     * Check if file version history is enabled.
+     *
+     * @return bool
+     * @since 3.4.0
+     */
+    private static function is_version_history_enabled(): bool
+    {
+        $enabled = Config::get('general.file_version_history.enabled', true);
+        return (bool) apply_filters('f!windpress/core/volume:version_history_enabled', $enabled);
+    }
+
     public static function get_entries(): array
     {
         $entries = [];
@@ -98,12 +111,14 @@ class Volume
             // Detect external changes
             if ($stored_checksum && $stored_checksum !== $current_checksum) {
                 // Auto-create version snapshot for external modification
-                $version->create_version(
-                    $relative_path,
-                    $content,
-                    'External modification detected',
-                    'local'
-                );
+                if (self::is_version_history_enabled()) {
+                    $version->create_version(
+                        $relative_path,
+                        $content,
+                        'External modification detected',
+                        'local'
+                    );
+                }
             }
 
             // Update metadata
@@ -305,7 +320,7 @@ class Volume
                     // }
 
                     // Create version before saving (if content changed)
-                    if ($disk_content !== $content && !empty($content)) {
+                    if ($disk_content !== $content && !empty($content) && self::is_version_history_enabled()) {
                         $version->create_version(
                             $relative_path,
                             $disk_content,

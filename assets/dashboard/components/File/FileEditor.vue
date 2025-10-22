@@ -1226,7 +1226,7 @@ onBeforeUnmount(() => {
 
             <template #right>
                 <!-- Version History Button -->
-                <FileVersionHistoryModal :entry="entry" />
+                <FileVersionHistoryModal v-if="settingsStore.virtualOptions('general.file_version_history.enabled', true).value" :entry="entry" />
 
                 <UTooltip v-if="entry?.relative_path !== 'main.css' && !(Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" :text="i18n.__('Delete', 'windpress')">
                     <UButton icon="i-lucide-trash" color="neutral" variant="ghost" @click="emit('delete', entry)" />
