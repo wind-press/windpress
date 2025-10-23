@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.65] - 2025-10-24
+
 ### Added
 - Upgraded to Tailwind CSS v4 (4.1.16 latest)
 - Added file version history feature to the Simple File System (experimental)
@@ -590,7 +592,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.64...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.65...HEAD
+[3.3.65]: https://github.com/wind-press/windpress/compare/v3.3.64...v3.3.65
 [3.3.64]: https://github.com/wind-press/windpress/compare/v3.3.63...v3.3.64
 [3.3.63]: https://github.com/wind-press/windpress/compare/v3.3.62...v3.3.63
 [3.3.62]: https://github.com/wind-press/windpress/compare/v3.3.61...v3.3.62
