@@ -137,6 +137,14 @@ logger('Loading...');
         }
 
         if (needInject) {
+            // Check if this is actually a pattern preview modal by looking for the pattern preview container
+            const hasPatternPreview = modalPatterPreviewOverlay.querySelector('div.block-editor-block-preview__container');
+
+            if (!hasPatternPreview) {
+                // Not a pattern preview modal, skip injection
+                return;
+            }
+
             logger('waiting for the patternIframes...');
 
             // wait for the patternIframes greater than 0
@@ -210,6 +218,14 @@ logger('Loading...');
         }
 
         if (needInject) {
+            // Check if this panel actually has pattern preview containers
+            const hasPatternPreview = sidebarPatterPreviewPanel.querySelector('div.block-editor-block-preview__container');
+
+            if (!hasPatternPreview) {
+                // Not a pattern preview panel, skip injection
+                return;
+            }
+
             logger('waiting for the patternIframes...');
 
             // wait for the patternIframes greater than 0

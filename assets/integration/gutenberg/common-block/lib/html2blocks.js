@@ -5,6 +5,8 @@
  * Exposed as window.windpressCommonBlock.html2blocks()
  */
 
+import { nanoid } from 'nanoid';
+
 /**
  * Inline elements that should prefer 'text' content type with inline HTML
  */
@@ -39,17 +41,70 @@ function html2blocks(html) {
 		return [];
 	}
 
-	// Use DOMParser to preserve custom elements and structure
+	// Check if HTML contains WordPress block comments
+	const hasWpBlocks = /<!--\s*wp:/.test(html);
+
+	if (hasWpBlocks && typeof wp !== 'undefined' && wp.blocks && wp.blocks.parse) {
+		// Parse everything with WordPress parser first (handles nesting correctly)
+		try {
+			const wpParsed = wp.blocks.parse(html);
+
+			// Separate WordPress blocks from plain HTML
+			const wpBlocksMap = {};
+			let processedHtml = html;
+
+			// Use wp.blocks.serialize to get the exact serialized form of each block
+			// Then replace it with a placeholder (preserves structure while allowing HTML parsing)
+			wpParsed.forEach(block => {
+				if (block.name) { // Skip null/undefined blocks (plain HTML)
+					const uniqueId = nanoid();
+					const serialized = wp.blocks.serialize(block);
+
+					// Replace the serialized block with placeholder
+					processedHtml = processedHtml.replace(serialized, `<wp-block-placeholder data-id="${uniqueId}"></wp-block-placeholder>`);
+					wpBlocksMap[uniqueId] = block;
+				}
+			});
+
+			// Now parse the HTML (with placeholders) using DOMParser
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(processedHtml.trim(), 'text/html');
+			const temp = doc.body;
+
+			// Parse child nodes and replace placeholders
+			const blocks = [];
+			Array.from(temp.childNodes).forEach(node => {
+				const block = parseNode(node, wpBlocksMap);
+				if (block) {
+					blocks.push(block);
+				}
+			});
+
+			return blocks;
+
+		} catch (e) {
+			console.error('Failed to parse WordPress blocks, falling back to HTML parser:', e);
+		}
+	}
+
+	// No WordPress blocks - use DOMParser for plain HTML
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(html.trim(), 'text/html');
 
-	// Get body content (DOMParser wraps in <html><body>)
-	const temp = doc.body;
-
-	// Parse child nodes
 	const blocks = [];
-	Array.from(temp.childNodes).forEach(node => {
-		const block = parseNode(node);
+
+	// Parse head elements first (scripts, styles, meta tags, etc.)
+	// Browser automatically moves these tags to <head>
+	Array.from(doc.head.childNodes).forEach(node => {
+		const block = parseNode(node, {});
+		if (block) {
+			blocks.push(block);
+		}
+	});
+
+	// Parse body elements
+	Array.from(doc.body.childNodes).forEach(node => {
+		const block = parseNode(node, {});
 		if (block) {
 			blocks.push(block);
 		}
@@ -61,9 +116,10 @@ function html2blocks(html) {
 /**
  * Parse a DOM node to a block object
  * @param {Node} node - DOM node to parse
+ * @param {Object} wpBlocksMap - Map of WordPress blocks by placeholder ID
  * @returns {Object|null} Block object or null
  */
-function parseNode(node) {
+function parseNode(node, wpBlocksMap = {}) {
 	// Skip comments
 	if (node.nodeType === Node.COMMENT_NODE) {
 		return null;
@@ -88,6 +144,18 @@ function parseNode(node) {
 	// Handle element nodes
 	if (node.nodeType === Node.ELEMENT_NODE) {
 		const tagName = node.tagName.toLowerCase();
+
+		// Check if this is a wp-block-placeholder
+		if (tagName === 'wp-block-placeholder') {
+			const placeholderId = node.getAttribute('data-id');
+			if (placeholderId && wpBlocksMap[placeholderId]) {
+				// Return the actual WordPress block
+				return wpBlocksMap[placeholderId];
+			}
+			// If placeholder not found, skip it
+			return null;
+		}
+
 		const attributes = getAttributes(node);
 
 		// Determine content type
@@ -114,7 +182,7 @@ function parseNode(node) {
 			// Parse child nodes recursively
 			const innerBlocks = [];
 			Array.from(node.childNodes).forEach(child => {
-				const childBlock = parseNode(child);
+				const childBlock = parseNode(child, wpBlocksMap);
 				if (childBlock) {
 					innerBlocks.push(childBlock);
 				}
@@ -219,20 +287,21 @@ function getAttributes(element) {
 	let className = '';
 
 	Array.from(element.attributes).forEach(attr => {
-		// Decode HTML entities in attribute values
-		const decodedValue = decodeHtmlEntities(attr.value);
+		// Note: attr.value is already decoded by the browser's parser
+		// No need to decode entities again - browser gives us the actual value
+		const value = attr.value;
 
 		// Handle class separately for WordPress className
 		if (attr.name === 'class') {
-			className = decodedValue;
+			className = value;
 		}
 		// Convert style to data-style (WordPress doesn't allow inline styles in blocks)
 		else if (attr.name === 'style') {
-			attrs['data-style'] = decodedValue;
+			attrs['data-style'] = value;
 		}
 		// All other attributes go to globalAttrs
 		else {
-			attrs[attr.name] = decodedValue;
+			attrs[attr.name] = value;
 		}
 	});
 
@@ -254,13 +323,36 @@ function createBlock(tagName, contentType, content = '', attributeData = {}, inn
 		globalAttrs = {}
 	} = attributeData;
 
+	// Generate block name based on tag name and ID
+	// Format: capitalize first letter of each word (e.g., div -> Div, cb-text-node -> Cb Text Node)
+	const generateBlockName = (tag, attrs) => {
+		if (tag === 'cb-text-node') {
+			return 'Text';
+		}
+		// Convert tag to readable name (e.g., 'my-tag' -> 'My Tag')
+		let name = tag
+			.split('-')
+			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
+
+		// Append ID if it exists
+		if (attrs && attrs.globalAttrs && attrs.globalAttrs.id) {
+			name += ` #${attrs.globalAttrs.id}`;
+		}
+
+		return name;
+	};
+
 	const block = {
 		name: 'windpress/common-block',
 		attributes: {
 			tagName: tagName,
 			contentType: contentType,
 			globalAttrs: globalAttrs,
-			selfClosing: VOID_ELEMENTS.has(tagName)
+			selfClosing: VOID_ELEMENTS.has(tagName),
+			metadata: {
+				name: generateBlockName(tagName, attributeData)
+			}
 		},
 		innerBlocks: innerBlocks || []
 	};

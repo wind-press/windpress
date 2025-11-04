@@ -7,6 +7,33 @@
  */
 
 /**
+ * Serialize a block using WordPress block format (for non-Common Blocks)
+ * @param {Object} block - Block object
+ * @returns {string} Serialized block HTML with comment markers
+ */
+function serializeBlock(block) {
+	if (!block || !block.name) {
+		return '';
+	}
+
+	// Use WordPress's serialize function if available
+	if (typeof wp !== 'undefined' && wp.blocks && wp.blocks.serialize) {
+		return wp.blocks.serialize(block);
+	}
+
+	// Fallback: Basic serialization
+	const { name, attributes = {}, innerBlocks = [] } = block;
+	const attrsJSON = Object.keys(attributes).length > 0 ? ' ' + JSON.stringify(attributes) : '';
+	const innerContent = innerBlocks.length > 0 ? blocks2html(innerBlocks) : '';
+
+	if (innerContent) {
+		return `<!-- wp:${name}${attrsJSON} -->\n${innerContent}\n<!-- /wp:${name} -->`;
+	} else {
+		return `<!-- wp:${name}${attrsJSON} /-->`;
+	}
+}
+
+/**
  * Convert an array of blocks to HTML string
  * @param {Array} blocks - Array of block objects
  * @returns {string} HTML string
@@ -25,8 +52,13 @@ function blocks2html(blocks) {
  * @returns {string} HTML string
  */
 function blockToHTML(block) {
-	if (!block || block.name !== 'windpress/common-block') {
+	if (!block) {
 		return '';
+	}
+
+	// Handle non-Common Blocks (Core blocks, etc.) by preserving as WordPress block comments
+	if (block.name !== 'windpress/common-block') {
+		return serializeBlock(block);
 	}
 
 	const { attributes, innerBlocks } = block;
@@ -49,16 +81,18 @@ function blockToHTML(block) {
 
 	// Add className if present
 	if (className) {
-		attributesString += ` class="${escapeAttribute(className)}"`;
+		attributesString += ` class="${escapeQuotes(className)}"`;
 	}
 
 	// Add global attributes
 	Object.entries(globalAttrs).forEach(([name, value]) => {
 		// Convert data-style back to style
 		if (name === 'data-style') {
-			attributesString += ` style="${escapeAttribute(value)}"`;
-		} else if (name && value !== undefined && value !== '') {
-			attributesString += ` ${escapeAttributeName(name)}="${escapeAttribute(value)}"`;
+			attributesString += ` style="${escapeQuotes(value)}"`;
+		} else if (name && value !== undefined && value !== null) {
+			// Include all attributes, even empty strings (alt="", aria-hidden="", etc.)
+			// Only escape quotes to prevent attribute breaking, preserve everything else
+			attributesString += ` ${escapeAttributeName(name)}="${escapeQuotes(value)}"`;
 		}
 	});
 
@@ -85,7 +119,9 @@ function blockToHTML(block) {
 	}
 
 	// Generate HTML
-	const shouldBeSelfClosing = contentType === 'empty' || isVoidElement(tagName);
+	// IMPORTANT: Only void elements should be self-closing in HTML5
+	// Non-void elements like <div>, <span> must have closing tags even if empty
+	const shouldBeSelfClosing = isVoidElement(tagName);
 
 	if (shouldBeSelfClosing) {
 		return `<${tagName}${attributesString} />`;
@@ -109,7 +145,20 @@ function isVoidElement(tagName) {
 }
 
 /**
- * Escape HTML attribute value
+ * Escape only double quotes in attribute values
+ * Minimal escaping to prevent attribute breaking while preserving other characters
+ * @param {string} value - Attribute value
+ * @returns {string} Escaped value
+ */
+function escapeQuotes(value) {
+	if (typeof value !== 'string') {
+		value = String(value);
+	}
+	return value.replace(/"/g, '&quot;');
+}
+
+/**
+ * Escape HTML attribute value (full escaping, standards-compliant)
  * @param {string} value - Attribute value
  * @returns {string} Escaped value
  */

@@ -64,20 +64,42 @@ function Edit({ attributes, setAttributes, clientId }) {
 		[clientId]
 	);
 
-	// Update block metadata title when tagName changes (memoize to prevent unnecessary updates)
+	// Generate block name based on tag name and ID
+	const generateBlockName = useCallback((tag, attrs) => {
+		if (tag === 'cb-text-node') {
+			return 'Text';
+		}
+		// Convert tag to readable name (e.g., 'my-tag' -> 'My Tag')
+		let name = tag
+			.split('-')
+			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
+
+		// Append ID if it exists
+		if (attrs && attrs.globalAttrs && attrs.globalAttrs.id) {
+			name += ` #${attrs.globalAttrs.id}`;
+		}
+
+		return name;
+	}, []);
+
+	// Update block metadata title when tagName or ID changes (memoize to prevent unnecessary updates)
 	const previousTagNameRef = useRef(tagName);
+	const previousIdRef = useRef(globalAttrs?.id);
 	useEffect(() => {
-		// Only update if tagName actually changed
-		if (previousTagNameRef.current !== tagName) {
+		const currentId = globalAttrs?.id;
+		// Only update if tagName or ID actually changed
+		if (previousTagNameRef.current !== tagName || previousIdRef.current !== currentId) {
 			previousTagNameRef.current = tagName;
+			previousIdRef.current = currentId;
 			updateBlockAttributes(clientId, {
 				metadata: {
 					...attributes.metadata,
-					name: `${tagName}`
+					name: generateBlockName(tagName, attributes)
 				}
 			});
 		}
-	}, [tagName, clientId, updateBlockAttributes, attributes.metadata]);
+	}, [tagName, globalAttrs?.id, clientId, updateBlockAttributes, attributes, generateBlockName]);
 
 	// Memoize filtered global attributes with deep equality check
 	const filteredGlobalAttrs = useMemo(() => {

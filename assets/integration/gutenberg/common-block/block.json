@@ -36,6 +36,12 @@
 		"selfClosing": {
 			"type": "boolean",
 			"default": false
+		},
+		"metadata": {
+			"type": "object",
+			"default": {
+				"name": ""
+			}
 		}
 	},
 	"supports": {
