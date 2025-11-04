@@ -16,8 +16,13 @@ const icon = () => (
 	<WindPressIconOriginal width={24} height={24} aria-hidden="true" focusable="false" />
 );
 
-registerBlockType(metadata.name, {
-	...metadata,
+// Remove editorScript from metadata before registering
+// (it's needed in block.json for WordPress Block Directory validation,
+// but not needed here since we're registering via JS)
+const { editorScript, ...blockMetadata } = metadata;
+
+registerBlockType(blockMetadata.name, {
+	...blockMetadata,
 	icon,
 	edit: Edit,
 	save: Save,

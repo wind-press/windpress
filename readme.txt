@@ -1,10 +1,10 @@
 === WindPress - Tailwind CSS integration for WordPress ===
 Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
-Tags: tailwind, tailwindcss, tailwind css
+Tags: tailwind, tailwindcss, tailwind css, block
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 3.3.66
+Stable tag: 3.3.67
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html

@@ -13,6 +13,11 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.67] - 2025-11-04
+
+### Changed
+- [Gutenberg] Improved the Common Block's HTML to Blocks conversion process for better handling of complex HTML structures (experimental)
+
 ## [3.3.66] - 2025-11-04
 
 ### Added
@@ -597,7 +602,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.66...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.67...HEAD
+[3.3.67]: https://github.com/wind-press/windpress/compare/v3.3.66...v3.3.67
 [3.3.66]: https://github.com/wind-press/windpress/compare/v3.3.65...v3.3.66
 [3.3.65]: https://github.com/wind-press/windpress/compare/v3.3.64...v3.3.65
 [3.3.64]: https://github.com/wind-press/windpress/compare/v3.3.63...v3.3.64

@@ -16,6 +16,7 @@
 		"windpress"
 	],
 	"textdomain": "windpress",
+	"editorScript": "file:./index.js",
 	"attributes": {
 		"tagName": {
 			"type": "string",
