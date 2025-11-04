@@ -44,6 +44,8 @@ export default defineConfig({
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
                 'integration/gutenberg/site-editor': 'assets/integration/gutenberg/site-editor.js',
                 'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
+                'integration/gutenberg/common-block': 'assets/integration/gutenberg/common-block/index.jsx',
+                'integration/gutenberg/isolate-styles': 'assets/integration/gutenberg/common-block/isolate-styles.js',
                 'integration/bricks': 'assets/integration/bricks/main.js',
                 'integration/oxygen-classic/iframe': 'assets/integration/oxygen-classic/iframe/main.js',
                 'integration/oxygen-classic/editor': 'assets/integration/oxygen-classic/editor/main.js',

@@ -64,36 +64,52 @@ const settingsStore = useSettingsStore();
         <p class="text-sm text-muted">
           {{ i18n.__('Enable enhanced Gutenberg editor features including real-time Tailwind CSS preview, autocomplete, and editor enhancements.', 'windpress') }}
         </p>
+
+        <!-- Theme.json Generation Sub-option -->
+        <div class="pt-3 border-t border-default">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-lucide-file-json" class="size-4 text-muted" />
+              <div class="flex-1">
+                <h4 class="text-sm font-medium">{{ i18n.__('Theme.json Generation', 'windpress') }}</h4>
+                <p class="text-xs text-muted mt-0.5">{{ i18n.__('Generate theme.json with Tailwind colors, spacing, and typography', 'windpress') }}</p>
+              </div>
+            </div>
+            <USwitch v-model="settingsStore.virtualOptions(`integration.gutenberg.settings.theme_json`, false).value" />
+          </div>
+        </div>
       </div>
     </UCard>
 
-    <!-- theme.json Generation -->
+    <!-- Common Block -->
     <UCard>
       <template #header>
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-file-json" class="size-5 text-primary" />
-            <h3 class="text-sm font-medium">{{ i18n.__('Theme.json Generation', 'windpress') }}</h3>
+            <UIcon name="i-lucide-box" class="size-5 text-primary" />
+            <h3 class="text-sm font-medium">{{ i18n.__('Common Block', 'windpress') }}</h3>
             <UTooltip :text="i18n.__('Help', 'windpress')">
-              <UButton icon="i-lucide-circle-help" color="neutral" size="sm" variant="soft" to="https://developer.wordpress.org/themes/global-settings-and-styles/" target="_blank" />
+              <UButton icon="i-lucide-circle-help" color="neutral" size="sm" variant="soft" to="https://wind.press/docs/guide/integrations/gutenberg" target="_blank" />
             </UTooltip>
           </div>
-          <USwitch v-model="settingsStore.virtualOptions(`integration.gutenberg.settings.theme_json`, false).value" />
+          <USwitch v-model="settingsStore.virtualOptions(`integration.gutenberg.settings.common_block`, true).value" />
         </div>
       </template>
 
       <div class="space-y-3">
         <p class="text-sm text-muted">
-          {{ i18n.__('Generate and load a theme.json file based on your Tailwind CSS configuration. This enables Full Site Editing features and provides better integration with the block editor.', 'windpress') }}
+          {{ i18n.__('Enable the Common Block - a generic block that can be any HTML element. Import HTML directly into the editor and convert between HTML and blocks seamlessly.', 'windpress') }}
         </p>
         <div class="bg-muted/50 border border-default rounded-lg p-3">
           <div class="flex items-start gap-2">
             <UIcon name="i-lucide-info" class="size-4 text-info mt-0.5 shrink-0" />
             <div class="text-xs text-muted">
-              <p class="font-medium mb-1">{{ i18n.__('What does this do?', 'windpress') }}</p>
+              <p class="font-medium mb-1">{{ i18n.__('Features:', 'windpress') }}</p>
               <ul class="space-y-1 text-xs">
-                <li>- {{ i18n.__('Generates a theme.json file with your Tailwind colors, spacing, and typography', 'windpress') }}</li>
-                <li>- {{ i18n.__('Loads the generated theme.json on the Gutenberg editor', 'windpress') }}</li>
+                <li>- {{ i18n.__('Any HTML element can be a block (div, section, article, header, etc.)', 'windpress') }}</li>
+                <li>- {{ i18n.__('Import HTML code directly into the editor', 'windpress') }}</li>
+                <li>- {{ i18n.__('Export blocks as clean HTML', 'windpress') }}</li>
+                <li>- {{ i18n.__('Full control over attributes, classes, and content', 'windpress') }}</li>
               </ul>
             </div>
           </div>

@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Added
+- [Gutenberg] Introduced "Common Block" — a generic and flexible block that lets you build any HTML element, with import/export support (experimental)
+
 ## [3.3.65] - 2025-10-24
 
 ### Added

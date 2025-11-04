@@ -195,6 +195,9 @@ class Runtime
                 'in-footer' => true,
             ]);
             $loaded_modules[] = WIND_PRESS::WP_OPTION . ':worker';
+
+            do_action('a!windpress/core/runtime:enqueue_play_modules.loaded_modules');
+            $loaded_modules = apply_filters('f!windpress/core/runtime:enqueue_play_modules.loaded_modules', $loaded_modules);
         }
 
         AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/observer.ts', [

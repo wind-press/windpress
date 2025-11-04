@@ -35,6 +35,7 @@
     },
     "require": {
         "php": ">=7.4",
+        "enshrined/svg-sanitize": "^0.22.0",
         "hidehalo/nanoid-php": "^2.0",
         "masterminds/html5": "^2.9",
         "rosua/edd-sl-plugin-updater": "@dev",
