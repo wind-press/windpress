@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.66] - 2025-11-04
+
 ### Added
 - [Gutenberg] Introduced "Common Block" — a generic and flexible block that lets you build any HTML element, with import/export support (experimental)
 
@@ -595,7 +597,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.65...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.66...HEAD
+[3.3.66]: https://github.com/wind-press/windpress/compare/v3.3.65...v3.3.66
 [3.3.65]: https://github.com/wind-press/windpress/compare/v3.3.64...v3.3.65
 [3.3.64]: https://github.com/wind-press/windpress/compare/v3.3.63...v3.3.64
 [3.3.63]: https://github.com/wind-press/windpress/compare/v3.3.62...v3.3.63
