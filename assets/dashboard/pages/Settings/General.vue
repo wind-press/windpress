@@ -149,7 +149,7 @@ onBeforeMount(() => {
       </UFormField>
       <USeparator />
       <UFormField :label="i18n.__('File version history', 'windpress')" :description="i18n.__('Automatically save file version history when editing files in WindPress. This will track the changes of your files.', 'windpress')" class="flex items-center justify-between not-last:pb-4 gap-4">
-        <USwitch v-model="settingsStore.virtualOptions('general.file_version_history.enabled', true).value" />
+        <USwitch v-model="settingsStore.virtualOptions('general.file_version_history.enabled', false).value" />
       </UFormField>
       <!-- <USeparator />
       <UFormField :label="i18n.__('Ubiquitous panel', 'windpress')" :description="i18n.__('Access the WindPress dashboard panel right from the front page and made adjustment as it is on the wp-admin page.', 'windpress')" class="flex items-center justify-between not-last:pb-4 gap-4">

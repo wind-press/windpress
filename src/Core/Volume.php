@@ -69,7 +69,7 @@ class Volume
      */
     private static function is_version_history_enabled(): bool
     {
-        $enabled = Config::get('general.file_version_history.enabled', true);
+        $enabled = Config::get('general.file_version_history.enabled', false);
         return (bool) apply_filters('f!windpress/core/volume:version_history_enabled', $enabled);
     }
 
