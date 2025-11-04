@@ -16,17 +16,21 @@ function DarkModeToggle() {
 
 		target.classList.remove('dark', 'light');
 		target.style.removeProperty('color-scheme');
+		target.removeAttribute('data-theme');
 
 		if (newTheme === 'light') {
 			target.classList.add('light');
 			target.style.colorScheme = 'light';
+			target.setAttribute('data-theme', 'light');
 		} else if (newTheme === 'dark') {
 			target.classList.add('dark');
 			target.style.colorScheme = 'dark';
+			target.setAttribute('data-theme', 'dark');
 		} else {
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			if (prefersDark) {
 				target.classList.add('dark');
+				target.setAttribute('data-theme', 'dark');
 			}
 		}
 
