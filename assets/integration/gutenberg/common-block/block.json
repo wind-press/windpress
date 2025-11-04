@@ -7,12 +7,13 @@
 	"category": "design",
 	"description": "A generic and flexible block that lets you build any HTML element.",
 	"keywords": [
+		"common",
 		"element",
 		"flexible",
 		"generic",
 		"tailwind",
 		"html",
-		"common"
+		"windpress"
 	],
 	"textdomain": "windpress",
 	"attributes": {

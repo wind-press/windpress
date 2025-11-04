@@ -101,8 +101,11 @@ cb-text-node {
 
 /* Selected block gets a more visible indicator without affecting layout */
 .windpress-common-block.is-selected {
-	box-shadow: inset 0 0 0 1px rgba(0, 124, 186, 0.5) !important;
 	position: relative !important;
+}
+
+.windpress-common-block.is-selected:not([contenteditable="true"]) {
+	box-shadow: inset 0 0 0 2px rgba(0, 124, 186, 0.6) !important;
 }
 
 /* Add selection badge in top-left corner - shows tag name */

@@ -112,6 +112,10 @@ export default defineConfig({
                 {
                     src: 'assets/wp-i18n.js',
                     dest: './'
+                },
+                {
+                    src: 'assets/integration/gutenberg/common-block/block.json',
+                    dest: 'blocks/common-block/'
                 }
             ]
         })
