@@ -267,17 +267,6 @@ function determineContentType(element, tagName) {
 }
 
 /**
- * Decode HTML entities in a string
- * @param {string} str - String with HTML entities
- * @returns {string} Decoded string
- */
-function decodeHtmlEntities(str) {
-	const textarea = document.createElement('textarea');
-	textarea.innerHTML = str;
-	return textarea.value;
-}
-
-/**
  * Get all attributes from an element
  * @param {Element} element - DOM element
  * @returns {Object} Object with className and globalAttrs

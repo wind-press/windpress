@@ -141,7 +141,22 @@ function Edit({ attributes, setAttributes, clientId }) {
 
 	const blockProps = useBlockProps(blockPropsConfig);
 
-	const innerBlocksProps = useInnerBlocksProps(blockProps, INNER_BLOCKS_CONFIG);
+	// Add onClick handler for anchor tags to prevent navigation in blocks content type
+	const innerBlocksPropsConfig = useMemo(() => {
+		const config = { ...INNER_BLOCKS_CONFIG };
+		if (tagName === 'a') {
+			// InnerBlocksProps will merge this with blockProps
+			return config;
+		}
+		return config;
+	}, [tagName]);
+
+	const innerBlocksProps = useInnerBlocksProps(
+		tagName === 'a'
+			? { ...blockProps, onClick: (e) => e.preventDefault() }
+			: blockProps,
+		innerBlocksPropsConfig
+	);
 
 	const elementProps = useMemo(() => {
 		const props = { ...blockProps };
@@ -167,6 +182,8 @@ function Edit({ attributes, setAttributes, clientId }) {
 					node.style.removeProperty('min-width');
 				}
 			};
+			// Prevent link navigation in editor
+			props.onClick = (e) => e.preventDefault();
 		}
 
 		return props;

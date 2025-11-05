@@ -158,30 +158,17 @@ function escapeQuotes(value) {
 }
 
 /**
- * Escape HTML attribute value (full escaping, standards-compliant)
- * @param {string} value - Attribute value
- * @returns {string} Escaped value
- */
-function escapeAttribute(value) {
-	if (typeof value !== 'string') {
-		value = String(value);
-	}
-	return value
-		.replace(/&/g, '&amp;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#x27;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;');
-}
-
-/**
  * Escape HTML attribute name
+ * Preserves Vue.js and Alpine.js attribute syntax
  * @param {string} name - Attribute name
  * @returns {string} Escaped name
  */
 function escapeAttributeName(name) {
-	// Only allow letters, numbers, hyphens, and underscores
-	return name.replace(/[^a-zA-Z0-9\-_]/g, '');
+	// Allow letters, numbers, hyphens, underscores, colons, periods, and @ symbol
+	// These are valid in HTML5 and used by modern frameworks (Vue, Alpine.js, etc.)
+	// - Vue: :href, @click, v-model
+	// - Alpine.js: x-data, @click, :class
+	return name.replace(/[^a-zA-Z0-9\-_:@.]/g, '');
 }
 
 // Expose to window
