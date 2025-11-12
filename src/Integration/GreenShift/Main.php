@@ -59,8 +59,8 @@ class Main implements IntegrationInterface
             'homepage' => 'https://shop.greenshiftwp.com/?from=3679',
             'is_installed_active' => static function () {
                 $is = -1;
-                $is += Common::is_plugin_installed('GreenShift') ? 1 : 0;
-                $is += Common::is_plugin_active_by_name('GreenShift') ? 1 : 0;
+                $is += Common::is_plugin_installed('GreenShift - Animation and Page Builder Blocks') ? 1 : 0;
+                $is += Common::is_plugin_active_by_name('GreenShift - Animation and Page Builder Blocks') ? 1 : 0;
                 return $is;
             },
             'meta' => [

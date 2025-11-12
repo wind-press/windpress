@@ -187,32 +187,132 @@ class Common
     }
 
     /**
-     * Check if a plugin is installed by name
-     * 
-     * @param string $plugin_name The name of the plugin to check
+     * Check if a plugin is installed by name or slug
+     * Supports wildcard patterns (e.g., "GreenShift*") and regex patterns (e.g., "/^GreenShift/i")
+     *
+     * @param string|array $plugin_name The name, slug, or array of aliases of the plugin to check. Can be:
+     *                                  - Exact match: "GreenShift" or "greenshift/greenshift.php"
+     *                                  - Wildcard: "GreenShift*" or "greenshift/*"
+     *                                  - Regex: "/^GreenShift/i" or "/^greenshift\//i"
+     *                                  - Array: ['GreenShift', 'greenshift/*', '/^GreenShift/i']
      * @return bool True if the plugin is installed, false otherwise
      */
     public static function is_plugin_installed($plugin_name)
     {
-        $all_plugins = self::get_all_plugins();
-        foreach ($all_plugins as $plugin_data) {
-            if ($plugin_data['Name'] == $plugin_name) return true;
+        // Handle array input - check if any alias matches
+        if (is_array($plugin_name)) {
+            foreach ($plugin_name as $alias) {
+                if (self::is_plugin_installed($alias)) {
+                    return true;
+                }
+            }
+            return false;
         }
+
+        $all_plugins = self::get_all_plugins();
+
+        // Check if it's a regex pattern (starts and ends with /)
+        $is_regex = preg_match('/^\/.*\/[imsxeADSUXJu]*$/', $plugin_name);
+
+        if ($is_regex) {
+            // Use regex pattern directly - check both name and slug
+            foreach ($all_plugins as $plugin_path => $plugin_data) {
+                if (preg_match($plugin_name, $plugin_data['Name']) || preg_match($plugin_name, $plugin_path)) {
+                    return true;
+                }
+            }
+        } else {
+            // Check if contains wildcards (* or ?)
+            $has_wildcards = strpos($plugin_name, '*') !== false || strpos($plugin_name, '?') !== false;
+
+            if ($has_wildcards) {
+                // Convert wildcard pattern to regex
+                // First replace wildcards with placeholders, then escape, then convert placeholders to regex
+                $pattern = str_replace(['*', '?'], ['__WILDCARD_ASTERISK__', '__WILDCARD_QUESTION__'], $plugin_name);
+                $pattern = preg_quote($pattern, '/');
+                $pattern = str_replace(['__WILDCARD_ASTERISK__', '__WILDCARD_QUESTION__'], ['.*', '.'], $pattern);
+                $pattern = '/^' . $pattern . '$/i';
+
+                foreach ($all_plugins as $plugin_path => $plugin_data) {
+                    if (preg_match($pattern, $plugin_data['Name']) || preg_match($pattern, $plugin_path)) {
+                        return true;
+                    }
+                }
+            } else {
+                // Exact match - check both name and slug
+                foreach ($all_plugins as $plugin_path => $plugin_data) {
+                    if ($plugin_data['Name'] == $plugin_name || $plugin_path == $plugin_name) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 
     /**
-     * Check if a plugin is active by name
-     * 
-     * @param string $plugin_name The name of the plugin to check
+     * Check if a plugin is active by name or slug
+     * Supports wildcard patterns (e.g., "GreenShift*") and regex patterns (e.g., "/^GreenShift/i")
+     *
+     * @param string|array $plugin_name The name, slug, or array of aliases of the plugin to check. Can be:
+     *                                  - Exact match: "GreenShift" or "greenshift/greenshift.php"
+     *                                  - Wildcard: "GreenShift*" or "greenshift/*"
+     *                                  - Regex: "/^GreenShift/i" or "/^greenshift\//i"
+     *                                  - Array: ['GreenShift', 'greenshift/*', '/^GreenShift/i']
      * @return bool True if the plugin is active, false otherwise
      */
     public static function is_plugin_active_by_name($plugin_name)
     {
-        $all_plugins = self::get_all_plugins();
-        foreach ($all_plugins as $plugin_path => $plugin_data) {
-            if ($plugin_data['Name'] == $plugin_name && is_plugin_active($plugin_path)) return true;
+        // Handle array input - check if any alias matches
+        if (is_array($plugin_name)) {
+            foreach ($plugin_name as $alias) {
+                if (self::is_plugin_active_by_name($alias)) {
+                    return true;
+                }
+            }
+            return false;
         }
+
+        $all_plugins = self::get_all_plugins();
+
+        // Check if it's a regex pattern (starts and ends with /)
+        $is_regex = preg_match('/^\/.*\/[imsxeADSUXJu]*$/', $plugin_name);
+
+        if ($is_regex) {
+            // Use regex pattern directly - check both name and slug
+            foreach ($all_plugins as $plugin_path => $plugin_data) {
+                if ((preg_match($plugin_name, $plugin_data['Name']) || preg_match($plugin_name, $plugin_path)) && is_plugin_active($plugin_path)) {
+                    return true;
+                }
+            }
+        } else {
+            // Check if contains wildcards (* or ?)
+            $has_wildcards = strpos($plugin_name, '*') !== false || strpos($plugin_name, '?') !== false;
+
+            if ($has_wildcards) {
+                // Convert wildcard pattern to regex
+                // First replace wildcards with placeholders, then escape, then convert placeholders to regex
+                $pattern = str_replace(['*', '?'], ['__WILDCARD_ASTERISK__', '__WILDCARD_QUESTION__'], $plugin_name);
+                $pattern = preg_quote($pattern, '/');
+                $pattern = str_replace(['__WILDCARD_ASTERISK__', '__WILDCARD_QUESTION__'], ['.*', '.'], $pattern);
+                $pattern = '/^' . $pattern . '$/i';
+
+                foreach ($all_plugins as $plugin_path => $plugin_data) {
+                    if ((preg_match($pattern, $plugin_data['Name']) || preg_match($pattern, $plugin_path)) && is_plugin_active($plugin_path)) {
+                        return true;
+                    }
+                }
+            } else {
+                // Exact match - check both name and slug
+                foreach ($all_plugins as $plugin_path => $plugin_data) {
+                    if (($plugin_data['Name'] == $plugin_name || $plugin_path == $plugin_name) && is_plugin_active($plugin_path)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 
