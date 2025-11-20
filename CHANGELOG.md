@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Changed
+- Fix color picker on the Wizard page if the initial color is empty
+
 ### Removed
 - Reverted file version history feature introduced in v3.3.65 due to complexity and performance concerns
 

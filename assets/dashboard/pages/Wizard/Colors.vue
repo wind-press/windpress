@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import 'vue-color/style.css';
-import { ChromePicker } from 'vue-color'
+import { ChromePicker, tinycolor } from 'vue-color'
 import Color from 'colorjs.io';
 import { nanoid } from 'nanoid';
 import { onBeforeRouteLeave } from 'vue-router'
@@ -319,8 +319,8 @@ onBeforeRouteLeave((_, __, next) => {
                                 </div>
 
                                 <template #content>
-                                    <ChromePicker :value="item.var.value ? new Color(item.var.value).toString({ format: 'hex' }) : ''" @input="(color: string) => {
-                                        const prevColor = new Color(item.var.value);
+                                    <ChromePicker :value="new Color(item.var.value || '#ffffff00').toString({ format: 'hex' })" @input="(color: string) => {
+                                        const prevColor = new Color(item.var.value ||'#ffffff00');
                                         const nextColor = new Color(color).toString({ format: prevColor.parseMeta.formatId });
                                         item.var.value = nextColor;
                                     }" />
