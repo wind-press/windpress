@@ -29,18 +29,6 @@ export type Entry = {
     signature?: string;
 
     path_on_disk?: string; // The path on disk, used for the file manager
-
-    // Version token for conflict detection (checksum)
-    version_token?: string;
-};
-
-// TODO: Future - Conflict type is currently unused as conflict detection is disabled
-// Re-enable when implementing proper conflict resolution in Volume.php
-export type Conflict = {
-    path: string;
-    your_content: string;
-    disk_content: string;
-    disk_checksum: string;
 };
 
 export const useVolumeStore = defineStore('volume', () => {
@@ -209,7 +197,7 @@ export const useVolumeStore = defineStore('volume', () => {
     /**
      * Push the data to the server.
      *
-     * @returns {Promise} A promise with result or conflict information
+     * @returns {Promise} A promise
      */
     async function doPush() {
         busyStore.add('volume.doPush');
@@ -224,24 +212,7 @@ export const useVolumeStore = defineStore('volume', () => {
                 return { message: response.data.message, success: true };
             })
             .catch(error => {
-                // Redaxios doesn't have error.response, the error IS the response
-                const status = error.status
-                const data = error.data
-
-                // TODO: Future - This conflict handling code path won't execute until conflict detection is re-enabled
-                // Check if it's a conflict error (HTTP 409)
-                if (status === 409) {
-                    const conflicts: Conflict[] = data.conflicts || [];
-
-                    return {
-                        success: false,
-                        conflicts,
-                        message: __('Conflicts detected. Files were modified externally.', 'windpress'),
-                    };
-                }
-
-                // Other errors
-                throw new Error(data?.message || error.message || 'Unknown error');
+                throw new Error(error.response ? error.response.data.message : error.message);
             })
             .finally(() => {
                 busyStore.remove('volume.doPush');
@@ -294,65 +265,6 @@ export const useVolumeStore = defineStore('volume', () => {
         return Promise.resolve();
     }
 
-    /**
-     * Get version history for a file.
-     */
-    async function getVersions(relativePath: string) {
-        busyStore.add('volume.getVersions');
-
-        return api
-            .request(`/admin/volume/versions/${encodeURIComponent(relativePath)}`, {
-                method: 'GET',
-            })
-            .then(response => response.data)
-            .finally(() => {
-                busyStore.remove('volume.getVersions');
-            });
-    }
-
-    /**
-     * Get content of a specific version.
-     */
-    async function getVersionContent(relativePath: string, version: number) {
-        busyStore.add('volume.getVersionContent');
-
-        return api
-            .request(`/admin/volume/versions/${encodeURIComponent(relativePath)}/${version}`, {
-                method: 'GET',
-            })
-            .then(response => response.data)
-            .finally(() => {
-                busyStore.remove('volume.getVersionContent');
-            });
-    }
-
-    /**
-     * Restore a specific version.
-     */
-    async function restoreVersion(relativePath: string, version: number) {
-        busyStore.add('volume.restoreVersion');
-
-        return api
-            .request('/admin/volume/versions/restore', {
-                method: 'POST',
-                data: { path: relativePath, version },
-            })
-            .then(response => {
-                // Update the entry in the store with restored content
-                const entry = data.entries.find(e => e.relative_path === relativePath);
-                if (entry && response.data.entry) {
-                    entry.content = response.data.entry.content;
-                    entry.version_token = response.data.entry.version_token;
-                }
-
-                updateInitValues();
-                return response.data;
-            })
-            .finally(() => {
-                busyStore.remove('volume.restoreVersion');
-            });
-    }
-
     return {
         data,
         initData,
@@ -368,8 +280,5 @@ export const useVolumeStore = defineStore('volume', () => {
         renameEntry,
         cleanPath,
         initPull,
-        getVersions,
-        getVersionContent,
-        restoreVersion,
     };
 });

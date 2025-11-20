@@ -141,32 +141,7 @@ async function save() {
 
     return volumeStore
         .doPush()
-        .then((result) => {
-            // TODO: Future - Conflict detection is currently disabled in the backend
-            // This code path won't be reached until conflict detection is re-enabled in Volume.php
-            // Check if there are conflicts
-            if (!result.success && 'conflicts' in result && result.conflicts) {
-
-                toast.update('file-editor.doSave', {
-                    title: __('Conflicts Detected', 'windpress'),
-                    description: __('Files were modified externally. Please resolve conflicts.', 'windpress'),
-                    icon: 'i-lucide-alert-triangle',
-                    color: 'warning',
-                    duration: 5000,
-                    close: true,
-                    ui: {
-                        icon: undefined,
-                    }
-                });
-
-                // Emit event for conflict resolution modal to handle
-                window.dispatchEvent(new CustomEvent('windpress:conflicts', {
-                    detail: { conflicts: result.conflicts }
-                }));
-
-                return;
-            }
-
+        .then(() => {
             toast.update('file-editor.doSave', {
                 title: __('Saved', 'windpress'),
                 description: __('Your changes have been saved.', 'windpress'),
@@ -183,7 +158,7 @@ async function save() {
                 themeJsonStore.doPush();
             }
         })
-        .catch(() => {
+        .catch((err) => {
             toast.update('file-editor.doSave', {
                 title: __('Error', 'windpress'),
                 description: __('An error occurred while saving your changes.', 'windpress'),
@@ -229,7 +204,7 @@ function exportVolume() {
 
     const compressed = lzString.compressToUint8Array(JSON.stringify(data));
 
-    const blob = new Blob([compressed as Uint8Array], { type: 'application/octet-stream' });
+    const blob = new Blob([compressed], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');

@@ -11,7 +11,6 @@ import Color from 'colorjs.io';
 import { debounce, throttle } from 'lodash-es';
 import { useThemeJsonStore } from '@/dashboard/stores/themeJson';
 import { twToWp } from '@/dashboard/composables/useThemeJson';
-import FileVersionHistoryModal from './VersionHistoryModal.vue';
 
 type MonacoEditor = typeof monacoEditor;
 
@@ -1225,9 +1224,6 @@ onBeforeUnmount(() => {
             </template>
 
             <template #right>
-                <!-- Version History Button -->
-                <FileVersionHistoryModal v-if="settingsStore.virtualOptions('general.file_version_history.enabled', false).value" :entry="entry" />
-
                 <UTooltip v-if="entry?.relative_path !== 'main.css' && !(Number(settingsStore.virtualOptions('general.tailwindcss.version', 4).value) === 3 && (entry?.relative_path === 'tailwind.config.js' || entry?.relative_path === 'wizard.js'))" :text="i18n.__('Delete', 'windpress')">
                     <UButton icon="i-lucide-trash" color="neutral" variant="ghost" @click="emit('delete', entry)" />
                 </UTooltip>

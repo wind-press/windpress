@@ -62,7 +62,5 @@ class WIND_PRESS
 
     public const DATA_DIR = '/windpress/data/';
 
-    public const VOLUME_DIR = '/windpress/volume/';
-
     public const CACHE_DIR = '/windpress/cache/';
 }

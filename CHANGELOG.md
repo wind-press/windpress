@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Removed
+- Reverted file version history feature introduced in v3.3.65 due to complexity and performance concerns
+
 ## [3.3.67] - 2025-11-04
 
 ### Changed
