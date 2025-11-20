@@ -91,16 +91,26 @@ class Runtime
 
     public function append_header()
     {
-        $is_cache_enabled = Config::get('performance.cache.enabled', false);
-        $is_cache_enabled = apply_filters('f!windpress/core/runtime:append_header.cache_enabled', $is_cache_enabled);
+        $mode = $this->performance_mode();
 
-        $is_exclude_admin = Config::get('performance.cache.exclude_admin', false) && current_user_can('manage_options');
-        $is_exclude_admin = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', $is_exclude_admin);
+        // Keep the filter name for integrations that need to bypass cached CSS (e.g., builder previews).
+        $should_skip_cache = apply_filters('f!windpress/core/runtime:append_header.exclude_admin', false);
 
         add_action('wp_head', fn() => $this->print_windpress_metadata(), 1_000_001);
 
-        if ($is_cache_enabled && $this->is_cache_exists() && ! $is_exclude_admin) {
-            add_action('wp_head', fn() => $this->enqueue_css_cache(), 1_000_001);
+        $has_cache = $this->is_cache_exists();
+
+        if ($mode === 'hybrid') {
+            if ($has_cache && ! $should_skip_cache) {
+                add_action('wp_head', fn() => $this->enqueue_css_cache(true), 1_000_001);
+            }
+            add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
+        } elseif ($mode === 'cached') {
+            if ($has_cache && ! $should_skip_cache) {
+                add_action('wp_head', fn() => $this->enqueue_css_cache(), 1_000_001);
+            } else {
+                add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
+            }
         } else {
             add_action('wp_head', fn() => $this->enqueue_play_cdn(), 1_000_001);
         }
@@ -110,12 +120,26 @@ class Runtime
         // }
     }
 
+    private function performance_mode(): string
+    {
+        $mode = Config::get('performance.mode', 'hybrid');
+        $mode = apply_filters('f!windpress/core/runtime:append_header.mode', $mode);
+
+        $allowed = ['cached', 'hybrid', 'compiler'];
+
+        if (! in_array($mode, $allowed, true)) {
+            return 'hybrid';
+        }
+
+        return $mode;
+    }
+
     public function is_cache_exists()
     {
         return file_exists(Cache::get_cache_path(Cache::CSS_CACHE_FILE)) && is_readable(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
     }
 
-    public function enqueue_css_cache()
+    public function enqueue_css_cache(bool $force_inline = false)
     {
         if (! $this->is_cache_exists()) {
             return;
@@ -125,7 +149,7 @@ class Runtime
 
         $handle = WIND_PRESS::WP_OPTION . '-cached';
 
-        if (Config::get('performance.cache.inline_load', false)) {
+        if ($force_inline || Config::get('performance.cache.inline_load', false)) {
             // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file
             $css_clean = file_get_contents(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
 

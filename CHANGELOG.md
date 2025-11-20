@@ -15,6 +15,7 @@ For instance:
 
 ### Changed
 - Fix color picker on the Wizard page if the initial color is empty
+- Redefined how styles are loaded on the front page based on the selected Performance Mode: Hybrid, Cached, or Compiler.
 
 ### Removed
 - Reverted file version history feature introduced in v3.3.65 due to complexity and performance concerns

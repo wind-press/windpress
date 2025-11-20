@@ -19,7 +19,11 @@ let classes = new Set<string>()
 /**
  * The stylesheet that we use to inject the compiled CSS into the page.
  */
-let sheet = document.createElement('style')
+let sheet = document.querySelector('style#windpress-cached-inline-css') as HTMLStyleElement | null;
+if (!sheet) {
+    sheet = document.createElement('style');
+    sheet.id = 'windpress-cached-inline-css';
+}
 
 /**
  * The queue of build tasks that need to be run. This is used to ensure that we
@@ -117,12 +121,12 @@ async function build(kind: 'full' | 'incremental') {
         count: newClasses.size,
     })
 
-    if (newClasses.size === 0 && kind === 'incremental') return
+    if (newClasses.size === 0 && kind === 'incremental') return;
 
     // 2. Compile the CSS
-    I.start(`Build utilities`)
+    I.start(`Build utilities`);
 
-    sheet.textContent = compiler.build(Array.from(newClasses))
+    (sheet as HTMLStyleElement).textContent = compiler.build(Array.from(newClasses))
 
     I.end(`Build utilities`)
 }
@@ -237,7 +241,7 @@ function startPlayObserver() {
 
     rebuild('full');
 
-    document.head.append(sheet);
+    document.head.append(sheet as HTMLStyleElement);
 }
 
 // if not found constant that disable the observer don't run the observer
