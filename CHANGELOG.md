@@ -13,6 +13,10 @@ For instance:
 
 ## [Unreleased]
 
+### Added
+- [Gutenberg] Added Dark Mode toggle to switch between Light, Dark, and System themes
+- [Gutenberg] Generate Cache on Save feature
+
 ### Changed
 - Fix color picker on the Wizard page if the initial color is empty
 - Redefined how styles are loaded on the front page based on the selected Performance Mode: Hybrid, Cached, or Compiler.

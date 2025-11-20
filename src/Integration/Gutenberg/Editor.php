@@ -78,6 +78,15 @@ class Editor
             ]);
         }
 
+        // Enqueue Generate Cache module if enabled
+        if (Config::get('integration.gutenberg.modules.generate_cache', true)) {
+            AssetVite::get_instance()->enqueue_asset('assets/integration/gutenberg/modules/generate-cache/main.ts', [
+                'handle' => WIND_PRESS::WP_OPTION . ':integration-gutenberg-generate-cache',
+                'in-footer' => true,
+                'dependencies' => ['wp-data', 'wp-preferences', 'wp-components', 'wp-i18n', 'wp-plugins', 'wp-editor', 'wp-element', 'react', 'react-dom', $handle],
+            ]);
+        }
+
         wp_add_inline_script($handle, <<<JS
             // add __windpress__disable_playObserver to window if not exists
             if (typeof window.__windpress__disable_playObserver === 'undefined') {

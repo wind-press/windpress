@@ -1,96 +1,9 @@
 import { ToolbarButton, Dropdown, MenuGroup, MenuItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
+import { useDarkMode } from '../../hooks/useDarkMode';
 
 function DarkModeToggle() {
-	const [theme, setTheme] = useState('system');
-
-	const applyTheme = (newTheme) => {
-		const iframe = document.querySelector('iframe[name="editor-canvas"]');
-
-		if (!iframe || !iframe.contentDocument) {
-			return;
-		}
-
-		const target = iframe.contentDocument.documentElement;
-
-		target.classList.remove('dark', 'light');
-		target.style.removeProperty('color-scheme');
-		target.removeAttribute('data-theme');
-
-		if (newTheme === 'light') {
-			target.classList.add('light');
-			target.style.colorScheme = 'light';
-			target.setAttribute('data-theme', 'light');
-		} else if (newTheme === 'dark') {
-			target.classList.add('dark');
-			target.style.colorScheme = 'dark';
-			target.setAttribute('data-theme', 'dark');
-		} else {
-			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			if (prefersDark) {
-				target.classList.add('dark');
-				target.setAttribute('data-theme', 'dark');
-			}
-		}
-
-		try {
-			localStorage.setItem('windpress-theme', newTheme);
-		} catch (e) {
-			// Silent fail
-		}
-
-		setTheme(newTheme);
-	};
-
-	useEffect(() => {
-		let savedTheme = 'system';
-		try {
-			savedTheme = localStorage.getItem('windpress-theme') || 'system';
-		} catch (e) {
-			// Silent fail
-		}
-
-		setTheme(savedTheme);
-
-		const applyWithRetry = (attempts = 0) => {
-			const iframe = document.querySelector('iframe[name="editor-canvas"]');
-
-			if (iframe && iframe.contentDocument) {
-				applyTheme(savedTheme);
-			} else if (attempts < 20) {
-				setTimeout(() => applyWithRetry(attempts + 1), 200);
-			}
-		};
-
-		applyWithRetry();
-
-		const handleIframeLoad = () => {
-			applyTheme(savedTheme);
-		};
-
-		const iframe = document.querySelector('iframe[name="editor-canvas"]');
-		if (iframe) {
-			iframe.addEventListener('load', handleIframeLoad);
-		}
-
-		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-		const handleChange = () => {
-			const currentTheme = localStorage.getItem('windpress-theme') || 'system';
-			if (currentTheme === 'system') {
-				applyTheme('system');
-			}
-		};
-
-		mediaQuery.addEventListener('change', handleChange);
-
-		return () => {
-			mediaQuery.removeEventListener('change', handleChange);
-			if (iframe) {
-				iframe.removeEventListener('load', handleIframeLoad);
-			}
-		};
-	}, []);
+	const { theme, applyTheme, cycleTheme } = useDarkMode();
 
 	const getIcon = () => {
 		if (theme === 'light') {
@@ -127,16 +40,6 @@ function DarkModeToggle() {
 			return __('Theme: Dark', 'windpress');
 		} else {
 			return __('Theme: System', 'windpress');
-		}
-	};
-
-	const cycleTheme = () => {
-		if (theme === 'light') {
-			applyTheme('dark');
-		} else if (theme === 'dark') {
-			applyTheme('system');
-		} else {
-			applyTheme('light');
 		}
 	};
 
@@ -189,7 +92,7 @@ function DarkModeToggle() {
 					</MenuItem>
 					<MenuItem
 						icon={
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 17v4m10-8.693V15a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8.693M8 21h8"/><circle cx="19" cy="6" r="3"/></g></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 17v4m10-8.693V15a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8.693M8 21h8"/><circle cx="19" cy="6" r="3"/></g></svg>
 						}
 						isSelected={theme === 'system'}
 						onClick={() => applyTheme('system')}
