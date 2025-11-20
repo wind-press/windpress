@@ -13,12 +13,14 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.68] - 2025-11-20
+
 ### Added
 - [Gutenberg] Added Dark Mode toggle to switch between Light, Dark, and System themes
 - [Gutenberg] Generate Cache on Save feature
 
 ### Changed
-- Fix color picker on the Wizard page if the initial color is empty
+- Fix color picker on the Wizard page when the initial color is empty
 - Redefined how styles are loaded on the front page based on the selected Performance Mode: Hybrid, Cached, or Compiler.
 
 ### Removed
@@ -613,7 +615,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.67...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.68...HEAD
+[3.3.68]: https://github.com/wind-press/windpress/compare/v3.3.67...v3.3.68
 [3.3.67]: https://github.com/wind-press/windpress/compare/v3.3.66...v3.3.67
 [3.3.66]: https://github.com/wind-press/windpress/compare/v3.3.65...v3.3.66
 [3.3.65]: https://github.com/wind-press/windpress/compare/v3.3.64...v3.3.65
