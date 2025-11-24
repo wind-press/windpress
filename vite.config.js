@@ -18,6 +18,9 @@ export default defineConfig({
     define: {
         __dirname: JSON.stringify('/'),
     },
+    optimizeDeps: {
+        exclude: ['@windpress/oxide-parser'],
+    },
     plugins: [
         wasm(),
         topLevelAwait(),

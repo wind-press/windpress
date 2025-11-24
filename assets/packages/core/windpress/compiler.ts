@@ -206,23 +206,17 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
 
     if (options.tailwindcss_version === 4) {
         // import the modules dynamically to avoid bundling them in the main bundle
-        const { compile: buildV4, find_tw_candidates, optimize: optimizeV4, loadSource } = await import('@/packages/core/tailwindcss');
-
-        const candidates_pool: string[] = [];
-
-        contents.forEach((content) => {
-            const candidates = find_tw_candidates(content);
-
-            candidates_pool.push(...candidates);
-        });
+        const { compile: buildV4, getCandidates, optimize: optimizeV4, loadSource } = await import('@/packages/core/tailwindcss');
 
         const compiled = await buildV4({
             entrypoint: '/main.css',
             volume,
         });
 
-        // convert to set to remove duplicates, then back to array
-        let candidates = [...new Set([...candidates_pool, ...await loadSource(compiled.sources)])];
+        const candidates: string[] = await getCandidates([
+            ...contents, 
+            ...await loadSource(compiled.sources)
+        ]);
 
         log.add({ message: 'Scanning complete', type: 'success' });
 

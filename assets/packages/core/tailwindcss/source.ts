@@ -1,4 +1,3 @@
-import { find_tw_candidates } from '@windpress/oxide-parser-wasm';
 import { minimatch } from 'minimatch';
 import { createLogComposable } from '@/dashboard/stores/log'
 import { useApi } from '@/dashboard/library/api';
@@ -43,23 +42,7 @@ export async function loadSource(sources: Source[]) {
 
     await Promise.all(promises);
 
-    const candidates_pool: string[] = [];
-
-    let logId = logStore.add({ message: 'Scanning sources...', type: 'info', group: 'source' });
-
-    contents.forEach((content) => {
-        const candidates = find_tw_candidates(content);
-
-        candidates_pool.push(...candidates);
-    });
-
-    let currentLog = logStore.logs.value.find((log) => log.id === logId);
-
-    if (currentLog) {
-        currentLog.message += ' - done';
-    }
-
-    return Array.from(new Set(candidates_pool));
+    return contents;
 }
 
 async function jsDelivrProvider(source: Source) {
