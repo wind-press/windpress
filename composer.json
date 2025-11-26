@@ -43,7 +43,8 @@
         "symfony/finder": "^5.4",
         "symfony/property-access": "^5.4",
         "symfony/stopwatch": "^5.4",
-        "symfony/yaml": "^5.4"
+        "symfony/yaml": "^5.4",
+        "wordpress/abilities-api": "^0.4.0"
     },
     "require-dev": {
         "rector/rector": "^1.2",

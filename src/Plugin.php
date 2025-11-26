@@ -18,6 +18,7 @@ use Exception;
 use WIND_PRESS;
 use WindPress\WindPress\Admin\AdminPage;
 use WindPress\WindPress\Api\Router as ApiRouter;
+use WindPress\WindPress\Abilities\Loader as AbilitiesLoader;
 use WindPress\WindPress\Core\Runtime;
 use WindPress\WindPress\Integration\Loader as IntegrationLoader;
 use WindPress\WindPress\Upgrade\UpgradeManager;
@@ -169,6 +170,9 @@ final class Plugin
         // Instantiate the AdminPage class.
         new AdminPage();
         UtilsCache::exclude_optimization();
+
+        // Initialize Abilities API integration
+        AbilitiesLoader::get_instance()->init();
 
         do_action('a!windpress/plugin:init_plugin.end');
     }

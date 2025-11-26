@@ -146,6 +146,65 @@ Each page builder integration follows a consistent pattern:
 - **Authentication**: WordPress nonce system
 - **Endpoints**: Defined in `src/Api/` directory
 
+### Abilities API (WordPress 6.9+)
+WindPress implements the WordPress Abilities API to expose functionality to AI agents, automation tools, and developers.
+
+#### Available Abilities
+
+**Configuration:**
+- `windpress/get-config` - Get plugin configuration, Tailwind version, settings
+
+**Volume Management (Simple File System):**
+- `windpress/get-volume-entries` - Get all CSS/JS files (main.css, tailwind.config.js, etc.)
+- `windpress/get-volume-entry` - Get a single file by path
+- `windpress/get-volume-handlers` - Get available custom handlers
+- `windpress/save-volume-entries` - Save/update multiple files
+- `windpress/save-volume-entry` - Save/update a single file
+- `windpress/delete-volume-entry` - Delete a file
+- `windpress/reset-volume-entry` - Reset main.css or config files to defaults
+
+#### Using Abilities
+
+**Via PHP:**
+```php
+// Check if ability exists
+if (wp_has_ability('windpress/get-volume-entries')) {
+    $ability = wp_get_ability('windpress/get-volume-entries');
+    $entries = $ability->execute([]);
+}
+```
+
+**Via REST API:**
+```bash
+# Get all volume entries
+curl -u 'USERNAME:APP_PASSWORD' \
+  https://example.com/wp-json/wp-abilities/v1/abilities/windpress/get-volume-entries/run
+
+# Save a file
+curl -u 'USERNAME:APP_PASSWORD' \
+  -X POST https://example.com/wp-json/wp-abilities/v1/abilities/windpress/save-volume-entry/run \
+  -H "Content-Type: application/json" \
+  -d '{"input": {"name": "custom.css", "relative_path": "custom.css", "content": "/* custom styles */", "handler": "internal"}}'
+```
+
+**Via WP-CLI:**
+```bash
+# List all abilities
+wp shell
+wp> $abilities = wp_get_abilities();
+
+# Execute ability
+wp> $ability = wp_get_ability('windpress/get-config');
+wp> $config = $ability->execute([]);
+```
+
+#### Simple File System (Volume)
+The Volume manages CSS/JS files in `/wp-content/uploads/windpress/data/`:
+- `main.css` - Main Tailwind CSS entry point (imports, @source, @plugin, @config directives)
+- `tailwind.config.js` - Tailwind v3 configuration
+- `wizard.js` / `wizard.css` - Configuration wizards
+- Custom CSS/JS files created by users
+
 ### Asset Loading
 - **Vite Integration**: Custom WordPress-specific Vite plugin
 - **Conditional Loading**: Assets loaded based on context
