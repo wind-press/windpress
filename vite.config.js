@@ -47,6 +47,7 @@ export default defineConfig({
                 'integration/gutenberg/post-editor': 'assets/integration/gutenberg/post-editor.js',
                 'integration/gutenberg/site-editor': 'assets/integration/gutenberg/site-editor.js',
                 'integration/gutenberg/block-editor': 'assets/integration/gutenberg/block-editor.jsx',
+                'integration/gutenberg/modules/generate-cache': 'assets/integration/gutenberg/modules/generate-cache/main.ts',
                 'integration/gutenberg/common-block': 'assets/integration/gutenberg/common-block/index.jsx',
                 'integration/gutenberg/isolate-styles': 'assets/integration/gutenberg/common-block/isolate-styles.js',
                 'integration/bricks': 'assets/integration/bricks/main.js',

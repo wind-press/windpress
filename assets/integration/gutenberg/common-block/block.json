@@ -54,7 +54,13 @@
 		"metadata": {
 			"name": true
 		},
-		"align": ["left", "center", "right", "wide", "full"],
+		"align": [
+			"left",
+			"center",
+			"right",
+			"wide",
+			"full"
+		],
 		"alignWide": true,
 		"spacing": {
 			"padding": true,
