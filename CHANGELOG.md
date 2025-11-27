@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Added
+- Initial WordPress Abilities API support (experimental)
+
 ## [3.3.68] - 2025-11-20
 
 ### Added
