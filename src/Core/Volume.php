@@ -243,7 +243,8 @@ class Volume
         $full_path = Path::join($base_dir, $canonical_path);
 
         // Validate that the resolved path doesn't escape the base directory
-        if (! str_starts_with($full_path, $base_dir . DIRECTORY_SEPARATOR)) {
+        // Use Symfony's isBasePath() which handles platform differences automatically
+        if (! Path::isBasePath($base_dir, $full_path)) {
             throw new \InvalidArgumentException('Path traversal attempt detected: ' . $relative_path);
         }
 
