@@ -13,8 +13,17 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.69] - 2025-12-08
+
 ### Added
 - Initial WordPress Abilities API support (experimental)
+
+### Fixed
+- [Gutenberg] Generate Cache on Save feature's assets are not loaded correctly
+- [Internal] path handling issue on the Windows OS
+
+### Changed
+- [Internal] Replace the old scanner's dependency with `@windpress/oxide-parser` package
 
 ## [3.3.68] - 2025-11-20
 
@@ -618,7 +627,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.68...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.69...HEAD
+[3.3.69]: https://github.com/wind-press/windpress/compare/v3.3.68...v3.3.69
 [3.3.68]: https://github.com/wind-press/windpress/compare/v3.3.67...v3.3.68
 [3.3.67]: https://github.com/wind-press/windpress/compare/v3.3.66...v3.3.67
 [3.3.66]: https://github.com/wind-press/windpress/compare/v3.3.65...v3.3.66
