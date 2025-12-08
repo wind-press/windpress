@@ -42,6 +42,17 @@ $polyfillsStubs = array_map(
     ),
 );
 
+$wpAbilityApiFiles = array_map(
+    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    iterator_to_array(
+        Finder::create()
+            ->files()
+            ->in(dirname(__DIR__) . '/vendor/wordpress/abilities-api')
+            ->name('*.php'),
+        false,
+    ),
+);
+
 return [
     // The prefix configuration. If a non null value is be used, a random prefix
     // will be generated instead.
@@ -88,6 +99,7 @@ return [
 
         ...$polyfillsBootstraps,
         ...$polyfillsStubs,
+        ...$wpAbilityApiFiles,
     ],
 
     // When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
