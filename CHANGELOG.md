@@ -13,6 +13,8 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.70] - 2025-12-08
+
 ### Fixed
 - [Internal] Plugin's bundle (Zip) file are not generated correctly
 
@@ -630,7 +632,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.69...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.70...HEAD
+[3.3.70]: https://github.com/wind-press/windpress/compare/v3.3.69...v3.3.70
 [3.3.69]: https://github.com/wind-press/windpress/compare/v3.3.68...v3.3.69
 [3.3.68]: https://github.com/wind-press/windpress/compare/v3.3.67...v3.3.68
 [3.3.67]: https://github.com/wind-press/windpress/compare/v3.3.66...v3.3.67
