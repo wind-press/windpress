@@ -13,6 +13,9 @@ For instance:
 
 ## [Unreleased]
 
+### Fixed
+- [Internal] Plugin's bundle (Zip) file are not generated correctly
+
 ## [3.3.69] - 2025-12-08
 
 ### Added
