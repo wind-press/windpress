@@ -20,16 +20,19 @@ use Blockstudio\Build;
  */
 class Compile
 {
-    public function __invoke(): array
+    /**
+     * @param array $metadata
+     */
+    public function __invoke($metadata): array
     {
         if (! class_exists(Build::class)) {
             return [];
         }
 
-        return $this->get_contents();
+        return $this->get_contents($metadata);
     }
 
-    public function get_contents(): array
+    public function get_contents($metadata): array
     {
         $contents = [];
 
@@ -49,6 +52,12 @@ class Compile
             }
         }
 
-        return $contents;
+        return [
+            'metadata' => [
+                'next_batch' => false,
+                'total_batches' => 1,
+            ],
+            'contents' => $contents,
+        ];
     }
 }

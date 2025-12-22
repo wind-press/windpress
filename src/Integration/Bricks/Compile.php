@@ -25,7 +25,10 @@ class Compile
 
     private array $global_classes_index = [];
 
-    public function __invoke(): array
+    /**
+     * @param array $metadata
+     */
+    public function __invoke($metadata): array
     {
         if (! defined('BRICKS_VERSION')) {
             return [];
@@ -37,10 +40,10 @@ class Compile
             BRICKS_DB_PAGE_FOOTER,
         ];
 
-        return $this->get_contents();
+        return $this->get_contents($metadata);
     }
 
-    public function get_contents(): array
+    public function get_contents($metadata): array
     {
         $contents = [];
 
@@ -53,8 +56,11 @@ class Compile
             $this->global_classes_index[$value['id']] = $value['name'];
         }
 
+        $next_batch = $metadata['next_batch'] !== false ? $metadata['next_batch'] : 1;
+
         $wpQuery = new WP_Query([
-            'posts_per_page' => -1,
+            'posts_per_page' => apply_filters('f!windpress/integration/bricks/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 20)),
+            'paged' => $next_batch,
             'fields' => 'ids',
             'post_type' => $post_types,
             // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- This only run by trigger on specific event
@@ -69,12 +75,21 @@ class Compile
             $contents = [...$contents, ...$this->get_post_metas($post_id)];
         }
 
-        array_push($contents, [
-            'name' => 'bricks_components',
-            'content' => $this->get_components(),
-        ]);
+        // Only include components in the first batch
+        if ($next_batch === 1) {
+            array_push($contents, [
+                'name' => 'bricks_components',
+                'content' => $this->get_components(),
+            ]);
+        }
 
-        return $contents;
+        return [
+            'metadata' => [
+                'next_batch' => $wpQuery->max_num_pages > $next_batch ? $next_batch + 1 : false,
+                'total_batches' => $wpQuery->max_num_pages,
+            ],
+            'contents' => $contents,
+        ];
     }
 
     public function get_post_metas($post_id): array

@@ -13,6 +13,10 @@ For instance:
 
 ## [Unreleased]
 
+### Fixed
+- [Elementor, Bricks, Oxygen, OxygenClassic, Breakdance, Builderius, Timber, Blockstudio] Scanner now properly supports batch system to handle large datasets
+- [Internal] JSON string detection in cache fetch_contents method to properly set content type
+
 ## [3.3.72] - 2025-12-08
 
 ### Changed

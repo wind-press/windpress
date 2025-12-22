@@ -48,7 +48,7 @@ class Compile
         $next_batch = $metadata['next_batch'] !== false ? $metadata['next_batch'] : 1;
 
         $wpQuery = new WP_Query([
-            'posts_per_page' => apply_filters('f!windpress/integration/livecanvas/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 10)),
+            'posts_per_page' => apply_filters('f!windpress/integration/livecanvas/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 20)),
             'post_type' => $post_types,
             'paged' => $next_batch,
             // 'meta_query' => [

@@ -36,7 +36,7 @@ class Compile
 
         $next_batch = $metadata['next_batch'] !== false ? $metadata['next_batch'] : 1;
 
-        $per_page = apply_filters('f!windpress/integration/wpcodebox2/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 10));
+        $per_page = apply_filters('f!windpress/integration/wpcodebox2/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 20));
 
         // get the total for pagination and next_batch
         $sql = $wpdb->prepare(

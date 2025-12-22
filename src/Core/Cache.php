@@ -114,6 +114,12 @@ class Cache
                 if (is_array($content['content']) || is_object($content['content'])) {
                     $content['content'] = wp_json_encode($content['content']);
                     $content['type'] = 'json';
+                } elseif (is_string($content['content'])) {
+                    // Check if the string is already valid JSON
+                    $decoded = json_decode($content['content'], true);
+                    if (json_last_error() === JSON_ERROR_NONE && ($decoded !== null || $content['content'] === 'null')) {
+                        $content['type'] = 'json';
+                    }
                 }
 
                 $content['content'] = is_string($content['content']) ? base64_encode($content['content']) : null;

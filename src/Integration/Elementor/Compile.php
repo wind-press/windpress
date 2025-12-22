@@ -48,7 +48,7 @@ class Compile
         $next_batch = $metadata['next_batch'] !== false ? $metadata['next_batch'] : 1;
 
         $wpQuery = new WP_Query([
-            'posts_per_page' => apply_filters('f!windpress/integration/elementor/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 10)),
+            'posts_per_page' => apply_filters('f!windpress/integration/elementor/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 20)),
             'paged' => $next_batch,
             'fields' => 'ids',
             'post_type' => $post_types,
@@ -65,7 +65,13 @@ class Compile
             $contents = [...$contents, ...$this->get_post_metas($post_id)];
         }
 
-        return $contents;
+        return [
+            'metadata' => [
+                'next_batch' => $wpQuery->max_num_pages > $next_batch ? $next_batch + 1 : false,
+                'total_batches' => $wpQuery->max_num_pages,
+            ],
+            'contents' => $contents,
+        ];
     }
 
     public function get_post_metas($post_id): array
@@ -78,6 +84,7 @@ class Compile
                 $contents[] = [
                     'name' => $post_id,
                     'content' => $meta_value,
+                    'type' => 'json',
                 ];
             }
         }
