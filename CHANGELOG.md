@@ -13,6 +13,11 @@ For instance:
 
 ## [Unreleased]
 
+## [3.3.73] - 2025-12-22
+
+### Added
+- Upgraded to Tailwind CSS v4 (4.1.18 latest)
+
 ### Fixed
 - [Elementor, Bricks, Oxygen, OxygenClassic, Breakdance, Builderius, Timber, Blockstudio] Scanner now properly supports batch system to handle large datasets
 - [Internal] JSON string detection in cache fetch_contents method to properly set content type
@@ -646,7 +651,8 @@ For instance:
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.72...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.73...HEAD
+[3.3.73]: https://github.com/wind-press/windpress/compare/v3.3.72...v3.3.73
 [3.3.72]: https://github.com/wind-press/windpress/compare/v3.3.71...v3.3.72
 [3.3.71]: https://github.com/wind-press/windpress/compare/v3.3.70...v3.3.71
 [3.3.70]: https://github.com/wind-press/windpress/compare/v3.3.69...v3.3.70
