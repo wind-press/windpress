@@ -83,6 +83,13 @@ class Compile
 
             $post_content = apply_filters('f!windpress/integration/gutenberg/compile:get_contents.post_content', $post_content, $post);
 
+            // Decode HTML entities to preserve arbitrary variants like [&>img]:rounded-lg
+            // WordPress rendering functions encode special characters (&, >, <, etc.) but Tailwind
+            // needs the raw characters for proper class parsing
+            // Apply decoding twice to handle double-encoded entities (e.g., &amp;amp; -> &amp; -> &)
+            $post_content = html_entity_decode($post_content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $post_content = html_entity_decode($post_content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
             if (apply_filters('f!windpress/integration/gutenberg/compile:get_contents.dump_parsed_block', true, $post)) {
                 $post_content .= PHP_EOL . Yaml::dump(parse_blocks($post->post_content));
             }

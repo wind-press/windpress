@@ -155,8 +155,12 @@ class CommonBlock
         $attrs = [];
 
         // Add className if present
+        // Decode HTML entities to preserve arbitrary variants like [&>img]:rounded-lg
+        // Apply decoding twice to handle double-encoded entities (e.g., &amp;amp; -> &amp; -> &)
         if (!empty($class_name)) {
-            $attrs['class'] = $class_name;
+            $decoded_class = html_entity_decode($class_name, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $decoded_class = html_entity_decode($decoded_class, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $attrs['class'] = $decoded_class;
         }
 
         // Add globalAttrs
