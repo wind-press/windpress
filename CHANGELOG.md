@@ -16,6 +16,9 @@ For instance:
 ### Added
 - Upgraded to Tailwind CSS v3 (3.4.19)
 
+### Changed
+- Improve backend compile scan performance across integrations
+
 ## [3.3.73] - 2025-12-22
 
 ### Added

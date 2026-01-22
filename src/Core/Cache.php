@@ -111,10 +111,12 @@ class Cache
 
             $_contents = array_key_exists('contents', $result) ? $result['contents'] : $result;
             $_contents = array_map(static function ($content) {
+                $content_type = $content['type'] ?? null;
+
                 if (is_array($content['content']) || is_object($content['content'])) {
                     $content['content'] = wp_json_encode($content['content']);
                     $content['type'] = 'json';
-                } elseif (is_string($content['content'])) {
+                } elseif (is_string($content['content']) && $content_type !== 'json') {
                     // Check if the string is already valid JSON
                     $decoded = json_decode($content['content'], true);
                     if (json_last_error() === JSON_ERROR_NONE && ($decoded !== null || $content['content'] === 'null')) {

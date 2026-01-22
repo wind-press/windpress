@@ -38,17 +38,8 @@ class Compile
 
         $per_page = apply_filters('f!windpress/integration/wpcodebox2/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 20));
 
-        // get the total for pagination and next_batch
         $sql = $wpdb->prepare(
-            'SELECT COUNT(*) FROM %i WHERE enabled = %d',
-            $table_name,
-            1 // enabled
-        );
-
-        $total = $wpdb->get_var($sql);
-
-        $sql = $wpdb->prepare(
-            'SELECT * FROM %i WHERE enabled = %d LIMIT %d OFFSET %d',
+            'SELECT id, title, original_code FROM %i WHERE enabled = %d LIMIT %d OFFSET %d',
             $table_name,
             1, // enabled
             $per_page,
@@ -65,12 +56,13 @@ class Compile
             ];
         }
 
-        $total_batches = ceil($total / $per_page);
+        $post_count = count($results);
+        $has_more = $per_page > 0 && $post_count === $per_page;
 
         return [
             'metadata' => [
-                'total_batches' => $total_batches,
-                'next_batch' => $total_batches > $next_batch ? $next_batch + 1 : false,
+                'total_batches' => false,
+                'next_batch' => $has_more ? $next_batch + 1 : false,
             ],
             'contents' => $contents,
         ];

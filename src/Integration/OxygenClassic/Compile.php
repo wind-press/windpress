@@ -57,12 +57,17 @@ class Compile
         );
 
         $next_batch = $metadata['next_batch'] !== false ? $metadata['next_batch'] : 1;
+        $per_page = apply_filters('f!windpress/integration/oxygen/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 20));
 
         $wpQuery = new WP_Query([
-            'posts_per_page' => apply_filters('f!windpress/integration/oxygen/compile:get_contents.post_per_page', (int) get_option('posts_per_page', 20)),
+            'posts_per_page' => $per_page,
             'paged' => $next_batch,
             'fields' => 'ids',
             'post_type' => $post_types,
+            'no_found_rows' => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+            'ignore_sticky_posts' => true,
             // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- This only run by trigger on specific event
             'meta_query' => array_merge([
                 'relation' => 'OR',
@@ -76,14 +81,23 @@ class Compile
             )),
         ]);
 
-        foreach ($wpQuery->posts as $post_id) {
-            $contents = [...$contents, ...$this->get_post_metas($post_id)];
+        if ($wpQuery->posts !== []) {
+            update_meta_cache('post', $wpQuery->posts);
         }
+
+        foreach ($wpQuery->posts as $post_id) {
+            foreach ($this->get_post_metas($post_id) as $content) {
+                $contents[] = $content;
+            }
+        }
+
+        $post_count = count($wpQuery->posts);
+        $has_more = $per_page > 0 && $post_count === $per_page;
 
         return [
             'metadata' => [
-                'next_batch' => $wpQuery->max_num_pages > $next_batch ? $next_batch + 1 : false,
-                'total_batches' => $wpQuery->max_num_pages,
+                'next_batch' => $has_more ? $next_batch + 1 : false,
+                'total_batches' => false,
             ],
             'contents' => $contents,
         ];
