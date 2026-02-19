@@ -3,6 +3,8 @@ import { __ } from '@wordpress/i18n';
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
+import LiveCanvasIcon from '@/dashboard/assets/icon/livecanvas.svg';
+import OmniIconIcon from '@/dashboard/assets/icon/omni-icon.svg';
 import { useGenerateCache } from '@/dashboard/composables/useGenerateCache';
 
 const router = useRouter()
@@ -97,9 +99,32 @@ const groups = computed(() => [
                 label: 'Yabe Webfont',
                 avatar: {
                     src: YabeWebfontIcon,
-                    alt: 'Yabe Webfont'
+                    alt: 'Yabe Webfont',
+                    class: 'rounded-none bg-transparent'
                 },
                 to: `https://webfont.yabe.land/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
+                target: '_blank',
+            },
+            {
+                id: 'livecanvas',
+                label: 'LiveCanvas',
+                avatar: {
+                    src: LiveCanvasIcon,
+                    alt: 'LiveCanvas',
+                    class: 'rounded-none bg-transparent [&>img]:object-contain'
+                },
+                to: `https://livecanvas.com/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
+                target: '_blank',
+            },
+            {
+                id: 'omni-icon',
+                label: 'Omni Icon',
+                avatar: {
+                    src: OmniIconIcon,
+                    alt: 'Omni Icon',
+                    class: 'rounded-none bg-transparent'
+                },
+                to: `https://wordpress.org/plugins/omni-icon/?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=windpress&utm_id=all-edition&windpress_version=${window.windpress._version}`,
                 target: '_blank',
             },
             ...links[1].flat()
