@@ -18,8 +18,8 @@ Integrate Tailwind CSS 3 or 4 into WordPress easily, in seconds. Works well with
 WindPress is a platform agnostic [Tailwind CSS](https://tailwindcss.com/) integration plugin for WordPress that allows you to use the full power of Tailwind CSS within the WordPress ecosystem.
 
 **Tailwind CSS version**:
-- 3.4.17
-- 4.1.18
+- 3.4.19
+- 4.2.0
 
 ### Features
 
