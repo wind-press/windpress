@@ -6,7 +6,9 @@ import { stringify as stringifyYaml } from 'yaml';
 import { nanoid } from 'nanoid';
 import lzString from 'lz-string';
 import { get } from 'lodash-es';
-import { get as getIdb, set as setIdb } from 'idb-keyval';
+import { createStore, get as getIdb, set as setIdb } from 'idb-keyval';
+
+const provider_cache_store = createStore('windpress-cache-store', 'provider-cache');
 
 // TODO: Add option to allow enable/disable the incremental cache build
 
@@ -68,6 +70,29 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
         file_url: null,
         file_size: 0,
     };
+    let idb_unavailable_logged = false;
+
+    async function getProviderCache(key: string) {
+        try {
+            return await getIdb(key, provider_cache_store);
+        } catch {
+            if (!idb_unavailable_logged) {
+                log.add({ message: 'IndexedDB cache is unavailable. Falling back to provider scanning.', type: 'warning' });
+                idb_unavailable_logged = true;
+            }
+
+            return null;
+        }
+    }
+
+    function setProviderCache(key: string, value: string) {
+        setIdb(key, value, provider_cache_store).catch(() => {
+            if (!idb_unavailable_logged) {
+                log.add({ message: 'IndexedDB cache is unavailable. Falling back to provider scanning.', type: 'warning' });
+                idb_unavailable_logged = true;
+            }
+        });
+    }
 
     log.add({ message: 'Getting the latest Simple File System data...', type: 'info' });
 
@@ -86,7 +111,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
     await api
         .request('/admin/volume/index', { method: 'GET' })
         .then(response => response.data)
-        .then(res => {
+        .then((res: { entries: Array<{ relative_path: string; content: string }> }) => {
             volume = res.entries.reduce((acc: { [key: string]: string }, entry) => {
                 acc[`/${entry.relative_path}`] = entry.content;
                 return acc;
@@ -129,7 +154,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
             if (options.incremental?.providers && !options.incremental.providers.includes(provider.id)) {
                 // use the stored sources on the browser's local storage (if available)
                 // let lsCache = localStorage.getItem(`windpress.cache.provider.${provider.id}`);
-                let lsCache = await getIdb(`windpress.cache.provider.${provider.id}`);
+                let lsCache = await getProviderCache(`windpress.cache.provider.${provider.id}`);
 
                 if (lsCache) {
                     let decompressedCache = lzString.decompressFromUTF16(lsCache);
@@ -180,7 +205,7 @@ export async function buildCache(opts: BuildCacheOptions = {}) {
 
         // store to local storage
         // localStorage.setItem(`windpress.cache.provider.${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
-        setIdb(`windpress.cache.provider.${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
+        setProviderCache(`windpress.cache.provider.${provider.id}`, lzString.compressToUTF16(JSON.stringify({ contents: batch_pool, timestamp: Date.now() })));
 
         return Promise.resolve();
     }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { VolumeSFSFile } from '@/dashboard/composables/useFileAction';
+import type { VolumeSFSFile } from '@/dashboard/composables/useFileAction';
 
 const props = defineProps<{
     data: VolumeSFSFile,

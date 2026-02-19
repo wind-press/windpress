@@ -67,9 +67,16 @@ class AdminPage
 
         $handle = WIND_PRESS::WP_OPTION . '-admin';
 
-        $manifest = AssetVite::get_instance()->get_manifest(dirname(WIND_PRESS::FILE) . '/build');
+        $asset_vite = AssetVite::get_instance();
+        $manifest = $asset_vite->get_manifest(dirname(WIND_PRESS::FILE) . '/build');
 
-        wp_enqueue_script($handle . '-i18n', $manifest->is_dev ? AssetVite::get_instance()->generate_development_asset_src($manifest, 'assets/wp-i18n.js') : AssetVite::get_instance()->prepare_asset_url($manifest->dir) . '/wp-i18n.js', ['wp-i18n'], null);
+        $i18n_src = $asset_vite->prepare_asset_url($manifest->dir) . '/wp-i18n.js';
+
+        if (! is_file(dirname(WIND_PRESS::FILE) . '/build/wp-i18n.js')) {
+            $i18n_src = plugins_url('assets/wp-i18n.js', WIND_PRESS::FILE);
+        }
+
+        wp_enqueue_script($handle . '-i18n', $i18n_src, ['wp-i18n'], null);
         wp_set_script_translations($handle . '-i18n', 'windpress');
 
         AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [

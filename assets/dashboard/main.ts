@@ -2,8 +2,6 @@ import './styles/main.css'
 
 import './wp-admin';
 
-import('./monaco-editor'); // Vite: Using dynamic import() to code-split the application
-
 import { createApp } from 'vue'
 import { createPinia, PiniaPluginContext } from 'pinia'
 import ui from '@nuxt/ui/vue-plugin'
@@ -16,25 +14,31 @@ import i18nPlugin from './plugins/i18n';
 
 import { setupWorker } from '@/packages/core/windpress/worker';
 
-const app = createApp(App)
-const pinia = createPinia()
+async function bootstrap() {
+    await import('./monaco-editor'); // Load Monaco contributions before editor components mount
 
-app.config.globalProperties.window = window;
+    const app = createApp(App)
+    const pinia = createPinia()
 
-// Pinia plugin: Initialize the store with the data from the server.
-pinia.use(({ store }: PiniaPluginContext) => {
-    if (['volume', 'settings'].includes(store.$id)) {
-        store.initPull();
-    }
-})
+    app.config.globalProperties.window = window;
 
-app
-    .use(router)
-    .use(ui)
-    .use(pinia)
-    .use(VueMonacoEditorPlugin)
-    .use(i18nPlugin)
+    // Pinia plugin: Initialize the store with the data from the server.
+    pinia.use(({ store }: PiniaPluginContext) => {
+        if (['volume', 'settings'].includes(store.$id)) {
+            store.initPull();
+        }
+    })
 
-app.mount('#windpress-app')
+    app
+        .use(router)
+        .use(ui)
+        .use(pinia)
+        .use(VueMonacoEditorPlugin)
+        .use(i18nPlugin)
 
-setupWorker();
+    app.mount('#windpress-app')
+
+    setupWorker();
+}
+
+void bootstrap();

@@ -18,54 +18,82 @@ import { parse } from './dom2elements.js';
  * @see https://web.dev/articles/async-clipboard
  * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
  */
+async function queryClipboardPermission(permissionName) {
+    if (!navigator.permissions || typeof navigator.permissions.query !== 'function') {
+        return null;
+    }
+
+    try {
+        return await navigator.permissions.query({ name: permissionName });
+    } catch {
+        return null;
+    }
+}
+
 async function checkAndRequestClipboardPermission() {
-    if (!navigator.permissions) {
-        logger('Clipboard permissions not supported', { module: 'html2bricks', type: 'error' });
+    if (!navigator.clipboard || typeof navigator.clipboard.readText !== 'function' || typeof navigator.clipboard.writeText !== 'function') {
+        logger('Clipboard API not supported', { module: 'html2bricks', type: 'error' });
+        return false;
+    }
+
+    const readStatus = await queryClipboardPermission('clipboard-read');
+
+    if (readStatus && readStatus.state === 'denied') {
+        logger('Clipboard-read permission denied', { module: 'html2bricks', type: 'error' });
         return false;
     }
 
     let clipboardContent = '';
 
-    // clipboard-read
-    const readStatus = await navigator.permissions.query({ name: 'clipboard-read', allowWithoutGesture: false });
-
-    if (readStatus.state === 'prompt') {
-        logger('Requesting clipboard-read permission', { module: 'html2bricks' });
-
+    try {
         clipboardContent = await navigator.clipboard.readText();
-
-        if (readStatus.state !== 'granted') {
-            logger('Clipboard-read permission denied', { module: 'html2bricks', type: 'error' });
-            return false;
-        }
+    } catch (error) {
+        logger('Clipboard-read permission denied', error, { module: 'html2bricks', type: 'error' });
+        return false;
     }
 
-    // clipboard-write
-    clipboardContent = await navigator.clipboard.readText();
+    const writeStatus = await queryClipboardPermission('clipboard-write');
 
-    const writeStatus = await navigator.permissions.query({ name: 'clipboard-write' });
+    if (writeStatus && writeStatus.state === 'denied') {
+        logger('Clipboard-write permission denied', { module: 'html2bricks', type: 'error' });
+        return false;
+    }
 
-    if (writeStatus.state === 'prompt') {
-        logger('Requesting clipboard-write permission', { module: 'html2bricks' });
-
+    try {
         await navigator.clipboard.writeText(clipboardContent);
-
-        if (writeStatus.state !== 'granted') {
-            logger('Clipboard-write permission denied', { module: 'html2bricks', type: 'error' });
-            return false;
-        }
+    } catch (error) {
+        logger('Clipboard-write permission denied', error, { module: 'html2bricks', type: 'error' });
+        return false;
     }
 
     return true;
 }
 
-async function htmlPasteHandler() {
-    if (!await checkAndRequestClipboardPermission()) {
-        brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
-        return;
+function getClipboardTextFromPasteEvent(event) {
+    if (!event.clipboardData) {
+        return '';
     }
 
-    const clipboardText = (await navigator.clipboard.readText()).trim();
+    return (event.clipboardData.getData('text/html') || event.clipboardData.getData('text/plain') || '').trim();
+}
+
+async function htmlPasteHandler(sourceClipboardText = '') {
+    let clipboardText = typeof sourceClipboardText === 'string' ? sourceClipboardText.trim() : '';
+
+    if (!clipboardText) {
+        if (!await checkAndRequestClipboardPermission()) {
+            brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
+            return;
+        }
+
+        try {
+            clipboardText = (await navigator.clipboard.readText()).trim();
+        } catch (error) {
+            logger('Clipboard-read permission denied', error, { module: 'html2bricks', type: 'error' });
+            brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
+            return;
+        }
+    }
 
     if (!clipboardText || clipboardText.charAt(0) !== '<') {
         logger('Pasted content is not HTML', { module: 'html2bricks', type: 'error' });
@@ -88,8 +116,14 @@ async function htmlPasteHandler() {
         globalElements: [],
     };
 
-    // copy to clipboard
-    await navigator.clipboard.writeText(JSON.stringify(bricksData, null));
+    try {
+        // copy to clipboard
+        await navigator.clipboard.writeText(JSON.stringify(bricksData, null));
+    } catch (error) {
+        logger('Clipboard-write permission denied', error, { module: 'html2bricks', type: 'error' });
+        brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
+        return;
+    }
 
     brxGlobalProp.$_pasteElements();
 
@@ -105,6 +139,32 @@ async function htmlPasteHandler() {
  * Windows: Ctrl + Shift + V
  * Mac: Cmd + Shift + V
  */
+let pendingShortcutPaste = false;
+let pendingShortcutPasteTimeout = null;
+
+function resetPendingShortcutPaste() {
+    pendingShortcutPaste = false;
+
+    if (pendingShortcutPasteTimeout) {
+        window.clearTimeout(pendingShortcutPasteTimeout);
+        pendingShortcutPasteTimeout = null;
+    }
+}
+
+document.addEventListener('paste', (event) => {
+    if (!pendingShortcutPaste || !settingsState('module.html2bricks.copy-paste', true).value) {
+        return;
+    }
+
+    resetPendingShortcutPaste();
+    event.preventDefault();
+    event.stopPropagation();
+
+    const clipboardText = getClipboardTextFromPasteEvent(event);
+
+    htmlPasteHandler(clipboardText);
+}, true);
+
 document.addEventListener('keydown', (event) => {
     if (!settingsState('module.html2bricks.copy-paste', true).value) {
         return;
@@ -120,7 +180,19 @@ document.addEventListener('keydown', (event) => {
 
     event.stopPropagation();
 
-    htmlPasteHandler();
+    pendingShortcutPaste = true;
+    if (pendingShortcutPasteTimeout) {
+        window.clearTimeout(pendingShortcutPasteTimeout);
+    }
+
+    pendingShortcutPasteTimeout = window.setTimeout(() => {
+        if (!pendingShortcutPaste) {
+            return;
+        }
+
+        resetPendingShortcutPaste();
+        htmlPasteHandler();
+    }, 0);
 
 }, true);
 

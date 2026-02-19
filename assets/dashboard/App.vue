@@ -3,10 +3,11 @@ import { __ } from '@wordpress/i18n';
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import YabeWebfontIcon from '@/dashboard/assets/icon/yabe-webfont.svg';
-import { generateCache } from '@/dashboard/composables/useGenerateCache';
+import { useGenerateCache } from '@/dashboard/composables/useGenerateCache';
 
 const router = useRouter()
 const toast = useToast()
+const { generateCache } = useGenerateCache()
 
 const links = [
     [

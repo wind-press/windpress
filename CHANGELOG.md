@@ -19,9 +19,12 @@ For instance:
 
 ### Fixed
 - [Breakdance] Unwanted margin-top style is applied on the editor
+- [Bricks] Firefox browser compatibility for html2bricks copy-paste feature
+- Compiler's partial scanning cache issue 
 
 ### Changed
 - Improve backend compile scan performance across integrations
+- Improve the File editor support for Tailwind CSS v4 features
 
 ## [3.3.73] - 2025-12-22
 

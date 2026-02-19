@@ -11,12 +11,6 @@ import ConfirmVolumeImportModal from '@/dashboard/components/File/Explorer/Confi
 import NewFileFormModal from '@/dashboard/components/File/Explorer/NewFileFormModal.vue'
 import RenameFileFormModal from '@/dashboard/components/File/Explorer/RenameFileFormModal.vue'
 
-const volumeStore = useVolumeStore()
-const settingsStore = useSettingsStore()
-const themeJsonStore = useThemeJsonStore()
-const toast = useToast()
-const overlay = useOverlay()
-
 export type VolumeSFSFile = {
     entries: Entry[];
     _windpress: boolean;
@@ -26,6 +20,13 @@ export type VolumeSFSFile = {
     _uid: string;
     _type: string;
 }
+
+export function useFileAction() {
+    const volumeStore = useVolumeStore()
+    const settingsStore = useSettingsStore()
+    const themeJsonStore = useThemeJsonStore()
+    const toast = useToast()
+    const overlay = useOverlay()
 
 async function deleteFile(entry: Entry) {
     if (entry.readonly) {
@@ -423,7 +424,6 @@ async function renameFile(entry: Entry) {
     }
 }
 
-export function useFileAction() {
     return {
         deleteFile,
         resetFile,

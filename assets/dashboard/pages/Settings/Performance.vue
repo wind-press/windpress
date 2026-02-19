@@ -6,10 +6,10 @@ import { useSettingsStore } from '@/dashboard/stores/settings';
 import dayjs from 'dayjs';
 import prettyBytes from 'pretty-bytes';
 import { useApi } from '@/dashboard/library/api';
-import { generateCache } from '@/dashboard/composables/useGenerateCache';
+import { useGenerateCache } from '@/dashboard/composables/useGenerateCache';
 
 const api = useApi();
-const toast = useToast();
+const { generateCache } = useGenerateCache();
 
 const settingsStore = useSettingsStore()
 const busyStore = useBusyStore()
@@ -37,7 +37,7 @@ function pullCacheInfo() {
 }
 
 async function doGenerateCache() {
-  generateCache((res) => {
+  generateCache(() => {
     pullCacheInfo();
   });
 }

@@ -7,6 +7,7 @@ import path from 'path';
 import { shallowRef, ref, onBeforeUnmount } from 'vue';
 import { getVariableList, loadDesignSystem, naturalExpand, getClassList, candidatesToCss } from '@/packages/core/tailwindcss';
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
+import { cssDefaults as monacoCssDefaults } from 'monaco-editor/esm/vs/language/css/monaco.contribution.js';
 import Color from 'colorjs.io';
 import { debounce, throttle } from 'lodash-es';
 import { useThemeJsonStore } from '@/dashboard/stores/themeJson';
@@ -381,6 +382,49 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
 
             monaco.languages.registerHoverProvider('css', {
                 async provideHover(model, position) {
+                    const currentLine = model.getLineContent(position.lineNumber);
+
+                    const importThemeMatches = [...currentLine.matchAll(/@import\s+[^;]*\btheme\s*\(\s*([-\w]+)\s*\)/g)];
+                    for (const importThemeMatch of importThemeMatches) {
+                        if (importThemeMatch.index === undefined) {
+                            continue;
+                        }
+
+                        const fullMatch = importThemeMatch[0];
+                        const themePart = /\btheme\s*\(\s*([-\w]+)\s*\)/.exec(fullMatch);
+                        if (!themePart || themePart.index === undefined) {
+                            continue;
+                        }
+
+                        const mode = themePart[1];
+                        const modeIndex = themePart[0].indexOf(mode);
+                        if (modeIndex === -1) {
+                            continue;
+                        }
+
+                        const modeStart = importThemeMatch.index + themePart.index + modeIndex;
+                        const modeEnd = modeStart + mode.length;
+                        const isHoveringMode = position.column >= modeStart + 1 && position.column <= modeEnd + 1;
+
+                        if (!isHoveringMode || mode !== 'static') {
+                            continue;
+                        }
+
+                        return {
+                            range: {
+                                startLineNumber: position.lineNumber,
+                                startColumn: modeStart + 1,
+                                endLineNumber: position.lineNumber,
+                                endColumn: modeEnd + 1,
+                            },
+                            contents: [
+                                {
+                                    value: `\`static\`\n\n${__('Always emit imported theme values into the CSS file instead of only when used.', 'windpress')}`,
+                                },
+                            ],
+                        };
+                    }
+
                     // Get cached design system
                     const { designSystem } = await getDesignSystemData();
                     if (!designSystem) {
@@ -432,8 +476,6 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
                     }
 
                     // Find which specific class the cursor is hovering over
-                    const currentLine = model.getLineContent(position.lineNumber);
-
                     // Check if @apply is on current line (single-line case) 
                     // For multiple @apply on same line, find the one that contains cursor
                     const allSingleLineMatches = [...currentLine.matchAll(/@apply\s+([^;}@]+)/g)];
@@ -1013,10 +1055,100 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             });
         }; // End registerProviders
 
+        const getTailwindImportThemeRanges = (model: monacoEditor.editor.ITextModel) => {
+            const text = model.getValue();
+            const ranges: Array<{ start: number; end: number }> = [];
+            const importRegex = /@import\s+[^;]*\btheme\s*\(\s*[-\w]+\s*\)\s*;/g;
+            let importMatch: RegExpExecArray | null;
+
+            while ((importMatch = importRegex.exec(text)) !== null) {
+                const themeMatch = /\btheme\s*\(\s*[-\w]+\s*\)/.exec(importMatch[0]);
+                if (!themeMatch || themeMatch.index === undefined) {
+                    continue;
+                }
+
+                const start = importMatch.index + themeMatch.index;
+                ranges.push({ start, end: start + themeMatch[0].length });
+            }
+
+            return ranges;
+        };
+
+        const toMarkerData = (marker: monacoEditor.editor.IMarker): monacoEditor.editor.IMarkerData => ({
+            severity: marker.severity,
+            startLineNumber: marker.startLineNumber,
+            startColumn: marker.startColumn,
+            endLineNumber: marker.endLineNumber,
+            endColumn: marker.endColumn,
+            message: marker.message,
+            source: marker.source,
+            code: marker.code,
+            tags: marker.tags,
+            relatedInformation: marker.relatedInformation,
+        });
+
+        const filterTailwindImportThemeMarkers = () => {
+            const model = editor.getModel();
+            if (!model || model.getLanguageId() !== 'css') {
+                return;
+            }
+
+            const themeRanges = getTailwindImportThemeRanges(model);
+            if (themeRanges.length === 0) {
+                return;
+            }
+
+            const cssMarkers = monaco.editor.getModelMarkers({
+                owner: 'css',
+                resource: model.uri,
+            });
+
+            if (cssMarkers.length === 0) {
+                return;
+            }
+
+            let didFilter = false;
+            const filteredMarkers = cssMarkers.filter((marker) => {
+                const markerCode = typeof marker.code === 'string'
+                    ? marker.code
+                    : marker.code?.value;
+
+                if (markerCode !== 'css-semicolonexpected' && markerCode !== 'css-lcurlyexpected') {
+                    return true;
+                }
+
+                const markerStart = model.getOffsetAt({
+                    lineNumber: marker.startLineNumber,
+                    column: marker.startColumn,
+                });
+                const markerEnd = model.getOffsetAt({
+                    lineNumber: marker.endLineNumber,
+                    column: marker.endColumn,
+                });
+
+                const isTailwindThemeMarker = themeRanges.some((range) => {
+                    return markerStart >= range.start && markerEnd <= range.end;
+                });
+
+                if (isTailwindThemeMarker) {
+                    didFilter = true;
+                    return false;
+                }
+
+                return true;
+            });
+
+            if (!didFilter) {
+                return;
+            }
+
+            monaco.editor.setModelMarkers(model, 'css', filteredMarkers.map(toMarkerData));
+        };
+
         if (!(window as any).__windpressMonacoInstantiated) {
-            monaco.languages.css.cssDefaults.setOptions(
+            monacoCssDefaults.setOptions(
                 Object.assign(
-                    monaco.languages.css.cssDefaults.options,
+                    monacoCssDefaults.options,
                     {
                         data: {
                             useDefaultDataProvider: true,
@@ -1154,6 +1286,20 @@ async function handleEditorMount(editor: monacoEditor.editor.IStandaloneCodeEdit
             setTimeout(registerProviders, 100);
 
             (window as any).__windpressMonacoInstantiated = true;
+        }
+
+        const model = editor.getModel();
+        if (model && model.getLanguageId() === 'css') {
+            monacoDisposables.value.push(monaco.editor.onDidChangeMarkers((resources) => {
+                const hasCurrentModel = resources.some((resource) => resource.toString() === model.uri.toString());
+                if (!hasCurrentModel) {
+                    return;
+                }
+
+                filterTailwindImportThemeMarkers();
+            }));
+
+            filterTailwindImportThemeMarkers();
         }
 
         clearDesignSystemCache();
