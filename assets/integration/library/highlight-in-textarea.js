@@ -271,7 +271,7 @@ HighlightInTextarea.prototype = {
         // replace stop tokens with closing </mark> tags
         input = input.replace(/{{hit-mark-stop}}/g, '</mark>');
 
-        input += '<mark class="placeholder"> ⚡ </mark>';
+        input += '<mark class="placeholder"> ⚡ windpress </mark>';
 
         this.highlights.innerHTML = input;
 

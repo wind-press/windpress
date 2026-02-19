@@ -17,6 +17,9 @@ For instance:
 - Upgraded to Tailwind CSS v3 (3.4.19)
 - Upgraded to Tailwind CSS v4 (4.2.0 latest)
 
+### Fixed
+- [Breakdance] Unwanted margin-top style is applied on the editor
+
 ### Changed
 - Improve backend compile scan performance across integrations
 

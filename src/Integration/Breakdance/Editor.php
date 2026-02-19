@@ -41,10 +41,9 @@ class Editor
             return;
         }
 
-        // Manually enqueue the assets since Breakdance doesn't wp_head
+        // Manually enqueue the assets since Breakdance doesn't wp_head.
         add_filter('f!windpress/core/runtime:append_header.ubiquitous_panel.is_prevent_load', static fn ($is_prevent_load) => true);
-        Runtime::get_instance()->append_header();
-        wp_head();
+        $this->load_windpress_head_assets();
 
         $handle = WIND_PRESS::WP_OPTION . ':integration-breakdance-editor';
 
@@ -81,16 +80,68 @@ class Editor
             });
         JS, 'after');
 
+        $this->print_queued_windpress_assets();
+    }
+
+    private function load_windpress_head_assets(): void
+    {
+        global $wp_filter;
+
+        $callbacks_before = [];
+
+        if (isset($wp_filter['wp_head']) && isset($wp_filter['wp_head']->callbacks) && is_array($wp_filter['wp_head']->callbacks)) {
+            $callbacks_before = $wp_filter['wp_head']->callbacks;
+        }
+
+        Runtime::get_instance()->append_header();
+
+        if (! isset($wp_filter['wp_head']) || ! isset($wp_filter['wp_head']->callbacks) || ! is_array($wp_filter['wp_head']->callbacks)) {
+            return;
+        }
+
+        foreach ($wp_filter['wp_head']->callbacks as $priority => $callbacks) {
+            foreach ($callbacks as $callback_id => $callback) {
+                if (isset($callbacks_before[$priority][$callback_id])) {
+                    continue;
+                }
+
+                $function = $callback['function'] ?? null;
+
+                if (! is_callable($function)) {
+                    continue;
+                }
+
+                call_user_func($function);
+                remove_action('wp_head', $function, (int) $priority);
+            }
+        }
+    }
+
+    private function print_queued_windpress_assets(): void
+    {
+        $wp_styles = wp_styles();
+
+        foreach ($wp_styles->queue as $handle) {
+            if (! $this->is_windpress_handle($handle)) {
+                continue;
+            }
+
+            $wp_styles->do_items($handle);
+        }
+
         $wp_scripts = wp_scripts();
 
-        $queue = $wp_scripts->queue;
-
-        foreach ($queue as $handle) {
-            if (strpos($handle, WIND_PRESS::WP_OPTION . ':') !== 0) {
+        foreach ($wp_scripts->queue as $handle) {
+            if (! $this->is_windpress_handle($handle)) {
                 continue;
             }
 
             $wp_scripts->do_items($handle);
         }
+    }
+
+    private function is_windpress_handle(string $handle): bool
+    {
+        return strpos($handle, WIND_PRESS::WP_OPTION) === 0;
     }
 }
