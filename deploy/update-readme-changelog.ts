@@ -28,8 +28,16 @@ function getSectionPrefix(section: string): string {
     'Fixed': 'Fix',
     'Security': 'Security'
   };
-  
+
   return sectionMap[section] || 'Note';
+}
+
+/**
+ * Detect markdown reference-style link definitions, e.g.:
+ * [unreleased]: https://example.com/compare
+ */
+function isReferenceLinkDefinition(line: string): boolean {
+  return /^\[[^\]]+\]:\s+\S+/.test(line.trim());
 }
 
 /**
@@ -78,6 +86,11 @@ function parseChangelog(changelogContent: string): ChangelogEntry[] {
     
     // Collect content for current entry
     if (inEntry && currentEntry) {
+      // Skip markdown reference links from the bottom links section.
+      if (isReferenceLinkDefinition(line)) {
+        continue;
+      }
+
       // Convert markdown format to readme.txt format
       let processedLine = line;
       
@@ -130,6 +143,10 @@ function formatForReadme(entries: ChangelogEntry[]): string {
     for (const line of lines) {
       const trimmedLine = line.trim();
       if (trimmedLine) {
+        if (isReferenceLinkDefinition(trimmedLine)) {
+          continue;
+        }
+
         // Check if this is a section header (Added, Fixed, etc.)
         if (['Added', 'Fixed', 'Improved', 'Changed', 'Deprecated', 'Removed', 'Security'].includes(trimmedLine)) {
           continue; // Skip the section header itself
@@ -177,7 +194,9 @@ For instance:
 Free version 1.**0**.4
 Pro version 1.**1**.4
 
-${changelogText}`;
+${changelogText}
+
+[See changelog for all versions.](https://github.com/wind-press/windpress/blob/main/CHANGELOG.md)`;
   
   return beforeChangelog + newChangelogSection;
 }
