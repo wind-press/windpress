@@ -30,7 +30,8 @@ class Editor
     {
         add_action('enqueue_block_editor_assets', fn() => $this->enqueue_block_editor_assets());
         if (Config::get('integration.gutenberg.settings.theme_json', true)) {
-            add_filter('wp_theme_json_data_user', fn($theme_json) => $this->filter_theme_json_data_user($theme_json), 1_000_001);
+            add_filter('wp_theme_json_data_theme', fn($theme_json) => $this->filter_theme_json_data($theme_json, 'theme'), 1_000_001);
+            add_filter('wp_theme_json_data_user', fn($theme_json) => $this->filter_theme_json_data($theme_json, 'custom'), 1_000_001);
         }
     }
 
@@ -108,7 +109,7 @@ class Editor
      * @param WP_Theme_JSON_Data $theme_json
      * @return WP_Theme_JSON_Data
      */
-    public function filter_theme_json_data_user($theme_json) {
+    public function filter_theme_json_data($theme_json, string $origin = 'theme') {
         // Only apply if Tailwind v4 is active
         if (Runtime::tailwindcss_version() !== 4) {
             return $theme_json;
@@ -136,14 +137,21 @@ class Editor
         }
 
         try {
-            // Get current theme.json data
-            $current_theme_data = $theme_json->get_data();
-            
-            // Merge WindPress theme.json with current theme.json
-            $merged_data = $this->merge_theme_json_data($current_theme_data, $windpress_theme_data);
-            
+            $current_theme_data = $this->normalize_existing_preset_data($theme_json->get_data());
+            $prefixed_windpress_theme_data = $this->prefix_windpress_theme_preset_slugs($windpress_theme_data);
+
+            $merged_theme_data = $current_theme_data;
+
+            if ($origin === 'theme') {
+                $merged_theme_data = $this->merge_windpress_theme_presets($merged_theme_data, $prefixed_windpress_theme_data, 'theme');
+            }
+
+            if ($origin === 'custom') {
+                $merged_theme_data = $this->merge_windpress_theme_presets($merged_theme_data, $prefixed_windpress_theme_data, 'theme', true);
+            }
+
             // Return updated theme.json data
-            return $theme_json->update_with($merged_data);
+            return $theme_json->update_with($merged_theme_data);
             
         } catch (Exception $e) {
             if (WP_DEBUG) {
@@ -154,107 +162,388 @@ class Editor
     }
 
     /**
-     * Merge WindPress theme.json data with existing theme.json data
+     * Prefix WindPress preset slugs to avoid collisions with theme/user presets.
      */
-    private function merge_theme_json_data(array $current_data, array $windpress_data): array
+    private function prefix_windpress_theme_preset_slugs(array $windpress_data): array
     {
-        // Start with current data
-        $merged = $current_data;
-        
-        // Merge settings
-        if (isset($windpress_data['settings'])) {
-            // Merge color palette
-            if (isset($windpress_data['settings']['color']['palette'])) {
-                if (!isset($merged['settings']['color']['palette'])) {
-                    $merged['settings']['color']['palette'] = [];
-                }
-                
-                // Add WindPress colors with 'custom' origin to distinguish from theme colors
-                foreach ($windpress_data['settings']['color']['palette'] as $color) {
-                    $merged['settings']['color']['palette'][] = [
-                        'name' => $color['name'],
-                        'slug' => 'windpress-' . $color['slug'],
-                        'color' => $color['color'],
-                    ];
-                }
+        $preset_paths = [
+            ['settings', 'color', 'palette'],
+            ['settings', 'typography', 'fontSizes'],
+            ['settings', 'typography', 'fontFamilies'],
+            ['settings', 'spacing', 'spacingSizes'],
+            ['settings', 'border', 'radiusSizes'],
+            ['settings', 'shadow', 'presets'],
+        ];
+
+        foreach ($preset_paths as $path) {
+            $this->prefix_preset_slugs_at_path($windpress_data, $path);
+        }
+
+        return $windpress_data;
+    }
+
+    private function normalize_existing_preset_data(array $theme_data): array
+    {
+        $preset_paths = [
+            ['settings', 'color', 'palette'],
+            ['settings', 'typography', 'fontSizes'],
+            ['settings', 'typography', 'fontFamilies'],
+            ['settings', 'spacing', 'spacingSizes'],
+            ['settings', 'border', 'radiusSizes'],
+            ['settings', 'shadow', 'presets'],
+        ];
+
+        foreach ($preset_paths as $path) {
+            $this->normalize_preset_collection_at_path($theme_data, $path);
+        }
+
+        return $theme_data;
+    }
+
+    /**
+     * Merge WindPress presets into the selected origin while preserving existing presets.
+     */
+    private function merge_windpress_theme_presets(array $current_data, array $windpress_data, string $origin, bool $only_if_origin_exists = false): array
+    {
+        $merged_data = $current_data;
+        $preset_paths = [
+            ['settings', 'color', 'palette'],
+            ['settings', 'typography', 'fontSizes'],
+            ['settings', 'typography', 'fontFamilies'],
+            ['settings', 'spacing', 'spacingSizes'],
+            ['settings', 'border', 'radiusSizes'],
+            ['settings', 'shadow', 'presets'],
+        ];
+
+        foreach ($preset_paths as $path) {
+            if ($only_if_origin_exists && !$this->has_origin_preset_list_at_path($merged_data, $path, $origin)) {
+                continue;
             }
-            
-            // Merge typography font sizes
-            if (isset($windpress_data['settings']['typography']['fontSizes'])) {
-                if (!isset($merged['settings']['typography']['fontSizes'])) {
-                    $merged['settings']['typography']['fontSizes'] = [];
-                }
-                
-                foreach ($windpress_data['settings']['typography']['fontSizes'] as $fontSize) {
-                    $merged['settings']['typography']['fontSizes'][] = [
-                        'name' => $fontSize['name'],
-                        'slug' => 'windpress-' . $fontSize['slug'],
-                        'size' => $fontSize['size'],
-                    ];
-                }
+
+            $windpress_presets = $this->get_preset_list_at_path($windpress_data, $path);
+
+            if ($windpress_presets === []) {
+                continue;
             }
-            
-            // Merge typography font families
-            if (isset($windpress_data['settings']['typography']['fontFamilies'])) {
-                if (!isset($merged['settings']['typography']['fontFamilies'])) {
-                    $merged['settings']['typography']['fontFamilies'] = [];
-                }
-                
-                foreach ($windpress_data['settings']['typography']['fontFamilies'] as $fontFamily) {
-                    $merged['settings']['typography']['fontFamilies'][] = [
-                        'name' => $fontFamily['name'],
-                        'slug' => 'windpress-' . $fontFamily['slug'],
-                        'fontFamily' => $fontFamily['fontFamily'],
-                    ];
-                }
+
+            $current_presets = $this->get_preset_list_at_path($merged_data, $path, $origin);
+            $merged_presets = $this->merge_preset_lists($current_presets, $windpress_presets);
+
+            $this->set_preset_list_for_origin($merged_data, $path, $origin, $merged_presets);
+        }
+
+        return $merged_data;
+    }
+
+    private function has_origin_preset_list_at_path(array $data, array $path, string $origin): bool
+    {
+        $target = $this->get_array_at_path($data, $path);
+
+        if ($target === null || !$this->is_origin_preset_map($target)) {
+            return false;
+        }
+
+        return isset($target[$origin]) && is_array($target[$origin]);
+    }
+
+    private function prefix_preset_slugs_at_path(array &$data, array $path): void
+    {
+        $target = &$data;
+
+        foreach ($path as $segment) {
+            if (!isset($target[$segment]) || !is_array($target[$segment])) {
+                return;
             }
-            
-            // Merge spacing sizes
-            if (isset($windpress_data['settings']['spacing']['spacingSizes'])) {
-                if (!isset($merged['settings']['spacing']['spacingSizes'])) {
-                    $merged['settings']['spacing']['spacingSizes'] = [];
+
+            $target = &$target[$segment];
+        }
+
+        if ($this->is_origin_preset_map($target)) {
+            foreach ($target as $origin => $origin_presets) {
+                if (!is_array($origin_presets)) {
+                    continue;
                 }
-                
-                foreach ($windpress_data['settings']['spacing']['spacingSizes'] as $spacing) {
-                    $merged['settings']['spacing']['spacingSizes'][] = [
-                        'name' => $spacing['name'],
-                        'slug' => 'windpress-' . $spacing['slug'],
-                        'size' => $spacing['size'],
-                    ];
-                }
+
+                $normalized_presets = $this->normalize_preset_collection_with_resolved_slugs($origin_presets);
+                $this->prefix_preset_slugs($normalized_presets);
+                $target[$origin] = $normalized_presets;
             }
-            
-            // Merge border radius sizes
-            if (isset($windpress_data['settings']['border']['radiusSizes'])) {
-                if (!isset($merged['settings']['border']['radiusSizes'])) {
-                    $merged['settings']['border']['radiusSizes'] = [];
-                }
-                
-                foreach ($windpress_data['settings']['border']['radiusSizes'] as $radius) {
-                    $merged['settings']['border']['radiusSizes'][] = [
-                        'name' => $radius['name'],
-                        'slug' => 'windpress-' . $radius['slug'],
-                        'size' => $radius['size'],
-                    ];
-                }
+
+            return;
+        }
+
+        $normalized_presets = $this->normalize_preset_collection_with_resolved_slugs($target);
+        $this->prefix_preset_slugs($normalized_presets);
+        $target = $normalized_presets;
+    }
+
+    private function normalize_preset_collection_at_path(array &$data, array $path): void
+    {
+        $target = &$data;
+
+        foreach ($path as $segment) {
+            if (!isset($target[$segment]) || !is_array($target[$segment])) {
+                return;
             }
-            
-            // Merge shadow presets
-            if (isset($windpress_data['settings']['shadow']['presets'])) {
-                if (!isset($merged['settings']['shadow']['presets'])) {
-                    $merged['settings']['shadow']['presets'] = [];
+
+            $target = &$target[$segment];
+        }
+
+        if ($this->is_origin_preset_map($target)) {
+            foreach ($target as $origin => $origin_presets) {
+                if (!is_array($origin_presets)) {
+                    continue;
                 }
-                
-                foreach ($windpress_data['settings']['shadow']['presets'] as $shadow) {
-                    $merged['settings']['shadow']['presets'][] = [
-                        'name' => $shadow['name'],
-                        'slug' => 'windpress-' . $shadow['slug'],
-                        'shadow' => $shadow['shadow'],
-                    ];
-                }
+
+                $target[$origin] = $this->normalize_preset_collection_with_resolved_slugs($origin_presets);
+            }
+
+            return;
+        }
+
+        $target = $this->normalize_preset_collection_with_resolved_slugs($target);
+    }
+
+    private function prefix_preset_slugs(array &$presets): void
+    {
+        foreach ($presets as &$preset) {
+            if (!is_array($preset)) {
+                continue;
+            }
+
+            $slug = $this->resolve_preset_slug($preset);
+
+            if ($slug === null) {
+                continue;
+            }
+
+            if (strpos($slug, 'windpress-') !== 0) {
+                $slug = 'windpress-' . $slug;
+            }
+
+            $preset['slug'] = $slug;
+        }
+
+        unset($preset);
+    }
+
+    private function get_preset_list_at_path(array $data, array $path, ?string $origin = null): array
+    {
+        $target = $this->get_array_at_path($data, $path);
+
+        if ($target === null) {
+            return [];
+        }
+
+        if ($origin !== null) {
+            if (!isset($target[$origin]) || !is_array($target[$origin])) {
+                return [];
+            }
+
+            return $this->normalize_preset_collection($target[$origin]);
+        }
+
+        if (!$this->is_origin_preset_map($target)) {
+            return $this->normalize_preset_collection($target);
+        }
+
+        $presets = [];
+
+        foreach ($target as $origin_presets) {
+            if (!is_array($origin_presets)) {
+                continue;
+            }
+
+            foreach ($this->normalize_preset_collection($origin_presets) as $preset) {
+                $presets[] = $preset;
             }
         }
-        
-        return $merged;
+
+        return $presets;
+    }
+
+    private function set_preset_list_for_origin(array &$data, array $path, string $origin, array $presets): void
+    {
+        $target = &$data;
+
+        foreach ($path as $segment) {
+            if (!isset($target[$segment]) || !is_array($target[$segment])) {
+                $target[$segment] = [];
+            }
+
+            $target = &$target[$segment];
+        }
+
+        if (!$this->is_origin_preset_map($target)) {
+            $target = [$origin => $this->normalize_preset_collection($target)];
+        }
+
+        $target[$origin] = $presets;
+    }
+
+    private function is_origin_preset_map(array $presets): bool
+    {
+        $origin_keys = ['default', 'blocks', 'theme', 'custom'];
+
+        foreach ($origin_keys as $origin_key) {
+            if (array_key_exists($origin_key, $presets)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function normalize_preset_collection(array $presets): array
+    {
+        if ($this->is_list_array($presets)) {
+            return $presets;
+        }
+
+        $normalized_presets = [];
+
+        foreach ($presets as $key => $preset) {
+            if (!is_array($preset)) {
+                continue;
+            }
+
+            if ((!isset($preset['slug']) || !is_string($preset['slug']) || trim($preset['slug']) === '') && (is_string($key) || is_int($key))) {
+                $preset['slug'] = (string) $key;
+            }
+
+            $normalized_presets[] = $preset;
+        }
+
+        return $normalized_presets;
+    }
+
+    private function normalize_preset_collection_with_resolved_slugs(array $presets): array
+    {
+        $normalized_presets = [];
+        $seen_slugs = [];
+
+        foreach ($this->normalize_preset_collection($presets) as $preset) {
+            if (!is_array($preset)) {
+                continue;
+            }
+
+            $normalized_preset = $this->normalize_preset_for_merge($preset);
+
+            if ($normalized_preset === null) {
+                continue;
+            }
+
+            $slug = $normalized_preset['slug'];
+
+            if (isset($seen_slugs[$slug])) {
+                continue;
+            }
+
+            $normalized_presets[] = $normalized_preset;
+            $seen_slugs[$slug] = true;
+        }
+
+        return $normalized_presets;
+    }
+
+    private function merge_preset_lists(array $current_presets, array $windpress_presets): array
+    {
+        $merged_presets = [];
+        $seen_slugs = [];
+
+        foreach ([$current_presets, $windpress_presets] as $preset_group) {
+            foreach ($preset_group as $preset) {
+                if (!is_array($preset)) {
+                    continue;
+                }
+
+                $normalized_preset = $this->normalize_preset_for_merge($preset);
+
+                if ($normalized_preset === null) {
+                    continue;
+                }
+
+                $slug = $normalized_preset['slug'];
+
+                if (isset($seen_slugs[$slug])) {
+                    continue;
+                }
+
+                $merged_presets[] = $normalized_preset;
+                $seen_slugs[$slug] = true;
+            }
+        }
+
+        return $merged_presets;
+    }
+
+    private function normalize_preset_for_merge(array $preset): ?array
+    {
+        $slug = $this->resolve_preset_slug($preset);
+
+        if ($slug === null) {
+            return null;
+        }
+
+        $preset['slug'] = $slug;
+
+        return $preset;
+    }
+
+    private function resolve_preset_slug(array $preset): ?string
+    {
+        if (isset($preset['slug']) && is_string($preset['slug'])) {
+            $slug = trim($preset['slug']);
+
+            if ($slug !== '') {
+                return $slug;
+            }
+        }
+
+        $fallback_keys = ['name', 'fontFamily', 'size', 'color', 'shadow'];
+
+        foreach ($fallback_keys as $fallback_key) {
+            if (!isset($preset[$fallback_key]) || !is_string($preset[$fallback_key])) {
+                continue;
+            }
+
+            $slug = sanitize_title($preset[$fallback_key]);
+
+            if ($slug !== '') {
+                return $slug;
+            }
+        }
+
+        return null;
+    }
+
+    private function get_array_at_path(array $data, array $path): ?array
+    {
+        $target = $data;
+
+        foreach ($path as $segment) {
+            if (!isset($target[$segment]) || !is_array($target[$segment])) {
+                return null;
+            }
+
+            $target = $target[$segment];
+        }
+
+        return $target;
+    }
+
+    private function is_list_array(array $array): bool
+    {
+        $expected_key = 0;
+
+        foreach ($array as $key => $_value) {
+            if ($key !== $expected_key) {
+                return false;
+            }
+
+            $expected_key++;
+        }
+
+        return true;
     }
 }
