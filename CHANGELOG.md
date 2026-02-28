@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.75] - 2026-02-28
+
 ### Added
 - Updated bundled Tailwind CSS v4 to 4.2.1
 
@@ -663,7 +665,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.74...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.75...HEAD
+[3.3.75]: https://github.com/wind-press/windpress/compare/v3.3.74...v3.3.75
 [3.3.74]: https://github.com/wind-press/windpress/compare/v3.3.73...v3.3.74
 [3.3.73]: https://github.com/wind-press/windpress/compare/v3.3.72...v3.3.73
 [3.3.72]: https://github.com/wind-press/windpress/compare/v3.3.71...v3.3.72
