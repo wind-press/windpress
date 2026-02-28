@@ -69,7 +69,7 @@ function parseChangelog(changelogContent: string): ChangelogEntry[] {
       if (line.startsWith('### ')) {
         const sectionName = line.replace('### ', '').trim();
         const sectionHeader = `**${sectionName}**`;
-        processedLine = currentEntry.content ? `\n${sectionHeader}\n` : `${sectionHeader}\n`;
+        processedLine = `\n${sectionHeader}\n`;
       }
 
       // Convert list items to readme.txt format

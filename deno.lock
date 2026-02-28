@@ -99,7 +99,7 @@
         "npm:shiki@^3.22.0",
         "npm:tailwindcss-language-service@^0.0.28",
         "npm:tailwindcss@^3.4.19",
-        "npm:tailwindcss@^4.2.0",
+        "npm:tailwindcss@^4.2.1",
         "npm:tippy.js@^6.3.7",
         "npm:typescript-eslint@^8.56.0",
         "npm:unplugin-icons@^23.0.1",
