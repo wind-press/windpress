@@ -118,5 +118,3 @@ No, by default, you do not need an internet connection to use WindPress. However
 WindPress is compatible with any WordPress theme. A small adjustment may be needed for the compiler scanner to detect the used classes in the theme.
 
 == Changelog ==
-
-[See changelog for all versions.](https://github.com/wind-press/windpress/blob/main/CHANGELOG.md)

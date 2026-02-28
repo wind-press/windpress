@@ -5,33 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Note:** The Pro version has a version number with one higher minor version than the Free version.
-
-For instance:
-- Free version 1.**0**.4
-- Pro version 1.**1**.4
-
 ## [Unreleased]
+
+### Added
+- Updated bundled Tailwind CSS v4 to 4.2.1
 
 ## [3.3.74] - 2026-02-20
 
 ### Added
-- Upgraded to Tailwind CSS v3 (3.4.19)
-- Upgraded to Tailwind CSS v4 (4.2.0 latest)
+- Updated bundled Tailwind CSS v3 to 3.4.19
+- Updated bundled Tailwind CSS v4 to 4.2.0
 
 ### Fixed
-- [Breakdance] Unwanted margin-top style is applied on the editor
-- [Bricks] Firefox browser compatibility for html2bricks copy-paste feature
-- Compiler's partial scanning cache issue 
+- [Breakdance] Prevented unwanted `margin-top` styles in the editor
+- [Bricks] Improved Firefox compatibility for html2bricks copy-paste
+- [Internal] Fixed compiler partial scanning cache behavior
 
 ### Changed
-- Improve backend compile scan performance across integrations
-- Improve the File editor support for Tailwind CSS v4 features
+- Improved backend compile scan performance across integrations
+- Improved file editor support for Tailwind CSS v4 features
 
 ## [3.3.73] - 2025-12-22
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.18 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.18
 
 ### Fixed
 - [Elementor, Bricks, Oxygen, OxygenClassic, Breakdance, Builderius, Timber, Blockstudio] Scanner now properly supports batch system to handle large datasets
@@ -40,7 +37,7 @@ For instance:
 ## [3.3.72] - 2025-12-08
 
 ### Changed
-- Test compatibility with WordPress 6.9
+- Tested compatibility with WordPress 6.9
 
 ## [3.3.71] - 2025-12-08
 
@@ -71,7 +68,7 @@ For instance:
 - [Gutenberg] Generate Cache on Save feature
 
 ### Changed
-- Fix color picker on the Wizard page when the initial color is empty
+- Fixed color picker on the Wizard page when the initial color is empty
 - Redefined how styles are loaded on the front page based on the selected Performance Mode: Hybrid, Cached, or Compiler.
 
 ### Removed
@@ -90,13 +87,13 @@ For instance:
 ## [3.3.65] - 2025-10-24
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.16 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.16
 - Added file version history feature to the Simple File System (experimental)
 
 ## [3.3.64] - 2025-10-18
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.14 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.14
 - [TW4] Source Map support for easier debugging in the browser DevTools (experimental)
 
 ### Fixed
@@ -112,17 +109,17 @@ For instance:
 ## [3.3.62] - 2025-09-13
 
 ### Changed
-- Improve the File editor performance by register the IntelliSense only once after the editor is initialized
+- Improved file editor performance by registering IntelliSense only once after initialization
 
 ## [3.3.61] - 2025-09-10
 
 ### Fixed
-- [Bricks] Plain Classes: Doesn't work on some Bricks templates types like Archive, Search, Section, etc
+- [Bricks] Plain Classes did not work on some Bricks template types like Archive, Search, and Section
 
 ## [3.3.60] - 2025-09-09
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.13 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.13
 - [LiveCanvas] Added compatibility with LiveCanvas 4.7
 - Added integrations settings page to manage the integrations features
 
@@ -134,7 +131,7 @@ For instance:
 ## [3.3.58] - 2025-08-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.12 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.12
 
 ### Changed
 - Restricted the IntelliSense on the Files tab feature to work exclusively with Tailwind CSS v4
@@ -175,7 +172,7 @@ For instance:
 - [Bricks] Added compatibility with Bricks 2.0
 
 ### Fixed
-- [Bricks] Plain Classes feature not works correctly with the Components feature
+- [Bricks] Plain Classes feature does not work correctly with the Components feature
 
 ## [3.3.51] - 2025-07-10
 
@@ -185,18 +182,18 @@ For instance:
 ## [3.3.44] - 2025-07-09
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.11 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.11
 - [TW4] The Wizard feature is now available on the Dashboard page
 
 ## [3.3.43] - 2025-06-12
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.10 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.10
 
 ## [3.3.42] - 2025-06-06
 
 ### Changed
-- [Gutenberg] Run the Play Observer / Compiler even if the visual editor is not iframed
+- [Gutenberg] Ran the Play Observer / Compiler even when the visual editor is not iframed
 
 ## [3.3.41] - 2025-06-04
 
@@ -213,7 +210,7 @@ For instance:
 ## [3.3.39] - 2025-05-29
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.8 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.8
 
 ### Changed
 - [TW4] The Play Observer / Compiler performance & stability
@@ -235,13 +232,13 @@ For instance:
 ## [3.3.33] - 2025-05-20
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.7 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.7
 - Added context menu to the Simple File System explorer (right-click on the file explorer)
 
 ## [3.3.32] - 2025-05-11
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.6 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.6
 
 ### Fixed
 - Unable to add new files to the Simple File System
@@ -249,7 +246,7 @@ For instance:
 ## [3.3.31] - 2025-05-09
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.5 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.5
 
 ### Changed
 - [TW4] The compiler is now logging the candidates it has found to aid in debugging
@@ -257,7 +254,7 @@ For instance:
 ## [3.3.30] - 2025-04-29
 
 ### Changed
-- [Gutenberg] Load the The Play Observer / Compiler to the Pattern preview [#40](https://github.com/wind-press/windpress/issues/40)
+- [Gutenberg] Loaded the Play Observer / Compiler in Pattern preview [#40](https://github.com/wind-press/windpress/issues/40)
 - [Bricks] The Plain Classes feature compatibility for version 2.0-alpha [#42](https://github.com/wind-press/windpress/issues/42)
 
 ### Fixed
@@ -266,7 +263,7 @@ For instance:
 ## [3.3.29] - 2025-04-15
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.4 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.4
 
 ## [3.3.28] - 2025-04-08
 
@@ -282,11 +279,11 @@ For instance:
 ## [3.3.26] - 2025-04-06
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.3 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.3
 
 ### Changed
 - [TW4] Autocompletion feature now supports user-defined classes from the Simple File System data
-- Exclude the WindPress files from being processed by the SiteGround Speed Optimizer plugin
+- Excluded WindPress files from processing by the SiteGround Speed Optimizer plugin
 
 ### Fixed
 - [Gutenberg] Misconfigured integration on the block editor
@@ -299,10 +296,10 @@ For instance:
 ## [3.3.23] - 2025-04-02
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.1.1 latest)
+- Updated bundled Tailwind CSS v4 to 4.1.1
 
 ### Changed
-- Add keyboard shortcuts to Generate Cache on the WindPress dashboard page
+- Added keyboard shortcuts to Generate Cache on the WindPress dashboard page
 - [TW3] The Play Observer / Compiler performance & stability
 
 ## [3.3.22] - 2025-03-28
@@ -318,12 +315,12 @@ For instance:
 ## [3.3.12] - 2025-03-27
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.17 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.17
 
 ## [3.3.11] - 2025-03-27
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.16 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.16
 
 ## [3.3.7] - 2025-03-27
 
@@ -334,8 +331,8 @@ For instance:
 ## [3.3.5] - 2025-03-27
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.15 latest)
-- [TW4] The compiler now can generating cache on the front-end page. This only available if the "Admin always uses Compiler" setting is enabled.
+- Updated bundled Tailwind CSS v4 to 4.0.15
+- [TW4] The compiler can now generate cache on front-end pages when the "Admin always uses Compiler" setting is enabled.
 
 ### Fixed
 - [TW4][Breakdance, Bricks, Builderius, LiveCanvas, Oxygen Classic] The "Generate Cache on Save" feature are not available on the previous version
@@ -354,21 +351,21 @@ For instance:
 - [TW4] The Play Observer / Compiler performance & stability
 
 ### Fixed
-- [TW4][Breakdance] The style are now instantly applied on the editor
+- [TW4][Breakdance] Styles are now instantly applied in the editor
 
 ## [3.3.2] - 2025-03-27
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.14 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.14
 - Refreshed the WindPress dashboard page design and layout for better user experience. Built with the latest [Nuxt UI](https://ui.nuxt.com/pro?aff=GZ5Zd)
 
 ### Fixed
-- [TW3] The `tailwind.config.js` file are not properly loaded
+- [TW3] The `tailwind.config.js` file is not properly loaded
 
 ## [3.2.35] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.9 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.9
 
 ### Changed
 - [TW4] Importing additional CSS files with the `@import` directive are now with the following format: `@import "fetch:https://example.com/path/to/the/file.css";`
@@ -386,7 +383,7 @@ For instance:
 ## [3.2.32] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.8 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.8
 - [WPCodeBox 2](https://wpcodebox.com/) integration **[Pro]**
 
 ### Changed
@@ -401,7 +398,7 @@ For instance:
 ## [3.2.30] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.7 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.7
 
 ### Fixed
 - [TW4] The `@source` directive is causing error when loaded in the page builders' editor
@@ -409,13 +406,13 @@ For instance:
 ## [3.2.29] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.6 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.6
 - [TW4] The `@source` directive is now supported but differs from the official Tailwind CSS version. Please refer to [our documentation](https://wind.press/docs/configuration/file-main-css#scanning-additional-sources) for details.
 
 ## [3.2.28] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.5 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.5
 
 ## [3.2.27] - 2024-12-19
 
@@ -425,22 +422,22 @@ For instance:
 ## [3.2.26] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.4 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.4
 
 ## [3.2.25] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.3 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.3
 
 ## [3.2.24] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.1 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.1
 
 ## [3.2.23] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0 latest)
+- Updated bundled Tailwind CSS v4 to 4.0.0
 
 ## [3.2.22] - 2024-12-19
 
@@ -451,7 +448,7 @@ For instance:
 ## [3.2.21] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-beta.6 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-beta.6
 
 ### Fixed
 - [Breakdance] Editor style is mixed with admin-bar style (margin-top)
@@ -459,7 +456,7 @@ For instance:
 ## [3.2.20] - 2024-12-19
 
 ### Changed
-- Decouple the Gutenberg-based integrations' scanner
+- Decoupled the Gutenberg-based integrations scanner
 
 ### Fixed
 - [Gutenberg, Breakdance, Bricks, Oxygen] The hover preview feature is too late to disappear when the mouse is moved away from the class name
@@ -468,20 +465,20 @@ For instance:
 
 ### Added
 - [Blockstudio](https://blockstudio.dev/?ref=7) integration **[Pro]**
-- Upgraded to Tailwind CSS v3 (3.4.16)
-- Upgraded to Tailwind CSS v4 (4.0.0-beta.5 next)
+- Updated bundled Tailwind CSS v3 to 3.4.16
+- Updated bundled Tailwind CSS v4 to 4.0.0-beta.5
 
 ## [3.2.18] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-beta.4 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-beta.4
 - [Meta Box Views](https://metabox.io/plugins/mb-views/) integration **[Pro]**
 
 ## [3.2.17] - 2024-12-19
 
 ### Added
 - The new website and documentation is now live at [wind.press](https://wind.press)
-- Upgraded to Tailwind CSS v4 (4.0.0-beta.2 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-beta.2
 
 ### Fixed
 - Scanned classes names are not unescaped correctly ([#4](https://github.com/wind-press/windpress/issues/4))
@@ -489,16 +486,16 @@ For instance:
 ## [3.2.16] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-beta.1 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-beta.1
 
 ## [3.2.15] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v3 (3.4.15)
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.34 next)
+- Updated bundled Tailwind CSS v3 to 3.4.15
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.34
 
 ### Changed
-- Test compatibility with WordPress 6.7
+- Tested compatibility with WordPress 6.7
 - The [LiveCanvas](https://livecanvas.com/?ref=4008) integration is now available on the Free version
 - Tailwind CSS v3 stubs/default content are updated for the upcoming Wizard feature
 
@@ -513,7 +510,7 @@ For instance:
 ## [3.2.12] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.33 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.33
 
 ### Changed
 - [Breakdance, Bricks, Builderius, Oxygen] Variable Picker feature is now updated to the latest Tailwind CSS v4 variable names
@@ -525,34 +522,34 @@ For instance:
 ## [3.2.10] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.32 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.32
 
 ## [3.2.9] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.30 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.30
 
 ## [3.2.8] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.29 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.29
 
 ## [3.2.7] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.28 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.28
 
 ## [3.2.6] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v3 (3.4.14)
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.27 next)
+- Updated bundled Tailwind CSS v3 to 3.4.14
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.27
 - [Bricks] added settings to enable or disable WindPress' features. Right-click the WindPress icon on the Editor's top bar to access the settings.
 
 ## [3.2.5] - 2024-12-19
 
 ### Changed
-- Reduce the number of Play modules loaded on the front-end page for non-admin users
+- Reduced the number of Play modules loaded on front-end pages for non-admin users
 - The Ubiquitous panel is now automatically hidden when outside of the panel is clicked
 
 ## [3.2.4] - 2024-12-19
@@ -563,17 +560,17 @@ For instance:
 ## [3.2.3] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.26 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.26
 
 ### Changed
-- Properly handling the local JavaScript modules
+- Improved handling of local JavaScript modules
 - Renamed some action and filter hooks
 - Some integrations' features are conditionally loaded based on the supported Tailwind CSS version
 
 ## [3.2.1] - 2024-12-19
 
 ### Added
-- Porting the Tailwind CSS v4 specific integration features to the Tailwind CSS v3: Autocompletion, Sort, and Class name to CSS
+- Ported Tailwind CSS v4 integration features to Tailwind CSS v3: Autocompletion, Sort, and Class Name to CSS
 
 ### Changed
 - The Play Observer regenerates the CSS only if new classes are added to the DOM
@@ -582,17 +579,17 @@ For instance:
 
 ### Added
 - Tailwind CSS v3 support has been added
-- Upgraded to Tailwind CSS v3 (3.4.13)
+- Updated bundled Tailwind CSS v3 to 3.4.13
 
 ### Changed
-- Disable the preflight styles by default on the new installation
+- Disabled preflight styles by default on new installations
 - The CSS and JavaScript files are now deletable by emptying the content
 - The `main.css` and `tailwind.config.js` files are now resettable by emptying the content
 
 ## [3.1.17] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.25 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.25
 
 ## [3.1.15] - 2024-12-19
 
@@ -603,7 +600,7 @@ For instance:
 ## [3.1.14] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.24 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.24
 - A simple local CSS and JavaScript file support to manage the Tailwind CSS customizations
 
 ### Fixed
@@ -612,12 +609,12 @@ For instance:
 ## [3.1.11] - 2024-12-19
 
 ### Changed
-- Temporary disable the Ubiquitous Panel feature on the Bricks editor due to causing issue with the integration.
+- Temporarily disabled the Ubiquitous Panel feature on the Bricks editor due to integration issues.
 
 ## [3.1.10] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.23 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.23
 - Initial support on Tailwind CSS configs loaded from CDN with the `@config` directive
 
 ### Changed
@@ -629,7 +626,7 @@ For instance:
 ## [3.1.9] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.21 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.21
 - Initial support on Tailwind CSS plugins loaded from CDN with the `@plugin` directive
 
 ### Changed
@@ -650,7 +647,7 @@ For instance:
 ## [3.1.0] - 2024-12-19
 
 ### Added
-- Upgraded to Tailwind CSS v4 (4.0.0-alpha.20 next)
+- Updated bundled Tailwind CSS v4 to 4.0.0-alpha.20
 - [Timber](https://upstatement.com/timber/) integration
 - [Bricks](https://bricksbuilder.io/) integration **[Pro]**
 - [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]**
@@ -659,7 +656,7 @@ For instance:
 - [Oxygen](https://oxygenbuilder.com/ref/12/) integration **[Pro]**
 
 ### Changed
-- Test compatibility with WordPress 6.6
+- Tested compatibility with WordPress 6.6
 
 ## [1.1.0] - 2024-12-19
 

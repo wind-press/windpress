@@ -38,6 +38,60 @@ function updateVersionInFile(filePath, version, patterns) {
 }
 
 /**
+ * Extract semantic version from dependency range string
+ */
+function extractVersionFromRange(range, dependencyName) {
+  if (typeof range !== 'string') {
+    throw new Error(`Dependency ${dependencyName} is missing or invalid in package.json`);
+  }
+
+  const match = range.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/);
+  if (!match) {
+    throw new Error(`Could not extract version from ${dependencyName}: ${range}`);
+  }
+
+  return match[0];
+}
+
+/**
+ * Read bundled Tailwind CSS versions from package.json
+ */
+function getBundledTailwindVersions() {
+  const packageJsonPath = join(rootDir, 'package.json');
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+
+  return {
+    tw3: extractVersionFromRange(packageJson.dependencies?.tailwindcss3, 'tailwindcss3'),
+    tw4: extractVersionFromRange(packageJson.dependencies?.tailwindcss, 'tailwindcss'),
+  };
+}
+
+/**
+ * Update readme.txt Tailwind CSS version block from package.json
+ */
+function updateReadmeTailwindVersions() {
+  console.log('Updating Tailwind CSS versions in readme.txt...');
+
+  const readmePath = join(rootDir, 'readme.txt');
+  const { tw3, tw4 } = getBundledTailwindVersions();
+  let content = readFileSync(readmePath, 'utf8');
+
+  const versionBlockPattern = /\*\*Tailwind CSS version\*\*:\n- [^\n]+\n- [^\n]+/;
+
+  if (!versionBlockPattern.test(content)) {
+    throw new Error('Tailwind CSS version block not found in readme.txt');
+  }
+
+  content = content.replace(
+    versionBlockPattern,
+    `**Tailwind CSS version**:\n- ${tw3}\n- ${tw4}`,
+  );
+
+  writeFileSync(readmePath, content, 'utf8');
+  console.log(`✓ Updated readme.txt Tailwind CSS versions: ${tw3}, ${tw4}`);
+}
+
+/**
  * Update CHANGELOG.md to replace Unreleased with current date and add new Unreleased section
  */
 function updateChangelog(version) {
@@ -142,6 +196,9 @@ function release() {
         replace: `Stable tag: ${version}`
       }
     ]);
+
+    // Sync Tailwind CSS versions in readme.txt from package.json
+    updateReadmeTailwindVersions();
     
     // Update constant.php
     updateVersionInFile(join(rootDir, 'constant.php'), version, [

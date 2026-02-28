@@ -39,7 +39,7 @@ importers:
         version: 3.0.0
       '@nuxt/ui':
         specifier: 4.4.0
-        version: 4.4.0(@emotion/is-prop-valid@1.4.0)(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.1(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.12.2)(embla-carousel@8.6.0)(idb-keyval@6.2.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.2.0)(typescript@5.6.2)(vite@8.0.0-beta.8(@types/node@25.3.0)(esbuild@0.27.2)(jiti@1.21.7)(less@4.2.0)(sass-embedded@1.97.3)(sass-embedded@1.97.3)(stylus@0.63.0)(terser@5.34.1)(yaml@2.8.2))(vue-router@5.0.2(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.6.2)(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2))(yjs@13.6.29)(zod@4.3.6)
+        version: 4.4.0(@emotion/is-prop-valid@1.4.0)(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.1(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.12.2)(embla-carousel@8.6.0)(idb-keyval@6.2.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.2.1)(typescript@5.6.2)(vite@8.0.0-beta.8(@types/node@25.3.0)(esbuild@0.27.2)(jiti@1.21.7)(less@4.2.0)(sass-embedded@1.97.3)(sass-embedded@1.97.3)(stylus@0.63.0)(terser@5.34.1)(yaml@2.8.2))(vue-router@5.0.2(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.6.2)(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2))(yjs@13.6.29)(zod@4.3.6)
       '@std/encoding':
         specifier: npm:@jsr/std__encoding@^1.0.10
         version: '@jsr/std__encoding@1.0.10'
@@ -167,8 +167,8 @@ importers:
         specifier: ^3.22.0
         version: 3.22.0
       tailwindcss:
-        specifier: ^4.2.0
-        version: 4.2.0
+        specifier: ^4.2.1
+        version: 4.2.1
       tailwindcss-intellisense:
         specifier: github:tailwindlabs/tailwindcss-intellisense
         version: https://codeload.github.com/tailwindlabs/tailwindcss-intellisense/tar.gz/4babab353489d26db45d090734195de37e3ba50c
@@ -5830,6 +5830,9 @@ packages:
   tailwindcss@4.2.0:
     resolution: {integrity: sha512-yYzTZ4++b7fNYxFfpnberEEKu43w44aqDMNM9MHMmcKuCH7lL8jJ4yJ7LGHv7rSwiqM0nkiobF9I6cLlpS2P7Q==}
 
+  tailwindcss@4.2.1:
+    resolution: {integrity: sha512-/tBrSQ36vCleJkAOsy9kbNTgaxvGbyOamC30PRePTQe/o1MFwEKHQk4Cn7BNGaPtjp+PuUrByJehM1hgxfq4sw==}
+
   tannin@1.2.0:
     resolution: {integrity: sha512-U7GgX/RcSeUETbV7gYgoz8PD7Ni4y95pgIP/Z6ayI3CfhSujwKEBlGFTCRN+Aqnuyf4AN2yHL+L8x+TCGjb9uA==}
 
@@ -7459,7 +7462,7 @@ snapshots:
       pkg-types: 2.3.0
       std-env: 3.10.0
 
-  '@nuxt/ui@4.4.0(@emotion/is-prop-valid@1.4.0)(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.1(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.12.2)(embla-carousel@8.6.0)(idb-keyval@6.2.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.2.0)(typescript@5.6.2)(vite@8.0.0-beta.8(@types/node@25.3.0)(esbuild@0.27.2)(jiti@1.21.7)(less@4.2.0)(sass-embedded@1.97.3)(sass-embedded@1.97.3)(stylus@0.63.0)(terser@5.34.1)(yaml@2.8.2))(vue-router@5.0.2(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.6.2)(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2))(yjs@13.6.29)(zod@4.3.6)':
+  '@nuxt/ui@4.4.0(@emotion/is-prop-valid@1.4.0)(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))(@tiptap/y-tiptap@3.0.1(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(axios@1.12.2)(embla-carousel@8.6.0)(idb-keyval@6.2.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.2.1)(typescript@5.6.2)(vite@8.0.0-beta.8(@types/node@25.3.0)(esbuild@0.27.2)(jiti@1.21.7)(less@4.2.0)(sass-embedded@1.97.3)(sass-embedded@1.97.3)(stylus@0.63.0)(terser@5.34.1)(yaml@2.8.2))(vue-router@5.0.2(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.6.2)(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2)))(vue@3.5.28(typescript@5.6.2))(yjs@13.6.29)(zod@4.3.6)':
     dependencies:
       '@floating-ui/dom': 1.7.5
       '@iconify/vue': 5.0.0(vue@3.5.28(typescript@5.6.2))
@@ -7517,8 +7520,8 @@ snapshots:
       reka-ui: 2.7.0(typescript@5.6.2)(vue@3.5.28(typescript@5.6.2))
       scule: 1.3.0
       tailwind-merge: 3.5.0
-      tailwind-variants: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.0)
-      tailwindcss: 4.2.0
+      tailwind-variants: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.1)
+      tailwindcss: 4.2.1
       tinyglobby: 0.2.15
       typescript: 5.6.2
       ufo: 1.6.3
@@ -12414,9 +12417,9 @@ snapshots:
 
   tailwind-merge@3.5.0: {}
 
-  tailwind-variants@3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.0):
+  tailwind-variants@3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.1):
     dependencies:
-      tailwindcss: 4.2.0
+      tailwindcss: 4.2.1
     optionalDependencies:
       tailwind-merge: 3.5.0
 
@@ -12474,6 +12477,8 @@ snapshots:
       - yaml
 
   tailwindcss@4.2.0: {}
+
+  tailwindcss@4.2.1: {}
 
   tannin@1.2.0:
     dependencies:
