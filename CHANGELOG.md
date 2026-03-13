@@ -234,7 +234,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.3.34] - 2025-05-24
 
 ### Added
-- [Etch](https://etchwp.com/) integration **[Pro]** (experimental)
+- [Etch](https://etchwp.com?aff=bce0d1ab) integration **[Pro]** (experimental)
 
 ## [3.3.33] - 2025-05-20
 

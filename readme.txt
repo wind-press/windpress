@@ -56,7 +56,7 @@ It's easy to build design with Tailwind CSS thanks to the seamless integration w
 * [Breakdance](https://breakdance.com/ref/165/) — **Pro**
 * [Bricks](https://bricksbuilder.io/) — **Pro**
 * [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
-* [Etch](https://etchwp.com/) — **Pro**
+* [Etch](https://etchwp.com?aff=bce0d1ab) — **Pro**
 * [Meta Box Views](https://metabox.sjv.io/OeOeZr) — **Pro**
 * [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
 * [WPCodeBox 2](https://wpcodebox.com/?ref=185) — **Pro**
