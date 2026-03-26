@@ -15,7 +15,7 @@ namespace WindPress\WindPress\Admin;
 
 use WIND_PRESS;
 use WindPress\WindPress\Core\Runtime;
-use WindPress\WindPress\Utils\AssetVite;
+use WindPress\WindPress\Utils\Vite;
 
 class AdminPage
 {
@@ -67,10 +67,7 @@ class AdminPage
 
         $handle = WIND_PRESS::WP_OPTION . '-admin';
 
-        $asset_vite = AssetVite::get_instance();
-        $manifest = $asset_vite->get_manifest(dirname(WIND_PRESS::FILE) . '/build');
-
-        $i18n_src = $asset_vite->prepare_asset_url($manifest->dir) . '/wp-i18n.js';
+        $i18n_src = Vite::base_url('wp-i18n.js');
 
         if (! is_file(dirname(WIND_PRESS::FILE) . '/build/wp-i18n.js')) {
             $i18n_src = plugins_url('assets/wp-i18n.js', WIND_PRESS::FILE);
@@ -79,7 +76,7 @@ class AdminPage
         wp_enqueue_script($handle . '-i18n', $i18n_src, ['wp-i18n'], null);
         wp_set_script_translations($handle . '-i18n', 'windpress');
 
-        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [
+        Vite::assets()->enqueue('assets/dashboard/main.ts', [
             'handle' => $handle,
             'in_footer' => true,
             'dependencies' => ['wp-hooks'],

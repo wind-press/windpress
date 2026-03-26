@@ -5,30 +5,61 @@
  * Exposed as window.windpressCommonBlock.html2blocks()
  */
 
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
 /**
  * Inline elements that should prefer 'text' content type with inline HTML
  */
 const INLINE_ELEMENTS = new Set([
-	'a', 'abbr', 'b', 'bdi', 'bdo', 'cite', 'code', 'data', 'dfn',
-	'em', 'i', 'kbd', 'mark', 'q', 's', 'samp', 'small', 'span', 'strong',
-	'sub', 'sup', 'time', 'u', 'var'
+  "a",
+  "abbr",
+  "b",
+  "bdi",
+  "bdo",
+  "cite",
+  "code",
+  "data",
+  "dfn",
+  "em",
+  "i",
+  "kbd",
+  "mark",
+  "q",
+  "s",
+  "samp",
+  "small",
+  "span",
+  "strong",
+  "sub",
+  "sup",
+  "time",
+  "u",
+  "var",
 ]);
 
 /**
  * Elements that should always use 'html' content type (unavoidable)
  */
-const HTML_ONLY_ELEMENTS = new Set([
-	'svg', 'math', 'script', 'style', 'noscript', 'iframe'
-]);
+const HTML_ONLY_ELEMENTS = new Set(["svg", "math", "script", "style", "noscript", "iframe"]);
 
 /**
  * Self-closing (void) elements
  */
 const VOID_ELEMENTS = new Set([
-	'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-	'link', 'meta', 'param', 'source', 'track', 'wbr'
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr",
 ]);
 
 /**
@@ -37,80 +68,83 @@ const VOID_ELEMENTS = new Set([
  * @returns {Array} Array of block objects
  */
 function html2blocks(html) {
-	if (!html || typeof html !== 'string') {
-		return [];
-	}
+  if (!html || typeof html !== "string") {
+    return [];
+  }
 
-	// Check if HTML contains WordPress block comments
-	const hasWpBlocks = /<!--\s*wp:/.test(html);
+  // Check if HTML contains WordPress block comments
+  const hasWpBlocks = /<!--\s*wp:/.test(html);
 
-	if (hasWpBlocks && typeof wp !== 'undefined' && wp.blocks && wp.blocks.parse) {
-		// Parse everything with WordPress parser first (handles nesting correctly)
-		try {
-			const wpParsed = wp.blocks.parse(html);
+  if (hasWpBlocks && typeof wp !== "undefined" && wp.blocks && wp.blocks.parse) {
+    // Parse everything with WordPress parser first (handles nesting correctly)
+    try {
+      const wpParsed = wp.blocks.parse(html);
 
-			// Separate WordPress blocks from plain HTML
-			const wpBlocksMap = {};
-			let processedHtml = html;
+      // Separate WordPress blocks from plain HTML
+      const wpBlocksMap = {};
+      let processedHtml = html;
 
-			// Use wp.blocks.serialize to get the exact serialized form of each block
-			// Then replace it with a placeholder (preserves structure while allowing HTML parsing)
-			wpParsed.forEach(block => {
-				if (block.name) { // Skip null/undefined blocks (plain HTML)
-					const uniqueId = nanoid();
-					const serialized = wp.blocks.serialize(block);
+      // Use wp.blocks.serialize to get the exact serialized form of each block
+      // Then replace it with a placeholder (preserves structure while allowing HTML parsing)
+      wpParsed.forEach((block) => {
+        if (block.name) {
+          // Skip null/undefined blocks (plain HTML)
+          const uniqueId = nanoid();
+          const serialized = wp.blocks.serialize(block);
 
-					// Replace the serialized block with placeholder
-					processedHtml = processedHtml.replace(serialized, `<wp-block-placeholder data-id="${uniqueId}"></wp-block-placeholder>`);
-					wpBlocksMap[uniqueId] = block;
-				}
-			});
+          // Replace the serialized block with placeholder
+          processedHtml = processedHtml.replace(
+            serialized,
+            `<wp-block-placeholder data-id="${uniqueId}"></wp-block-placeholder>`,
+          );
+          wpBlocksMap[uniqueId] = block;
+        }
+      });
 
-			// Now parse the HTML (with placeholders) using DOMParser
-			const parser = new DOMParser();
-			const doc = parser.parseFromString(processedHtml.trim(), 'text/html');
-			const temp = doc.body;
+      // Now parse the HTML (with placeholders) using DOMParser
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(processedHtml.trim(), "text/html");
+      const temp = doc.body;
 
-			// Parse child nodes and replace placeholders
-			const blocks = [];
-			Array.from(temp.childNodes).forEach(node => {
-				const block = parseNode(node, wpBlocksMap);
-				if (block) {
-					blocks.push(block);
-				}
-			});
+      // Parse child nodes and replace placeholders
+      const blocks = [];
+      Array.from(temp.childNodes).forEach((node) => {
+        const block = parseNode(node, wpBlocksMap);
+        if (block) {
+          blocks.push(block);
+        }
+      });
 
-			return blocks;
+      return blocks;
+    } catch (e) {
+      console.error("Failed to parse WordPress blocks, falling back to HTML parser:", e);
+    }
+  }
 
-		} catch (e) {
-			console.error('Failed to parse WordPress blocks, falling back to HTML parser:', e);
-		}
-	}
+  // No WordPress blocks - use DOMParser for plain HTML
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html.trim(), "text/html");
 
-	// No WordPress blocks - use DOMParser for plain HTML
-	const parser = new DOMParser();
-	const doc = parser.parseFromString(html.trim(), 'text/html');
+  const blocks = [];
 
-	const blocks = [];
+  // Parse head elements first (scripts, styles, meta tags, etc.)
+  // Browser automatically moves these tags to <head>
+  Array.from(doc.head.childNodes).forEach((node) => {
+    const block = parseNode(node, {});
+    if (block) {
+      blocks.push(block);
+    }
+  });
 
-	// Parse head elements first (scripts, styles, meta tags, etc.)
-	// Browser automatically moves these tags to <head>
-	Array.from(doc.head.childNodes).forEach(node => {
-		const block = parseNode(node, {});
-		if (block) {
-			blocks.push(block);
-		}
-	});
+  // Parse body elements
+  Array.from(doc.body.childNodes).forEach((node) => {
+    const block = parseNode(node, {});
+    if (block) {
+      blocks.push(block);
+    }
+  });
 
-	// Parse body elements
-	Array.from(doc.body.childNodes).forEach(node => {
-		const block = parseNode(node, {});
-		if (block) {
-			blocks.push(block);
-		}
-	});
-
-	return blocks;
+  return blocks;
 }
 
 /**
@@ -120,79 +154,79 @@ function html2blocks(html) {
  * @returns {Object|null} Block object or null
  */
 function parseNode(node, wpBlocksMap = {}) {
-	// Skip comments
-	if (node.nodeType === Node.COMMENT_NODE) {
-		return null;
-	}
+  // Skip comments
+  if (node.nodeType === Node.COMMENT_NODE) {
+    return null;
+  }
 
-	// Handle text nodes - wrap in cb-text-node to preserve in blocks structure
-	if (node.nodeType === Node.TEXT_NODE) {
-		const text = node.textContent;
+  // Handle text nodes - wrap in cb-text-node to preserve in blocks structure
+  if (node.nodeType === Node.TEXT_NODE) {
+    const text = node.textContent;
 
-		// Skip empty or whitespace-only text nodes
-		if (!text.trim()) {
-			return null;
-		}
+    // Skip empty or whitespace-only text nodes
+    if (!text.trim()) {
+      return null;
+    }
 
-		// Trim whitespace but preserve single spaces between words
-		const trimmedText = text.trim();
+    // Trim whitespace but preserve single spaces between words
+    const trimmedText = text.trim();
 
-		// Wrap text in cb-text-node element (will be unwrapped in renderer)
-		return createBlock('cb-text-node', 'text', trimmedText, { className: '', globalAttrs: {} });
-	}
+    // Wrap text in cb-text-node element (will be unwrapped in renderer)
+    return createBlock("cb-text-node", "text", trimmedText, { className: "", globalAttrs: {} });
+  }
 
-	// Handle element nodes
-	if (node.nodeType === Node.ELEMENT_NODE) {
-		const tagName = node.tagName.toLowerCase();
+  // Handle element nodes
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    const tagName = node.tagName.toLowerCase();
 
-		// Check if this is a wp-block-placeholder
-		if (tagName === 'wp-block-placeholder') {
-			const placeholderId = node.getAttribute('data-id');
-			if (placeholderId && wpBlocksMap[placeholderId]) {
-				// Return the actual WordPress block
-				return wpBlocksMap[placeholderId];
-			}
-			// If placeholder not found, skip it
-			return null;
-		}
+    // Check if this is a wp-block-placeholder
+    if (tagName === "wp-block-placeholder") {
+      const placeholderId = node.getAttribute("data-id");
+      if (placeholderId && wpBlocksMap[placeholderId]) {
+        // Return the actual WordPress block
+        return wpBlocksMap[placeholderId];
+      }
+      // If placeholder not found, skip it
+      return null;
+    }
 
-		const attributes = getAttributes(node);
+    const attributes = getAttributes(node);
 
-		// Determine content type
-		const contentType = determineContentType(node, tagName);
+    // Determine content type
+    const contentType = determineContentType(node, tagName);
 
-		// Create block based on content type
-		if (contentType === 'empty') {
-			return createBlock(tagName, 'empty', '', attributes);
-		}
+    // Create block based on content type
+    if (contentType === "empty") {
+      return createBlock(tagName, "empty", "", attributes);
+    }
 
-		if (contentType === 'text') {
-			// For text content with inline HTML, store innerHTML
-			const textContent = node.innerHTML.trim();
-			return createBlock(tagName, 'text', textContent, attributes);
-		}
+    if (contentType === "text") {
+      // For text content with inline HTML, store innerHTML
+      const textContent = node.innerHTML.trim();
+      return createBlock(tagName, "text", textContent, attributes);
+    }
 
-		if (contentType === 'html') {
-			// Use innerHTML for HTML content type (last resort)
-			const htmlContent = node.innerHTML;
-			return createBlock(tagName, 'html', htmlContent, attributes);
-		}
+    if (contentType === "html") {
+      // Use innerHTML for HTML content type (last resort)
+      const htmlContent = node.innerHTML;
+      return createBlock(tagName, "html", htmlContent, attributes);
+    }
 
-		if (contentType === 'blocks') {
-			// Parse child nodes recursively
-			const innerBlocks = [];
-			Array.from(node.childNodes).forEach(child => {
-				const childBlock = parseNode(child, wpBlocksMap);
-				if (childBlock) {
-					innerBlocks.push(childBlock);
-				}
-			});
+    if (contentType === "blocks") {
+      // Parse child nodes recursively
+      const innerBlocks = [];
+      Array.from(node.childNodes).forEach((child) => {
+        const childBlock = parseNode(child, wpBlocksMap);
+        if (childBlock) {
+          innerBlocks.push(childBlock);
+        }
+      });
 
-			return createBlock(tagName, 'blocks', '', attributes, innerBlocks);
-		}
-	}
+      return createBlock(tagName, "blocks", "", attributes, innerBlocks);
+    }
+  }
 
-	return null;
+  return null;
 }
 
 /**
@@ -204,66 +238,66 @@ function parseNode(node, wpBlocksMap = {}) {
  * @returns {string} Content type: 'blocks', 'text', 'html', or 'empty'
  */
 function determineContentType(element, tagName) {
-	// Force HTML type for specific elements (unavoidable)
-	if (HTML_ONLY_ELEMENTS.has(tagName)) {
-		return 'html';
-	}
+  // Force HTML type for specific elements (unavoidable)
+  if (HTML_ONLY_ELEMENTS.has(tagName)) {
+    return "html";
+  }
 
-	// Void elements
-	if (VOID_ELEMENTS.has(tagName)) {
-		return 'empty';
-	}
+  // Void elements
+  if (VOID_ELEMENTS.has(tagName)) {
+    return "empty";
+  }
 
-	// Check if element has any children
-	if (!element.hasChildNodes()) {
-		return 'empty';
-	}
+  // Check if element has any children
+  if (!element.hasChildNodes()) {
+    return "empty";
+  }
 
-	// Analyze child nodes
-	let hasElementChildren = false;
-	let hasSignificantText = false;
-	let elementNodes = [];
+  // Analyze child nodes
+  let hasElementChildren = false;
+  let hasSignificantText = false;
+  let elementNodes = [];
 
-	Array.from(element.childNodes).forEach(node => {
-		if (node.nodeType === Node.ELEMENT_NODE) {
-			hasElementChildren = true;
-			elementNodes.push(node);
-		} else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-			hasSignificantText = true;
-		}
-	});
+  Array.from(element.childNodes).forEach((node) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      hasElementChildren = true;
+      elementNodes.push(node);
+    } else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+      hasSignificantText = true;
+    }
+  });
 
-	// CASE 1: Pure text content (no element children)
-	// Use 'text' type
-	if (!hasElementChildren && hasSignificantText) {
-		return 'text';
-	}
+  // CASE 1: Pure text content (no element children)
+  // Use 'text' type
+  if (!hasElementChildren && hasSignificantText) {
+    return "text";
+  }
 
-	// CASE 2: Only element children (no significant text)
-	// Use 'blocks' type for clean nested structure
-	if (hasElementChildren && !hasSignificantText) {
-		return 'blocks';
-	}
+  // CASE 2: Only element children (no significant text)
+  // Use 'blocks' type for clean nested structure
+  if (hasElementChildren && !hasSignificantText) {
+    return "blocks";
+  }
 
-	// CASE 3: Mixed content (elements + significant text)
-	// Determine if we can handle it with 'blocks' + cb-text-node or need 'text' with inline HTML
+  // CASE 3: Mixed content (elements + significant text)
+  // Determine if we can handle it with 'blocks' + cb-text-node or need 'text' with inline HTML
 
-	// Check if all child elements are inline elements
-	const allChildrenInline = elementNodes.every(el =>
-		INLINE_ELEMENTS.has(el.tagName.toLowerCase())
-	);
+  // Check if all child elements are inline elements
+  const allChildrenInline = elementNodes.every((el) =>
+    INLINE_ELEMENTS.has(el.tagName.toLowerCase()),
+  );
 
-	if (allChildrenInline) {
-		// All children are inline elements (like <strong>, <em>, <a>)
-		// Use 'text' type and preserve inline HTML
-		// Example: <p>Hello <strong>world</strong></p> → text type with innerHTML
-		return 'text';
-	}
+  if (allChildrenInline) {
+    // All children are inline elements (like <strong>, <em>, <a>)
+    // Use 'text' type and preserve inline HTML
+    // Example: <p>Hello <strong>world</strong></p> → text type with innerHTML
+    return "text";
+  }
 
-	// CASE 4: Has block-level children mixed with text
-	// Use 'blocks' type and wrap text nodes in cb-text-node
-	// Example: <div>Hello<div>World</div></div> → blocks type
-	return 'blocks';
+  // CASE 4: Has block-level children mixed with text
+  // Use 'blocks' type and wrap text nodes in cb-text-node
+  // Example: <div>Hello<div>World</div></div> → blocks type
+  return "blocks";
 }
 
 /**
@@ -272,29 +306,29 @@ function determineContentType(element, tagName) {
  * @returns {Object} Object with className and globalAttrs
  */
 function getAttributes(element) {
-	const attrs = {};
-	let className = '';
+  const attrs = {};
+  let className = "";
 
-	Array.from(element.attributes).forEach(attr => {
-		// Note: attr.value is already decoded by the browser's parser
-		// No need to decode entities again - browser gives us the actual value
-		const value = attr.value;
+  Array.from(element.attributes).forEach((attr) => {
+    // Note: attr.value is already decoded by the browser's parser
+    // No need to decode entities again - browser gives us the actual value
+    const value = attr.value;
 
-		// Handle class separately for WordPress className
-		if (attr.name === 'class') {
-			className = value;
-		}
-		// Convert style to data-style (WordPress doesn't allow inline styles in blocks)
-		else if (attr.name === 'style') {
-			attrs['data-style'] = value;
-		}
-		// All other attributes go to globalAttrs
-		else {
-			attrs[attr.name] = value;
-		}
-	});
+    // Handle class separately for WordPress className
+    if (attr.name === "class") {
+      className = value;
+    }
+    // Convert style to data-style (WordPress doesn't allow inline styles in blocks)
+    else if (attr.name === "style") {
+      attrs["data-style"] = value;
+    }
+    // All other attributes go to globalAttrs
+    else {
+      attrs[attr.name] = value;
+    }
+  });
 
-	return { className, globalAttrs: attrs };
+  return { className, globalAttrs: attrs };
 }
 
 /**
@@ -306,57 +340,54 @@ function getAttributes(element) {
  * @param {Array} innerBlocks - Child blocks (for blocks type)
  * @returns {Object} Block object
  */
-function createBlock(tagName, contentType, content = '', attributeData = {}, innerBlocks = []) {
-	const {
-		className = '',
-		globalAttrs = {}
-	} = attributeData;
+function createBlock(tagName, contentType, content = "", attributeData = {}, innerBlocks = []) {
+  const { className = "", globalAttrs = {} } = attributeData;
 
-	// Generate block name based on tag name and ID
-	// Format: capitalize first letter of each word (e.g., div -> Div, cb-text-node -> Cb Text Node)
-	const generateBlockName = (tag, attrs) => {
-		if (tag === 'cb-text-node') {
-			return 'Text';
-		}
-		// Convert tag to readable name (e.g., 'my-tag' -> 'My Tag')
-		let name = tag
-			.split('-')
-			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-			.join(' ');
+  // Generate block name based on tag name and ID
+  // Format: capitalize first letter of each word (e.g., div -> Div, cb-text-node -> Cb Text Node)
+  const generateBlockName = (tag, attrs) => {
+    if (tag === "cb-text-node") {
+      return "Text";
+    }
+    // Convert tag to readable name (e.g., 'my-tag' -> 'My Tag')
+    let name = tag
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
 
-		// Append ID if it exists
-		if (attrs && attrs.globalAttrs && attrs.globalAttrs.id) {
-			name += ` #${attrs.globalAttrs.id}`;
-		}
+    // Append ID if it exists
+    if (attrs && attrs.globalAttrs && attrs.globalAttrs.id) {
+      name += ` #${attrs.globalAttrs.id}`;
+    }
 
-		return name;
-	};
+    return name;
+  };
 
-	const block = {
-		name: 'windpress/common-block',
-		attributes: {
-			tagName: tagName,
-			contentType: contentType,
-			globalAttrs: globalAttrs,
-			selfClosing: VOID_ELEMENTS.has(tagName),
-			metadata: {
-				name: generateBlockName(tagName, attributeData)
-			}
-		},
-		innerBlocks: innerBlocks || []
-	};
+  const block = {
+    name: "windpress/common-block",
+    attributes: {
+      tagName: tagName,
+      contentType: contentType,
+      globalAttrs: globalAttrs,
+      selfClosing: VOID_ELEMENTS.has(tagName),
+      metadata: {
+        name: generateBlockName(tagName, attributeData),
+      },
+    },
+    innerBlocks: innerBlocks || [],
+  };
 
-	// Add className if present
-	if (className) {
-		block.attributes.className = className;
-	}
+  // Add className if present
+  if (className) {
+    block.attributes.className = className;
+  }
 
-	// Add content for text and html types
-	if ((contentType === 'text' || contentType === 'html') && content) {
-		block.attributes.content = content;
-	}
+  // Add content for text and html types
+  if ((contentType === "text" || contentType === "html") && content) {
+    block.attributes.content = content;
+  }
 
-	return block;
+  return block;
 }
 
 /**
@@ -365,32 +396,30 @@ function createBlock(tagName, contentType, content = '', attributeData = {}, inn
  * @returns {string} WordPress block markup
  */
 function generateBlockMarkup(blocks) {
-	if (!blocks || !Array.isArray(blocks)) {
-		return '';
-	}
+  if (!blocks || !Array.isArray(blocks)) {
+    return "";
+  }
 
-	const serializeBlock = (block) => {
-		const { name, attributes, innerBlocks } = block;
+  const serializeBlock = (block) => {
+    const { name, attributes, innerBlocks } = block;
 
-		// Serialize attributes to JSON
-		const attrsJson = Object.keys(attributes).length > 0
-			? ' ' + JSON.stringify(attributes)
-			: '';
+    // Serialize attributes to JSON
+    const attrsJson = Object.keys(attributes).length > 0 ? " " + JSON.stringify(attributes) : "";
 
-		// Check if block has inner blocks
-		const hasInnerBlocks = innerBlocks && innerBlocks.length > 0;
+    // Check if block has inner blocks
+    const hasInnerBlocks = innerBlocks && innerBlocks.length > 0;
 
-		if (hasInnerBlocks) {
-			// Block with inner blocks
-			const innerMarkup = innerBlocks.map(serializeBlock).join('\n');
-			return `<!-- wp:${name}${attrsJson} -->\n${innerMarkup}\n<!-- /wp:${name} -->`;
-		} else {
-			// Self-closing block
-			return `<!-- wp:${name}${attrsJson} /-->`;
-		}
-	};
+    if (hasInnerBlocks) {
+      // Block with inner blocks
+      const innerMarkup = innerBlocks.map(serializeBlock).join("\n");
+      return `<!-- wp:${name}${attrsJson} -->\n${innerMarkup}\n<!-- /wp:${name} -->`;
+    } else {
+      // Self-closing block
+      return `<!-- wp:${name}${attrsJson} /-->`;
+    }
+  };
 
-	return blocks.map(serializeBlock).join('\n\n');
+  return blocks.map(serializeBlock).join("\n\n");
 }
 
 /**
@@ -399,50 +428,49 @@ function generateBlockMarkup(blocks) {
  * @returns {void}
  */
 function insertBlocks(blocks) {
-	if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-		console.error('No blocks to insert');
-		return;
-	}
+  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
+    console.error("No blocks to insert");
+    return;
+  }
 
-	// Check if WordPress editor is available
-	if (typeof wp === 'undefined' || !wp.data) {
-		console.error('WordPress editor not available');
-		return;
-	}
+  // Check if WordPress editor is available
+  if (typeof wp === "undefined" || !wp.data) {
+    console.error("WordPress editor not available");
+    return;
+  }
 
-	const { select, dispatch } = wp.data;
-	const { createBlock } = wp.blocks;
+  const { select, dispatch } = wp.data;
+  const { createBlock } = wp.blocks;
 
-	// Recursively convert block data to WordPress blocks
-	const convertBlockData = (data) => {
-		const innerBlocks = data.innerBlocks && data.innerBlocks.length > 0
-			? data.innerBlocks.map(convertBlockData)
-			: [];
-		return createBlock(data.name, data.attributes, innerBlocks);
-	};
+  // Recursively convert block data to WordPress blocks
+  const convertBlockData = (data) => {
+    const innerBlocks =
+      data.innerBlocks && data.innerBlocks.length > 0 ? data.innerBlocks.map(convertBlockData) : [];
+    return createBlock(data.name, data.attributes, innerBlocks);
+  };
 
-	// Convert all blocks
-	const wpBlocks = blocks.map(convertBlockData);
+  // Convert all blocks
+  const wpBlocks = blocks.map(convertBlockData);
 
-	// Get current block selection
-	const selectedBlockId = select('core/block-editor').getSelectedBlockClientId();
-	const rootClientId = select('core/block-editor').getBlockRootClientId(selectedBlockId);
+  // Get current block selection
+  const selectedBlockId = select("core/block-editor").getSelectedBlockClientId();
+  const rootClientId = select("core/block-editor").getBlockRootClientId(selectedBlockId);
 
-	// Insert blocks after current selection or at end
-	if (selectedBlockId) {
-		const blockIndex = select('core/block-editor').getBlockIndex(selectedBlockId);
-		dispatch('core/block-editor').insertBlocks(wpBlocks, blockIndex + 1, rootClientId);
-	} else {
-		dispatch('core/block-editor').insertBlocks(wpBlocks);
-	}
+  // Insert blocks after current selection or at end
+  if (selectedBlockId) {
+    const blockIndex = select("core/block-editor").getBlockIndex(selectedBlockId);
+    dispatch("core/block-editor").insertBlocks(wpBlocks, blockIndex + 1, rootClientId);
+  } else {
+    dispatch("core/block-editor").insertBlocks(wpBlocks);
+  }
 }
 
 // Expose to window
-if (typeof window !== 'undefined') {
-	window.windpressCommonBlock = window.windpressCommonBlock || {};
-	window.windpressCommonBlock.html2blocks = html2blocks;
-	window.windpressCommonBlock.generateBlockMarkup = generateBlockMarkup;
-	window.windpressCommonBlock.insertBlocks = insertBlocks;
+if (typeof window !== "undefined") {
+  window.windpressCommonBlock = window.windpressCommonBlock || {};
+  window.windpressCommonBlock.html2blocks = html2blocks;
+  window.windpressCommonBlock.generateBlockMarkup = generateBlockMarkup;
+  window.windpressCommonBlock.insertBlocks = insertBlocks;
 }
 
 // Export for module usage

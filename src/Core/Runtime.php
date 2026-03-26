@@ -16,9 +16,9 @@ namespace WindPress\WindPress\Core;
 use Exception;
 use WIND_PRESS;
 use WindPress\WindPress\Admin\AdminPage;
-use WindPress\WindPress\Utils\AssetVite;
 use WindPress\WindPress\Utils\Common;
 use WindPress\WindPress\Utils\Config;
+use WindPress\WindPress\Utils\Vite;
 
 /**
  * @since 3.0.0
@@ -208,15 +208,15 @@ class Runtime
         // Register the modules
         $loaded_modules = [];
         if ($can_load_modules) {
-            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/intellisense.ts', [
+            Vite::assets()->register('assets/packages/core/tailwindcss/play/intellisense.ts', [
                 'handle' => WIND_PRESS::WP_OPTION . ':intellisense',
-                'in-footer' => true,
+                'in_footer' => true,
             ]);
             $loaded_modules[] = WIND_PRESS::WP_OPTION . ':intellisense';
 
-            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/worker.ts', [
+            Vite::assets()->register('assets/packages/core/tailwindcss/play/worker.ts', [
                 'handle' => WIND_PRESS::WP_OPTION . ':worker',
-                'in-footer' => true,
+                'in_footer' => true,
             ]);
             $loaded_modules[] = WIND_PRESS::WP_OPTION . ':worker';
 
@@ -224,9 +224,9 @@ class Runtime
             $loaded_modules = apply_filters('f!windpress/core/runtime:enqueue_play_modules.loaded_modules', $loaded_modules);
         }
 
-        AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss/play/observer.ts', [
+        Vite::assets()->register('assets/packages/core/tailwindcss/play/observer.ts', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
-            'in-footer' => true,
+            'in_footer' => true,
             'dependencies' => array_merge(['wp-i18n', 'wp-hooks'], is_array($loaded_modules) ? $loaded_modules : iterator_to_array($loaded_modules)),
         ]);
     }
@@ -236,16 +236,16 @@ class Runtime
         // Register the modules
         $loaded_modules = [];
         if ($can_load_modules) {
-            AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/intellisense.ts', [
+            Vite::assets()->register('assets/packages/core/tailwindcss-v3/play/intellisense.ts', [
                 'handle' => WIND_PRESS::WP_OPTION . ':intellisense',
-                'in-footer' => true,
+                'in_footer' => true,
             ]);
             $loaded_modules[] = WIND_PRESS::WP_OPTION . ':intellisense';
         }
 
-        AssetVite::get_instance()->register_asset('assets/packages/core/tailwindcss-v3/play/observer.ts', [
+        Vite::assets()->register('assets/packages/core/tailwindcss-v3/play/observer.ts', [
             'handle' => WIND_PRESS::WP_OPTION . ':observer',
-            'in-footer' => true,
+            'in_footer' => true,
             'dependencies' => array_merge(['wp-i18n', 'wp-hooks'], is_array($loaded_modules) ? $loaded_modules : iterator_to_array($loaded_modules)),
         ]);
     }
@@ -254,7 +254,7 @@ class Runtime
     {
         $handle = WIND_PRESS::WP_OPTION . ':admin';
 
-        AssetVite::get_instance()->enqueue_asset('assets/dashboard/main.ts', [
+        Vite::assets()->enqueue('assets/dashboard/main.ts', [
             'handle' => $handle,
             'in_footer' => true,
             'dependencies' => ['wp-i18n', 'wp-hooks'],
@@ -303,7 +303,7 @@ class Runtime
             '_via_wp_org' => ! Common::is_updater_library_available(),
             'is_ubiquitous' => $this->is_ubiquitous_panel(),
             'assets' => [
-                'url' => AssetVite::asset_base_url(),
+                'url' => Vite::base_url(),
             ],
             'user_data' => [
                 'data_dir' => [

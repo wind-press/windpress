@@ -1,0 +1,118 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "lsp": {
+        "php intelephense": {
+            "disabled": true
+        },
+        "intelephense": {
+            "command": [
+                "intelephense",
+                "--stdio"
+            ],
+            "extensions": [".php", ".phtml", ".inc"],
+            "initialization": {
+                "environment": {
+                    "documentRoot": "../../"
+                },
+                "stubs": [
+                    "apache",
+                    "bcmath",
+                    "bz2",
+                    "calendar",
+                    "com_dotnet",
+                    "Core",
+                    "ctype",
+                    "curl",
+                    "date",
+                    "dba",
+                    "dom",
+                    "enchant",
+                    "exif",
+                    "FFI",
+                    "fileinfo",
+                    "filter",
+                    "fpm",
+                    "ftp",
+                    "gd",
+                    "gettext",
+                    "gmp",
+                    "hash",
+                    "iconv",
+                    "imap",
+                    "intl",
+                    "json",
+                    "ldap",
+                    "libxml",
+                    "mbstring",
+                    "meta",
+                    "mysqli",
+                    "oci8",
+                    "odbc",
+                    "openssl",
+                    "pcntl",
+                    "pcre",
+                    "PDO",
+                    "pdo_ibm",
+                    "pdo_mysql",
+                    "pdo_pgsql",
+                    "pdo_sqlite",
+                    "pgsql",
+                    "Phar",
+                    "posix",
+                    "pspell",
+                    "random",
+                    "readline",
+                    "Reflection",
+                    "regex",
+                    "session",
+                    "shmop",
+                    "SimpleXML",
+                    "snmp",
+                    "soap",
+                    "sockets",
+                    "sodium",
+                    "SPL",
+                    "sqlite3",
+                    "standard",
+                    "superglobals",
+                    "sysvmsg",
+                    "sysvsem",
+                    "sysvshm",
+                    "tidy",
+                    "tokenizer",
+                    "xml",
+                    "xmlreader",
+                    "xmlrpc",
+                    "xmlwriter",
+                    "xsl",
+                    "Zend OPcache",
+                    "zip",
+                    "zlib",
+                    "wordpress"
+                ]
+            }
+        }
+    },
+    "mcp": {
+        "chrome-devtools": {
+            "type": "local",
+            "command": [
+                "npx",
+                "-y",
+                "chrome-devtools-mcp@latest"
+            ],
+            "enabled": false
+        },
+        "firefox-devtools": {
+            "type": "local",
+            "command": [
+                "npx",
+                "-y",
+                "firefox-devtools-mcp@latest",
+                "--firefox-path",
+                "/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox"
+            ],
+            "enabled": false
+        }
+    }
+}

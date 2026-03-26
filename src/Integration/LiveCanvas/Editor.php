@@ -15,7 +15,7 @@ namespace WindPress\WindPress\Integration\LiveCanvas;
 
 use WIND_PRESS;
 use WindPress\WindPress\Admin\AdminPage;
-use WindPress\WindPress\Utils\AssetVite;
+use WindPress\WindPress\Utils\Vite;
 
 /**
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
@@ -31,7 +31,7 @@ class Editor
     {
         $handle = WIND_PRESS::WP_OPTION . ':integration-livecanvas-editor';
 
-        AssetVite::get_instance()->enqueue_asset('assets/integration/livecanvas/main.js', [
+        Vite::assets()->enqueue('assets/integration/livecanvas/main.js', [
             'handle' => $handle,
             'in_footer' => true,
             'dependencies' => ['wp-hooks']
@@ -40,7 +40,7 @@ class Editor
         wp_localize_script($handle, 'windpresslivecanvas', [
             '_version' => WIND_PRESS::VERSION,
             'assets' => [
-                'url' => AssetVite::asset_base_url(),
+                'url' => Vite::base_url(),
             ],
             'site_meta' => [
                 'name' => get_bloginfo('name'),

@@ -1,136 +1,144 @@
 /**
- * @module html2bricks 
+ * @module html2bricks
  * @package WindPress
  * @since 1.0.1
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
- * 
+ *
  * Convert HTML string to Bricks element
  */
 
-import { brxGlobalProp, settingsState } from '@/integration/bricks/constant.js';
-import { watch } from 'vue';
-import { logger } from '@/integration/common/logger';
-import { parse } from './dom2elements.js';
+import { brxGlobalProp, settingsState } from "@/integration/bricks/constant.js";
+import { watch } from "vue";
+import { logger } from "@/integration/common/logger";
+import { parse } from "./dom2elements.js";
 
 /**
  * Check and request clipboard permission
- * 
+ *
  * @see https://web.dev/articles/async-clipboard
  * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
  */
 async function queryClipboardPermission(permissionName) {
-    if (!navigator.permissions || typeof navigator.permissions.query !== 'function') {
-        return null;
-    }
+  if (!navigator.permissions || typeof navigator.permissions.query !== "function") {
+    return null;
+  }
 
-    try {
-        return await navigator.permissions.query({ name: permissionName });
-    } catch {
-        return null;
-    }
+  try {
+    return await navigator.permissions.query({ name: permissionName });
+  } catch {
+    return null;
+  }
 }
 
 async function checkAndRequestClipboardPermission() {
-    if (!navigator.clipboard || typeof navigator.clipboard.readText !== 'function' || typeof navigator.clipboard.writeText !== 'function') {
-        logger('Clipboard API not supported', { module: 'html2bricks', type: 'error' });
-        return false;
-    }
+  if (
+    !navigator.clipboard ||
+    typeof navigator.clipboard.readText !== "function" ||
+    typeof navigator.clipboard.writeText !== "function"
+  ) {
+    logger("Clipboard API not supported", { module: "html2bricks", type: "error" });
+    return false;
+  }
 
-    const readStatus = await queryClipboardPermission('clipboard-read');
+  const readStatus = await queryClipboardPermission("clipboard-read");
 
-    if (readStatus && readStatus.state === 'denied') {
-        logger('Clipboard-read permission denied', { module: 'html2bricks', type: 'error' });
-        return false;
-    }
+  if (readStatus && readStatus.state === "denied") {
+    logger("Clipboard-read permission denied", { module: "html2bricks", type: "error" });
+    return false;
+  }
 
-    let clipboardContent = '';
+  let clipboardContent = "";
 
-    try {
-        clipboardContent = await navigator.clipboard.readText();
-    } catch (error) {
-        logger('Clipboard-read permission denied', error, { module: 'html2bricks', type: 'error' });
-        return false;
-    }
+  try {
+    clipboardContent = await navigator.clipboard.readText();
+  } catch (error) {
+    logger("Clipboard-read permission denied", error, { module: "html2bricks", type: "error" });
+    return false;
+  }
 
-    const writeStatus = await queryClipboardPermission('clipboard-write');
+  const writeStatus = await queryClipboardPermission("clipboard-write");
 
-    if (writeStatus && writeStatus.state === 'denied') {
-        logger('Clipboard-write permission denied', { module: 'html2bricks', type: 'error' });
-        return false;
-    }
+  if (writeStatus && writeStatus.state === "denied") {
+    logger("Clipboard-write permission denied", { module: "html2bricks", type: "error" });
+    return false;
+  }
 
-    try {
-        await navigator.clipboard.writeText(clipboardContent);
-    } catch (error) {
-        logger('Clipboard-write permission denied', error, { module: 'html2bricks', type: 'error' });
-        return false;
-    }
+  try {
+    await navigator.clipboard.writeText(clipboardContent);
+  } catch (error) {
+    logger("Clipboard-write permission denied", error, { module: "html2bricks", type: "error" });
+    return false;
+  }
 
-    return true;
+  return true;
 }
 
 function getClipboardTextFromPasteEvent(event) {
-    if (!event.clipboardData) {
-        return '';
-    }
+  if (!event.clipboardData) {
+    return "";
+  }
 
-    return (event.clipboardData.getData('text/html') || event.clipboardData.getData('text/plain') || '').trim();
+  return (
+    event.clipboardData.getData("text/html") ||
+    event.clipboardData.getData("text/plain") ||
+    ""
+  ).trim();
 }
 
-async function htmlPasteHandler(sourceClipboardText = '') {
-    let clipboardText = typeof sourceClipboardText === 'string' ? sourceClipboardText.trim() : '';
+async function htmlPasteHandler(sourceClipboardText = "") {
+  let clipboardText = typeof sourceClipboardText === "string" ? sourceClipboardText.trim() : "";
 
-    if (!clipboardText) {
-        if (!await checkAndRequestClipboardPermission()) {
-            brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
-            return;
-        }
-
-        try {
-            clipboardText = (await navigator.clipboard.readText()).trim();
-        } catch (error) {
-            logger('Clipboard-read permission denied', error, { module: 'html2bricks', type: 'error' });
-            brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
-            return;
-        }
+  if (!clipboardText) {
+    if (!(await checkAndRequestClipboardPermission())) {
+      brxGlobalProp.$_showMessage("[WindPress] Clipboard access not available");
+      return;
     }
-
-    if (!clipboardText || clipboardText.charAt(0) !== '<') {
-        logger('Pasted content is not HTML', { module: 'html2bricks', type: 'error' });
-        brxGlobalProp.$_showMessage('[WindPress] Pasted content is not HTML');
-        return;
-    }
-
-    // parse HTML string to DOM
-    const doc = (new DOMParser()).parseFromString(clipboardText, 'text/html').body;
-
-    // convert DOM to Bricks element
-    const bricksElements = parse(doc);
-
-    const bricksData = {
-        content: bricksElements,
-        source: 'bricksCopiedElements',
-        sourceUrl: window.bricksData.siteUrl,
-        version: window.bricksData.version,
-        globalClasses: [],
-        globalElements: [],
-    };
 
     try {
-        // copy to clipboard
-        await navigator.clipboard.writeText(JSON.stringify(bricksData, null));
+      clipboardText = (await navigator.clipboard.readText()).trim();
     } catch (error) {
-        logger('Clipboard-write permission denied', error, { module: 'html2bricks', type: 'error' });
-        brxGlobalProp.$_showMessage('[WindPress] Clipboard access not available');
-        return;
+      logger("Clipboard-read permission denied", error, { module: "html2bricks", type: "error" });
+      brxGlobalProp.$_showMessage("[WindPress] Clipboard access not available");
+      return;
     }
+  }
 
-    brxGlobalProp.$_pasteElements();
+  if (!clipboardText || clipboardText.charAt(0) !== "<") {
+    logger("Pasted content is not HTML", { module: "html2bricks", type: "error" });
+    brxGlobalProp.$_showMessage("[WindPress] Pasted content is not HTML");
+    return;
+  }
 
-    brxGlobalProp.$_showMessage('[WindPress] HTML pasted');
+  // parse HTML string to DOM
+  const doc = new DOMParser().parseFromString(clipboardText, "text/html").body;
 
-    // restore clipboard content
-    // await navigator.clipboard.writeText(clipboardText);
+  // convert DOM to Bricks element
+  const bricksElements = parse(doc);
+
+  const bricksData = {
+    content: bricksElements,
+    source: "bricksCopiedElements",
+    sourceUrl: window.bricksData.siteUrl,
+    version: window.bricksData.version,
+    globalClasses: [],
+    globalElements: [],
+  };
+
+  try {
+    // copy to clipboard
+    await navigator.clipboard.writeText(JSON.stringify(bricksData, null));
+  } catch (error) {
+    logger("Clipboard-write permission denied", error, { module: "html2bricks", type: "error" });
+    brxGlobalProp.$_showMessage("[WindPress] Clipboard access not available");
+    return;
+  }
+
+  brxGlobalProp.$_pasteElements();
+
+  brxGlobalProp.$_showMessage("[WindPress] HTML pasted");
+
+  // restore clipboard content
+  // await navigator.clipboard.writeText(clipboardText);
 }
 
 /**
@@ -143,17 +151,19 @@ let pendingShortcutPaste = false;
 let pendingShortcutPasteTimeout = null;
 
 function resetPendingShortcutPaste() {
-    pendingShortcutPaste = false;
+  pendingShortcutPaste = false;
 
-    if (pendingShortcutPasteTimeout) {
-        window.clearTimeout(pendingShortcutPasteTimeout);
-        pendingShortcutPasteTimeout = null;
-    }
+  if (pendingShortcutPasteTimeout) {
+    window.clearTimeout(pendingShortcutPasteTimeout);
+    pendingShortcutPasteTimeout = null;
+  }
 }
 
-document.addEventListener('paste', (event) => {
-    if (!pendingShortcutPaste || !settingsState('module.html2bricks.copy-paste', true).value) {
-        return;
+document.addEventListener(
+  "paste",
+  (event) => {
+    if (!pendingShortcutPaste || !settingsState("module.html2bricks.copy-paste", true).value) {
+      return;
     }
 
     resetPendingShortcutPaste();
@@ -163,84 +173,94 @@ document.addEventListener('paste', (event) => {
     const clipboardText = getClipboardTextFromPasteEvent(event);
 
     htmlPasteHandler(clipboardText);
-}, true);
+  },
+  true,
+);
 
-document.addEventListener('keydown', (event) => {
-    if (!settingsState('module.html2bricks.copy-paste', true).value) {
-        return;
+document.addEventListener(
+  "keydown",
+  (event) => {
+    if (!settingsState("module.html2bricks.copy-paste", true).value) {
+      return;
     }
 
-    if (event.target.id === 'bricks-toolbar' || event.target.id === 'bricks-panel') {
-        return;
+    if (event.target.id === "bricks-toolbar" || event.target.id === "bricks-panel") {
+      return;
     }
 
-    if (!(event.ctrlKey || event.metaKey) || !event.shiftKey || event.key.toLowerCase() !== 'v') {
-        return;
+    if (!(event.ctrlKey || event.metaKey) || !event.shiftKey || event.key.toLowerCase() !== "v") {
+      return;
     }
 
     event.stopPropagation();
 
     pendingShortcutPaste = true;
     if (pendingShortcutPasteTimeout) {
-        window.clearTimeout(pendingShortcutPasteTimeout);
+      window.clearTimeout(pendingShortcutPasteTimeout);
     }
 
     pendingShortcutPasteTimeout = window.setTimeout(() => {
-        if (!pendingShortcutPaste) {
-            return;
-        }
+      if (!pendingShortcutPaste) {
+        return;
+      }
 
-        resetPendingShortcutPaste();
-        htmlPasteHandler();
+      resetPendingShortcutPaste();
+      htmlPasteHandler();
     }, 0);
-
-}, true);
+  },
+  true,
+);
 
 // insert "Paste HTML" menu item after "Paste" menu item
-const pasteItemContextMenu = document.querySelector('#bricks-builder-context-menu li:nth-child(2)');
-const pasteMenu = document.createElement('li');
-pasteMenu.id = 'windpressbricks-html2bricks-context-menu';
-pasteMenu.classList.add('sep');
-pasteMenu.innerHTML = '<span class="label">Paste HTML</span><span class="shortcut">CTRL + SHIFT + V</span>';
-pasteMenu.addEventListener('click', htmlPasteHandler);
-
+const pasteItemContextMenu = document.querySelector("#bricks-builder-context-menu li:nth-child(2)");
+const pasteMenu = document.createElement("li");
+pasteMenu.id = "windpressbricks-html2bricks-context-menu";
+pasteMenu.classList.add("sep");
+pasteMenu.innerHTML =
+  '<span class="label">Paste HTML</span><span class="shortcut">CTRL + SHIFT + V</span>';
+pasteMenu.addEventListener("click", htmlPasteHandler);
 
 // add "Paste HTML" button on the Structure panel header
-const pasteItemStructureHeader = document.querySelector('#bricks-panel-header>ul.actions>li[data-balloon="Paste (All)"]');
-const pasteHTMLStructureHeader = document.createElement('li');
-pasteHTMLStructureHeader.dataset.balloon = 'Paste HTML';
-pasteHTMLStructureHeader.dataset.balloonPos = 'bottom-right';
-pasteHTMLStructureHeader.innerHTML = /*html*/`
+const pasteItemStructureHeader = document.querySelector(
+  '#bricks-panel-header>ul.actions>li[data-balloon="Paste (All)"]',
+);
+const pasteHTMLStructureHeader = document.createElement("li");
+pasteHTMLStructureHeader.dataset.balloon = "Paste HTML";
+pasteHTMLStructureHeader.dataset.balloonPos = "bottom-right";
+pasteHTMLStructureHeader.innerHTML = /*html*/ `
     <span class="bricks-svg-wrapper">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-html5" fill="none" stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 4l-2 14.5l-6 2l-6 -2l-2 -14.5z" /><path d="M15.5 8h-7l.5 4h6l-.5 3.5l-2.5 .75l-2.5 -.75l-.1 -.5" /></svg>
     </span>
 `;
 
-pasteHTMLStructureHeader.addEventListener('click', htmlPasteHandler);
+pasteHTMLStructureHeader.addEventListener("click", htmlPasteHandler);
 
 const addControl = () => {
-    pasteItemContextMenu.classList.remove('sep');
-    pasteItemContextMenu.insertAdjacentElement('afterend', pasteMenu);
-    pasteItemStructureHeader.insertAdjacentElement('afterend', pasteHTMLStructureHeader);
+  pasteItemContextMenu.classList.remove("sep");
+  pasteItemContextMenu.insertAdjacentElement("afterend", pasteMenu);
+  pasteItemStructureHeader.insertAdjacentElement("afterend", pasteHTMLStructureHeader);
 };
 
 const removeControl = () => {
-    pasteItemContextMenu.classList.add('sep');
-    pasteMenu.remove();
-    pasteHTMLStructureHeader.remove();
+  pasteItemContextMenu.classList.add("sep");
+  pasteMenu.remove();
+  pasteHTMLStructureHeader.remove();
 };
 
 // initial
-if (settingsState('module.html2bricks.copy-paste', true).value) {
-    addControl();
+if (settingsState("module.html2bricks.copy-paste", true).value) {
+  addControl();
 }
 
-watch(() => settingsState('module.html2bricks.copy-paste', true).value, (value) => {
+watch(
+  () => settingsState("module.html2bricks.copy-paste", true).value,
+  (value) => {
     if (value) {
-        addControl();
+      addControl();
     } else {
-        removeControl();
+      removeControl();
     }
-});
+  },
+);
 
-logger('Module loaded!', { module: 'html2bricks' });
+logger("Module loaded!", { module: "html2bricks" });

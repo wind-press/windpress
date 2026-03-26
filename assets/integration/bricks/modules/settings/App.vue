@@ -1,9 +1,9 @@
 <script setup>
-import { inject, ref, watch } from 'vue';
-import { settingsState } from '@/integration/bricks/constant';
+import { inject, ref, watch } from "vue";
+import { settingsState } from "@/integration/bricks/constant";
 
-const isOpen = inject('isOpen');
-const mousePosition = inject('mousePosition');
+const isOpen = inject("isOpen");
+const mousePosition = inject("mousePosition");
 const containerEl = ref(null);
 
 watch(isOpen, (value) => {
@@ -16,11 +16,14 @@ watch(isOpen, (value) => {
 </script>
 
 <template>
-  <div v-show="isOpen" id="windpressbricks-settings-app-container" ref="containerEl" class="flex flex:column">
+  <div
+    v-show="isOpen"
+    id="windpressbricks-settings-app-container"
+    ref="containerEl"
+    class="flex flex:column"
+  >
     <ul class="w:full">
-      <li class="disabled" style="color: var(--bricks-text-dark);">
-        Module: Plain Classes
-      </li>
+      <li class="disabled" style="color: var(--bricks-text-dark)">Module: Plain Classes</li>
       <li>
         <span class="label">
           <label for="cb-settings-plain-classes-input-field">Input Field</label>
@@ -28,7 +31,11 @@ watch(isOpen, (value) => {
         <span class="buttons">
           <div>
             <div data-control="checkbox" type="checkbox">
-              <input id="cb-settings-plain-classes-input-field" v-model="settingsState('module.plain-classes.input-field', true).value" type="checkbox">
+              <input
+                id="cb-settings-plain-classes-input-field"
+                v-model="settingsState('module.plain-classes.input-field', true).value"
+                type="checkbox"
+              />
             </div>
           </div>
         </span>
@@ -40,7 +47,11 @@ watch(isOpen, (value) => {
         <span class="buttons">
           <div>
             <div data-control="checkbox" type="checkbox">
-              <input id="cb-settings-plain-classes-autocomplete" v-model="settingsState('module.plain-classes.autocomplete', true).value" type="checkbox">
+              <input
+                id="cb-settings-plain-classes-autocomplete"
+                v-model="settingsState('module.plain-classes.autocomplete', true).value"
+                type="checkbox"
+              />
             </div>
           </div>
         </span>
@@ -52,14 +63,16 @@ watch(isOpen, (value) => {
         <span class="buttons">
           <div>
             <div data-control="checkbox" type="checkbox">
-              <input id="cb-settings-plain-classes-hover-preview-classes" v-model="settingsState('module.plain-classes.hover-preview-classes', true).value" type="checkbox">
+              <input
+                id="cb-settings-plain-classes-hover-preview-classes"
+                v-model="settingsState('module.plain-classes.hover-preview-classes', true).value"
+                type="checkbox"
+              />
             </div>
           </div>
         </span>
       </li>
-      <li class="disabled sep-t" style="color: var(--bricks-text-dark);">
-        Module: Generate Cache
-      </li>
+      <li class="disabled sep-t" style="color: var(--bricks-text-dark)">Module: Generate Cache</li>
       <li>
         <span class="label">
           <label for="cb-settings-generate-cache-on-save">On Save</label>
@@ -67,14 +80,16 @@ watch(isOpen, (value) => {
         <span class="buttons">
           <div>
             <div data-control="checkbox" type="checkbox">
-              <input id="cb-settings-generate-cache-on-save" v-model="settingsState('module.generate-cache.on-save', true).value" type="checkbox">
+              <input
+                id="cb-settings-generate-cache-on-save"
+                v-model="settingsState('module.generate-cache.on-save', true).value"
+                type="checkbox"
+              />
             </div>
           </div>
         </span>
       </li>
-      <li class="disabled sep-t" style="color: var(--bricks-text-dark);">
-        Module: HTML2Bricks
-      </li>
+      <li class="disabled sep-t" style="color: var(--bricks-text-dark)">Module: HTML2Bricks</li>
       <li>
         <span class="label">
           <label for="cb-settings-html2bricks-copy-paste">Copy-Paste</label>
@@ -82,7 +97,11 @@ watch(isOpen, (value) => {
         <span class="buttons">
           <div>
             <div data-control="checkbox" type="checkbox">
-              <input id="cb-settings-html2bricks-copy-paste" v-model="settingsState('module.html2bricks.copy-paste', true).value" type="checkbox">
+              <input
+                id="cb-settings-html2bricks-copy-paste"
+                v-model="settingsState('module.html2bricks.copy-paste', true).value"
+                type="checkbox"
+              />
             </div>
           </div>
         </span>
@@ -95,7 +114,7 @@ watch(isOpen, (value) => {
 #windpressbricks-settings-app-container {
   background-color: #fff;
   border-radius: var(--builder-border-radius);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   min-width: 220px;
   position: fixed;
   user-select: none;

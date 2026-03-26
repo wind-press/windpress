@@ -1,45 +1,45 @@
 html {
-    --wp-admin--sidebar-width: 160px;
+  --wp-admin--sidebar-width: 160px;
 }
 
 html:has(.folded) {
-    --wp-admin--sidebar-width: 36px;
+  --wp-admin--sidebar-width: 36px;
 }
 
 .wp-admin.toplevel_page_windpress {
-    #wpcontent {
-        padding-left: 0 !important;
+  #wpcontent {
+    padding-left: 0 !important;
 
-        #wpbody {
-            background-color: var(--ui-bg);
-            color: var(--ui-text);
-            position: fixed !important;
+    #wpbody {
+      background-color: var(--ui-bg);
+      color: var(--ui-text);
+      position: fixed !important;
 
-            #wpbody-content {
-                padding-bottom: 0;
+      #wpbody-content {
+        padding-bottom: 0;
 
-                /* hide the notice nag if it doesn't have .windpress-notice */
-                .notice:not(.windpress-notice) {
-                    display: none;
-                }
-
-                #windpress-app {
-                    isolation: isolate;
-                }
-            }
+        /* hide the notice nag if it doesn't have .windpress-notice */
+        .notice:not(.windpress-notice) {
+          display: none;
         }
-    }
 
-    #wpfooter {
-        display: none;
+        #windpress-app {
+          isolation: isolate;
+        }
+      }
     }
+  }
 
-    /* Hide the update nag */
-    .update-nag {
-        display: none;
-    }
+  #wpfooter {
+    display: none;
+  }
 
-    #adminmenumain #adminmenu li img {
-        display: inline;
-    }
+  /* Hide the update nag */
+  .update-nag {
+    display: none;
+  }
+
+  #adminmenumain #adminmenu li img {
+    display: inline;
+  }
 }

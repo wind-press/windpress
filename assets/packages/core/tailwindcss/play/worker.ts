@@ -1,3 +1,3 @@
-import { setupWorker } from '@/packages/core/windpress/worker';
+import { setupWorker } from "@/packages/core/windpress/worker";
 
 setupWorker();

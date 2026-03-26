@@ -15,7 +15,7 @@ namespace WindPress\WindPress\Integration\Bricks;
 
 use WIND_PRESS;
 use WindPress\WindPress\Admin\AdminPage;
-use WindPress\WindPress\Utils\AssetVite;
+use WindPress\WindPress\Utils\Vite;
 
 /**
  * @author Joshua Gugun Siagian <suabahasa@gmail.com>
@@ -35,7 +35,7 @@ class Editor
 
         $handle = WIND_PRESS::WP_OPTION . ':integration-bricks-editor';
 
-        AssetVite::get_instance()->enqueue_asset('assets/integration/bricks/main.js', [
+        Vite::assets()->enqueue('assets/integration/bricks/main.js', [
             'handle' => $handle,
             'in_footer' => true,
         ]);
@@ -43,7 +43,7 @@ class Editor
         wp_localize_script($handle, 'windpressbricks', [
             '_version' => WIND_PRESS::VERSION,
             'assets' => [
-                'url' => AssetVite::asset_base_url(),
+                'url' => Vite::base_url(),
             ],
             'site_meta' => [
                 'name' => get_bloginfo('name'),

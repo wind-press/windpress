@@ -1,17 +1,13 @@
 <script setup>
-import { inject } from 'vue';
-import PanelHeader from './components/PanelHeader.vue';
-import PanelBody from './components/PanelBody.vue';
+import { inject } from "vue";
+import PanelHeader from "./components/PanelHeader.vue";
+import PanelBody from "./components/PanelBody.vue";
 
-const isOpen = inject('isOpen');
-
+const isOpen = inject("isOpen");
 </script>
 
 <template>
-  <div
-    v-show="isOpen"
-    id="windpressoxygen-variable-app-container"
-  >
+  <div v-show="isOpen" id="windpressoxygen-variable-app-container">
     <PanelHeader />
     <Suspense>
       <PanelBody />
@@ -27,4 +23,3 @@ const isOpen = inject('isOpen');
   height: 100%;
 }
 </style>
-

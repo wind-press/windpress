@@ -1,17 +1,13 @@
 <script setup>
-import { inject } from 'vue';
-import PanelHeader from './components/PanelHeader.vue';
-import PanelBody from './components/PanelBody.vue';
+import { inject } from "vue";
+import PanelHeader from "./components/PanelHeader.vue";
+import PanelBody from "./components/PanelBody.vue";
 
-const isOpen = inject('isOpen');
+const isOpen = inject("isOpen");
 </script>
 
 <template>
-  <div
-    v-show="isOpen"
-    id="windpressbricks-variable-app-container"
-    class="wp-b-var-container"
-  >
+  <div v-show="isOpen" id="windpressbricks-variable-app-container" class="wp-b-var-container">
     <PanelHeader />
     <Suspense>
       <PanelBody />
@@ -21,12 +17,12 @@ const isOpen = inject('isOpen');
 
 <style lang="scss" scoped>
 .wp-b-var-container {
-    // font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    color: var(--builder-color);
-    background-color: var(--builder-bg);
+  // font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  color: var(--builder-color);
+  background-color: var(--builder-bg);
 }
 </style>

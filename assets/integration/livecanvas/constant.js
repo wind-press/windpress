@@ -1,5 +1,3 @@
-const previewIframe = document.getElementById('previewiframe');
+const previewIframe = document.getElementById("previewiframe");
 
-export {
-    previewIframe
-};
+export { previewIframe };

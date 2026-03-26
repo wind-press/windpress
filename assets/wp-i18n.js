@@ -1,3 +1,3 @@
-(() => {
-    const { __, _x, _n, sprintf } = wp.i18n;
-});
+() => {
+  const { __, _x, _n, sprintf } = wp.i18n;
+};

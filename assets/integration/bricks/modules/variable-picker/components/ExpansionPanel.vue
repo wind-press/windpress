@@ -1,6 +1,6 @@
 <script setup>
-import { useStorage } from '@vueuse/core';
-import { ref } from 'vue';
+import { useStorage } from "@vueuse/core";
+import { ref } from "vue";
 
 const props = defineProps({
   namespace: {
@@ -19,7 +19,7 @@ const expand = useStorage(
   `windpressbricks-variable-app.ui.expansion-panels.${props.namespace}`,
   { [`${props.name}`]: false },
   undefined,
-  { mergeDefaults: true }
+  { mergeDefaults: true },
 );
 
 function togglePanel(val) {
@@ -32,18 +32,21 @@ function scrollIntoView() {
 
 defineExpose({
   togglePanel,
-  scrollIntoView
+  scrollIntoView,
 });
 </script>
 
 <template>
   <div ref="sectionRef" class="expansion-panel">
-    <div :class="{}" class="expansion-panel__header " @click="expand[name] = !expand[name]">
+    <div :class="{}" class="expansion-panel__header" @click="expand[name] = !expand[name]">
       <div class="header-slot">
         <slot name="header" />
       </div>
       <div>
-        <i-fa6-solid-chevron-right :style="{ transform: expand[name] ? 'rotate(-90deg)' : 'rotate(0deg)' }" class="iconify" />
+        <i-fa6-solid-chevron-right
+          :style="{ transform: expand[name] ? 'rotate(-90deg)' : 'rotate(0deg)' }"
+          class="iconify"
+        />
       </div>
     </div>
     <Transition>

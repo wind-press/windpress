@@ -7,7 +7,7 @@
  * in readme.txt with the content from the CHANGELOG.md file.
  */
 
-import { dirname, join } from 'jsr:@std/path@1';
+import { dirname, join } from "jsr:@std/path@1";
 
 interface ChangelogEntry {
   version: string;
@@ -20,7 +20,7 @@ interface ChangelogEntry {
  */
 function parseChangelog(changelogContent: string): ChangelogEntry[] {
   const entries: ChangelogEntry[] = [];
-  const lines = changelogContent.split('\n');
+  const lines = changelogContent.split("\n");
 
   let currentEntry: ChangelogEntry | null = null;
   let inEntry = false;
@@ -38,20 +38,20 @@ function parseChangelog(changelogContent: string): ChangelogEntry[] {
       currentEntry = {
         version: versionMatch[1],
         date: versionMatch[2],
-        content: '',
+        content: "",
       };
       inEntry = true;
       continue;
     }
 
     // Stop collecting when we hit another ## or # header (not version)
-    if (line.startsWith('## ') && !line.match(/^## \[.+?\] - .+$/)) {
+    if (line.startsWith("## ") && !line.match(/^## \[.+?\] - .+$/)) {
       inEntry = false;
       continue;
     }
 
     // Skip the main headers
-    if (line.startsWith('# ') || line.startsWith('All notable changes')) {
+    if (line.startsWith("# ") || line.startsWith("All notable changes")) {
       continue;
     }
 
@@ -66,20 +66,20 @@ function parseChangelog(changelogContent: string): ChangelogEntry[] {
       let processedLine = line;
 
       // Convert ### headers (Added, Fixed, etc.) to bold text
-      if (line.startsWith('### ')) {
-        const sectionName = line.replace('### ', '').trim();
+      if (line.startsWith("### ")) {
+        const sectionName = line.replace("### ", "").trim();
         const sectionHeader = `**${sectionName}**`;
         processedLine = `\n${sectionHeader}\n`;
       }
 
       // Convert list items to readme.txt format
-      if (line.startsWith('- ')) {
+      if (line.startsWith("- ")) {
         const itemContent = line.substring(2).trim();
         processedLine = `* ${itemContent}`;
       }
 
       if (processedLine.trim()) {
-        currentEntry.content += `${currentEntry.content ? '\n' : ''}${processedLine}`;
+        currentEntry.content += `${currentEntry.content ? "\n" : ""}${processedLine}`;
       }
     }
   }
@@ -96,7 +96,7 @@ function parseChangelog(changelogContent: string): ChangelogEntry[] {
  * Convert changelog entries to readme.txt format
  */
 function formatForReadme(entries: ChangelogEntry[]): string {
-  let result = '';
+  let result = "";
 
   for (const entry of entries) {
     // Include the date in the version header
@@ -106,7 +106,7 @@ function formatForReadme(entries: ChangelogEntry[]): string {
     if (entry.content.trim()) {
       result += `${entry.content}\n`;
     }
-    result += '\n';
+    result += "\n";
   }
 
   return result.trim();
@@ -142,34 +142,34 @@ async function main() {
   try {
     // Get the project root directory
     const scriptDir = dirname(new URL(import.meta.url).pathname);
-    const projectRoot = join(scriptDir, '..');
+    const projectRoot = join(scriptDir, "..");
 
     // Read files
-    const changelogPath = join(projectRoot, 'CHANGELOG.md');
-    const readmePath = join(projectRoot, 'readme.txt');
+    const changelogPath = join(projectRoot, "CHANGELOG.md");
+    const readmePath = join(projectRoot, "readme.txt");
 
-    console.log('Reading CHANGELOG.md...');
+    console.log("Reading CHANGELOG.md...");
     const changelogContent = await Deno.readTextFile(changelogPath);
 
-    console.log('Reading readme.txt...');
+    console.log("Reading readme.txt...");
     const readmeContent = await Deno.readTextFile(readmePath);
 
-    console.log('Parsing changelog...');
+    console.log("Parsing changelog...");
     const entries = parseChangelog(changelogContent);
     console.log(`Found ${entries.length} changelog entries`);
 
-    console.log('Converting to readme.txt format...');
+    console.log("Converting to readme.txt format...");
     const readmeChangelog = formatForReadme(entries);
 
-    console.log('Updating readme.txt...');
+    console.log("Updating readme.txt...");
     const updatedReadme = updateReadmeWithChangelog(readmeContent, readmeChangelog);
 
-    console.log('Writing updated readme.txt...');
+    console.log("Writing updated readme.txt...");
     await Deno.writeTextFile(readmePath, updatedReadme);
 
-    console.log('Successfully updated readme.txt with changelog from CHANGELOG.md');
+    console.log("Successfully updated readme.txt with changelog from CHANGELOG.md");
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error("Error:", error.message);
     Deno.exit(1);
   }
 }

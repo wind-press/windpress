@@ -1,66 +1,66 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useSettingsStore } from '@/dashboard/stores/settings';
-import { useRouter } from 'vue-router';
-import { useBusyStore } from '@/dashboard/stores/busy';
-import { __ } from '@wordpress/i18n';
+import { computed } from "vue";
+import { useSettingsStore } from "@/dashboard/stores/settings";
+import { useRouter } from "vue-router";
+import { useBusyStore } from "@/dashboard/stores/busy";
+import { __ } from "@wordpress/i18n";
 
-const router = useRouter()
-const toast = useToast()
+const router = useRouter();
+const toast = useToast();
 
-const settingsStore = useSettingsStore()
-const busyStore = useBusyStore()
+const settingsStore = useSettingsStore();
+const busyStore = useBusyStore();
 
 async function saveSetting() {
   const toastData: Omit<Partial<Toast>, "id"> = {
-    title: __('Saving...', 'windpress'),
-    description: __('Please wait while we save your changes.', 'windpress'),
+    title: __("Saving...", "windpress"),
+    description: __("Please wait while we save your changes.", "windpress"),
     duration: 0,
-    icon: 'lucide:loader-circle',
+    icon: "lucide:loader-circle",
     close: false,
-    color: 'neutral',
+    color: "neutral",
     ui: {
-      icon: 'animate-spin',
-    }
+      icon: "animate-spin",
+    },
   };
 
-  if (toast.toasts.value.find(t => t.id === 'settings.doSave')) {
-    toast.update('settings.doSave', {
-      ...toastData
+  if (toast.toasts.value.find((t) => t.id === "settings.doSave")) {
+    toast.update("settings.doSave", {
+      ...toastData,
     });
   } else {
     toast.add({
-      id: 'settings.doSave',
-      ...toastData
+      id: "settings.doSave",
+      ...toastData,
     });
   }
 
   return settingsStore
     .doPush()
     .then(() => {
-      toast.update('settings.doSave', {
-        title: __('Saved', 'windpress'),
-        description: __('Your changes have been saved.', 'windpress'),
-        icon: 'i-lucide-save',
-        color: 'success',
+      toast.update("settings.doSave", {
+        title: __("Saved", "windpress"),
+        description: __("Your changes have been saved.", "windpress"),
+        icon: "i-lucide-save",
+        color: "success",
         duration: undefined,
         close: true,
         ui: {
           icon: undefined,
-        }
+        },
       });
     })
     .catch((err) => {
-      toast.update('settings.doSave', {
-        title: __('Error', 'windpress'),
-        description: __('An error occurred while saving your changes.', 'windpress'),
-        icon: 'i-lucide-save',
-        color: 'error',
+      toast.update("settings.doSave", {
+        title: __("Error", "windpress"),
+        description: __("An error occurred while saving your changes.", "windpress"),
+        icon: "i-lucide-save",
+        color: "error",
         duration: undefined,
         close: true,
         ui: {
           icon: undefined,
-        }
+        },
       });
 
       // TODO: log error
@@ -73,21 +73,21 @@ async function saveSetting() {
 const links = computed(() => [
   [
     {
-      label: __('General', 'windpress'),
-      to: router.resolve({ name: 'settings.general' }),
-      icon: 'lucide:settings',
+      label: __("General", "windpress"),
+      to: router.resolve({ name: "settings.general" }),
+      icon: "lucide:settings",
       exact: true,
     },
     {
-      label: __('Performance', 'windpress'),
-      to: router.resolve({ name: 'settings.performance' }),
-      icon: 'lucide:rocket',
+      label: __("Performance", "windpress"),
+      to: router.resolve({ name: "settings.performance" }),
+      icon: "lucide:rocket",
       exact: true,
     },
     {
-      label: __('Integrations', 'windpress'),
-      to: router.resolve({ name: 'settings.integrations' }),
-      icon: 'lucide:package',
+      label: __("Integrations", "windpress"),
+      to: router.resolve({ name: "settings.integrations" }),
+      icon: "lucide:package",
     },
   ],
   [
@@ -104,15 +104,15 @@ const links = computed(() => [
     //     target: '_blank'
     // },
     {
-      label: __('Save', 'windpress'),
-      icon: 'lucide:save',
-      color: 'primary',
+      label: __("Save", "windpress"),
+      icon: "lucide:save",
+      color: "primary",
       onSelect: saveSetting,
       disabled: busyStore.isBusy,
-      badge: settingsStore.hasChanged ? { color: 'warning', variant: 'solid' } : undefined,
-    }
-  ]
-])
+      badge: settingsStore.hasChanged ? { color: "warning", variant: "solid" } : undefined,
+    },
+  ],
+]);
 </script>
 
 <template>
@@ -137,9 +137,22 @@ const links = computed(() => [
         <div class="flex justify-end">
           <UTooltip :text="i18n.__('Save', 'windpress')">
             <UChip v-if="settingsStore.hasChanged" color="warning" size="md">
-              <UButton icon="i-lucide-save" color="primary" :label="i18n.__('Save', 'windpress')" @click="saveSetting" :disabled="busyStore.isBusy" />
+              <UButton
+                icon="i-lucide-save"
+                color="primary"
+                :label="i18n.__('Save', 'windpress')"
+                @click="saveSetting"
+                :disabled="busyStore.isBusy"
+              />
             </UChip>
-            <UButton v-else icon="i-lucide-save" color="primary" :label="i18n.__('Save', 'windpress')" @click="saveSetting" :disabled="busyStore.isBusy" />
+            <UButton
+              v-else
+              icon="i-lucide-save"
+              color="primary"
+              :label="i18n.__('Save', 'windpress')"
+              @click="saveSetting"
+              :disabled="busyStore.isBusy"
+            />
           </UTooltip>
         </div>
       </div>

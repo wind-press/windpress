@@ -6,7 +6,7 @@ name: Deploy the Plugin
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 env:
   # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
@@ -21,259 +21,259 @@ jobs:
     timeout-minutes: 30
 
     steps:
-        # # sometime, when 2 or more consecutive PRs merged, the checkout wind-press/windpress is overlapped
-        # # and reverting other commit change
-        # # this should not happen on create a tag, so wait first
-        # - name: "Wait before checkout wind-press/windpress on create a tag"
-        #   if: "startsWith(github.ref, 'refs/tags/')"
-        #   run: sleep 20
+      # # sometime, when 2 or more consecutive PRs merged, the checkout wind-press/windpress is overlapped
+      # # and reverting other commit change
+      # # this should not happen on create a tag, so wait first
+      # - name: "Wait before checkout wind-press/windpress on create a tag"
+      #   if: "startsWith(github.ref, 'refs/tags/')"
+      #   run: sleep 20
 
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-        # Use pnpm to install dependencies and build the assets.
-        - uses: actions/setup-node@v4
-          with:
-            node-version: 22
+      # Use pnpm to install dependencies and build the assets.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-        - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
 
-        - name: Get pnpm store directory
-          shell: bash
-          run: |
-            echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-        - uses: actions/cache@v4
-          name: Setup pnpm cache
-          with:
-            path: ${{ env.STORE_PATH }}
-            key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-            restore-keys: |
-              ${{ runner.os }}-pnpm-store-
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-        # install dependencies and build the assets
-        - run: pnpm install
+      # install dependencies and build the assets
+      - run: pnpm install
 
-        - run: pnpm build
-          env:
-            WP_I18N: 'true'
+      - run: pnpm build
+        env:
+          WP_I18N: "true"
 
-        # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
-        - uses: shivammathur/setup-php@v2
-          with:
-            php-version: 7.4
-            coverage: none
-          # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
-          env:
-            COMPOSER_TOKEN: ${{ secrets.ORG_DEV_PAT }}
+      # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+        # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+        env:
+          COMPOSER_TOKEN: ${{ secrets.ORG_DEV_PAT }}
 
-        # preparing translations
+      # preparing translations
 
-        # install wp-cli
-        - name: Setup WP-CLI
-          uses: godaddy-wordpress/setup-wp-cli@1
+      # install wp-cli
+      - name: Setup WP-CLI
+        uses: godaddy-wordpress/setup-wp-cli@1
 
-        - name: Install Deno
-          uses: denoland/setup-deno@v2
-          with:
-            deno-version: v2.x
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
 
-        # Extract changelog content before removing the file
-        - name: "Extract changelog for version"
-          id: changelog
-          run: |
-            VERSION=${GITHUB_REF#refs/tags/}
-            # Remove 'v' prefix if it exists
-            VERSION_NO_V=${VERSION#v}
-            CHANGELOG_CONTENT=$(node deploy/extract-changelog.js "$VERSION_NO_V")
-            echo "content<<EOF" >> $GITHUB_OUTPUT
-            echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+      # Extract changelog content before removing the file
+      - name: "Extract changelog for version"
+        id: changelog
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          # Remove 'v' prefix if it exists
+          VERSION_NO_V=${VERSION#v}
+          CHANGELOG_CONTENT=$(node deploy/extract-changelog.js "$VERSION_NO_V")
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-        # Update readme.txt changelog from CHANGELOG.md
-        - name: "Update readme.txt changelog"
-          run: deno run --allow-read --allow-write deploy/update-readme-changelog.ts
+      # Update readme.txt changelog from CHANGELOG.md
+      - name: "Update readme.txt changelog"
+        run: deno run --allow-read --allow-write deploy/update-readme-changelog.ts
 
-        # make pot file,
-        - name: "Make pot file"
-          run: php -d memory_limit=-1 /usr/local/bin/wp i18n make-pot ./ ./languages/windpress.pot
+      # make pot file,
+      - name: "Make pot file"
+        run: php -d memory_limit=-1 /usr/local/bin/wp i18n make-pot ./ ./languages/windpress.pot
 
-        # run the deno script to build the i18n.js file
-        - name: "Build i18n.js"
-          run: |
-            deno run --allow-all deploy/build-i18n.ts
-            rm -rf ./languages
-        
-        # # rebuild the assets
-        # - run: pnpm build
-        #   env:
-        #     WP_I18N: 'false'
+      # run the deno script to build the i18n.js file
+      - name: "Build i18n.js"
+        run: |
+          deno run --allow-all deploy/build-i18n.ts
+          rm -rf ./languages
 
-        # clean up the dev files
-        - run: rm -rf assets node_modules deno.lock package.json pnpm-lock.yaml vite.config.js .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
-        - run: rm -rf ecs.php rector.php
-        - run: rm -rf CLAUDE.md .agents
-        - run: rm -rf CHANGELOG.md
+      # # rebuild the assets
+      # - run: pnpm build
+      #   env:
+      #     WP_I18N: 'false'
 
-        # install only prod dependencies
-        - run: composer install --no-dev --classmap-authoritative --ansi
+      # clean up the dev files
+      - run: rm -rf assets node_modules deno.lock package.json pnpm-lock.yaml vite.config.ts .npmrc tsconfig.json mago.toml eslint.config.js auto-imports.d.ts components.d.ts
+      - run: rm -rf ecs.php rector.php
+      - run: rm -rf CLAUDE.md .agents
+      - run: rm -rf CHANGELOG.md
 
-        # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
-        - run: rsync --exclude windpress-deploy -av * windpress-deploy --quiet
+      # install only prod dependencies
+      - run: composer install --no-dev --classmap-authoritative --ansi
 
-        # humbug/php-scoper requires php ^8.2
-        - uses: shivammathur/setup-php@v2
-          with:
-            php-version: 8.2
-            coverage: none
+      # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
+      - run: rsync --exclude windpress-deploy -av * windpress-deploy --quiet
 
-        # prefix the namespaces
-        - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
+      # humbug/php-scoper requires php ^8.2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          coverage: none
 
-        # clone remote repository, so we can push it
-        - uses: actions/checkout@v4
-          with:
-            repository: wind-press/windpress-deployed
-            ref: main
-            path: remote-repository
-            fetch-depth: 0
-            token: ${{ secrets.ORG_DEV_PAT }}
+      # prefix the namespaces
+      - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
 
-        # remove remote files, to avoid piling up dead code in remote repository
-        - working-directory: remote-repository
-          run: |
-            git rm -rf .
-            git clean -fxd
+      # clone remote repository, so we can push it
+      - uses: actions/checkout@v4
+        with:
+          repository: wind-press/windpress-deployed
+          ref: main
+          path: remote-repository
+          fetch-depth: 0
+          token: ${{ secrets.ORG_DEV_PAT }}
 
-        # copy files to remote repository
-        - run: cp -a windpress-prefixed/. remote-repository
+      # remove remote files, to avoid piling up dead code in remote repository
+      - working-directory: remote-repository
+        run: |
+          git rm -rf .
+          git clean -fxd
 
-        # clean up the .wordpress-org directory as it is not needed
-        - run: rm -rf remote-repository/.wordpress-org
+      # copy files to remote repository
+      - run: cp -a windpress-prefixed/. remote-repository
 
-        # setup git
-        - working-directory: remote-repository
-          run: |
-            git config user.name "Joshua Gugun Siagian"
-            git config user.email suabahasa@gmail.com
+      # clean up the .wordpress-org directory as it is not needed
+      - run: rm -rf remote-repository/.wordpress-org
 
-        # commit metadata
-        - name: "Get Git log"
-          id: git-log
-          run: |
-              echo "log<<EOF" >> $GITHUB_OUTPUT
-              echo "$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='https://github.com/wind-press/windpress/commit/%H %s')" >> $GITHUB_OUTPUT
-              echo 'EOF' >> $GITHUB_OUTPUT
+      # setup git
+      - working-directory: remote-repository
+        run: |
+          git config user.name "Joshua Gugun Siagian"
+          git config user.email suabahasa@gmail.com
 
-        # publish it to remote repository with tag
-        - name: "Commit Prefixed - tag"
-          working-directory: remote-repository
-          if: "startsWith(github.ref, 'refs/tags/')"
-          env:
-              INPUT_LOG: ${{ steps.git-log.outputs.log }}
-          run: |
-            VERSION=${GITHUB_REF#refs/tags/}
-            # Remove 'v' prefix if it exists
-            VERSION_NO_V=${VERSION#v}
-            git add --all
-            git commit -m "WindPress $VERSION_NO_V" -m "$INPUT_LOG"
-            git push --quiet origin main
-            git tag $VERSION_NO_V -m "$VERSION_NO_V"
-            git push --quiet origin $VERSION_NO_V
+      # commit metadata
+      - name: "Get Git log"
+        id: git-log
+        run: |
+          echo "log<<EOF" >> $GITHUB_OUTPUT
+          echo "$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='https://github.com/wind-press/windpress/commit/%H %s')" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
-        # WordPress.org build
+      # publish it to remote repository with tag
+      - name: "Commit Prefixed - tag"
+        working-directory: remote-repository
+        if: "startsWith(github.ref, 'refs/tags/')"
+        env:
+          INPUT_LOG: ${{ steps.git-log.outputs.log }}
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          # Remove 'v' prefix if it exists
+          VERSION_NO_V=${VERSION#v}
+          git add --all
+          git commit -m "WindPress $VERSION_NO_V" -m "$INPUT_LOG"
+          git push --quiet origin main
+          git tag $VERSION_NO_V -m "$VERSION_NO_V"
+          git push --quiet origin $VERSION_NO_V
 
-        # Get the current tag from github.ref, where the tag name is the version number.
-        # tag name pattern: X.Y.Z, where X, Y, Z are integers
-        # reduce the Y by 1, then build the tag name
-        # save the tag name as `WP_ORG_VERSION` variable to file $GITHUB_ENV
-        # Note, set-output is deprecated, so use alternative instead of ::set-output
-        - run: |
-            VERSION=${GITHUB_REF#refs/tags/}
-            # Remove 'v' prefix if it exists
-            VERSION_NO_V=${VERSION#v}
-            echo "WP_ORG_VERSION=$(echo $VERSION_NO_V | awk -F. '{print $1"."$2-1"."$3}')" >> $GITHUB_ENV
+      # WordPress.org build
 
-        - run: ls -la
+      # Get the current tag from github.ref, where the tag name is the version number.
+      # tag name pattern: X.Y.Z, where X, Y, Z are integers
+      # reduce the Y by 1, then build the tag name
+      # save the tag name as `WP_ORG_VERSION` variable to file $GITHUB_ENV
+      # Note, set-output is deprecated, so use alternative instead of ::set-output
+      - run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          # Remove 'v' prefix if it exists
+          VERSION_NO_V=${VERSION#v}
+          echo "WP_ORG_VERSION=$(echo $VERSION_NO_V | awk -F. '{print $1"."$2-1"."$3}')" >> $GITHUB_ENV
 
-        # remove the $NESTED_DIRECTORY directory
-        - run: rm -rf windpress-deploy remote-repository windpress-prefixed
-        # remove the vendor directory
-        - run: rm -rf vendor
+      - run: ls -la
 
-        # keep this folders (Free):
-        # - Gutenberg
-        # - Elementor
-        # - GreenShift
-        # - Kadence
-        # - Timber
-        # - LiveCanvas
-        # - Builderius (Planned)
-        # else, remove the premium version
-        - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,Etch,MetaBox,Oxygen,OxygenClassic,WPCodeBox2}
+      # remove the $NESTED_DIRECTORY directory
+      - run: rm -rf windpress-deploy remote-repository windpress-prefixed
+      # remove the vendor directory
+      - run: rm -rf vendor
 
-        - run: ls -la
+      # keep this folders (Free):
+      # - Gutenberg
+      # - Elementor
+      # - GreenShift
+      # - Kadence
+      # - Timber
+      # - LiveCanvas
+      # - Builderius (Planned)
+      # else, remove the premium version
+      - run: rm -rf src/Integration/{Blockstudio,Builderius,Breakdance,Beaver,Blocksy,Bricks,Cwicly,Divi,Etch,MetaBox,Oxygen,OxygenClassic,WPCodeBox2}
 
-        # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
-        - uses: shivammathur/setup-php@v2
-          with:
-            php-version: 7.4
-            coverage: none
-          # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
-          env:
-            COMPOSER_TOKEN: ${{ secrets.ORG_DEV_PAT }}
+      - run: ls -la
 
-        # remove custom update library
-        - run: composer remove rosua/edd-sl-plugin-updater --ansi
+      # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+        # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+        env:
+          COMPOSER_TOKEN: ${{ secrets.ORG_DEV_PAT }}
 
-        # decrease the version
-        - run: deno run --allow-read --allow-write deploy/decrease-version.ts
+      # remove custom update library
+      - run: composer remove rosua/edd-sl-plugin-updater --ansi
 
-        # install only prod dependencies
-        - run: composer install --no-dev --classmap-authoritative --ansi
+      # decrease the version
+      - run: deno run --allow-read --allow-write deploy/decrease-version.ts
 
-        # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop        
-        - run: rsync --exclude windpress-deploy -av * windpress-deploy --quiet
+      # install only prod dependencies
+      - run: composer install --no-dev --classmap-authoritative --ansi
 
-        # humbug/php-scoper requires php ^8.2
-        - uses: shivammathur/setup-php@v2
-          with:
-            php-version: 8.2
-            coverage: none
-          
-        # prefix the namespaces
-        - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
+      # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
+      - run: rsync --exclude windpress-deploy -av * windpress-deploy --quiet
 
-        # deploy to WordPress.org SVN repository
-        - name: WordPress Plugin Deploy
-          uses: 10up/action-wordpress-plugin-deploy@stable
-          env:
-            SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-            SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-            SLUG: windpress
-            BUILD_DIR: windpress-prefixed
-            VERSION: ${{ env.WP_ORG_VERSION }}
+      # humbug/php-scoper requires php ^8.2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          coverage: none
 
-        # Create GitHub Release with changelog and zip file
-        - name: "Create plugin zip file"
-          run: |
-            mkdir -p windpress-zip/windpress
-            cp -r windpress-prefixed/* windpress-zip/windpress/
-            cd windpress-zip
-            zip -r "../windpress-${{ env.WP_ORG_VERSION }}-free.zip" . -x "*.git*" "*.DS_Store*"
-            cd ..
-            ls -la windpress-*.zip
+      # prefix the namespaces
+      - run: sh deploy/deploy-scoped.sh windpress-deploy windpress-prefixed
 
-        - name: "Create GitHub Release"
-          uses: softprops/action-gh-release@v2
-          if: "startsWith(github.ref, 'refs/tags/')"
-          with:
-            name: "${{ github.ref_name }}"
-            body: ${{ steps.changelog.outputs.content }}
-            files: |
-              windpress-${{ env.WP_ORG_VERSION }}-free.zip
-            draft: false
-            prerelease: false
-          env:
-            GITHUB_TOKEN: ${{ secrets.ORG_DEV_PAT }}
+      # deploy to WordPress.org SVN repository
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: windpress
+          BUILD_DIR: windpress-prefixed
+          VERSION: ${{ env.WP_ORG_VERSION }}
+
+      # Create GitHub Release with changelog and zip file
+      - name: "Create plugin zip file"
+        run: |
+          mkdir -p windpress-zip/windpress
+          cp -r windpress-prefixed/* windpress-zip/windpress/
+          cd windpress-zip
+          zip -r "../windpress-${{ env.WP_ORG_VERSION }}-free.zip" . -x "*.git*" "*.DS_Store*"
+          cd ..
+          ls -la windpress-*.zip
+
+      - name: "Create GitHub Release"
+        uses: softprops/action-gh-release@v2
+        if: "startsWith(github.ref, 'refs/tags/')"
+        with:
+          name: "${{ github.ref_name }}"
+          body: ${{ steps.changelog.outputs.content }}
+          files: |
+            windpress-${{ env.WP_ORG_VERSION }}-free.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORG_DEV_PAT }}

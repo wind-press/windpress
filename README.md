@@ -67,7 +67,6 @@
 >
 > You are looking at the WordPress plugin for integrating Tailwind CSS `v3` and `v4`.
 
-
 ## Intro
 
 Use Tailwind CSS within the block editor, page builders, plugins, and themes — no build step is required.
@@ -83,26 +82,26 @@ Use Tailwind CSS within the block editor, page builders, plugins, and themes —
 
 Seamless integration with the most popular visual/page builders:
 
-* [Gutenberg](https://wordpress.org/gutenberg/?ref=windpress) / Block Editor
-* [GreenShift](https://shop.greenshiftwp.com/?from=3679)
-* [Kadence WP](https://kadencewp.com/?ref=windpress)
-* [LiveCanvas](https://livecanvas.com/?ref=4008)
-* [Timber](https://upstatement.com/timber/?ref=windpress)
-* [Blockstudio](https://blockstudio.dev/?ref=7) — **Pro**
-* [Breakdance](https://breakdance.com/ref/165/) — **Pro**
-* [Bricks](https://bricksbuilder.io/?ref=windpress) — **Pro**
-* [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
-* [Etch](https://etchwp.com?aff=bce0d1ab) — **Pro**
-* [Meta Box Views](https://metabox.sjv.io/OeOeZr) — **Pro**
-* [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
-* [WPCodeBox 2](https://wpcodebox.com/?ref=185) — **Pro**
+- [Gutenberg](https://wordpress.org/gutenberg/?ref=windpress) / Block Editor
+- [GreenShift](https://shop.greenshiftwp.com/?from=3679)
+- [Kadence WP](https://kadencewp.com/?ref=windpress)
+- [LiveCanvas](https://livecanvas.com/?ref=4008)
+- [Timber](https://upstatement.com/timber/?ref=windpress)
+- [Blockstudio](https://blockstudio.dev/?ref=7) — **Pro**
+- [Breakdance](https://breakdance.com/ref/165/) — **Pro**
+- [Bricks](https://bricksbuilder.io/?ref=windpress) — **Pro**
+- [Builderius](https://builderius.io/?referral=afdfca82c8) — **Pro**
+- [Etch](https://etchwp.com?aff=bce0d1ab) — **Pro**
+- [Meta Box Views](https://metabox.sjv.io/OeOeZr) — **Pro**
+- [Oxygen 6 / Classic](https://oxygenbuilder.com/ref/12/) — **Pro**
+- [WPCodeBox 2](https://wpcodebox.com/?ref=185) — **Pro**
 
 #### Planned / In Progress
 
-* [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
-* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
-* [Pinegrow](https://pinegrow.com/wordpress?ref=windpress)
-* [Zion Builder](https://zionbuilder.io/?ref=windpress)
+- [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
+- [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
+- [Pinegrow](https://pinegrow.com/wordpress?ref=windpress)
+- [Zion Builder](https://zionbuilder.io/?ref=windpress)
 
 ## 🛠 Development
 
@@ -116,29 +115,28 @@ Seamless integration with the most popular visual/page builders:
 
 1. Clone the repository to your `wp-content/plugins` directory:
 
-    ```bash
-    git clone https://github.com/wind-press/windpress.git windpress-dev
-    cd windpress-dev
-    ```
+   ```bash
+   git clone https://github.com/wind-press/windpress.git windpress-dev
+   cd windpress-dev
+   ```
+
 2. Install the PHP dependencies:
 
-    ```bash
-    composer install
-    ```
+   ```bash
+   composer install
+   ```
 
 3. Install the JavaScript dependencies:
 
-    ```bash
-    pnpm install
-    ```
-
+   ```bash
+   pnpm install
+   ```
 
 4. Start the development server:
 
-    ```bash
-    pnpm run dev
-    ```
-
+   ```bash
+   pnpm run dev
+   ```
 
 5. Activate the plugin.
 

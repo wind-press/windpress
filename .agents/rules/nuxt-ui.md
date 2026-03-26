@@ -40,45 +40,45 @@ Nuxt UI v3 automatically includes several Nuxt modules, so you **don't need to i
 // ❌ Don't install these separately when using Nuxt UI
 export default defineNuxtConfig({
   modules: [
-    '@nuxt/ui',
-    '@nuxt/fonts',  // ❌ Already included in Nuxt UI
-    '@nuxt/icon',   // ❌ Already included in Nuxt UI
+    "@nuxt/ui",
+    "@nuxt/fonts", // ❌ Already included in Nuxt UI
+    "@nuxt/icon", // ❌ Already included in Nuxt UI
     // '@nuxtjs/color-mode' // ❌ Already included in Nuxt UI
-  ]
-})
+  ],
+});
 
 // ✅ Just use Nuxt UI - everything is included
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui']
-})
+  modules: ["@nuxt/ui"],
+});
 ```
 
 ## Breaking Changes Reference (v2 → v3)
 
 ### Renamed Components (ALWAYS use the v3 name)
 
-| ❌ v2 Component              | ✅ v3 Component                    |
-| ---------------------------- | ---------------------------------- |
-| `UDivider`                   | `USeparator`                       |
-| `UDropdown`                  | `UDropdownMenu`                    |
-| `UFormGroup`                 | `UFormField`                       |
-| `URange`                     | `USlider`                          |
-| `UToggle`                    | `USwitch`                          |
-| `UNotification`              | `UToast`                           |
-| `UVerticalNavigation`        | `UNavigationMenu` (orientation="vertical") |
-| `UHorizontalNavigation`      | `UNavigationMenu` (orientation="horizontal") |
+| ❌ v2 Component         | ✅ v3 Component                              |
+| ----------------------- | -------------------------------------------- |
+| `UDivider`              | `USeparator`                                 |
+| `UDropdown`             | `UDropdownMenu`                              |
+| `UFormGroup`            | `UFormField`                                 |
+| `URange`                | `USlider`                                    |
+| `UToggle`               | `USwitch`                                    |
+| `UNotification`         | `UToast`                                     |
+| `UVerticalNavigation`   | `UNavigationMenu` (orientation="vertical")   |
+| `UHorizontalNavigation` | `UNavigationMenu` (orientation="horizontal") |
 
 ### Removed Components (NEVER use these in v3)
 
-| ❌ v2 Component              | ✅ v3 Replacement                  |
-| ---------------------------- | ---------------------------------- |
-| `UModals`                    | Wrap app with `UApp`               |
-| `USlideovers`                | Wrap app with `UApp`               |
-| `UNotifications`             | Wrap app with `UApp`               |
-| `UContentDoc`                | Use `UContentRenderer`             |
-| `UContentList`               | Use `UContentRenderer`             |
-| `UContentNavigation`         | Use `UContentRenderer`             |
-| `UContentQuery`              | Use `UContentRenderer`             |
+| ❌ v2 Component      | ✅ v3 Replacement      |
+| -------------------- | ---------------------- |
+| `UModals`            | Wrap app with `UApp`   |
+| `USlideovers`        | Wrap app with `UApp`   |
+| `UNotifications`     | Wrap app with `UApp`   |
+| `UContentDoc`        | Use `UContentRenderer` |
+| `UContentList`       | Use `UContentRenderer` |
+| `UContentNavigation` | Use `UContentRenderer` |
+| `UContentQuery`      | Use `UContentRenderer` |
 
 ### Changed Props and API
 
@@ -101,7 +101,7 @@ export default defineNuxtConfig({
 ```vue
 <!-- ❌ v2 pattern -->
 <script setup>
-const isOpen = ref(false)
+const isOpen = ref(false);
 </script>
 
 <template>
@@ -113,7 +113,7 @@ const isOpen = ref(false)
 
 <!-- ✅ v3 pattern with v-model:open -->
 <script setup>
-const isOpen = ref(false)
+const isOpen = ref(false);
 </script>
 
 <template>
@@ -129,7 +129,7 @@ const isOpen = ref(false)
 <template>
   <UModal>
     <UButton>Open Modal</UButton>
-    
+
     <template #content>
       <div class="p-4">Content</div>
     </template>
@@ -209,11 +209,11 @@ Nuxt UI v3 overlay components (`UModal`, `UPopover`, `USlideover`, `UTooltip`) n
 
 ### Slot Usage
 
-| Slot | When to Use |
-|------|-------------|
-| `#content` | Complete custom UI |
-| `#body` | Form-like content with automatic header/footer |
-| `#footer` | Action buttons (with `#body`) |
+| Slot       | When to Use                                    |
+| ---------- | ---------------------------------------------- |
+| `#content` | Complete custom UI                             |
+| `#body`    | Form-like content with automatic header/footer |
+| `#footer`  | Action buttons (with `#body`)                  |
 
 ## New Design System
 
@@ -235,15 +235,15 @@ Nuxt UI v3 introduces 7 semantic color aliases that should be used instead of Ta
 
 #### Complete Color Reference
 
-| Color     | Usage                        | Example                |
-| --------- | ---------------------------- | ---------------------- |
-| primary   | Main brand actions           | `<UButton color="primary" />` |
-| secondary | Secondary brand actions      | `<UButton color="secondary" />` |
-| success   | Success states               | `<UAlert color="success" />` |
-| info      | Informational states         | `<UAlert color="info" />` |
-| warning   | Warning states               | `<UAlert color="warning" />` |
-| error     | Error/destructive actions    | `<UButton color="error" />` |
-| neutral   | Neutral/default styling      | `<UButton color="neutral" />` |
+| Color     | Usage                     | Example                         |
+| --------- | ------------------------- | ------------------------------- |
+| primary   | Main brand actions        | `<UButton color="primary" />`   |
+| secondary | Secondary brand actions   | `<UButton color="secondary" />` |
+| success   | Success states            | `<UAlert color="success" />`    |
+| info      | Informational states      | `<UAlert color="info" />`       |
+| warning   | Warning states            | `<UAlert color="warning" />`    |
+| error     | Error/destructive actions | `<UButton color="error" />`     |
+| neutral   | Neutral/default styling   | `<UButton color="neutral" />`   |
 
 ### Design Tokens for Consistent Theming
 
@@ -251,7 +251,9 @@ Use the new design tokens instead of manual Tailwind classes:
 
 ```vue
 <!-- ❌ Manual dark mode handling -->
-<div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700">
+<div
+  class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700"
+>
   <p class="text-gray-600 dark:text-gray-300">Description</p>
   <button class="ring-2 ring-blue-500 dark:ring-blue-400">Action</button>
 </div>
@@ -263,7 +265,7 @@ Use the new design tokens instead of manual Tailwind classes:
 </div>
 ```
 
-**Note**: While you *can* still use Tailwind CSS colors directly, it's **not recommended**. The semantic color aliases and design tokens should cover most use cases and provide better consistency.
+**Note**: While you _can_ still use Tailwind CSS colors directly, it's **not recommended**. The semantic color aliases and design tokens should cover most use cases and provide better consistency.
 
 ```vue
 <!-- ⚠️ Allowed but not recommended -->
@@ -277,13 +279,13 @@ Use the new design tokens instead of manual Tailwind classes:
 
 Nuxt UI v3 provides comprehensive design tokens across all styling categories:
 
-| Category | Available Tokens | Usage |
-|----------|------------------|-------|
-| **Text** | `text-dimmed`, `text-muted`, `text-toned`, `text-default`, `text-highlighted`, `text-inverted` | Text colors for different emphasis levels |
-| **Background** | `bg-default`, `bg-muted`, `bg-elevated`, `bg-accented`, `bg-inverted` | Surface colors for cards, modals, etc. |
-| **Border** | `border-default`, `border-muted`, `border-accented`, `border-inverted` | Border colors for components |
-| **Ring** | `ring-default`, `ring-muted`, `ring-accented`, `ring-inverted` | Focus rings and outlines |
-| **Divide** | `divide-default`, `divide-muted`, `divide-accented`, `divide-inverted` | Divider lines between elements |
+| Category       | Available Tokens                                                                               | Usage                                     |
+| -------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **Text**       | `text-dimmed`, `text-muted`, `text-toned`, `text-default`, `text-highlighted`, `text-inverted` | Text colors for different emphasis levels |
+| **Background** | `bg-default`, `bg-muted`, `bg-elevated`, `bg-accented`, `bg-inverted`                          | Surface colors for cards, modals, etc.    |
+| **Border**     | `border-default`, `border-muted`, `border-accented`, `border-inverted`                         | Border colors for components              |
+| **Ring**       | `ring-default`, `ring-muted`, `ring-accented`, `ring-inverted`                                 | Focus rings and outlines                  |
+| **Divide**     | `divide-default`, `divide-muted`, `divide-accented`, `divide-inverted`                         | Divider lines between elements            |
 
 ## Event Handler Changes
 
@@ -294,38 +296,45 @@ The `click` field in component items has been removed in favor of the native Vue
 ```vue
 <!-- ❌ v2 click property -->
 <script setup>
-const items = [{
-  label: 'Edit',
-  click: () => {
-    console.log('Edit clicked')
-  }
-}, {
-  label: 'Delete',
-  click: () => {
-    console.log('Delete clicked')
-  }
-}]
+const items = [
+  {
+    label: "Edit",
+    click: () => {
+      console.log("Edit clicked");
+    },
+  },
+  {
+    label: "Delete",
+    click: () => {
+      console.log("Delete clicked");
+    },
+  },
+];
 </script>
 
 <!-- ✅ v3 onClick event -->
 <script setup>
-const items = [{
-  label: 'Edit',
-  onClick: () => {
-    console.log('Edit clicked')
-  }
-}, {
-  label: 'Delete',
-  onClick: () => {
-    console.log('Delete clicked')
-  }
-}]
+const items = [
+  {
+    label: "Edit",
+    onClick: () => {
+      console.log("Edit clicked");
+    },
+  },
+  {
+    label: "Delete",
+    onClick: () => {
+      console.log("Delete clicked");
+    },
+  },
+];
 </script>
 ```
 
 This change affects multiple components:
+
 - `UNavigationMenu`
-- `UDropdownMenu` 
+- `UDropdownMenu`
 - `UCommandPalette`
 - `UToast`
 - Any component that accepts `items` with clickable actions
@@ -349,19 +358,16 @@ Always wrap your application with `UApp` for proper modal, toast, and overlay fu
 
 ```vue
 <!-- ✅ Vertical navigation -->
-<UNavigationMenu 
+<UNavigationMenu
   orientation="vertical"
   :items="[
     { label: 'Home', to: '/' },
-    { label: 'About', to: '/about' }
+    { label: 'About', to: '/about' },
   ]"
 />
 
 <!-- ✅ Horizontal navigation -->
-<UNavigationMenu 
-  orientation="horizontal"
-  :items="navigationItems"
-/>
+<UNavigationMenu orientation="horizontal" :items="navigationItems" />
 ```
 
 ### Form Components
@@ -387,17 +393,17 @@ Always wrap your application with `UApp` for proper modal, toast, and overlay fu
 
 ```vue
 <script setup>
-const toast = useToast()
+const toast = useToast();
 
 function showSuccess() {
   // ❌ v2 API
   // toast.add({ title: 'Success', timeout: 5000 })
-  
+
   // ✅ v3 API
-  toast.add({ 
-    title: 'Success', 
-    duration: 5000  // renamed from timeout
-  })
+  toast.add({
+    title: "Success",
+    duration: 5000, // renamed from timeout
+  });
 }
 </script>
 ```
@@ -411,38 +417,38 @@ The `useModal` and `useSlideover` composables have been unified into `useOverlay
 ```vue
 <!-- ❌ v2 pattern -->
 <script setup>
-import { MyModal } from '#components'
+import { MyModal } from "#components";
 
-const modal = useModal()
+const modal = useModal();
 
 function openModal() {
   modal.open(MyModal, {
-    title: 'Hello',
+    title: "Hello",
     onSuccess: () => {
-      console.log('Success!')
-    }
-  })
+      console.log("Success!");
+    },
+  });
 }
 </script>
 
 <!-- ✅ v3 pattern -->
 <script setup>
-import { MyModal } from '#components'
+import { MyModal } from "#components";
 
-const overlay = useOverlay()
+const overlay = useOverlay();
 
 async function openModal() {
   const modal = overlay.create(MyModal, {
     props: {
-      title: 'Hello'
-    }
-  })
-  
-  const instance = modal.open()
-  const result = await instance.result
-  
+      title: "Hello",
+    },
+  });
+
+  const instance = modal.open();
+  const result = await instance.result;
+
   if (result) {
-    console.log('Success!')
+    console.log("Success!");
   }
 }
 </script>
@@ -456,15 +462,13 @@ Use the new `loading-auto` prop for automatic loading states:
 <script setup>
 async function handleSubmit() {
   // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 2000))
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 }
 </script>
 
 <template>
   <!-- ✅ Automatic loading state -->
-  <UButton @click="handleSubmit" loading-auto>
-    Submit
-  </UButton>
+  <UButton @click="handleSubmit" loading-auto> Submit </UButton>
 </template>
 ```
 
@@ -481,24 +485,24 @@ export default defineAppConfig({
     // ❌ v2 theming
     // primary: 'green',
     // gray: 'slate'
-    
+
     // ✅ v3 theming
     colors: {
-      primary: 'green',
-      neutral: 'slate'
+      primary: "green",
+      neutral: "slate",
     },
     button: {
       slots: {
-        base: 'font-medium rounded-lg',
-        label: 'font-semibold'
+        base: "font-medium rounded-lg",
+        label: "font-semibold",
       },
       defaultVariants: {
-        size: 'md',
-        color: 'primary'
-      }
-    }
-  }
-})
+        size: "md",
+        color: "primary",
+      },
+    },
+  },
+});
 ```
 
 ### Component-level Theming
@@ -530,20 +534,23 @@ export default defineAppConfig({
 <script setup>
 // ✅ Use reactive state for complex forms
 const state = reactive({
-  name: '',
-  email: '',
-  preferences: []
-})
+  name: "",
+  email: "",
+  preferences: [],
+});
 
 // ✅ Use computed for derived state
 const isValid = computed(() => {
-  return state.name.length > 0 && state.email.includes('@')
-})
+  return state.name.length > 0 && state.email.includes("@");
+});
 
 // ✅ Use watch for side effects
-watch(() => state.email, (newEmail) => {
-  // Validate email
-})
+watch(
+  () => state.email,
+  (newEmail) => {
+    // Validate email
+  },
+);
 </script>
 
 <template>
@@ -551,10 +558,8 @@ watch(() => state.email, (newEmail) => {
     <UFormField name="name" label="Name">
       <UInput v-model="state.name" />
     </UFormField>
-    
-    <UButton type="submit" :disabled="!isValid">
-      Save
-    </UButton>
+
+    <UButton type="submit" :disabled="!isValid"> Save </UButton>
   </UForm>
 </template>
 ```
@@ -586,7 +591,7 @@ Nuxt UI v3 is built on Reka UI, providing excellent accessibility out of the box
 9. **Missing content slots** - Use `#content`, `#header`, `#body`, `#footer` structure
 10. **Wrong event handlers** - Use `onClick` instead of `click` in item objects
 11. **Incorrect loading prop** - Use `loading-auto` for automatic states
-13. **Missing .npmrc for pnpm** - Add `shamefully-hoist=true` for pnpm projects
+12. **Missing .npmrc for pnpm** - Add `shamefully-hoist=true` for pnpm projects
 
 ## TypeScript Integration
 

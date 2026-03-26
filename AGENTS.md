@@ -4,6 +4,7 @@ This file guides agentic coding tools working in this repository.
 Keep it updated when project rules change.
 
 ## Project Snapshot
+
 - WindPress is a WordPress plugin that brings Tailwind CSS v3/v4 to WordPress without a build step.
 - Frontend stack: Vue 3 + TypeScript + Pinia + Vue Router + Nuxt UI + Tailwind CSS v4, built with Vite.
 - Backend stack: PHP 7.4+ with PSR-4 autoloading under `WindPress\WindPress`.
@@ -13,6 +14,7 @@ Keep it updated when project rules change.
 - No Cursor/Copilot rule files were found in this repo.
 
 ## File Layout
+
 - `windpress.php` is the plugin entry point and registers hooks.
 - `src/Core` holds runtime, cache, and volume implementations.
 - `src/Integration/*` contains page builder integrations (Main/Compile/Editor pattern).
@@ -24,6 +26,7 @@ Keep it updated when project rules change.
 - `build/` is generated output; do not edit by hand.
 
 ## Imports and Module Boundaries
+
 - Side-effect imports (CSS, globals) come first, then external packages, then local files.
 - Use `import type` for type-only imports where possible.
 - Prefer aliases over deep relative paths (`@/dashboard/...`, `@/packages/...`).
@@ -34,6 +37,7 @@ Keep it updated when project rules change.
 - Use single quotes and trailing commas in multiline objects to match existing style.
 
 ## Cross-Cutting Style Rules
+
 - Prefer clear, explicit names; match existing naming in the file you touch.
 - Use named functions for methods; use arrow functions only for callbacks.
 - Keep types next to the code that uses them; prefer `interface` over `type`.
@@ -42,6 +46,7 @@ Keep it updated when project rules change.
 - Keep new code in its domain (`assets/` for frontend, `src/` for PHP).
 
 ## Frontend (Vue + TypeScript)
+
 - Always use `<script setup lang="ts">` with the Composition API.
 - Never use the Options API.
 - Use path aliases: `@/` maps to `assets/`, `~/` maps to repo root.
@@ -57,6 +62,7 @@ Keep it updated when project rules change.
 - Use dynamic `import()` for heavy modules (e.g., Monaco editor).
 
 ## Vue Template Conventions
+
 - Use Nuxt UI components (`UButton`, `UForm`, `UFormField`) for shared look and feel.
 - Prefer `:ui` props for component theming rather than inline style blocks.
 - Avoid inline styles except for component-specific CSS variables.
@@ -66,6 +72,7 @@ Keep it updated when project rules change.
 - Provide `aria-label` on icon-only buttons or links.
 
 ## Nuxt UI v3 Rules (from `.agents/rules/nuxt-ui.md`)
+
 - Always use Nuxt UI v3 component names (e.g., `UDropdownMenu`, `UFormField`).
 - Wrap the app with `UApp` to enable modals, toasts, and overlays.
 - Use semantic colors: `primary`, `secondary`, `success`, `info`, `warning`, `error`, `neutral`.
@@ -75,6 +82,7 @@ Keep it updated when project rules change.
 - Overlay components use `v-model:open` and `#content`/`#body`/`#footer` slots.
 
 ## Backend (PHP)
+
 - Use `declare(strict_types=1);` at the top of every PHP file.
 - Namespace under `WindPress\WindPress`; follow PSR-4 paths in `src/`.
 - Format with PSR-12 (ECS Clean Code/Common/PSR-12 sets).
@@ -87,6 +95,7 @@ Keep it updated when project rules change.
 - Prefer typed properties and explicit return types.
 
 ## WordPress Integration Notes
+
 - REST namespace is `windpress/v1` and uses nonce-based auth.
 - Abilities API handlers live in `src/Abilities/Abilities/*`.
 - Keep action/filter names scoped with the `windpress` prefix.
@@ -96,6 +105,7 @@ Keep it updated when project rules change.
 - Use `register_activation_hook` and `register_deactivation_hook` in `Plugin`.
 
 ## Error Handling & Validation
+
 - Frontend: throw `Error` from store actions when API calls fail.
 - Frontend: avoid silent catches; if you catch, return `{ success: false, message }`.
 - Backend: return `WP_Error` from abilities/REST handlers with a code + message.
@@ -104,12 +114,14 @@ Keep it updated when project rules change.
 - Log only when needed; avoid noisy console output in production paths.
 
 ## Documentation & Research
+
 - Prefer existing docs in-repo before external searches.
 - When looking up external docs, try `llms.txt` first as required by repo guidelines.
 - Never guess URLs; verify them.
 - Keep README references intact unless updating docs intentionally.
 
 ## Repo Hygiene Notes
+
 - Do not start the dev server; it is already running with HMR.
 - Do not install or update dependencies without using `pnpm install`/`pnpm update`.
 - Avoid touching generated files in `build/`.

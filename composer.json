@@ -1,53 +1,54 @@
 {
-    "$schema": "https://getcomposer.org/schema.json",
-    "name": "windpress/windpress",
-    "description": "Tailwind CSS for WordPress",
-    "version": "1.0.0",    
-    "license": "GPL-3.0-or-later",
-    "autoload": {
-        "psr-4": {
-            "WindPress\\WindPress\\": "src/"
-        },
-        "files": [
-            "constant.php"
-        ]
+  "$schema": "https://getcomposer.org/schema.json",
+  "name": "windpress/windpress",
+  "description": "Tailwind CSS for WordPress",
+  "version": "1.0.0",
+  "license": "GPL-3.0-or-later",
+  "autoload": {
+    "psr-4": {
+      "WindPress\\WindPress\\": "src/"
     },
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "optimize-autoloader": true,
-        "allow-plugins": {
-            "phpstan/extension-installer": true
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "scripts": {
-        "complete-check": [
-            "@check-ecs",
-            "@phpstan",
-            "phpunit"
-        ],
-        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
-        "rector": "vendor/bin/rector process --ansi",
-        "check-ecs": "vendor/bin/ecs check --ansi",
-        "fix-ecs": "vendor/bin/ecs check --fix --ansi"
-    },
-    "require": {
-        "php": ">=7.4",
-        "enshrined/svg-sanitize": "^0.22.0",
-        "hidehalo/nanoid-php": "^2.0",
-        "masterminds/html5": "^2.9",
-        "rosua/edd-sl-plugin-updater": "@dev",
-        "symfony/filesystem": "^5.4",
-        "symfony/finder": "^5.4",
-        "symfony/property-access": "^5.4",
-        "symfony/stopwatch": "^5.4",
-        "symfony/yaml": "^5.4",
-        "wordpress/abilities-api": "^0.4.0"
-    },
-    "require-dev": {
-        "rector/rector": "^1.2",
-        "symplify/easy-coding-standard": "^12.3"
+    "files": [
+      "constant.php"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "phpstan/extension-installer": true
     }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "complete-check": [
+      "@check-ecs",
+      "@phpstan",
+      "phpunit"
+    ],
+    "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+    "rector": "vendor/bin/rector process --ansi",
+    "check-ecs": "vendor/bin/ecs check --ansi",
+    "fix-ecs": "vendor/bin/ecs check --fix --ansi"
+  },
+  "require": {
+    "php": ">=7.4",
+    "enshrined/svg-sanitize": "^0.22.0",
+    "hidehalo/nanoid-php": "^2.0",
+    "masterminds/html5": "^2.9",
+    "nabasa/vp-wp": "^0.3.1",
+    "rosua/edd-sl-plugin-updater": "@dev",
+    "symfony/filesystem": "^5.4",
+    "symfony/finder": "^5.4",
+    "symfony/property-access": "^5.4",
+    "symfony/stopwatch": "^5.4",
+    "symfony/yaml": "^5.4",
+    "wordpress/abilities-api": "^0.4.0"
+  },
+  "require-dev": {
+    "rector/rector": "^1.2",
+    "symplify/easy-coding-standard": "^12.3"
+  }
 }

@@ -11,12 +11,20 @@ const props = defineProps({
   <div class="{m:10;pb:15}>div">
     <div v-for="(item, key) in variableItems" :key="key" class="var-item">
       <div class="variable-section-title font:14 my:10">
-        {{ key.replace('_', '-') }}
+        {{ key.replace("_", "-") }}
       </div>
 
       <div class="variable-section-items flex flex:row gap:8 flex-wrap:wrap">
         <template v-if="item.length > 0">
-          <button v-for="(subItem, subItemKey) in item" :key="subItemKey" v-tooltip="{ placement: 'top', content: `var(${subItem.key}, ${subItem.value})` }" class=" px:12 py:8 r:8 font:medium fg:$(oxy-light-text) bg:$(oxy-mid) bg:$(oxy-hover):hover b:0 flex-grow:1 flex-shrink:1 flex-basis:30% cursor:pointer {opacity:.5}>span opacity:100:hover>span" @click="(event) => $emit('previewChose', event, subItem.key)" @mouseenter="(event) => $emit('previewEnter', event, subItem.key)" @mouseleave="$emit('previewLeave')">
+          <button
+            v-for="(subItem, subItemKey) in item"
+            :key="subItemKey"
+            v-tooltip="{ placement: 'top', content: `var(${subItem.key}, ${subItem.value})` }"
+            class="px:12 py:8 r:8 font:medium fg:$(oxy-light-text) bg:$(oxy-mid) bg:$(oxy-hover):hover b:0 flex-grow:1 flex-shrink:1 flex-basis:30% cursor:pointer {opacity:.5}>span opacity:100:hover>span"
+            @click="(event) => $emit('previewChose', event, subItem.key)"
+            @mouseenter="(event) => $emit('previewEnter', event, subItem.key)"
+            @mouseleave="$emit('previewLeave')"
+          >
             <span class="font:14">{{ subItem.label }}</span>
           </button>
         </template>
@@ -24,7 +32,6 @@ const props = defineProps({
     </div>
   </div>
 </template>
-
 
 <style scoped lang="scss">
 .var-item {
@@ -44,7 +51,6 @@ const props = defineProps({
     flex-wrap: wrap;
 
     button {
-
       //   {opacity:.5}>span opacity:100:hover>span
 
       padding: 8px 12px;
@@ -60,7 +66,7 @@ const props = defineProps({
 
       span {
         font-size: 14px;
-        opacity: .5;
+        opacity: 0.5;
 
         &:hover {
           opacity: 1;

@@ -1,9 +1,9 @@
 export function isValidUrl(url: string): boolean {
-    try {
-        const resource: URL = new URL(url);
+  try {
+    const resource: URL = new URL(url);
 
-        return resource.protocol === 'http:' || resource.protocol === 'https:';
-    } catch (e) {
-        return false;
-    }
+    return resource.protocol === "http:" || resource.protocol === "https:";
+  } catch (e) {
+    return false;
+  }
 }

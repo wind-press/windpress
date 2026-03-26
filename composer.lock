@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c269686ad4265b074219247b5307d96",
+    "content-hash": "2cff42046d02818ba93e7d37421c16ce",
     "packages": [
         {
             "name": "enshrined/svg-sanitize",
@@ -174,6 +174,46 @@
                 "source": "https://github.com/Masterminds/html5-php/tree/2.10.0"
             },
             "time": "2025-07-25T09:04:22+00:00"
+        },
+        {
+            "name": "nabasa/vp-wp",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nabasa-dev/vp-wp.git",
+                "reference": "6b8e91b8265260fb5337b7a0e5d0192b8ea6e0f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nabasa-dev/vp-wp/zipball/6b8e91b8265260fb5337b7a0e5d0192b8ea6e0f3",
+                "reference": "6b8e91b8265260fb5337b7a0e5d0192b8ea6e0f3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "vp-wp.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "WordPress integration for Vite+.",
+            "homepage": "https://github.com/nabasa-dev/vp-wp",
+            "keywords": [
+                "vite",
+                "vite-plus",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/nabasa-dev/vp-wp/issues",
+                "source": "https://github.com/nabasa-dev/vp-wp"
+            },
+            "time": "2026-03-25T13:19:31+00:00"
         },
         {
             "name": "paragonie/random_compat",
