@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.77] - 2026-03-27
+
+### Added
+
+- Updated bundled Tailwind CSS v4 to 4.2.2
+
 ### Changed
 - Migrate the build system to [`@nabasa/vp-wp`](https://github.com/nabasa-dev/vp-wp) for improved performance and better WordPress integration
 
@@ -811,7 +817,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.76...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.77...HEAD
+[3.3.77]: https://github.com/wind-press/windpress/compare/v3.3.76...v3.3.77
 [3.3.76]: https://github.com/wind-press/windpress/compare/v3.3.75...v3.3.76
 [3.3.75]: https://github.com/wind-press/windpress/compare/v3.3.74...v3.3.75
 [3.3.74]: https://github.com/wind-press/windpress/compare/v3.3.73...v3.3.74
