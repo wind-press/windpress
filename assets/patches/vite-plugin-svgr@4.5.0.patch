@@ -1,0 +1,96 @@
+diff --git a/dist/index.js b/dist/index.js
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -4,14 +4,16 @@
+ import * as viteModule from "vite";
+ // @ts-ignore - check if transformWithOxc is available, i.e. rolldown-vite is installed and aliased
+ let useOxc = viteModule.transformWithOxc != null;
+-// @ts-ignore - assign transformer function
+-let transformWith = useOxc ? viteModule.transformWithOxc : transformWithEsbuild;
+ export default function vitePluginSvgr({ svgrOptions, esbuildOptions, include = "**/*.svg?react", exclude, } = {}) {
+     const filter = createFilter(include, exclude);
+     const postfixRE = /[?#].*$/s;
++    let resolvedConfig;
+     return {
+         name: "vite-plugin-svgr",
+         enforce: "pre", // to override `vite:asset`'s behavior
++        configResolved(config) {
++            resolvedConfig = config;
++        },
+         async load(id) {
+             if (filter(id)) {
+                 const { transform } = await import("@svgr/core");
+@@ -24,14 +26,17 @@
+                         defaultPlugins: [jsx],
+                     },
+                 });
+-                const res = await transformWith(componentCode, id, useOxc ? {
+-                    // @ts-ignore - "lang" is required for transformWithOxc
+-                    lang: "jsx",
+-                    ...esbuildOptions,
+-                } : {
+-                    loader: "jsx",
+-                    ...esbuildOptions,
+-                });
++                const jsxOptions = resolvedConfig?.oxc?.jsx ?? { runtime: "automatic" };
++                const res = await (useOxc
++                    ? viteModule.transformWithOxc(componentCode, id, {
++                        // @ts-ignore - "lang" is required for transformWithOxc
++                        lang: "jsx",
++                        jsx: jsxOptions,
++                    })
++                    : transformWithEsbuild(componentCode, id, {
++                        loader: "jsx",
++                        ...esbuildOptions,
++                    }));
+                 return {
+                     code: res.code,
+                     map: null, // TODO:
+diff --git a/dist/index.cjs b/dist/index.cjs
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -43,14 +43,16 @@
+ const viteModule = __importStar(require("vite"));
+ // @ts-ignore - check if transformWithOxc is available, i.e. rolldown-vite is installed and aliased
+ let useOxc = viteModule.transformWithOxc != null;
+-// @ts-ignore - assign transformer function
+-let transformWith = useOxc ? viteModule.transformWithOxc : vite_1.transformWithEsbuild;
+ function vitePluginSvgr({ svgrOptions, esbuildOptions, include = "**/*.svg?react", exclude, } = {}) {
+     const filter = (0, pluginutils_1.createFilter)(include, exclude);
+     const postfixRE = /[?#].*$/s;
++    let resolvedConfig;
+     return {
+         name: "vite-plugin-svgr",
+         enforce: "pre", // to override `vite:asset`'s behavior
++        configResolved(config) {
++            resolvedConfig = config;
++        },
+         async load(id) {
+             if (filter(id)) {
+                 const { transform } = await Promise.resolve().then(() => __importStar(require("@svgr/core")));
+@@ -63,14 +65,17 @@
+                         defaultPlugins: [jsx],
+                     },
+                 });
+-                const res = await transformWith(componentCode, id, useOxc ? {
+-                    // @ts-ignore - "lang" is required for transformWithOxc
+-                    lang: "jsx",
+-                    ...esbuildOptions,
+-                } : {
+-                    loader: "jsx",
+-                    ...esbuildOptions,
+-                });
++                const jsxOptions = resolvedConfig?.oxc?.jsx ?? { runtime: "automatic" };
++                const res = await (useOxc
++                    ? viteModule.transformWithOxc(componentCode, id, {
++                        // @ts-ignore - "lang" is required for transformWithOxc
++                        lang: "jsx",
++                        jsx: jsxOptions,
++                    })
++                    : (0, vite_1.transformWithEsbuild)(componentCode, id, {
++                        loader: "jsx",
++                        ...esbuildOptions,
++                    }));
+                 return {
+                     code: res.code,
+                     map: null, // TODO:

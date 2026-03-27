@@ -1,0 +1,12 @@
+diff --git a/index.js b/index.js
+--- a/index.js
++++ b/index.js
+@@ -107,7 +107,7 @@ Script.prototype.runInContext = function (context) {
+ };
+ 
+ Script.prototype.runInThisContext = function () {
+-    return eval(this.code); // maybe...
++    return (0, eval)(this.code); // maybe...
+ };
+ 
+ Script.prototype.runInNewContext = function (context) {
