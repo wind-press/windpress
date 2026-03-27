@@ -28,11 +28,10 @@ class GetConfig
 {
     /**
      * Execute the ability
-     * 
-     * @param mixed $input Not used for this ability
+     *
      * @return array Configuration data
      */
-    public static function execute($input): array
+    public static function execute(): array
     {
         $settings = get_option(WIND_PRESS::WP_OPTION, []);
 

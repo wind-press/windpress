@@ -26,11 +26,10 @@ class GetVolumeEntries
 {
     /**
      * Execute the ability
-     * 
-     * @param mixed $input Not used for this ability
+     *
      * @return array Array of volume entries
      */
-    public static function execute($input): array
+    public static function execute(): array
     {
         return Volume::get_entries();
     }

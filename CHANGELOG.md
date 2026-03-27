@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- [Internal] Prevented no-input Abilities API callbacks from crashing when WordPress omits the input argument [#76](https://github.com/wind-press/windpress/issues/76)
+
 ## [3.3.77] - 2026-03-27
 
 ### Added

@@ -26,11 +26,10 @@ class GetVolumeHandlers
 {
     /**
      * Execute the ability
-     * 
-     * @param mixed $input Not used for this ability
+     *
      * @return array Array of available handler names
      */
-    public static function execute($input): array
+    public static function execute(): array
     {
         return Volume::get_available_handlers();
     }
