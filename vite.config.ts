@@ -94,6 +94,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["@windpress/oxide-parser"],
   },
+  build: {
+    target: "es2020",
+  },
   plugins: [
     wasm(),
     topLevelAwait(),
@@ -138,6 +141,11 @@ export default defineConfig({
     svgr({
       svgrOptions: {
         dimensions: false,
+      },
+      oxcOptions: {
+        jsx: {
+          runtime: 'classic',
+        },
       },
     }),
     wordpress({
