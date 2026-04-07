@@ -129,12 +129,20 @@ class Compile
             if (array_key_exists('settings', $node)) {
                 // swap the global classes with the actual class name
                 if (array_key_exists('_cssGlobalClasses', $node['settings'])) {
-                    $meta_value[$key]['settings']['_cssGlobalClasses'] = array_map(
-                        fn ($class) => array_key_exists($class, $this->global_classes_index)
-                            ? $this->global_classes_index[$class]
-                            : $class,
-                        $node['settings']['_cssGlobalClasses']
-                    );
+                    $global_classes = $node['settings']['_cssGlobalClasses'];
+
+                    if (is_string($global_classes)) {
+                        $global_classes = [$global_classes];
+                    }
+
+                    if (is_array($global_classes)) {
+                        $meta_value[$key]['settings']['_cssGlobalClasses'] = array_map(
+                            fn ($class) => array_key_exists($class, $this->global_classes_index)
+                                ? $this->global_classes_index[$class]
+                                : $class,
+                            $global_classes
+                        );
+                    }
                 }
 
                 // if "code" exists and "executeCode" is false, remove the code

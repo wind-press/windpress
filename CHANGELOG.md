@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- [Bricks] Prevented cache scans from crashing when `_cssGlobalClasses` is stored as a string [#77](https://github.com/wind-press/windpress/issues/77)
+
 ## [3.3.78] - 2026-03-27
 
 ### Fixed
