@@ -36,17 +36,43 @@ app.component("InlineSvg", InlineSvg);
 
 app.mount("#windpressbricks-variable-app");
 
-function onInputClick(e) {
-  if (!e.shiftKey || !e.target) {
+function getEventElement(target) {
+  if (target instanceof Element) {
+    return target;
+  }
+
+  return target?.parentElement ?? null;
+}
+
+function openForInput(e, input) {
+  if (!e.shiftKey || !input) {
     return;
   }
 
   document?.getSelection()?.removeAllRanges();
   e.preventDefault();
   e.stopPropagation();
-  focusedInput.value = e.target;
-  tempInputValue.value = e.target.value;
+  focusedInput.value = input;
+  tempInputValue.value = input.value;
   isOpen.value = true;
+}
+
+function openForColor(e, target) {
+  if (!e.shiftKey || !target) {
+    return;
+  }
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  document?.getSelection()?.removeAllRanges();
+  focusedInput.value = null;
+  isOpen.value = true;
+
+  recentColorPickerTarget.value = null; // ensure the watcher is triggered
+  nextTick(() => {
+    recentColorPickerTarget.value = target;
+  });
 }
 
 function onFocusCallback(e) {
@@ -70,6 +96,69 @@ const bricksInputs = [
   },
 ];
 
+function isInsideBricksPanel(element) {
+  return Boolean(element?.closest("#bricks-panel-inner, .bricks-control-popup"));
+}
+
+function isSupportedInput(input) {
+  if (!isInsideBricksPanel(input)) {
+    return false;
+  }
+
+  const wrapper = input.closest('[data-control="number"], [data-control="text"]');
+  const control = wrapper?.getAttribute("data-control");
+
+  if (control === "number") {
+    return true;
+  }
+
+  if (control === "text") {
+    const textField = bricksInputs.find((field) => typeof field !== "string");
+
+    return textField.hasChild.some((selector) => wrapper.querySelector(selector) === input);
+  }
+
+  return false;
+}
+
+function getColorTrigger(element) {
+  if (!isInsideBricksPanel(element)) {
+    return null;
+  }
+
+  const trigger = element?.closest(".bricks-control-preview");
+  return trigger?.closest('[data-control="color"]') ? trigger : null;
+}
+
+function onDocumentClick(e) {
+  if (!e.shiftKey || !e.target) {
+    return;
+  }
+
+  const element = getEventElement(e.target);
+  const input = element?.closest('input[type="text"]');
+  if (input && isSupportedInput(input)) {
+    openForInput(e, input);
+    return;
+  }
+
+  const colorTrigger = getColorTrigger(element);
+  if (colorTrigger) {
+    openForColor(e, colorTrigger);
+  }
+}
+
+function onDocumentContextMenu(e) {
+  if (!e.shiftKey || !e.target) {
+    return;
+  }
+
+  const colorTrigger = getColorTrigger(getEventElement(e.target));
+  if (colorTrigger) {
+    openForColor(e, colorTrigger);
+  }
+}
+
 function addTriggers() {
   setTimeout(() => {
     bricksInputs.forEach((field) => {
@@ -85,8 +174,6 @@ function addTriggers() {
           return;
         }
 
-        input?.removeEventListener("click", onInputClick);
-        input?.addEventListener("click", onInputClick);
         input?.removeEventListener("focus", onFocusCallback);
         input?.addEventListener("focus", onFocusCallback);
 
@@ -96,32 +183,13 @@ function addTriggers() {
       });
     });
 
-    const popupTriggers = [...document.querySelectorAll(".bricks-control-preview")].filter(
-      (trigger) => {
-        return (
-          "color" === trigger.closest(".control-inner")?.querySelector("label")?.getAttribute("for")
-        );
-      },
-    );
+    document.querySelectorAll(".bricks-control-preview").forEach((popupTrigger) => {
+      if (!getColorTrigger(popupTrigger)) {
+        return;
+      }
 
-    popupTriggers.forEach((popupTrigger) => {
-      popupTrigger.addEventListener("contextmenu", (e) => {
-        if (!e.shiftKey || !e.target) {
-          return;
-        }
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        document?.getSelection()?.removeAllRanges();
-        focusedInput.value = null;
-        isOpen.value = true;
-
-        recentColorPickerTarget.value = null; // ensure the watcher is triggered
-        nextTick(() => {
-          recentColorPickerTarget.value = e.target;
-        });
-      });
+      popupTrigger.setAttribute("data-balloon", "Shift + click to open the Variable Picker");
+      popupTrigger.setAttribute("data-balloon-pos", "bottom-right");
     });
   }, 100);
 }
@@ -146,6 +214,9 @@ observe({
 });
 
 addTriggers();
+
+document.addEventListener("click", onDocumentClick, true);
+document.addEventListener("contextmenu", onDocumentContextMenu, true);
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && isOpen.value) {

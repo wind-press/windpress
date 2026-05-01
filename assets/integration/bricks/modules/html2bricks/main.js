@@ -211,8 +211,6 @@ document.addEventListener(
   true,
 );
 
-// insert "Paste HTML" menu item after "Paste" menu item
-const pasteItemContextMenu = document.querySelector("#bricks-builder-context-menu li:nth-child(2)");
 const pasteMenu = document.createElement("li");
 pasteMenu.id = "windpressbricks-html2bricks-context-menu";
 pasteMenu.classList.add("sep");
@@ -220,10 +218,6 @@ pasteMenu.innerHTML =
   '<span class="label">Paste HTML</span><span class="shortcut">CTRL + SHIFT + V</span>';
 pasteMenu.addEventListener("click", htmlPasteHandler);
 
-// add "Paste HTML" button on the Structure panel header
-const pasteItemStructureHeader = document.querySelector(
-  '#bricks-panel-header>ul.actions>li[data-balloon="Paste (All)"]',
-);
 const pasteHTMLStructureHeader = document.createElement("li");
 pasteHTMLStructureHeader.dataset.balloon = "Paste HTML";
 pasteHTMLStructureHeader.dataset.balloonPos = "bottom-right";
@@ -235,14 +229,32 @@ pasteHTMLStructureHeader.innerHTML = /*html*/ `
 
 pasteHTMLStructureHeader.addEventListener("click", htmlPasteHandler);
 
+function getPasteItemContextMenu() {
+  return document.querySelector("#bricks-builder-context-menu li:nth-child(2)");
+}
+
+function getPasteItemStructureHeader() {
+  const actions = document.querySelector("#bricks-panel-header > ul.actions");
+  const pasteAllBalloon = `${brxGlobalProp.i18n?.paste ?? "Paste"} (${brxGlobalProp.i18n?.all ?? "All"})`;
+
+  return [...(actions?.children ?? [])].find((item) => item.dataset.balloon === pasteAllBalloon);
+}
+
 const addControl = () => {
-  pasteItemContextMenu.classList.remove("sep");
-  pasteItemContextMenu.insertAdjacentElement("afterend", pasteMenu);
-  pasteItemStructureHeader.insertAdjacentElement("afterend", pasteHTMLStructureHeader);
+  const pasteItemContextMenu = getPasteItemContextMenu();
+  if (pasteItemContextMenu && !pasteMenu.isConnected) {
+    pasteItemContextMenu.classList.remove("sep");
+    pasteItemContextMenu.insertAdjacentElement("afterend", pasteMenu);
+  }
+
+  const pasteItemStructureHeader = getPasteItemStructureHeader();
+  if (pasteItemStructureHeader && !pasteHTMLStructureHeader.isConnected) {
+    pasteItemStructureHeader.insertAdjacentElement("afterend", pasteHTMLStructureHeader);
+  }
 };
 
 const removeControl = () => {
-  pasteItemContextMenu.classList.add("sep");
+  getPasteItemContextMenu()?.classList.add("sep");
   pasteMenu.remove();
   pasteHTMLStructureHeader.remove();
 };

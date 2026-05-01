@@ -184,7 +184,7 @@ const sectionSpacing = ref(null);
 watch(focusedInput, (value) => {
   if (value) {
     const control = value.closest("[data-controlkey]");
-    const dataControlKey = control?.dataset.controlkey?.toLocaleLowerCase() ?? "";
+    const dataControlKey = control?.dataset.controlkey?.toLowerCase() ?? "";
     const isFontSize = ["typography", "font"].some((key) => dataControlKey.includes(key));
     const isSpacing = ["padding", "margin", "gap", "width", "height"].some((key) =>
       dataControlKey.includes(key),

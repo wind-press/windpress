@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Updated bundled Tailwind CSS v4 to 4.2.4
+
+### Fixed
+
+- [Bricks] Fixed Variable Picker not opening in localized Bricks editor environments, including Japanese.
+
 ## [3.3.79] - 2026-04-07
 
 ### Fixed
