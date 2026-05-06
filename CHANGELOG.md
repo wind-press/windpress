@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.81] - 2026-05-07
+
 ### Added
 
 - [Oxygen 6](https://oxygenbuilder.com/ref/12/) integration **[Pro]**
@@ -843,7 +845,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.80...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.81...HEAD
+[3.3.81]: https://github.com/wind-press/windpress/compare/v3.3.80...v3.3.81
 [3.3.80]: https://github.com/wind-press/windpress/compare/v3.3.79...v3.3.80
 [3.3.79]: https://github.com/wind-press/windpress/compare/v3.3.78...v3.3.79
 [3.3.78]: https://github.com/wind-press/windpress/compare/v3.3.77...v3.3.78

@@ -273,6 +273,9 @@ importers:
       eslint-plugin-vue:
         specifier: ^10.9.0
         version: 10.9.0(@typescript-eslint/parser@8.59.2(eslint@10.0.0(jiti@1.21.7))(typescript@5.6.2))(eslint@10.0.0(jiti@1.21.7))(vue-eslint-parser@10.1.1(eslint@10.0.0(jiti@1.21.7)))
+      gettext-parser:
+        specifier: ^1.4.0
+        version: 1.4.0
       lightningcss:
         specifier: ^1.32.0
         version: 1.32.0
@@ -993,10 +996,10 @@ packages:
       tslib: '2'
 
   '@jsr/std__encoding@1.0.10':
-    resolution: {integrity: sha512-WK2njnDTyKefroRNk2Ooq7GStp6Y0ccAvr4To+Z/zecRAGe7+OSvH9DbiaHpAKwEi2KQbmpWMOYsdNt+TsdmSw==}
+    resolution: {integrity: sha512-WK2njnDTyKefroRNk2Ooq7GStp6Y0ccAvr4To+Z/zecRAGe7+OSvH9DbiaHpAKwEi2KQbmpWMOYsdNt+TsdmSw==, tarball: https://npm.jsr.io/~/11/@jsr/std__encoding/1.0.10.tgz}
 
   '@jsr/std__html@1.0.6':
-    resolution: {integrity: sha512-okF5FAJ/erV1np18z5BHKyfxBFf9QiXqRAg4829Sn0VzqiGSfbXcNld3dXYnGV0jooXawngyemDHvqJnp+rhpQ==}
+    resolution: {integrity: sha512-okF5FAJ/erV1np18z5BHKyfxBFf9QiXqRAg4829Sn0VzqiGSfbXcNld3dXYnGV0jooXawngyemDHvqJnp+rhpQ==, tarball: https://npm.jsr.io/~/11/@jsr/std__html/1.0.6.tgz}
 
   '@master/colors@3.0.0':
     resolution: {integrity: sha512-1fqX0gncBTXtaidwCqJmOXgW6n0Ikh8DAFsW9/FKwiSYxrNdE0LlI4I0ozbdFdFRfheTV9MUbReiqeuDnD75aQ==}
