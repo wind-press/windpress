@@ -73,7 +73,7 @@ class Editor
 
                 let iframeWindow = document.getElementById('iframe');
 
-                wp.hooks.addFilter('windpressbreakdance-autocomplete-items-query', 'windpressbreakdance', async (autocompleteItems, text) => {
+                wp.hooks.addFilter('windpressoxygen-autocomplete-items-query', 'windpressoxygen', async (autocompleteItems, text) => {
                     const windpress_suggestions = await iframeWindow.contentWindow.windpress.module.autocomplete.query(text);
 
                     return [...windpress_suggestions, ...autocompleteItems];

@@ -26,7 +26,7 @@
     "@tailwindcss/root": "github:tailwindlabs/tailwindcss",
     "@vueuse/core": "^14.3.0",
     "@vueuse/integrations": "^14.3.0",
-    "@windpress/oxide-parser": "^1.0.26",
+    "@windpress/oxide-parser": "^1.0.27",
     "@wordpress/block-editor": "15.18.0",
     "@wordpress/components": "^33.0.0",
     "@wordpress/i18n": "^6.18.0",
@@ -49,7 +49,7 @@
     "nanoid": "^5.1.11",
     "parse-package-name": "^1.0.0",
     "pinia": "^3.0.4",
-    "postcss": "^8.5.13",
+    "postcss": "^8.5.14",
     "postcss-import": "^16.1.1",
     "postcss-nested": "^7.0.2",
     "postcss-safe-parser": "^7.0.1",
@@ -72,8 +72,8 @@
     "vue-color": "^3.3.3",
     "vue-inline-svg": "^4.0.1",
     "vue-router": "^5.0.6",
-    "yaml": "^2.8.3",
-    "zod": "^4.4.1"
+    "yaml": "^2.8.4",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@iconify-json/arcticons": "^1.2.52",
@@ -90,6 +90,7 @@
     "@iconify-json/octicon": "^1.2.23",
     "@iconify-json/skill-icons": "^1.2.4",
     "@iconify-json/tabler": "^1.2.33",
+    "@jridgewell/remapping": "^2.3.5",
     "@nabasa/vp-wp": "^0.3.1",
     "@shikijs/transformers": "^4.0.2",
     "@types/css-tree": "^2.3.11",
@@ -104,7 +105,7 @@
     "lightningcss": "^1.32.0",
     "memfs": "^4.57.2",
     "sass": "npm:sass-embedded@^1.99.0",
-    "typescript-eslint": "^8.59.1",
+    "typescript-eslint": "^8.59.2",
     "unplugin-icons": "^23.0.1",
     "unplugin-vue-components": "^32.0.0",
     "vite": "^8.0.10",
@@ -118,7 +119,7 @@
   "volta": {
     "node": "22.9.0"
   },
-  "packageManager": "pnpm@10.30.0+sha512.2b5753de015d480eeb88f5b5b61e0051f05b4301808a82ec8b840c9d2adf7748eb352c83f5c1593ca703ff1017295bc3fdd3119abb9686efc96b9fcb18200937",
+  "packageManager": "pnpm@11.0.6+sha512.97f906e1da2bedac3df83cadae04b4753a130092dd49d55cd36825ad3e623e9df3f97754f8f259e699172a360fac569acf2f908e7732bdae3eddb2dcf7e121fd",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@parcel/watcher",
