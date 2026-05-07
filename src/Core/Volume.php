@@ -138,28 +138,81 @@ class Volume
         return apply_filters('f!windpress/core/volume:get_entries.entries', $entries);
     }
 
-    public static function save_entries($entries)
+    public static function save_entries($entries): array
     {
+        $result = [
+            'saved' => [],
+            'deleted' => [],
+            'handled' => [],
+            'skipped' => [],
+            'errors' => [],
+        ];
+
         if (! is_array($entries)) {
-            return;
+            $result['errors'][] = [
+                'code' => 'invalid_entries',
+                'message' => __('Entries must be an array.', 'windpress'),
+            ];
+
+            return $result;
         }
 
         $data_dir = static::data_dir_path();
 
         foreach ($entries as $entry) {
+            if (! is_array($entry)) {
+                $result['skipped'][] = [
+                    'relative_path' => '',
+                    'reason' => 'invalid_entry',
+                    'message' => __('Entry must be an array.', 'windpress'),
+                ];
+
+                continue;
+            }
+
+            $relative_path = isset($entry['relative_path']) && is_scalar($entry['relative_path']) ? (string) $entry['relative_path'] : '';
+
             // if doesn't have any of the following keys, skip: name, relative_path, content, handler
             if (! isset($entry['name'], $entry['relative_path'], $entry['content'], $entry['handler'])) {
+                $result['skipped'][] = [
+                    'relative_path' => $relative_path,
+                    'reason' => 'missing_required_fields',
+                    'message' => __('Entry is missing required fields.', 'windpress'),
+                ];
+
+                continue;
+            }
+
+            if (! is_string($entry['name']) || ! is_string($entry['relative_path']) || ! is_string($entry['handler'])) {
+                $result['skipped'][] = [
+                    'relative_path' => $relative_path,
+                    'reason' => 'invalid_entry',
+                    'message' => __('Entry name, relative path, and handler must be strings.', 'windpress'),
+                ];
+
                 continue;
             }
 
             // skip the readonly entries
             if (isset($entry['readonly']) && $entry['readonly']) {
+                $result['skipped'][] = [
+                    'relative_path' => $relative_path,
+                    'reason' => 'readonly_entry',
+                    'message' => __('Read-only entries cannot be saved.', 'windpress'),
+                ];
+
                 continue;
             }
 
             if ($entry['handler'] !== 'internal') {
                 // the handler only accept alphanumeric, hyphens, and underscores
-                if (! preg_match('/^[a-zA-Z0-9_-]+$/', $entry['handler'])) {
+                if (! is_string($entry['handler']) || ! preg_match('/^[a-zA-Z0-9_-]+$/', $entry['handler'])) {
+                    $result['skipped'][] = [
+                        'relative_path' => $relative_path,
+                        'reason' => 'invalid_handler',
+                        'message' => __('Entry handler is invalid.', 'windpress'),
+                    ];
+
                     continue;
                 }
 
@@ -167,6 +220,11 @@ class Volume
 
                 // use specific handler instead for efficient handling
                 do_action('a!windpress/core/volume:save_entries.entry.' . $entry['handler'], $entry);
+
+                $result['handled'][] = [
+                    'relative_path' => $relative_path,
+                    'handler' => $entry['handler'],
+                ];
 
                 continue;
             }
@@ -184,6 +242,12 @@ class Volume
 
                 // only handle a css and js files.
                 if (! in_array(pathinfo($entry['name'], PATHINFO_EXTENSION), ['css', 'js'], true)) {
+                    $result['skipped'][] = [
+                        'relative_path' => $entry['relative_path'],
+                        'reason' => 'unsupported_file_type',
+                        'message' => __('Only CSS and JavaScript files can be saved.', 'windpress'),
+                    ];
+
                     continue;
                 }
 
@@ -192,6 +256,12 @@ class Volume
 
             // verify the signature
             if (! wp_verify_nonce($entry['signature'], sprintf('%s:%s', WIND_PRESS::WP_OPTION, $entry['relative_path']))) {
+                $result['skipped'][] = [
+                    'relative_path' => $entry['relative_path'],
+                    'reason' => 'invalid_signature',
+                    'message' => __('Entry signature is invalid.', 'windpress'),
+                ];
+
                 continue;
             }
 
@@ -200,23 +270,62 @@ class Volume
                 $safe_file_path = static::sanitize_relative_path($entry['relative_path'], $data_dir);
 
                 // if the content is empty, delete the file.
-                if (empty($entry['content'])) {
-                    Common::delete_file($safe_file_path);
+                if ($entry['content'] === '') {
+                    if (file_exists($safe_file_path)) {
+                        Common::delete_file($safe_file_path);
+                    }
+
+                    $result['deleted'][] = [
+                        'relative_path' => $entry['relative_path'],
+                    ];
                 } else {
                     Common::save_file($entry['content'], $safe_file_path);
+
+                    $result['saved'][] = [
+                        'relative_path' => $entry['relative_path'],
+                    ];
                 }
+            } catch (\InvalidArgumentException $th) {
+                $result['skipped'][] = [
+                    'relative_path' => $entry['relative_path'],
+                    'reason' => 'invalid_path',
+                    'message' => __('Entry path is invalid.', 'windpress'),
+                ];
             } catch (\Throwable $th) {
                 if (WP_DEBUG_LOG) {
                     error_log($th->__toString());
                 }
+
+                $result['errors'][] = [
+                    'relative_path' => $entry['relative_path'],
+                    'code' => 'filesystem_error',
+                    'message' => $th->getMessage(),
+                ];
             }
         }
+
+        return $result;
     }
 
     public static function sanitize_file_name_chars(array $special_chars, $filename_raw)
     {
         // allow dir
         return array_diff($special_chars, ['/']);
+    }
+
+    public static function data_dir_url(): string
+    {
+        return wp_upload_dir()['baseurl'] . WIND_PRESS::DATA_DIR;
+    }
+
+    public static function data_dir_path(): string
+    {
+        return wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR;
+    }
+
+    public static function get_available_handlers(): array
+    {
+        return apply_filters('f!windpress/core/volume:get_available_handlers', []);
     }
 
     /**
@@ -249,20 +358,5 @@ class Volume
         }
 
         return $full_path;
-    }
-
-    public static function data_dir_url(): string
-    {
-        return wp_upload_dir()['baseurl'] . WIND_PRESS::DATA_DIR;
-    }
-
-    public static function data_dir_path(): string
-    {
-        return wp_upload_dir()['basedir'] . WIND_PRESS::DATA_DIR;
-    }
-
-    public static function get_available_handlers(): array
-    {
-        return apply_filters('f!windpress/core/volume:get_available_handlers', []);
     }
 }

@@ -17,11 +17,11 @@ use Exception;
 
 /**
  * Abilities API Loader
- * 
+ *
  * Registers WindPress abilities with the WordPress Abilities API.
  * Abilities provide a standardized way to expose plugin functionality
  * to AI agents, automation tools, and other developers.
- * 
+ *
  * @since 3.2.0
  */
 class Loader
@@ -73,7 +73,7 @@ class Loader
 
     /**
      * Initialize the Abilities API integration
-     * 
+     *
      * This method checks if the Abilities API is available (WordPress 6.9+ or via composer package)
      * and registers the appropriate hooks for categories and abilities.
      */
@@ -87,10 +87,10 @@ class Loader
         do_action('a!windpress/abilities/loader:init.start');
 
         // Register ability categories on the categories init hook
-        add_action('wp_abilities_api_categories_init', fn() => $this->register_categories());
+        add_action('wp_abilities_api_categories_init', fn () => $this->register_categories());
 
         // Register abilities on the abilities init hook
-        add_action('wp_abilities_api_init', fn() => $this->register_abilities());
+        add_action('wp_abilities_api_init', fn () => $this->register_abilities());
 
         do_action('a!windpress/abilities/loader:init.end');
     }
@@ -122,7 +122,7 @@ class Loader
 
         /**
          * Allow other plugins/themes to register additional ability categories.
-         * 
+         *
          * @since 3.2.0
          */
         do_action('a!windpress/abilities/loader:register_categories.end');
@@ -155,7 +155,7 @@ class Loader
 
         /**
          * Allow other plugins/themes to register additional abilities.
-         * 
+         *
          * @since 3.2.0
          */
         do_action('a!windpress/abilities/loader:register_abilities.end');
@@ -188,10 +188,38 @@ class Loader
                             'type' => 'object',
                             'description' => __('Plugin settings and configuration options.', 'windpress'),
                         ],
+                        'data_dir' => [
+                            'type' => 'object',
+                            'description' => __('WindPress data directory details.', 'windpress'),
+                            'properties' => [
+                                'path' => [
+                                    'type' => 'string',
+                                    'description' => __('Absolute path to the WindPress data directory.', 'windpress'),
+                                ],
+                                'url' => [
+                                    'type' => 'string',
+                                    'description' => __('URL to the WindPress data directory.', 'windpress'),
+                                ],
+                            ],
+                        ],
+                        'cache_dir' => [
+                            'type' => 'object',
+                            'description' => __('WindPress cache directory details.', 'windpress'),
+                            'properties' => [
+                                'path' => [
+                                    'type' => 'string',
+                                    'description' => __('Absolute path to the WindPress cache directory.', 'windpress'),
+                                ],
+                                'url' => [
+                                    'type' => 'string',
+                                    'description' => __('URL to the WindPress cache directory.', 'windpress'),
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 'execute_callback' => [Abilities\GetConfig::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => true,
@@ -249,7 +277,7 @@ class Loader
                     ],
                 ],
                 'execute_callback' => [Abilities\GetVolumeEntries::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => true,
@@ -306,10 +334,14 @@ class Loader
                             'type' => 'string',
                             'description' => __('Security signature for file operations.', 'windpress'),
                         ],
+                        'readonly' => [
+                            'type' => 'boolean',
+                            'description' => __('Whether the file is read-only.', 'windpress'),
+                        ],
                     ],
                 ],
                 'execute_callback' => [Abilities\GetVolumeEntry::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => true,
@@ -342,7 +374,7 @@ class Loader
                     'description' => __('Array of available handler names.', 'windpress'),
                 ],
                 'execute_callback' => [Abilities\GetVolumeHandlers::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => true,
@@ -384,6 +416,7 @@ class Loader
                                     ],
                                     'content' => [
                                         'type' => 'string',
+                                        'minLength' => 1,
                                         'description' => __('File content.', 'windpress'),
                                     ],
                                     'handler' => [
@@ -415,11 +448,11 @@ class Loader
                     ],
                 ],
                 'execute_callback' => [Abilities\SaveVolumeEntries::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => false,
-                        'destructive' => false,
+                        'destructive' => true,
                         'idempotent' => false,
                     ],
                     'show_in_rest' => true,
@@ -452,6 +485,7 @@ class Loader
                         ],
                         'content' => [
                             'type' => 'string',
+                            'minLength' => 1,
                             'description' => __('File content.', 'windpress'),
                         ],
                         'handler' => [
@@ -484,11 +518,11 @@ class Loader
                     ],
                 ],
                 'execute_callback' => [Abilities\SaveVolumeEntry::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => false,
-                        'destructive' => false,
+                        'destructive' => true,
                         'idempotent' => false,
                     ],
                     'show_in_rest' => true,
@@ -536,12 +570,12 @@ class Loader
                     ],
                 ],
                 'execute_callback' => [Abilities\DeleteVolumeEntry::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => false,
                         'destructive' => true,
-                        'idempotent' => false,
+                        'idempotent' => true,
                     ],
                     'show_in_rest' => true,
                 ],
@@ -589,12 +623,12 @@ class Loader
                     ],
                 ],
                 'execute_callback' => [Abilities\ResetVolumeEntry::class, 'execute'],
-                'permission_callback' => fn() => current_user_can('manage_options'),
+                'permission_callback' => fn () => current_user_can('manage_options'),
                 'meta' => [
                     'annotations' => [
                         'readonly' => false,
                         'destructive' => true,
-                        'idempotent' => false,
+                        'idempotent' => true,
                     ],
                     'show_in_rest' => true,
                 ],

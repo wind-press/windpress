@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- [Internal] Improved WordPress Abilities API validation and error handling.
+
 ## [3.3.81] - 2026-05-07
 
 ### Added
