@@ -175,6 +175,7 @@ export default defineConfig({
         "integration/gutenberg/isolate-styles":
           "assets/integration/gutenberg/common-block/isolate-styles.js",
         "integration/bricks": "assets/integration/bricks/main.js",
+        "integration/oxygen": "assets/integration/oxygen/main.js",
         "integration/oxygen-classic/iframe": "assets/integration/oxygen-classic/iframe/main.js",
         "integration/oxygen-classic/editor": "assets/integration/oxygen-classic/editor/main.js",
         "integration/livecanvas": "assets/integration/livecanvas/main.js",

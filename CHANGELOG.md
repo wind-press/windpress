@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.82] - 2026-05-10
+
 ### Fixed
 
+- [Oxygen 6] Failed to load the integration's script files in the Oxygen 6 editor.
 - [Internal] Improved WordPress Abilities API validation and error handling.
 
 ## [3.3.81] - 2026-05-07
@@ -849,7 +852,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 🐣 Initial release.
 
-[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.81...HEAD
+[unreleased]: https://github.com/wind-press/windpress/compare/v3.3.82...HEAD
+[3.3.82]: https://github.com/wind-press/windpress/compare/v3.3.81...v3.3.82
 [3.3.81]: https://github.com/wind-press/windpress/compare/v3.3.80...v3.3.81
 [3.3.80]: https://github.com/wind-press/windpress/compare/v3.3.79...v3.3.80
 [3.3.79]: https://github.com/wind-press/windpress/compare/v3.3.78...v3.3.79
