@@ -46,11 +46,30 @@ function extractVersionFromRange(range, dependencyName) {
   }
 
   const match = range.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/);
-  if (!match) {
-    throw new Error(`Could not extract version from ${dependencyName}: ${range}`);
+  if (match) {
+    return match[0];
   }
 
-  return match[0];
+  const lockfileVersion = extractVersionFromLockfile(dependencyName);
+  if (lockfileVersion) {
+    return lockfileVersion;
+  }
+
+  throw new Error(`Could not extract version from ${dependencyName}: ${range}`);
+}
+
+/**
+ * Extract resolved semantic version from pnpm-lock.yaml for aliased dependencies.
+ */
+function extractVersionFromLockfile(dependencyName) {
+  const lockfilePath = join(rootDir, "pnpm-lock.yaml");
+  const lockfile = readFileSync(lockfilePath, "utf8");
+  const dependencyPattern = new RegExp(
+    `${dependencyName}:\\n\\s+specifier: [^\\n]+\\n\\s+version: (?:[^@\\n]+@)?(\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?)`,
+  );
+  const match = lockfile.match(dependencyPattern);
+
+  return match?.[1] ?? null;
 }
 
 /**

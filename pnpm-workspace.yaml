@@ -3,3 +3,7 @@ allowBuilds:
   '@swc/core': true
   esbuild: true
   vue-demi: true
+
+updateConfig:
+  ignoreDependencies:
+    - tailwindcss3
